@@ -154,7 +154,7 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
               <div class="span8 offset2"> <!--span8 offset2   esto da el tamaño pequeño -->
                 <div class="panel panel-primary">
                   <div class="panel-heading">
-                    <h2>INSUMOS INTERNO ENTRADA-SALIDA</h2>
+                    <h2>REMISIONES</h2>
                   </div>
                   <div id="cabezamenu">
                     <ul id="menuhorizontal">
@@ -249,22 +249,24 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                         <hr>
                         <div class="row align-items-start">
                           <div class="col-sm-1"><strong>ITEMS</strong></div>
-                          <div class="col-sm-2"><strong>ID REMISION</strong></div>
-                          <div class="col-sm-3"><strong>CLIENTE</strong></div>
-                          <div class="col-sm-1"><strong>ENTRADA</strong></div>
+                          <div class="col-sm-1"><strong>ID REMISION</strong></div>
+                          <div class="col-sm-2"><strong>CLIENTE</strong></div>
+                          <div class="col-sm-1"><strong>TIPO</strong></div>
                           <div class="col-sm-2"><strong>TELEFONO</strong></div>
-                          <div class="col-sm-2"><strong>FECHA</strong></div>
+                          <div class="col-sm-2"><strong>FECHA ENT</strong></div>
+                          <div class="col-sm-2"><strong>FECHA SAL</strong></div>
                           <div class="col-sm-1"><strong>VER</strong></div>
                         </div>
+                        
                         <?php foreach ($registros as $row_registros) {  ?>
                           <div class="row celdaborde1">
                             <div class="col-sm-1" id="fondo_2">
                               <p> - </p>
                             </div>
-                            <div class="col-sm-2" id="fondo_2">
+                            <div class="col-sm-1" id="fondo_2">
                               <p><a href="insumos_interno_entrada_salida_edit.php?id_remision=<?php echo $row_registros['id_remision']; ?>" target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['id_remision']; ?></a></p>
                             </div>
-                            <div class="col-sm-3" id="fondo_2">
+                            <div class="col-sm-2" id="fondo_2">
                               <p><a href="insumos_interno_entrada_salida_edit.php?id_remision=<?php echo $row_registros['id_remision']; ?>" target="_top" style="text-decoration:none; color:#000000">
                                   <?php
                                   $row_ver_nuevo = $conexion->buscar('proveedor', 'id_p', $row_registros['cliente']);
@@ -281,6 +283,9 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                             </div>
                             <div class="col-sm-2" id="fondo_2">
                               <p><a href="insumos_interno_entrada_salida_edit.php?id_remision=<?php echo $row_registros['id_remision']; ?>" target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['fecha']; ?></a></p>
+                            </div>
+                            <div class="col-sm-2" id="fondo_2">
+                              <p><a href="insumos_interno_entrada_salida_edit.php?id_remision=<?php echo $row_registros['id_remision']; ?>" target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['fecha_salida']; ?></a></p>
                             </div>
                             <div class="col-sm-1" id="fondo_2">
                               <p><a href="insumos_interno_entrada_salida_edit.php?id_remision=<?php echo $row_registros['id_remision']; ?>" target="_top" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" width="20" height="18" /> </a></p>
