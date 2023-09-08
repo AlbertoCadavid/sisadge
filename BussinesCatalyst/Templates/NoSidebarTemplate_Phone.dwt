@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" --><title></title><!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://use.typekit.com/gxw4mke.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+<script type="text/javascript" src="/js/mobile.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default.css"/>
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default_phone.css" />
+
+
+</head>
+<body>
+<!-- HEADER -->
+<header>
+  <div class="header">
+    <div class="menu-container">
+      
+      <a href="#" class="corner-menu">Menu</a>
+     
+      <div class="floating-menu"> {module_menu,14623}
+        <div class="search-container">
+          <form name="catsearchform92907" method="post" action="/search">
+            <div class="search-box">
+              <input class="cat_textbox_small" type="text" name="CAT_Search" id="CAT_Search" placeholder="Search..." />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="logo">
+		<a href="/"><img src="/demo/online-store-logo.png" alt="Online Store" class="logo-image"/></a>
+      <!--<h3><a href="/">{module_sitename}</a></h3>-->
+    </div>
+  
+  </div>
+</header>
+
+<!-- MAIN AREA -->
+<div class="main_bg">
+<div class="main"> 
+<!-- TemplateBeginEditable name="ContentArea" -->{tag_pagecontent}<!-- TemplateEndEditable -->
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer">
+    <div class="footer-links">
+{module_menu, version="2", menuId="14623", moduleTemplateGroup="Footer"}</div>
+    <div class="copyright"> Copyright 2011 {module_sitename} All rights reserved. </div>
+  </div>
+</footer>
+</body>
+</html>

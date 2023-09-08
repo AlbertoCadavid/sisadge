@@ -1,0 +1,82 @@
+.header,
+.main,
+.footer {
+	width: 960px;
+	margin: 0 auto;
+}
+
+.header .search,
+.header .logo {
+	width: 230px;
+	margin: 0 5px;
+	min-height: 40px;
+	float: left;
+}
+
+.header . logo {
+	width: 190px;
+}
+
+.header .menu {
+	width: 510px;
+	margin: 0 5px;
+	min-height: 40px;
+	float: left;
+}
+
+.main .sidebar{
+	width: 230px;
+	margin: 0 5px;
+	float: left;
+}
+
+.main .content {
+	width: 720px;
+	margin: 0;
+	float: left;
+}
+
+ul.productfeaturelist li {
+	width: 230px;
+	margin: 0 5px;
+	float: left;
+}
+
+.productSmall {
+	margin-bottom:10px;	
+}
+
+.productSmall li {
+	width: 350px;
+	margin: 0 5px;
+	margin-bottom:10px;	
+	float: left;
+}
+
+
+.content-columns {
+	margin-bottom:10px;
+}
+
+.content-columns .content-column {
+	width: 350px;
+	margin: 0 5px;
+}
+
+
+.footer .footer-links {
+	width: 590px;
+	margin: 0 5px;
+	float: left;
+}
+
+.footer .copyright {
+	width: 350px;
+	margin: 0 5px;
+	float: left;
+}
+
+
+.main h1 {
+	margin-left: 5px;
+}

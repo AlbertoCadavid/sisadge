@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/Main Template.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" --><title>Welcome to Online Shop</title><!-- InstanceEndEditable --><!-- InstanceBeginEditable name="head" -->
+
+<!-- InstanceEndEditable -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://use.typekit.com/gxw4mke.js"></script><script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<!--[if lt IE 9]><script type="text/javascript" src="/js/html5.js"></script><![endif]-->
+
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default.css" />
+
+</head>
+<body>
+<!-- HEADER -->
+<header>
+	<div class="header">
+		<div class="logo">
+			<a href="/"><img src="/demo/online-store-logo.png" alt="Online Store" class="logo-image"/></a>
+			<!--<h3><a href="/">Online Shop</a></h3>-->
+		</div>
+		<div class="menu">
+			<div class="links"> 
+				{module_menu,14623}
+			</div>
+			<div class="cart-summary"> 
+				{module_shoppingcartsummary, horizontal}
+			</div>
+		</div>
+		<div class="search">	
+			<form name="catsearchform92907" method="post" action="/search">
+				<div class="search-box">
+					<input class="cat_textbox_small" type="text" name="CAT_Search" id="CAT_Search" placeholder="Search..." />
+				</div>
+			</form>
+		</div>	
+	</div>
+</header>
+
+<!-- MAIN AREA -->
+<div class="main_bg">
+<div class="main">
+	<section class="content">
+<!-- InstanceBeginEditable name="ContentArea" -->
+	<div ice:editable=""><h1>Welcome to Online Shop</h1></div>
+	<section class="featured-products">
+		{module_productfeaturelist,onsale,3,,,true}
+		{module_product,147625,5056426}<div class="clear"></div>
+	</section>
+	<section class="content-columns">
+		<div class="content-column" ice:editable="*">
+			<h2>This is a title</h2>
+			<p><img src="/images/sample-homepage-image.jpg" width="340" height="170" alt="home page image"></p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. </p>
+		</div>
+		<div class="content-column" ice:editable="*">
+			<h2>This is a title</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+			<p>Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div class="clear">{module_facebooklike,moduleTemplateGroup="Default",language="en_US",url="",layout="standard",showFaces="true",width="300",verb="like",font="",colorScheme="light",send=""}</div>
+	</section>
+	<div class="clear-rows"></div>
+<!-- InstanceEndEditable -->
+	</section>
+	<!-- SIDEBAR -->
+	<section class="sidebar"> 
+		<!-- NEWS POD -->
+		<h3>Latest News</h3>
+		{module_announcement,a,}
+		<hr />
+		<!-- NEWSLETTER POD -->
+		<h3>Newsletter Sign-up</h3>
+		<form name="catemaillistform25179" onSubmit="return checkWholeForm25179(this)" method="post" action="/CampaignProcess.aspx?ListID=42214">
+			<label for="CLFullName">Full Name</label>
+			<input type="text" name="FullName" id="CLFullName" maxlength="255" />
+			<label for="CLEmailAddress">Email Address</label>
+			<input type="text" name="EmailAddress" id="CLEmailAddress" maxlength="255" />
+			<label>Word Verification</label>
+			{module_captchav2}
+			<input type="submit" value="Subscribe" id="catlistbutton" />
+			<script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script><script type="text/javascript">
+			//<![CDATA[
+			function checkWholeForm25179(theForm){var why = "";if (theForm.EmailAddress) why += checkEmail(theForm.EmailAddress.value);if (theForm.CaptchaV2) why += isEmpty(theForm.CaptchaV2.value, "Enter Word Verification in box below"); if (why != ""){alert(why);return false;}theForm.submit();return false;}
+			//]]>
+			</script>
+		</form>
+		<hr />
+		<!-- LOGIN POD -->
+		<h3>Members Login</h3>
+		<form name="catseczoneform80277" onSubmit="return checkWholeForm80277(this)" method="post" action="/ZoneProcess.aspx?ZoneID=51&amp;OID={module_oid}&amp;OTYPE={module_otype}">
+			<label for="SZUsername">Username</label>
+			<input type="text" name="Username" id="SZUsername" maxlength="255" />
+			<label for="SZPassword">Password</label>
+			<input type="password" name="Password" id="SZPassword" maxlength="255" /><br />
+			<input type="submit" value="Log in" />
+			<script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script><script type="text/javascript">
+			//<![CDATA[
+			function checkWholeForm80277(theForm){var why = "";if (theForm.Username) why += isEmpty(theForm.Username.value, "Username");if (theForm.Password) why += isEmpty(theForm.Password.value, "Password");if (why != ""){alert(why);return false;}theForm.submit();return false;}
+			//]]>
+			</script>
+		</form>
+	</section>
+	<div class="clear"></div>
+</div>
+</div>
+<!-- FOOTER -->
+<footer>
+	<div class="footer">
+		<div class="footer-links">
+			{module_menu, version="2", menuId="14623", moduleTemplateGroup="Footer"}
+		</div>
+		<div class="copyright"> Copyright 2011 Online Shop All rights reserved. </div>
+		<div class="clear"></div>
+	</div>
+</footer>
+</body>
+<!-- InstanceEnd --></html>

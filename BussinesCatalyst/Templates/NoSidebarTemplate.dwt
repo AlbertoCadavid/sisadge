@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" --><title></title><!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://use.typekit.com/gxw4mke.js"></script><script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<!--[if lt IE 9]><script type="text/javascript" src="/js/html5.js"></script><![endif]-->
+
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default.css" />
+
+
+</head>
+<body>
+<!-- HEADER -->
+<header>
+	<div class="header">
+		<div class="logo">
+			<a href="/"><img src="/demo/online-store-logo.png" alt="Online Store" class="logo-image"/></a>
+			<!--<h3><a href="/">Online Shop</a></h3>-->
+		</div>
+		<div class="menu">
+			<div class="links"> 
+				{module_menu,14623}
+			</div>
+			<div class="cart-summary"> 
+				{module_shoppingcartsummary, horizontal}
+			</div>
+		</div>
+		<div class="search">	
+			<form name="catsearchform92907" method="post" action="/search">
+				<div class="search-box">
+					<input class="cat_textbox_small" type="text" name="CAT_Search" id="CAT_Search" placeholder="Search..." />
+				</div>
+			</form>
+		</div>	
+		<div class="clear"></div>
+	</div>
+</header>
+<!-- MAIN AREA -->
+<div class="main_bg">
+	<div class="main">
+		<!-- TemplateBeginEditable name="ContentArea" -->{tag_pagecontent}<!-- TemplateEndEditable -->
+	</div>
+</div>
+<!-- FOOTER -->
+<footer>
+	<div class="footer">
+		<div class="footer-links">
+			{module_menu, version="2", menuId="14623", moduleTemplateGroup="Footer"}
+		</div>
+		<div class="copyright">Copyright 2011 Online Shop All rights reserved. </div>
+		<div class="clear"></div>
+	</div>
+</footer>
+</body>
+</html>

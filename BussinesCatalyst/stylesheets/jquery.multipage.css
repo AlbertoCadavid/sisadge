@@ -1,0 +1,28 @@
+.multipage_nav { border-top:1px solid #CCC; padding-top:10px;}
+.multipage_nav a { display:block; padding: 0 10px; }
+.multipage_nav .multipage_next { float:right;
+
+}
+
+.multipage_nav .multipage_back { 
+	float:left;
+
+}
+
+.multipage_nav .submit { 
+
+
+}
+
+.multipage_nav .multipage_state { display: block; text-align:center; width:100px; margin-left:auto;margin-right:auto; font-size:14px;}
+.multipage fieldset { border:0px; padding:10px; margin:0px; }
+
+div.clearer{
+    display: block;
+    visibility: hidden;
+    clear: both;
+    height:0;
+    border-width:0;
+    margin:0;
+    padding:0;
+}

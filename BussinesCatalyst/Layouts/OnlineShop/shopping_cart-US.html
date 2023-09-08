@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title></title>
+<link href="/StyleSheets/ModuleStyleSheets.css" type="text/css" rel="StyleSheet" />
+<link type="text/css" media="screen,projection" href="/StyleSheets/base.css" rel="stylesheet" />
+<link type="text/css" media="screen,projection" href="/StyleSheets/screen.css" rel="stylesheet" />
+<link rel="stylesheet" href="/CatalystStyles/Box.css" type="text/css" media="screen" />
+<meta content="text/html;charset=utf-8" http-equiv="content-type" />
+</head>
+<body>
+<div class="shop-cart">
+    <h1>Your Shopping Cart</h1>
+    <table class="cart">
+        <tbody>
+            <tr class="var">
+                <th class="first-column">Product</th>
+                <th>Price</th>
+                <th class="quantity">Quantity</th>
+                <th>Tax</th>
+                <th>Total</th>
+                <th>Remove</th>
+            </tr>
+            <tr class="val">
+                <td class="first-column">{tag_productname}</td>
+                <td>{tag_productextaxamount}</td>
+                <td class="quantity">{tag_productquantity}</td>
+                <td>{tag_producttaxrate}</td>
+                <td>{tag_producttotal}</td>
+                <td>{tag_productremovelink}</td>
+            </tr>
+            <tr class="sub-total">
+                <td class="first-column" colspan="2">Sub-Total</td>
+                <td class="quantity">{tag_totalunits} units</td>
+                <td>&nbsp;</td>
+                <td>{tag_productgrandtotal}</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="discount">
+                <td class="first-column">Discount</td>
+                <td colspan="2" class="quantity">{tag_discountcode}
+                    <input class="update" onclick="return false;" type="button"
+                    value="Update" />
+                </td>
+                <td>&nbsp;</td>
+                <td>({tag_invoicediscountamount})</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="giftvoucher">
+                <td class="first-column">Gift Voucher</td>
+                <td colspan="2" class="quantity">{tag_giftvoucher}
+                    <input class="update" onclick="return false;" type="button" value="Update"
+                    />
+                </td>
+                <td>&nbsp;</td>
+                <td>({tag_giftvoucheramount})</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="shipping">
+                <td class="first-column">Shipping</td>
+                <td colspan="2" class="quantity">{tag_shippingoptions}</td>
+                <td>&nbsp;</td>
+                <td>{tag_shippingtotal}</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr class="total">
+                <td class="first-column" colspan="2">
+                    <strong>Total</strong>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>
+                    <strong>{tag_invoicetotal}</strong>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="6">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="actions" colspan="6">{tag_clearcartbutton,<img alt="" src="/CatalystImages/shop_clearcart.png" />} 
+                    {tag_getquotebutton,<img alt="" src="/CatalystImages/shop_getaquote.png" />} 
+                    {tag_buybutton,<img alt="" src="/CatalystImages/shop_checkout.png" />}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>

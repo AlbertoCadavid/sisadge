@@ -1,0 +1,273 @@
+/* ----------------------- MAIN LAYOUT CSS ------------------------------ */
+
+html { 
+	overflow-y:auto;
+	min-height:auto;
+}
+
+.main,
+.main .content,
+.main .sidebar {
+	min-height:0;
+}
+
+.header,
+.main,
+.main .content,
+.main .sidebar,
+.footer,
+.footer .footer-links,
+.footer .copyright,
+.content-columns,
+.content-columns .content-column,
+ul.productfeaturelist li {
+	width:auto;
+	float:none;
+	margin:0;
+}
+
+.main {
+	margin: 0 5px;
+	padding-bottom: 10px;
+}
+
+ul.productList,
+ul.productfeaturelist,
+ul.catalogueList {
+	margin:0;
+	width:auto;
+}
+
+ul.catalogueList li,
+ul.productfeaturelist li,
+ul.productList li {
+	margin: 0 0 10px 0;
+	display:block;
+	float:none;
+	width:auto;
+}
+
+
+.content-columns {
+	width:auto;
+	margin:0 0px;
+	padding:0;
+}
+
+.main .content,
+.main .sidebar {
+	margin: 0;
+	padding: 0;
+}
+
+.header div {
+	display:block;
+}
+
+.footer {
+	min-height:40px;
+	padding: 10px 0;
+}
+
+header {
+	height: 40px;
+	display:block;
+}
+
+.header .menu-container {
+	text-align:center;
+	color:#666666;
+	font-size:14px;
+	line-height:100%;
+	
+	min-height:40px;
+	width:80px;
+	float:right;
+	display:block;
+}
+
+.header .menu-container a {
+	display: block;
+	float: none;
+	padding: 10px 10px 11px;
+	line-height: 19px;
+	text-decoration: none;
+}
+
+.header .logo {
+	min-height:40px;
+	margin: 0 150px 0 5px;
+	float:none;
+}
+
+.header .search-container{
+	padding:0;
+	min-height:30px;
+}
+
+.header .search-box input,
+.header .search-box {
+	float:none;
+	width:100px;
+	height:24px;
+}
+
+
+.header a.menu-cart {
+	display:block;
+	width:60px;
+	padding: 10px 0 11px 5px;
+	background-image: url("/images/mobile/cart.png");
+	background-repeat: no-repeat;
+	background-position: 35px center;
+	float:right;
+	line-height: 19px;
+	text-decoration: none;
+} 
+
+.header a.menu-cart,
+.header a.corner-menu {
+	color: #bfbfbf;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.header a.menu-cart:hover, 
+.header a.corner-menu:hover,
+.header li.active a.corner-menu {
+	background-color: #333;
+	background-color: rgba(255, 255, 255, 0.05);
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.header a.corner-menu {
+	display:block;
+	width:40px;
+	height:19px;
+	padding-top:10px;
+	padding-left:10px;
+	padding-right:30px;
+	text-align:center;
+	border-bottom: 1px solid #CCC;
+	text-decoration:none;
+	font-weight:bold;
+	background:#222222 url("/images/mobile/drop-down-arrow.png") no-repeat 55px center;
+}
+
+.header .floating-menu {
+	width:150px;
+	right:0px;
+	margin:0;
+	padding:0 15px 15px 0;
+	position:absolute; 
+	display:none; 
+	background-color:#222;
+	border-bottom: 1px solid #CCC;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+}
+
+.header .floating-menu ul {
+	list-style:none;
+	text-align:right;
+	margin:0;
+	padding:0;
+	width:100%;
+	float:none;
+}
+
+.header .floating-menu ul li {
+	height:20px;
+	padding-top:10px;
+	margin:0;
+	display:block;
+	float:none;
+	width:auto;
+}
+
+.header .search-box {
+	height:30px;
+	margin:0 auto;
+}
+
+.header .floating-menu ul li a, 
+.header .floating-menu ul li a:hover, 
+.header .floating-menu ul li a:visited, 
+.header .floating-menu ul li a:active {
+	color:#FFF;
+	font-size:14px;
+	height:20px;
+	display:block;
+	padding-right:15px;
+	margin:0;
+	text-align:right;
+	text-decoration:none;
+}
+
+
+.footer .footer-links,
+.footer .copyright {
+	margin:0;
+	padding:0;
+	text-align:center;
+	display:block;
+}
+
+.footer .footer-links {
+	margin:0 auto;
+	padding-bottom:0;
+}
+
+.footer-links ul,
+.footer-links ul li {
+	float:none;
+}
+
+.footer-links ul li {
+	display:inline-block;
+}
+
+.footer-links div {
+	text-align:center;
+}
+
+.productSmall li, 
+.productLarge li, 
+.productfeaturelist li,
+.product-details,
+.product-properties,
+.product-name,
+.product-price,	
+.product-add,
+.product-description,
+.product-images, 
+.product-large-image, 
+.product-poplets,
+.shop-products,
+.cart-summary {
+	width:auto;
+	float:none;
+	border:0;
+}
+
+.productSmall li,
+.productfeaturelist li {
+	margin:10px auto;	
+}
+
+.product-large-image {
+	text-align: left;
+}
+
+.search-results {
+	margin-left:10px;
+}
+
+table.cart {
+	width:auto;
+	margin:0 auto;
+}
+
+table.cart td.actions a {
+	margin-right:0px;
+}

@@ -1,0 +1,1189 @@
+@charset "utf-8";
+/ *! jQuery UI - v1.10.0 - 01/17/2013
+* Http://jqueryui.com
+* Incluye: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css , jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery . ui.tabs.css, jquery.ui.tooltip.css, jquery.ui.theme.css
+* Copyright 2013 Fundación jQuery y otros colaboradores, con licencia MIT * /
+
+/ * Ayudantes de diseño
+---------------------------------- * /
+. Ui-helper-hidden {
+	display: none;
+}
+. Ui-helper-hidden-accesible {
+	border: 0;
+	clip: rect (0 0 0 0);
+	altura: 1px;
+	margin:-1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	anchura: 1px;
+}
+. Ui-helper-reset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	esquema: 0;
+	line-height: 1.3;
+	text-decoration: none;
+	font-size: 100%;
+	list-style: none;
+}
+. Ui-helper-clearfix: antes,
+. Ui-helper-clearfix: after {
+	content: "";
+	display: table;
+}
+. Ui-helper-clearfix: after {
+	clear: both;
+}
+. Ui-helper-clearfix {
+	min-height: 0; / * Soporte: IE7 * /
+}
+. Ui-helper-zfix {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	opacidad: 0;
+	Filtro: Alpha (opacidad = 0);
+}
+
+. Ui-front {
+	z-index: 100;
+}
+
+
+/ * Interacción Cues
+---------------------------------- * /
+. Ui-estado-disabled {
+	cursor: defecto importante;
+}
+
+
+/ * Íconos
+---------------------------------- * /
+
+/ * Estados y las imágenes * /
+. Ui-icon {
+	display: block;
+	text-indent:-99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+}
+
+
+/ * Varios efectos visuales
+---------------------------------- * /
+
+/ * Plantillas * /
+. Ui-widget-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+. Ui-acordeón. Ui-acordeón-header {
+	display: block;
+	cursor: pointer;
+	position: relative;
+	margin-top: 2px;
+	padding: .5 em .5 .5 em em em 0,7;
+	min-height: 0; / * Soporte: IE7 * /
+}
+. Ui-acordeón. Ui-acordeón-icons {
+	padding-left: 2.2em;
+}
+. Ui-acordeón. Ui-acordeón noicons {
+	padding-left: 0,7 em;
+}
+. Ui-acordeón. Ui-acordeón acordeón iconos. Ui--icons {
+	padding-left: 2.2em;
+}
+. Ui-acordeón. Ui-acordeón cabecera. Ui-acordeón-header-icon {
+	position: absolute;
+	izquierdo: 0,5 em;
+	superior: 50%;
+	margin-top:-8px;
+}
+. Ui-acordeón. Ui-acordeón-content {
+	padding: 1em 2.2em;
+	border-top: 0;
+	overflow: auto;
+}
+
+. Ui-autocomplete {
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: default;
+}
+
+. Ui-button {
+	display: inline-block;
+	position: relative;
+	padding: 0;
+	line-height: normal;
+	margin-right: .1 em;
+	cursor: pointer;
+	vertical-align: middle;
+	text-align: center;
+	overflow: visible; / * elimina anchura extra en IE * /
+}
+. Ui-botón,
+. Ui-botón: link,
+. Ui-botón: visited,
+. Ui-botón: hover,
+. Ui-botón: active {
+	text-decoration: none;
+}
+/ * Para hacer espacio para el icono, una anchura debe establecerse aquí * /
+. Ui-button-icon-sólo {
+	anchura: 2.2em;
+}
+/ * Elementos botón parecen necesitar un poco más ancho * /
+button.ui-button-icon-sólo {
+	anchura: 2.4em;
+}
+. Ui-button-icons-sólo {
+	anchura: 3.4em;
+}
+button.ui-button-icons-sólo {
+	anchura: 3.7em;
+}
+
+/ * Elemento de texto del botón * /
+. Ui-botón. Ui-button-text {
+	display: block;
+	line-height: normal;
+}
+. Ui-button-de sólo texto. Ui-button-text {
+	padding: 1em 0,4 em;
+}
+. Ui-button-icon-only. Ui-button-texto,
+. Ui-button-iconos-only. Ui-button-text {
+	padding: 0,4 em;
+	text-indent:-9999999px;
+}
+. Ui-button-texto-icon-primaria. Ui-button-texto,
+. Ui-texto de botón-iconos. Ui-button-text {
+	padding: 1em 0,4 0,4 ​​em em 2.1em;
+}
+. Ui-button-texto-icon-secundaria. Ui-button-texto,
+. Ui-texto de botón-iconos. Ui-button-text {
+	padding: 2.1em 0,4 0,4 ​​em em 1em;
+}
+. Ui-texto de botón-iconos. Ui-button-text {
+	padding-left: 2.1em;
+	padding-right: 2.1em;
+}
+/ * No hay soporte icono de los elementos de entrada, proporcionan relleno por defecto * /
+input.ui-button {
+	padding: 1em 0,4 em;
+}
+
+/ * Botón icono de elemento (s) * /
+. Ui-button-icon-only. Ui-icon,
+. Ui-button-texto-icon-primaria. Ui-icon,
+. Ui-button-texto-icon-secundaria. Ui-icon,
+. Ui-texto de botón-iconos. Ui-icon,
+. Ui-button-iconos-only. Ui-icon {
+	position: absolute;
+	superior: 50%;
+	margin-top:-8px;
+}
+. Ui-button-icon-only. Ui-icon {
+	izquierda: 50%;
+	margin-left:-8px;
+}
+. Ui-button-texto-icon-primaria. Ui-button-icon-primaria,
+. Ui-texto de botón-iconos. Ui-button-icon-primaria,
+. Ui-button-iconos-only. Ui-button-icon-primaria {
+	izquierdo: 0,5 em;
+}
+. Ui-button-texto-icon-secundaria. Ui-button-icon-secundaria,
+. Ui-texto de botón-iconos. Ui-button-icon-secundaria,
+. Ui-button-iconos-only. Ui-button-icon-secundario {
+	derecha: 0,5 em;
+}
+
+/ * Establece botón * /
+. {Ui-Buttonset
+	margin-right: 7px;
+}
+. Ui-Buttonset. Ui-button {
+	margin-left: 0;
+	margin-right: - 0,3 em;
+}
+
+/ * Soluciones * /
+/ * Reinicio acolchado adicional en Firefox, ver h5bp.com / l * /
+input.ui botones ::-moz-focus-interior,
+button.ui botones ::-moz-focus-interior {
+	border: 0;
+	padding: 0;
+}
+
+. Ui-datepicker {
+	anchura: 17em;
+	padding: .2 .2 em em 0;
+	display: none;
+}
+. Ui-datepicker. Ui-datepicker-header {
+	position: relative;
+	padding: .2 em 0;
+}
+. Ui-datepicker. Ui-datepicker-prev,
+. Ui-datepicker. Ui-datepicker-next {
+	position: absolute;
+	top: 2px;
+	anchura: 1.8em;
+	altura: 1.8em;
+}
+. Ui-datepicker. Ui-datepicker-prev-hover,
+. Ui-datepicker. Ui-datepicker-next-hover {
+	top: 1px;
+}
+. Ui-datepicker. Ui-datepicker-prev {
+	izquierda: 2px;
+}
+. Ui-datepicker. Ui-datepicker-next {
+	derecha: 2px;
+}
+. Ui-datepicker. Ui-datepicker-prev-hover {
+	izquierda a derecha: 1px;
+}
+. Ui-datepicker. Ui-datepicker-next-hover {
+	derecha: 1px;
+}
+. Ui-datepicker. Ui-datepicker-prev span,
+. Ui-datepicker. Ui-datepicker-next lapso {
+	display: block;
+	position: absolute;
+	izquierda: 50%;
+	margin-left:-8px;
+	superior: 50%;
+	margin-top:-8px;
+}
+. Ui-datepicker. Ui-datepicker-title {
+	margin: 0 2.3em;
+	line-height: 1.8em;
+	text-align: center;
+}
+. Ui-datepicker. Ui-datepicker la titularidad seleccione {
+	font-size: 1em;
+	margin: 0 1px;
+}
+. Ui-datepicker select.ui-datepicker-mes-año {
+	width: 100%;
+}
+. Ui-datepicker select.ui-datepicker meses,
+. Ui-datepicker select.ui-datepicker años {
+	anchura: 49%;
+}
+. Ui-datepicker tabla {
+	width: 100%;
+	font-size: 0,9 em;
+	border-collapse: collapse;
+	margin: 0 0 0,4 em;
+}
+. Ui-datepicker th {
+	padding: 0.7 0.3 em em;
+	text-align: center;
+	font-weight: bold;
+	border: 0;
+}
+. Ui-datepicker td {
+	border: 0;
+	padding: 1px;
+}
+. Ui-datepicker td span,
+. Ui-datepicker td a {
+	display: block;
+	padding: .2 em;
+	text-align: right;
+	text-decoration: none;
+}
+. Ui-datepicker. Ui-datepicker-buttonpane {
+	background-image: none;
+	margen: 0,7 em 0 0 0;
+	padding: 0 .2 em;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+}
+. Ui-datepicker. Ui-datepicker-buttonpane botón {
+	float: right;
+	margen: .5 em em 0,2 0,4 em;
+	cursor: pointer;
+	padding: 0.2 0.6 em em em 0,3 0,6 em;
+	width: auto;
+	overflow: visible;
+}
+. Ui-datepicker. Ui-datepicker-buttonpane button.ui-datepicker de corriente {
+	float: left;
+}
+
+/ * Con varios calendarios * /
+. Ui-datepicker.ui-datepicker multi {
+	width: auto;
+}
+. Ui-datepicker-multi. Ui-datepicker-group {
+	float: left;
+}
+. Ui-datepicker-multi. Ui-datepicker grupo de la tabla {
+	anchura: 95%;
+	margin: 0 auto 0,4 em;
+}
+. Ui-datepicker-multi-2. Ui-datepicker-group {
+	anchura: 50%;
+}
+. Ui-datepicker-multi-3. Ui-datepicker-group {
+	ancho: 33,3%;
+}
+. Ui-datepicker-multi-4. Ui-datepicker-group {
+	anchura: 25%;
+}
+. Ui-datepicker-multi. Ui-datepicker-group-pasado. Ui-datepicker-header,
+. Ui-datepicker-multi. Ui-datepicker-group-media. Ui-datepicker-header {
+	border-left-width: 0;
+}
+. Ui-datepicker-multi. Ui-datepicker-buttonpane {
+	clear: left;
+}
+. Ui-datepicker-fila-break {
+	clear: both;
+	width: 100%;
+	font-size: 0;
+}
+
+/ * RTL apoyo * /
+. Ui-datepicker-rtl {
+	direction: rtl;
+}
+. Ui-datepicker-RTL. Ui-datepicker-prev {
+	derecha: 2px;
+	izquierda: auto;
+}
+. Ui-datepicker-RTL. Ui-datepicker-next {
+	izquierda: 2px;
+	derecha: auto;
+}
+.. Ui-datepicker rtl-ui-datepicker-prev: hover {
+	derecha: 1px;
+	izquierda: auto;
+}
+. Ui-datepicker rtl-ui-datepicker-siguiente:. Hover {
+	izquierda a derecha: 1px;
+	derecha: auto;
+}
+. Ui-datepicker-RTL. Ui-datepicker-buttonpane {
+	claro: right;
+}
+. Ui-datepicker-RTL. Ui-datepicker-buttonpane botón {
+	float: left;
+}
+. Ui-datepicker-RTL. Ui-datepicker-buttonpane button.ui-datepicker de corriente,
+. Ui-datepicker-RTL. Ui-datepicker-group {
+	float: right;
+}
+. Ui-datepicker-RTL. Ui-datepicker-group-pasado. Ui-datepicker-header,
+. Ui-datepicker-RTL. Ui-datepicker-group-media. Ui-datepicker-header {
+	border-right-width: 0;
+	border-left-width: 1px;
+}
+
+. Ui-dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: .2 em;
+	esquema: 0;
+}
+. Ui-dialog. Ui-dialog-barra de título {
+	padding: 1em 0,4 em;
+	position: relative;
+}
+. Ui-dialog. Ui-dialog-title {
+	float: left;
+	margen: .1 em 0;
+	white-space: nowrap;
+	anchura: 90%;
+	overflow: hidden;
+	texto de desbordamiento: puntos suspensivos;
+}
+. Ui-dialog. Ui-dialog-barra de título-close {
+	position: absolute;
+	derecha: 0,3 em;
+	superior: 50%;
+	Ancho: 21px;
+	margin:-10px 0 0 0;
+	padding: 1px;
+	altura: 20px;
+}
+. Ui-dialog. Ui-dialog-content {
+	position: relative;
+	border: 0;
+	padding: 1em .5 em;
+	background: none;
+	overflow: auto;
+}
+. Ui-dialog. Ui-dialog-buttonpane {
+	text-align: left;
+	border-width: 1px 0 0 0;
+	background-image: none;
+	margin-top: .5 em;
+	padding: 1em 0,5 0,3 em em em 0,4;
+}
+. Ui-dialog. Ui-dialog-buttonpane. Ui-dialog-Buttonset {
+	float: right;
+}
+. Ui-dialog. Ui-dialog-buttonpane botón {
+	margen: .5 em em .4 .5 em 0;
+	cursor: pointer;
+}
+. Ui-dialog. Ui-tamaño variable-se {
+	Ancho: 12px;
+	altura: 12px;
+	derecha:-5px;
+	abajo:-5px;
+	background-position: 16px 16px;
+}
+. Ui-arrastrable. Ui-dialog-barra de título {
+	cursor: move;
+}
+
+. Ui-menu {
+	list-style: none;
+	padding: 2px;
+	margin: 0;
+	display: block;
+	esquema: none;
+}
+. Ui-menú. Ui-menu {
+	margin-top:-3px;
+	position: absolute;
+}
+. Ui-menú. Ui-menu-item {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+. Ui-menú. Ui-menu-divisor {
+	margen: 5px 5px-2px 2px-;
+	Altura: 0;
+	font-size: 0;
+	line-height: 0;
+	border-width: 1px 0 0 0;
+}
+. Ui-menú. Ui-menu-item a {
+	text-decoration: none;
+	display: block;
+	padding: 2px 0,4 em;
+	line-height: 1.5;
+	min-height: 0; / * Soporte: IE7 * /
+	font-weight: normal;
+}
+. Ui-menú. Ui-menu-item a.ui-estado-enfoque,
+. Ui-menú. Ui-menu-item-a.ui estado activo {
+	font-weight: normal;
+	margin:-1px;
+}
+
+. Ui-menú. Ui-estado-disabled {
+	font-weight: normal;
+	margen: 0,4 em 0 .2 em;
+	line-height: 1.5;
+}
+. Ui-menú. Ui-estado desactivado a {
+	cursor: default;
+}
+
+/ * Soporte icono * /
+. Ui-menú-icons {
+	position: relative;
+}
+. Ui-menu-iconos. Ui-menu-item a {
+	position: relative;
+	padding-left: 2em;
+}
+
+/ * Alineado a la izquierda * /
+. Ui-menú. Ui-icon {
+	position: absolute;
+	superior: 0,2 em;
+	izquierdo: 0,2 em;
+}
+
+/ * Alineado a la derecha * /
+. Ui-menú. Ui-menu-icon {
+	posición: static;
+	float: right;
+}
+
+. {Ui-progressbar
+	altura: 2em;
+	text-align: left;
+	overflow: hidden;
+}
+. Ui-ProgressBar. Ui-progressbar-value {
+	margin:-1px;
+	height: 100%;
+}
+. Ui-ProgressBar. Ui-progressbar-overlay {
+	background: url ("images / animado-overlay.gif");
+	height: 100%;
+	Filtro: alfa (opacidad = 25);
+	opacidad: 0,25;
+}
+.-Ui-ProgressBar indeterminado. Ui-progressbar-value {
+	background-image: none;
+}
+
+. {Ui-redimensionable
+	position: relative;
+}
+. Ui-tamaño variable-handle {
+	position: absolute;
+	font-size: 0.1px;
+	display: block;
+}
+. Ui-redimensionable discapacitados. Ui-tamaño variable, mango,
+. Ui-tamaño variable-ocultación automática. Ui-tamaño variable-handle {
+	display: none;
+}
+. Ui-tamaño variable-n {
+	cursor: n-resize;
+	altura: 7px;
+	width: 100%;
+	top:-5px;
+	left: 0;
+}
+. Ui-tamaño variable-s {
+	cursor: s-resize;
+	altura: 7px;
+	width: 100%;
+	abajo:-5px;
+	left: 0;
+}
+. Ui-tamaño variable-e {
+	cursor: e-resize;
+	anchura: 7px;
+	derecha:-5px;
+	top: 0;
+	height: 100%;
+}
+. Ui-tamaño variable-w {
+	cursor: w-resize;
+	anchura: 7px;
+	a la izquierda:-5px;
+	top: 0;
+	height: 100%;
+}
+. Ui-tamaño variable-se {
+	cursor: se-resize;
+	Ancho: 12px;
+	altura: 12px;
+	derecha: 1px;
+	abajo: 1px;
+}
+. Ui-tamaño variable-sw {
+	cursor: sw-resize;
+	anchura: 9px;
+	altura: 9px;
+	a la izquierda:-5px;
+	abajo:-5px;
+}
+. Ui-tamaño variable-nw {
+	cursor: nw-resize;
+	anchura: 9px;
+	altura: 9px;
+	a la izquierda:-5px;
+	top:-5px;
+}
+. Ui-tamaño variable-ne {
+	cursor: ne-resize;
+	anchura: 9px;
+	altura: 9px;
+	derecha:-5px;
+	top:-5px;
+}
+
+. Ui seleccionable-helper {
+	position: absolute;
+	z-index: 100;
+	border: 1px punteado negro;
+}
+
+. Ui-slider {
+	position: relative;
+	text-align: left;
+}
+. Ui-slider. Ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	anchura: 1.2em;
+	altura: 1.2em;
+	cursor: default;
+}
+. Ui-slider. Ui-slider-range {
+	position: absolute;
+	z-index: 1;
+	font-size: 0,7 em;
+	display: block;
+	border: 0;
+	background-position: 0 0;
+}
+
+/ * Para IE8 - Ver # 6727 * /
+. Ui-slider.ui-estado desactivado. Ui-slider-asa,
+. Ui-slider.ui-estado desactivado. Ui-slider-range {
+	filtrar: inherit;
+}
+
+. Ui-slider-horizontal {
+	altura: 0,8 em;
+}
+. Ui-slider-horizontal. Ui-slider-handle {
+	superior: - 0,3 em;
+	margin-left: - 0,6 em;
+}
+. Ui-slider-horizontal. Ui-slider-range {
+	top: 0;
+	height: 100%;
+}
+. Ui-slider-horizontal. Ui-slider-range-min {
+	left: 0;
+}
+. Ui-slider-horizontal. Ui-slider-range-max {
+	derecha: 0;
+}
+
+. Ui-slider-vertical {
+	anchura: 0,8 em;
+	height: 100px;
+}
+. Ui-slider-vertical. Ui-slider-handle {
+	izquierda: - 0,3 em;
+	margin-left: 0;
+	margin-bottom: - 0,6 em;
+}
+. Ui-slider-vertical. Ui-slider-range {
+	left: 0;
+	width: 100%;
+}
+. Ui-slider-vertical. Ui-slider-range-min {
+	inferior: 0;
+}
+. Ui-slider-vertical. Ui-slider-range-max {
+	top: 0;
+}
+
+. Ui-spinner {
+	position: relative;
+	display: inline-block;
+	overflow: hidden;
+	padding: 0;
+	vertical-align: middle;
+}
+. Ui-spinner-input {
+	border: none;
+	background: none;
+	color: inherit;
+	padding: 0;
+	margen: .2 em 0;
+	vertical-align: middle;
+	margin-left: 0,4 em;
+	margin-right: 22px;
+}
+. Ui-spinner-button {
+	Ancho: 16px;
+	altura: 50%;
+	font-size: .5 em;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	position: absolute;
+	cursor: default;
+	display: block;
+	overflow: hidden;
+	derecha: 0;
+}
+/ * Especificidad más necesario aquí para overide fronteras por defecto * /
+. Ui-spinner a.ui-spinner-button {
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+}
+/ * Icono vertical de centro * /
+. Ui-spinner. Ui-icon {
+	position: absolute;
+	margin-top:-8px;
+	superior: 50%;
+	left: 0;
+}
+. Ui-spinner-up {
+	top: 0;
+}
+. Ui-spinner-down {
+	inferior: 0;
+}
+
+/ * Overrides TR * /
+. Ui-spinner. Ui-icon-triángulo-1-s {
+	/ * Se necesita para arreglar los iconos de sprites * /
+	background-position:-65px-16px;
+}
+
+. {Ui-tabs
+	position: relative ;/ * Posición: relative impide IE error de desplazamiento (elemento con position: relative dentro del recipiente con overflow: auto aparecer como "fijo") * /
+	padding: .2 em;
+}
+. Ui-tabs. Ui-tabs-nav {
+	margin: 0;
+	padding: .2 .2 em em 0;
+}
+. Ui-tabs. Ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0;
+	margen: 1px 0.2 em 0 0;
+	border-bottom: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+. Ui-tabs. Ui-tabs-nav li a {
+	float: left;
+	padding: 1em .5 em;
+	text-decoration: none;
+}
+. Ui-tabs. Ui-tabs-nav li.ui-tabs-active {
+	margin-bottom: 1px-;
+	padding-bottom: 1px;
+}
+Ui-tabs. Ui-tabs.-Nav li.ui-tabs-activo a,
+. Ui-tabs. Ui-tabs-nav li.ui-estado-un discapacitado,
+. Ui-tabs. Ui-tabs-nav li.ui-tabs-carga a {
+	cursor: text;
+}
+.. Ui ui-tabs-tabs-nav li a, / * selector primer grupo parece obsoleto, pero para superar Opera error en la aplicación de cursor: texto en su conjunto si se define en otra parte ... * /
+. Ui-tabs-plegable. Ui-tabs-nav li.ui-tabs-activo a {
+	cursor: pointer;
+}
+. Ui-tabs. Ui-tabs-panel {
+	display: block;
+	border-width: 0;
+	padding: 1em 1.4em;
+	background: none;
+}
+
+. Ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-Webkit-box-shadow: 0 0 5px # aaa;
+	box-shadow: 0 0 5px # aaa;
+}
+cuerpo. ui-tooltip {
+	border-width: 2px;
+}
+
+/ * Los recipientes de componentes
+---------------------------------- * /
+. Ui-widget {
+	font-family: Verdana, Arial, sans-serif / * {ffDefault} * /;
+	font-size: 1.1em / * {fsDefault} * /;
+}
+. Ui-widget. Ui-widget {
+	font-size: 1em;
+}
+. Ui-widget de entrada,
+. Ui-widget de selección,
+. Ui-widget textarea,
+. Ui-widget botón {
+	font-family: Verdana, Arial, sans-serif / * {ffDefault} * /;
+	font-size: 1em;
+}
+. Ui-widget-content {
+	border: 1px solid # aaaaaa / * {borderColorContent} * /;
+	background: # ffffff / * {} bgColorContent * / url (images/ui-bg_flat_75_ffffff_40x100.png) / * {} * bgImgUrlContent / 50% / * {} * bgContentXPos / 50% / * {} bgContentYPos * / repeat-x / * {bgContentRepeat} * /;
+	color: # 222222 / * {fcContent} * /;
+}
+. Ui-widget-content a {
+	color: # 222222 / * {fcContent} * /;
+}
+. Ui-widget-header {
+	border: 1px solid # aaaaaa / * {borderColorHeader} * /;
+	background: # cccccc / * {} bgColorHeader * / url (images/ui-bg_highlight-soft_75_cccccc_1x100.png) / * {} * bgImgUrlHeader / 50% / * {} * bgHeaderXPos / 50% / * {} * bgHeaderYPos / repetición- x / * {bgHeaderRepeat} * /;
+	color: # 222222 / * {fcHeader} * /;
+	font-weight: bold;
+}
+. Ui-widget-header a {
+	color: # 222222 / * {fcHeader} * /;
+}
+
+/ * Interacción estados
+---------------------------------- * /
+. Ui-estado-default,
+. Ui-widget-content. Ui-estado-default,
+. Ui-widget-header. Ui-estado-default {
+	border: 1px solid # d3d3d3 / * {borderColorDefault} * /;
+	fondo: # e6e6e6 / * {*} bgColorDefault / url (images/ui-bg_glass_75_e6e6e6_1x400.png) / * {bgImgUrlDefault} * / 50% / * {bgDefaultXPos} * / 50% / * {bgDefaultYPos} * / repeat-x / * {bgDefaultRepeat} * /;
+	font-weight: normal / * {fwDefault} * /;
+	color: # 555555 / * {fcDefault} * /;
+}
+. Ui-estado-default a,
+. Ui-estado-default a: link,
+. Ui-estado-default a: {visitado
+	color: # 555555 / * {fcDefault} * /;
+	text-decoration: none;
+}
+. Ui-estado-estacionario,
+. Ui-widget-content. Ui-estado-estacionario,
+. Ui-widget-header. Ui-estado-estacionario,
+. Ui-estado-focus,
+. Ui-widget-content. Ui-estado-focus,
+. Ui-widget-header. Ui-estado-focus {
+	border: 1px solid # 999999 / * {borderColorHover} * /;
+	fondo: # dadada / * {*} bgColorHover / url (images/ui-bg_glass_75_dadada_1x400.png) / * {bgImgUrlHover} * / 50% / * {bgHoverXPos} * / 50% / * {bgHoverYPos} * / repeat-x / * {bgHoverRepeat} * /;
+	font-weight: normal / * {fwDefault} * /;
+	color: # 212121 / * {fcHover} * /;
+}
+. Ui-estado-ciernen a,
+. Ui-estado-estacionario a: hover,
+. Ui-estado-ciernen a: link,
+. Ui-estado-ciernen a: {visitado
+	color: # 212121 / * {fcHover} * /;
+	text-decoration: none;
+}
+. Ui-estado-activo,
+. Ui-widget-content. Ui-estado-activo,
+. Ui-widget-header. Ui-estado-active {
+	border: 1px solid # aaaaaa / * {borderColorActive} * /;
+	background: # ffffff / * {} bgColorActive * / url (images/ui-bg_glass_65_ffffff_1x400.png) / * {} * bgImgUrlActive / 50% / * {} * bgActiveXPos / 50% / * {} bgActiveYPos * / repeat-x / * {bgActiveRepeat} * /;
+	font-weight: normal / * {fwDefault} * /;
+	color: # 212121 / * {fcActive} * /;
+}
+. Ui-estado-un activo,
+. Ui-estado-activo a: link,
+. Ui-estado-activo a: visited {
+	color: # 212121 / * {fcActive} * /;
+	text-decoration: none;
+}
+
+/ * Interacción Cues
+---------------------------------- * /
+. Ui-estado-highlight,
+. Ui-widget-content. Ui-estado-highlight,
+. Ui-widget-header. Ui-estado-para resaltar {
+	border: 1px solid # fcefa1 / * {borderColorHighlight} * /;
+	fondo: # fbf9ee / * {*} bgColorHighlight / url (images/ui-bg_glass_55_fbf9ee_1x400.png) / * {bgImgUrlHighlight} * / 50% / * {bgHighlightXPos} * / 50% / * {bgHighlightYPos} * / repeat-x / * {bgHighlightRepeat} * /;
+	color: # 363636 / * {fcHighlight} * /;
+}
+. Ui-estado-destacar una,
+. Ui-widget-content. Ui-estado-un punto culminante,
+. Ui-widget-header. Ui-estado-highlight a {
+	color: # 363636 / * {fcHighlight} * /;
+}
+. Ui-estado-error,
+. Ui-widget-content. Ui-estado-error,
+. Ui-widget-header. Ui-estado-error {
+	border: 1px solid # cd0a0a / * {borderColorError} * /;
+	fondo: # fef1ec / * {*} bgColorError / url (images/ui-bg_glass_95_fef1ec_1x400.png) / * {bgImgUrlError} * / 50% / * {bgErrorXPos} * / 50% / * {bgErrorYPos} * / repeat-x / * {bgErrorRepeat} * /;
+	color: # cd0a0a / * {fcError} * /;
+}
+. Ui-estado-un error,
+. Ui-widget-content. Ui-estado-un error,
+. Ui-widget-header. Ui-estado-un error {
+	color: # cd0a0a / * {fcError} * /;
+}
+. Ui-estado-error-text,
+. Ui-widget-content. Ui-estado-error-text,
+. Ui-widget-header. Ui-estado-error-text {
+	color: # cd0a0a / * {fcError} * /;
+}
+. Ui-prioridad-primaria,
+. Ui-widget-content. Ui-prioridad-primaria,
+. Ui-widget-header. Ui-prioridad-primaria {
+	font-weight: bold;
+}
+. Ui-prioridad-secundaria,
+. Ui-widget-content. Ui-prioridad-secundaria,
+. Ui-widget-header. Ui-prioridad secundaria {
+	opacidad: 0,7;
+	Filtro: Alpha (opacidad = 70);
+	font-weight: normal;
+}
+. Ui-estado-personas con discapacidad,
+. Ui-widget-content. Ui-estado-personas con discapacidad,
+. Ui-widget-header. Ui-estado-disabled {
+	opacidad: 0,35;
+	Filtro: Alpha (opacidad = 35);
+	background-image: none;
+}
+. Ui-estado desactivado. Ui-icon {
+	Filtro: Alpha (opacidad = 35); / * Para IE8 - Ver # 6059 * /
+}
+
+/ * Íconos
+---------------------------------- * /
+
+/ * Estados y las imágenes * /
+. Ui-icon {
+	Ancho: 16px;
+	altura: 16px;
+	background-position: 16px 16px;
+}
+. Ui-icon,
+. Ui-widget-content. Ui-icon {
+	background-image: url (images/ui-icons_222222_256x240.png) / * {iconsContent} * /;
+}
+. Ui-widget-header. Ui-icon {
+	background-image: url (images/ui-icons_222222_256x240.png) / * {iconsHeader} * /;
+}
+. Ui-estado-default. Ui-icon {
+	background-image: url (images/ui-icons_888888_256x240.png) / * {iconsDefault} * /;
+}
+. Ui-estado-estacionario. Ui-icon,
+. Ui-estado-foco. Ui-icon {
+	background-image: url (images/ui-icons_454545_256x240.png) / * {iconsHover} * /;
+}
+. Ui-estado activo. Ui-icon {
+	background-image: url (images/ui-icons_454545_256x240.png) / * {iconsActive} * /;
+}
+. Ui-estado-highlight. Ui-icon {
+	background-image: url (images/ui-icons_2e83ff_256x240.png) / * {iconsHighlight} * /;
+}
+. Ui-estado-error. Ui-icon,
+. Ui-estado-error-text. Ui-icon {
+	background-image: url (images/ui-icons_cd0a0a_256x240.png) / * {iconsError} * /;
+}
+
+/ * Posición * /
+. Ui-icon-carat-1-n {background-position: 0 0;}
+. Ui-icon-carat-1-ne {background-position:-16px 0;}
+. Ui-icon-carat-1-e {background-position:-32px 0;}
+. Ui-icon-carat-1-se {background-position:-48px 0;}
+. Ui-icon-carat-1-s {background-position:-64px 0;}
+. Ui-icon-carat-1-sw {background-position:-80px 0;}
+. Ui-icon-carat-1-W {background-position:-96px 0;}
+. Ui-icon-carat-1-nw {background-position:-112px 0;}
+. Ui-icon-carat-2-ns {background-position:-128px 0;}
+. Ui-icon-carat-2-ew {background-position:-144px 0;}
+. Ui-icon-triángulo-1-n {background-position: 0-16px;}
+. Ui-icon-triángulo-1-ne {background-position:-16px 16px-;}
+. Ui-icon-triángulo-1-e {background-position:-32px 16px-;}
+. Ui-icon-triángulo-1-se {background-position:-48px 16px-;}
+. Ui-icon-triángulo-1-s {background-position:-64px 16px-;}
+. Ui-icon-triángulo-1-sw {background-position:-80px 16px-;}
+. Ui-icon-triángulo-1-W {background-position:-96px 16px-;}
+. Ui-icon-triángulo-1-nw {background-position:-112px-16px;}
+. Ui-icon-triángulo-2-ns {background-position:-128px-16px;}
+. Ui-icon-triángulo-2-ew {background-position:-144px-16px;}
+. Ui-icon-flecha-1-n {background-position: 0-32px;}
+. Ui-icon-arrow-1-ne {background-position:-16px 32px-;}
+. Ui-icon-flecha-1-e {background-position:-32px 32px-;}
+. Ui-icon-arrow-1-se {background-position:-48px 32px-;}
+. Ui-icon-arrow-1-s {background-position:-64px 32px-;}
+. Ui-icon-arrow-1-sw {background-position:-80px 32px-;}
+. Ui-icon-flecha-1-W {background-position:-96px 32px-;}
+. Ui-icon-arrow-1-nw {background-position:-112px-32px;}
+. Ui-icon-flecha-2-ns {background-position:-128px-32px;}
+. Ui-icon-flecha-2-ne-sw {background-position:-144px-32px;}
+. Ui-icon-arrow-2-ew {background-position:-160px-32px;}
+. Ui-icon-flecha-2-se-nw {background-position:-176px-32px;}
+. Ui-icon-arrowstop-1-n {background-position:-192px-32px;}
+. Ui-icon-arrowstop-1-e {background-position:-208px-32px;}
+. Ui-icon-arrowstop-1-s {background-position:-224px-32px;}
+. Ui-icon-arrowstop-1-W {background-position:-240px-32px;}
+. Ui-icon-arrowthick-1-n {background-position: 0-48px;}
+. Ui-icon-arrowthick-1-ne {background-position:-16px 48px-;}
+. Ui-icon-arrowthick-1-e {background-position:-32px 48px-;}
+. Ui-icon-arrowthick-1-se {background-position:-48px 48px-;}
+. Ui-icon-arrowthick-1-s {background-position:-64px 48px-;}
+. Ui-icon-arrowthick-1-sw {background-position:-80px 48px-;}
+. Ui-icon-arrowthick-1-W {background-position:-96px 48px-;}
+. Ui-icon-arrowthick-1-nw {background-position:-112px-48px;}
+. Ui-icon-arrowthick-2-ns {background-position:-128px-48px;}
+. Ui-icon-arrowthick-2-ne-sw {background-position:-144px-48px;}
+. Ui-icon-arrowthick-2-ew {background-position:-160px-48px;}
+. Ui-icon-arrowthick-2-se-nw {background-position:-176px-48px;}
+. Ui-icon-arrowthickstop-1-n {background-position:-192px-48px;}
+. Ui-icon-arrowthickstop-1-e {background-position:-208px-48px;}
+. Ui-icon-arrowthickstop-1-s {background-position:-224px-48px;}
+. Ui-icon-arrowthickstop-1-W {background-position:-240px-48px;}
+. Ui-icon-arrowreturnthick-1-W {background-position: 0-64px;}
+. Ui-icon-arrowreturnthick-1-n {background-position:-16px 64px-;}
+. Ui-icon-arrowreturnthick-1-e {background-position:-32px 64px-;}
+. Ui-icon-arrowreturnthick-1-s {background-position:-48px 64px-;}
+. Ui-icon-arrowreturn-1-W {background-position:-64px 64px-;}
+. Ui-icon-arrowreturn-1-n {background-position:-80px 64px-;}
+. Ui-icon-arrowreturn-1-e {background-position:-96px 64px-;}
+. Ui-icon-arrowreturn-1-s {background-position:-112px-64px;}
+. Ui-icon-arrowrefresh-1-W {background-position:-128px-64px;}
+. Ui-icon-arrowrefresh-1-n {background-position:-144px-64px;}
+. Ui-icon-arrowrefresh-1-e {background-position:-160px-64px;}
+. Ui-icon-arrowrefresh-1-s {background-position:-176px-64px;}
+. Ui-icon-flecha-4 {background-position: 0-80px;}
+. Ui-icon-flecha-4-diag {background-position:-16px 80px-;}
+. Ui-icon-extlink {background-position:-32px 80px-;}
+. Ui-icon-newwin {background-position:-48px 80px-;}
+. Ui-icon-refresh {background-position:-64px 80px-;}
+. Ui-icon-shuffle {background-position:-80px 80px-;}
+. Ui-icon-transfer-ew {background-position:-96px 80px-;}
+. Ui-icon-transferthick-ew {background-position:-112px-80px;}
+. Ui-icon-carpeta-colapsada {background-position: 0-96px;}
+. Ui-icon-carpeta abierta {background-position:-16px 96px-;}
+. Ui-icon-documento {background-position:-32px 96px-;}
+. Ui-icon-documento-b {background-position:-48px 96px-;}
+. Ui-icon-note {background-position:-64px 96px-;}
+. Ui-icon-mail cerrado {background-position:-80px 96px-;}
+. Ui-icon-mail abierto {background-position:-96px 96px-;}
+. Ui-icon-maleta {background-position:-112px-96px;}
+. Ui-icon-comment {background-position:-128px-96px;}
+. Ui-icon-person {background-position:-144px-96px;}
+. Ui-icon-print {background-position:-160px-96px;}
+. Ui-icon-trash {background-position:-176px-96px;}
+. Ui-icon-bloqueado {background-position:-192px-96px;}
+. Ui-icon-desbloqueado {background-position:-208px-96px;}
+. Ui-icon-marcador {background-position:-224px-96px;}
+. Ui-icon-tag {background-position:-240px-96px;}
+. Ui-icon-home {background-position: 0-112px;}
+. Ui-icon-flag {background-position:-16px-112px;}
+. Ui-icon-calendario {background-position:-32px-112px;}
+. Ui-icon-cart {background-position:-48px-112px;}
+. Ui-icon-lápiz {background-position:-64px-112px;}
+. Ui-icon-reloj {background-position:-80px-112px;}
+. Ui-icon-disco {background-position:-96px-112px;}
+. Ui-icon-calculator {background-position:-112px-112px;}
+. Ui-icon-zoomin {background-position:-128px-112px;}
+. Ui-icon-ZoomOut {background-position:-144px-112px;}
+. Ui-icon-search {background-position:-160px-112px;}
+. Ui-icon-llave {background-position:-176px-112px;}
+. Ui-icon-engranaje {background-position:-192px-112px;}
+. Ui-icon-corazón {background-position:-208px-112px;}
+. Ui-icon-estrella {background-position:-224px-112px;}
+. Ui-icon-link {background-position:-240px-112px;}
+. Ui-icon-cancel {background-position: 0-128px;}
+. Ui-icon-plus {background-position:-16px-128px;}
+. Ui-icon-plusthick {background-position:-32px-128px;}
+. Ui-icon-minus {background-position:-48px-128px;}
+. Ui-icon-minusthick {background-position:-64px-128px;}
+. Ui-icon-close {background-position:-80px-128px;}
+. Ui-icon-closethick {background-position:-96px-128px;}
+. Ui-icon-key {background-position:-112px-128px;}
+. Ui-icon-bombilla {background-position:-128px-128px;}
+. Ui-icon-tijeras {background-posición:-144px-128px;}
+. Ui-icon-portapapeles {background-position:-160px-128px;}
+. Ui-icon-copy {background-position:-176px-128px;}
+. Ui-icon-contacto {background-position:-192px-128px;}
+. Ui-icon-imagen {background-position:-208px-128px;}
+. Ui-icon-video {background-position:-224px-128px;}
+. Ui-icon-script {background-position:-240px-128px;}
+. Ui-icon-alert {background-position: 0-144px;}
+. Ui-icon-info {background-position:-16px-144px;}
+. Ui-icon-aviso {background-position:-32px-144px;}
+. Ui-icon-help {background-position:-48px-144px;}
+. Ui-icon-check {background-position:-64px-144px;}
+. Ui-icon-bala {background-position:-80px-144px;}
+. Ui-icon-radio-on {background-position:-96px-144px;}
+. Ui-icon-radio-off {background-position:-112px-144px;}
+. Ui-icon-pin-w {background-position:-128px-144px;}
+. Ui-icon-pin-s {background-position:-144px-144px;}
+. Ui-icon-play {background-position: 0-160px;}
+. Ui-icon-pausa {background-position:-16px-160px;}
+. Ui-icon-buscar-junto {background-position:-32px-160px;}
+. Ui-icon-buscar-prev {background-position:-48px-160px;}
+. Ui-icon-buscar-end {background-position:-64px-160px;}
+. Ui-icon-buscar-comenzar {background-position:-80px-160px;}
+/ * Ui-icon-buscar-primero es obsoleta, utilice ui-icon-buscar-en lugar comenzar / *
+. Ui-icon-buscar-primero {background-position:-80px-160px;}
+. Ui-icon-stop {background-position:-96px-160px;}
+. Ui-icon-eject {background-position:-112px-160px;}
+. Ui-icon-volumen-off {background-position:-128px-160px;}
+. Ui-icon-volumen-on {background-position:-144px-160px;}
+. Ui-icon-power {background-position: 0-176px;}
+. Ui-icon-señal-diag {background-position:-16px-176px;}
+. Ui-icon-señal {background-position:-32px-176px;}
+. Ui-icon-batería-0 {background-position:-48px-176px;}
+. Ui-icon-batería-1 {background-position:-64px-176px;}
+. Ui-icon-batería-2 {background-position:-80px-176px;}
+. Ui-icon-batería-3 {background-position:-96px-176px;}
+. Ui-icon-círculo-plus {background-position: 0-192px;}
+. Ui-icon-círculo-minus {background-position:-16px-192px;}
+. Ui-icon-círculo-close {background-position:-32px-192px;}
+. Ui-icon-círculo-triángulo-e {background-position:-48px-192px;}
+. Ui-icon-círculo-triángulo-s {background-position:-64px-192px;}
+. Ui-icon-círculo-triángulo-w {background-position:-80px-192px;}
+. Ui-icon-círculo-triángulo-n {background-position:-96px-192px;}
+. Ui-icon-circle-flecha-e {background-position:-112px-192px;}
+. Ui-icon-círculo-arrow-s {background-position:-128px-192px;}
+. Ui-icon-circle-flecha-w {background-position:-144px-192px;}
+. Ui-icon-círculo-arrow-n {background-position:-160px-192px;}
+. Ui-icon-circle-zoomin {background-position:-176px-192px;}
+. Ui-icon-circle-ZoomOut {background-position:-192px-192px;}
+. Ui-icon-círculo-check {background-position:-208px-192px;}
+. Ui-icon-circlesmall-plus {background-position: 0-208px;}
+. Ui-icon-circlesmall-minus {background-position:-16px-208px;}
+
+. Ui-icon-circlesmall-close {background-position:-32px-208px;}
+. Ui-icon-squaresmall-plus {background-position:-48px-208px;}
+. Ui-icon-squaresmall-minus {background-position:-64px-208px;}
+. Ui-icon-squaresmall-close {background-position:-80px-208px;}
+. Ui-icon-grip-punteada-vertical {background-position: 0-224px;}
+. Ui-icon-grip-punteada horizontal {background-position:-16px-224px;}
+. Ui-icon-grip-sólido-vertical {background-position:-32px-224px;}
+. Ui-icon-grip-sólido-horizontal {background-position:-48px-224px;}
+. Ui-icon-gripsmall-diagonal-se {background-position:-64px-224px;}
+. Ui-icon-grip-diagonal-se {background-position:-80px-224px;}
+
+
+/ * Varios efectos visuales
+---------------------------------- * /
+
+/ * Radio de esquina * /
+. Ui-corner-todo,
+. Ui-corner-top,
+. Ui-esquina-izquierda,
+. Ui-corner-tl {
+	border-top-left-radio: 4px / * {CornerRadius} * /;
+}
+. Ui-corner-todo,
+. Ui-corner-top,
+. Ui-esquina-derecha,
+. Ui-corner-tr {
+	border-top-derecha-radio: 4px / * {CornerRadius} * /;
+}
+. Ui-corner-todo,
+. Ui-corner-abajo,
+. Ui-esquina-izquierda,
+. Ui-corner-bl {
+	border-bottom-izquierda-radio: 4px / * {CornerRadius} * /;
+}
+. Ui-corner-todo,
+. Ui-corner-abajo,
+. Ui-esquina-derecha,
+. Ui-corner-br {
+	border-bottom-derecha-radio: 4px / * {CornerRadius} * /;
+}
+
+/ * Plantillas * /
+. Ui-widget-overlay {
+	background: # aaaaaa / * {} bgColorOverlay * / url (images/ui-bg_flat_0_aaaaaa_40x100.png) / * {} * bgImgUrlOverlay / 50% / * {} * bgOverlayXPos / 50% / * {} bgOverlayYPos * / repeat-x / * {bgOverlayRepeat} * /;
+	opacidad: 0.3 / * {opacityOverlay} * /;
+	Filtro: Alpha (opacidad = 30) / * {opacityFilterOverlay} * /;
+}
+. Ui-widget-shadow {
+	margin:-8px / * {} offsetTopShadow * / 0 0-8px / * {offsetLeftShadow} * /;
+	padding: 8px / * {thicknessShadow} * /;
+	background: # aaaaaa / * {} bgColorShadow * / url (images/ui-bg_flat_0_aaaaaa_40x100.png) / * {} * bgImgUrlShadow / 50% / * {} * bgShadowXPos / 50% / * {} bgShadowYPos * / repeat-x / * {bgShadowRepeat} * /;
+	opacidad: 0.3 / * {opacityShadow} * /;
+	Filtro: Alpha (opacidad = 30) / * {opacityFilterShadow} * /;
+	border-radius: 8px / * {cornerRadiusShadow} * /;
+}
+

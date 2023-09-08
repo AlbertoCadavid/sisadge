@@ -1,0 +1,132 @@
+@import '/StyleSheets/common.css';
+body {
+  width: 100%;
+  background-color: #fff;
+  float: left;
+}
+.center {
+  margin: 0 auto;
+  width: 960px;
+}
+.header, .main, .footer {
+  margin: 0 auto;
+  width: 960px;
+}
+.header .search {
+  display: inline;
+  float: left;
+  width: 230px;
+  margin: 0 5px;
+}
+.header .logo {
+  display: inline;
+  float: left;
+  width: 170px;
+  margin: 0 5px;
+}
+.header .menu {
+  display: inline;
+  float: left;
+  width: 530px;
+  margin: 0 5px;
+}
+.main .sidebar {
+  display: inline;
+  float: left;
+  width: 230px;
+  margin: 0 5px;
+}
+.main .content {
+  display: inline;
+  float: left;
+  width: 710px;
+  margin: 0 5px;
+}
+.content-columns {
+  display: inline-block;
+  width: 970px;
+  margin: 0 -5px;
+  margin-bottom: 10px;
+}
+.content-columns .content-column {
+  display: inline;
+  float: left;
+  width: 350px;
+  margin: 0 5px;
+}
+ul.catalogueList {
+  display: inline-block;
+  width: 970px;
+  margin: 0 -5px;
+}
+ul.catalogueList li {
+  display: inline;
+  float: left;
+  width: 350px;
+  margin: 0 5px;
+  padding: 0;
+  border: 0;
+}
+ul.productfeaturelist {
+  display: inline-block;
+  width: 970px;
+  margin: 0 -5px;
+}
+ul.productfeaturelist li {
+  display: inline;
+  float: left;
+  width: 230px;
+  margin: 0 5px;
+  padding: 0;
+  border: 0;
+}
+.productSmall {
+  display: inline-block;
+  width: 970px;
+  margin: 0 -5px;
+  margin-bottom: 10px;
+}
+.productSmall li {
+  display: inline;
+  float: left;
+  width: 350px;
+  margin: 0 5px;
+  padding: 0;
+  border: 0;
+  margin-bottom: 10px;
+}
+.shop-navigation {
+  display: inline-block;
+  width: 970px;
+  margin: 0 -5px;
+}
+.shop-navigation .shop-back {
+  display: inline;
+  float: left;
+  width: 170px;
+  margin: 0 5px;
+}
+.shop-navigation .shop-pagination {
+  display: inline;
+  float: left;
+  width: 350px;
+  margin: 0 5px;
+}
+.shop-navigation .shop-next {
+  display: inline;
+  float: left;
+  width: 170px;
+  margin: 0 5px;
+}
+.footer .footer-links {
+  display: inline;
+  float: left;
+  width: 470px;
+  margin: 0 5px;
+}
+.footer .copyright {
+  display: inline;
+  float: left;
+  width: 470px;
+  margin: 0 5px;
+}

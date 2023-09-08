@@ -1,0 +1,426 @@
+/* MODULE SPECIFIC STYLES */
+
+
+/* PRODUCT LISTS RELATED STYLES */
+
+/* Featured products list */
+
+.productfeaturelist  {
+	display:block;
+}
+
+.productfeaturelist li {
+	display:block;
+}
+
+ul.catalogueList {
+	display:block;
+	padding:0;
+	list-style:none;
+}
+
+ul.catalogueList li {
+	display:block;
+}
+
+.productList li.productItemNotFound {
+	display:none;
+}
+
+.catalogueList li.catalogueItemNotFound {
+	display:none;
+}
+
+.shop-catalogue {
+	min-height:130px;
+	border: 1px solid #b1bdb4;
+	padding:10px;
+}
+
+.catalog-image {
+	float:left;
+	width:150px;
+}
+
+.catalog-info {
+	width:auto;
+	margin-left:150px;
+	text-align:right;
+}
+
+.catalog-info h4 {
+	margin-top:0px;
+}
+
+.featured-product {
+	min-height:300px;
+	border: 1px solid #b1bdb4;
+	padding:10px;
+	overflow-x:hidden;
+}
+
+.featured-product .product-caption,
+.small-product .product-caption {
+	min-height:100px;
+}
+
+.featured-product .product-image,
+.small-product .product-image {
+	min-height:130px;
+}
+
+.productSmall .product-price,
+.featured-product .product-price {
+	float:left;
+	width:50%;
+	text-align:left;
+	padding-top:5px;
+}
+
+.featured-product .product-add,
+.productSmall .product-add {
+	float:left;
+	width:50%;
+	text-align:right;
+	
+}
+
+.featured-product .product-add img,
+.productSmall .product-add img{
+	cursor:pointer;
+}
+
+.productLarge .product-price {
+	margin-bottom: 10px;
+}
+
+.productList {
+	padding:0px;
+	margin:0px;
+}
+
+.small-product {
+	min-height:200px;
+	padding:10px;
+	border:solid 1px #b1bdb4;
+	overflow-x:hidden;
+}
+
+.productSmall li {
+	display:block;
+	margin-bottom:10px;
+}
+
+.productLarge li {
+	display:block;
+	width:auto;
+	overflow-x:hidden;
+}
+
+.fb-like {
+	min-height: 25px;
+}
+
+.product-details {
+	margin: 0 0 15px 0;
+}
+
+.product-properties {
+	width:450px;
+	float:left;
+	overflow:hidden;
+}
+
+.product-description{
+	padding:5px 0;
+	margin-top: 0;
+}
+
+.product-images{
+	width:256px;
+	float:left;
+}
+
+.product-large-image{
+	text-align:right;
+}
+
+.product-poplets{
+}
+
+.featured-products {
+	margin-top:12px;
+	margin-bottom:20px;
+}
+
+ul.productfeaturelist {
+	padding:0;
+	list-style:none;
+}
+
+
+
+/* Product list navigation styles */
+
+.shop-products{
+	margin-top:12px;
+}
+
+.shop-back{
+	width:30%;
+	float:left;
+}
+
+.shop-pagination{
+	width:40%;
+	float:left;
+}
+
+.shop-next{
+	width:30%;
+	float:left;
+}
+
+/* BLOG RELATED STYLES */
+
+
+
+.BlogTagList ul,
+.BlogPostArchive ul,
+.BlogRecentPost ul, 
+.BlogRecentPost li, 
+.BlogTagList li, 
+.BlogPostArchive li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.BlogRecentPost,
+.BlogPostArchive {
+	margin-top: 10px;
+}
+
+.BlogRecentPost a, 
+.BlogRecentPost a:link, 
+.BlogRecentPost a:visited,
+.BlogRecentPost ul, 
+.BlogTagList li, 
+.BlogPostArchive li {
+	display: block;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.BlogTagCloud {
+	margin: 10px 0 18px;
+}
+
+.blog-post {
+	margin: 15px 0;
+	overflow-x:hidden;
+}
+
+.blog-comments-link {
+	background-color:#F3F3F3;
+	padding:5px;
+}
+
+.fb_edge_widget_with_comment {
+	min-height:24px;
+}
+
+.blog-posts .fb_iframe_widget {
+	width:100%;
+}
+
+.blog-posts .fb_iframe_widget iframe.fb_ltr {
+	width:100% !important;
+}
+
+
+
+/* ANNOUNCEMENTS RELATED STYLES */
+
+.announcement-list {
+	overflow-x:hidden;
+}
+	
+.announcement-list h4 {
+	margin-bottom:0;
+}
+
+/* SHOP RELATED STYLES (shopping cart table, checkout form, etc) */
+
+table.cart {
+    background: #fff;
+    border-collapse:collapse;
+    border-spacing:0;   
+    border: 1px solid #ddd;
+    font-size: 11px;
+    width: 100%;
+}
+
+table.cart td {
+    vertical-align: middle;
+}
+
+table.cart th.first-column,
+table.cart td.first-column {
+	padding-left:10px;
+}
+
+table.cart a {
+    color: #1969bc;
+}
+
+table.cart th, table.cart td {
+    color: #666;
+    padding: 9px 2px;
+}
+
+tr.val td {
+    border-bottom: 1px solid #eee;
+}
+
+tr.shipping td {
+    border-bottom: 1px solid #ddd;
+}
+
+tr.discount td.quantity, tr.shipping td.quantity {
+    text-align: right;
+}
+
+td.quantity input.update {
+    margin: 0 0 0 3px;
+}
+
+table.cart th {
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    color: #000;
+    font-size: 11px;
+    font-weight: normal;
+    text-align: left;
+}
+
+input.cartInputText {
+    width: 30px;
+}
+
+input#DiscountCode, input#GiftVoucher {
+    width: 50px;
+}
+
+select.shippingDropDown {
+    width: 150px;
+}
+
+table.cart th.quantity,
+table.cart td.quantity {
+    text-align: left;
+}
+
+.productitemcell {
+    height: 26px;
+    line-height: 20px;
+    margin: 0;
+    overflow: hidden;
+}
+
+table.cart td.actions {
+    text-align: right;
+}
+
+table.cart td.actions a {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0 18px 0 0;
+    text-decoration: none;
+}
+
+a#catshopclear {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+table.cart strong {
+    font-size: 14px;
+}
+
+.shop-form {
+    margin: 0 0 18px;
+}
+
+.shop-form ul.form {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 18px;
+}
+
+.shop-form label {
+    font-size: 11px;
+}
+
+.shop-form ul.form li {
+    margin: 0;
+    padding: 9px 0;
+}
+
+.shop-form li.last {
+    border-top: 1px solid #eee;
+}
+
+input.PaymentMethodType {
+    margin: 0 6px 0 0;
+}
+
+.shop-form ul.form input.cat_textbox,
+.shop-form ul.form select.cat_dropdown,
+.shop-form ul.form textarea.cat_listbox {
+    width: 260px;
+}
+
+.shop-form textarea.cat_listbox {
+    height: 100px;
+}
+
+.shop-receipt, .shop-quote-receipt {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    margin: 18px;
+    padding: 18px;
+}
+
+.shop-receipt h1, .shop-quote-receipt h1 {
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 3px;
+}
+
+.shop-receipt h2, .shop-quote-receipt h2 {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#ShippingAddress, 
+#ShippingCountry, 
+#ShippingInstructions,
+#BillingAddress,
+#BillingCountry,
+#BillingAddress {
+	width:250px;
+}
+
+#CardCCV {
+	width:50px;
+}
+
+.shop-checkout input[type=text] {
+	width:250px;
+}
+
+#Amount {
+	border:0;
+	padding:0;
+}

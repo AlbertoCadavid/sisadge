@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" --><title></title><!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://use.typekit.com/gxw4mke.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+<script type="text/javascript" src="/js/mobile.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default.css"/>
+<link rel="stylesheet" type="text/css" href="/StyleSheets/default_phone.css" />
+
+
+</head>
+<body>
+<!-- HEADER -->
+<header>
+  <div class="header">
+    <div class="menu-container">
+      
+      <a href="#" class="corner-menu">Menu</a>
+     
+      <div class="floating-menu"> {module_menu,14623}
+        <div class="search-container">
+          <form name="catsearchform92907" method="post" action="/search">
+            <div class="search-box">
+              <input class="cat_textbox_small" type="text" name="CAT_Search" id="CAT_Search" placeholder="Search..." />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+   <a class="menu-cart" href="/OrderRetrievev2.aspx?CatalogueID=36643">Cart</a>
+  
+   <div class="logo">
+		<a href="/"><img src="/demo/online-store-logo.png" alt="Online Store" class="logo-image"/></a>
+    </div>
+  
+  </div>
+</header>
+
+<!-- MAIN AREA -->
+<div class="main_bg">
+<div class="main">
+  <section class="content"> <!-- TemplateBeginEditable name="ContentArea" -->{tag_pagecontent}<!-- TemplateEndEditable --> </section>
+  <!-- SIDEBAR -->
+  <section class="sidebar"> 
+    <!-- NEWS POD -->
+    <h3>Latest News</h3>
+    {module_announcement,a,}
+    <hr />
+    <!-- NEWSLETTER POD -->
+    <h3>Newsletter Sign-up</h3>
+    <form name="catemaillistform92837" onsubmit="return checkWholeForm92837(this)" method="post" action="/CampaignProcess.aspx?ListID=24432">
+      <label for="CLFullName">Full Name</label>
+      <input class="cat_textbox_small" type="text" name="FullName" id="CLFullName" maxlength="255" />
+      <label for="CLEmailAddress">Email Address</label>
+      <input class="cat_textbox_small" type="text" name="EmailAddress" id="CLEmailAddress" maxlength="255" />
+      <input class="cat_button" type="submit" value="Subscribe" id="catlistbutton" />
+    </form>
+    <script type="text/javascript" src="/CatalystScripts/ValidationFunctions.js"></script> 
+    <script type="text/javascript">
+//<![CDATA[
+function checkWholeForm92837(theForm){var why = "";if (theForm.EmailAddress) why += checkEmail(theForm.EmailAddress.value);if (theForm.CaptchaV2) why += isEmpty(theForm.CaptchaV2.value, "Enter Word Verification in box below"); if (why != ""){alert(why);return false;}theForm.submit();return false;}
+//]]>
+    </script> 
+  </section>
+</div>
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer">
+    <div class="footer-links">
+{module_menu, version="2", menuId="14623", moduleTemplateGroup="Footer"}</div>
+    <div class="copyright"> Copyright 2011 {module_sitename} All rights reserved. </div>
+  </div>
+</footer>
+</body>
+</html>

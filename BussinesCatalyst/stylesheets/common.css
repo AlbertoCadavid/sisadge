@@ -1,0 +1,331 @@
+/* ----------------------- COMMON CSS ------------------------------ */
+/* These styles are used in both the grid based and the pure CSS version */
+
+header, section, footer, nav, article {
+	display:block;
+}
+
+html {
+	overflow-y:scroll;
+}
+
+body {
+	background-color:#666;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#333;
+	font-size:0.8em;
+	margin:0px;
+	padding:0px;
+}
+
+h1 {
+	font-size:2em;
+}
+
+h2 {
+	font-size:1.5em;
+}
+
+h3 {
+	font-size:1.17em;
+}
+
+h4 {
+	font-size:1em;
+}
+
+h1, h2, h3 {
+	font-weight:bold;
+	font-family: Myriad-Pro, Arial, Helvetica, sans-serif;
+	margin:5px 0;
+}
+
+img {
+	border:0;
+}
+
+hr {
+	height:1px;
+	border: 0;
+	background-color:#b1bdb4;
+}
+
+a:link, a:visited {
+	color: #0066BC;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #0066BC;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* ----------------------- HEADER CSS ------------------------------ */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  overflow: visible;
+  
+  background-color:#222;
+  border-bottom: 1px solid #CCC;
+}
+
+.header {
+	font-family: Myriad-Pro, Arial, Helvetica, sans-serif;
+	min-height:40px;
+	color: #bfbfbf;
+}
+
+/* Header logo CSS */
+ 
+.logo h3 {
+	position: relative;
+	float:left;
+	margin:0;
+	padding:0;
+}
+
+.logo h3 a,
+.logo h3 a:hover,
+.logo h3 a:active,
+.logo h3 a:visited {
+  display: block;
+  padding: 9px 10px 10px 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1;
+  text-decoration:none;
+}
+
+/* Header top menu CSS */
+ 
+.menu .links {
+	float:left;
+}
+
+.menu ul {
+  display: block;
+  float: left;
+  margin: 0 10px 0 0;
+  position: relative;
+  padding:0;
+}
+
+.menu ul li {
+  display: block;
+  float: left;
+}
+
+.menu ul li a {
+  display: block;
+  padding: 10px 10px 11px;
+  line-height: 19px;
+  font-weight:bold;
+  text-decoration: none;
+  color: #BFBFBF;
+}
+
+.menu ul li a:hover,
+.menu ul li a:active,
+.menu ul li.selected a {
+  color: #FFF;
+}
+
+.menu ul li a:hover {
+  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Header cart summary CSS */
+
+.cart-summary {
+	float:right;
+	text-align:right;
+	color:#FFF;
+	margin:10px 10px 0 0;
+}
+
+.cart-summary a,
+.cart-summary a:visited,
+.cart-summary a:hover {
+	font-size:12px;
+	margin-left: 3px;
+	color: #BFBFBF;
+}
+
+/* Header search box CSS */
+
+.search-box {
+	float:left;
+	margin: 6px 0 0 0;
+}
+
+.search-box input {
+  background-color: #444;
+  background-color: rgba(255, 255, 255, 0.3);
+  width: 200px;
+  padding: 4px 9px;
+  color: #fff;
+  border: 1px solid #111;
+	
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+	
+}
+
+.search-box input:-moz-placeholder {
+  color: #e6e6e6;
+}
+
+.search-box input::-webkit-input-placeholder {
+  color: #e6e6e6;
+}
+
+.search-box input:hover {
+  background-color: #bfbfbf;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.search-box input:focus, .search-box input.focused {
+  outline: none;
+  background-color: #fff;
+  color: #404040;
+  text-shadow: 0 1px 0 #fff;
+  border: 0;
+  padding: 5px 10px;
+}
+
+
+/* ----------------------- CONTENT ZONE CSS ------------------------------ */
+
+.main_bg {
+	background-color:#FFF;
+}
+
+.main {
+	min-height:500px;
+	padding-top:55px;
+}
+
+/* Main content area CSS */
+
+.main .content {
+	min-height:800px;
+}
+
+
+.content-columns {
+	margin-top:12px;
+	padding:0px;
+}
+
+.content-column form {
+	padding-left:5px;
+}
+
+.content-column form input[type=text],
+.content-column form textarea,
+.content-column form input[type=password] {
+	width:200px;
+	margin-bottom:5px;
+}
+
+/* Sidebar CSS */
+
+.main .sidebar {
+	padding:10px 0;
+	min-height:800px;
+}
+
+.sidebar hr {
+	margin: 20px 0;
+}
+
+.sidebar h3 {
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Sidebar forms CSS */
+
+.sidebar form {
+	padding-top:10px;
+}
+
+.sidebar form input[type=text],
+.sidebar form input[type=password] {
+	width:200px;
+	margin-bottom:5px;
+}
+
+.sidebar label,
+.sidebar input[type="submit"] {
+	display:block;
+	margin-top:5px;
+}
+
+
+/* ----------------------- FOOTER CSS ------------------------------ */
+
+footer {
+	background-color:#666;
+	color: white;
+}
+
+.footer {
+	font-family: Myriad-Pro, Arial, Helvetica, sans-serif;
+}
+
+/* Footer copyright text CSS */
+
+.footer .copyright {
+	text-align:right;
+	padding:25px 0;
+}
+
+/* Footer menu CSS */
+
+.footer .footer-links {
+	padding: 25px 0;
+}
+
+.footer-links ul {
+  margin: 0 10px 0 0;
+  padding:0px;
+}
+
+.footer-links ul li {
+  display: block;
+  float:left;
+}
+
+.footer-links a,
+.footer-links a:active, 
+.footer-links a:visited,
+.footer-links a:hover {
+  display: block;
+  padding: 0 10px 11px 0;
+  font-weight:bold;
+  text-decoration:underline;
+  color:#FFF;
+}
+
+
+
+/* Clear DIVs */
+
+.clear {
+	clear: left;
+	height: 0;
+}
+
+.clear-rows{
+	clear: both;
+	height: 0;
+}

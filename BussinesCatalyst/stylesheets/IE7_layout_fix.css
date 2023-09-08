@@ -1,0 +1,7 @@
+/* CSS Document */
+
+.header,
+.main,
+.footer {
+	max-width:960px !important ;
+}

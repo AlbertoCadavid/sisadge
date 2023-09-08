@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title></title>
+<link href="/StyleSheets/ModuleStyleSheets.css" type="text/css" rel="StyleSheet" />
+<link type="text/css" media="screen,projection" href="/StyleSheets/base.css" rel="stylesheet" />
+<link type="text/css" media="screen,projection" href="/StyleSheets/screen.css" rel="stylesheet" />
+<link rel="stylesheet" href="/CatalystStyles/Box.css" type="text/css" media="screen" />
+<meta content="text/html;charset=utf-8" http-equiv="content-type" />
+</head>
+<body>
+
+	<section class="content">
+		<h1>{tag_blogtitle} <a  id="rss" href="http://nakedtemplate01.businesscatalyst.com/RSSRetrieve.aspx?ID=6003&Type=RSS20" target="_blank"><img alt="RSS" src="http://nakedtemplate01.businesscatalyst.com/CatalystImages/RSS.png" width="16" height="16"/></a></h1>
+		<p class="description">{tag_blogdescription}</p>
+		<div class="blog-posts"> {tag_postlist}
+			<hr />
+			<p class="page-nav">
+				{tag_previouspage}
+				{tag_pagination}
+				{tag_nextpage}
+			</p>
+		</div>
+	</section>
+	<section class="sidebar">
+		<h3 ice:editable="*">Recent Posts</h3>
+		{tag_blogrecentpost}
+        <hr />
+		<h3 ice:editable="*">Tags</h3>
+		{tag_blogtagcloud}     
+		{tag_blogtaglist}
+        <hr />
+		<h3 ice:editable="*">Archive</h3>
+		{tag_blogpostarchive}
+	</section>
+	<div class="clear"></div>
+
+</body>
