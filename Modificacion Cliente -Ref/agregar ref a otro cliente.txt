@@ -1,0 +1,14 @@
+Se modifica las tablas:  
+
+SELECT * FROM `tbl_cliente_referencia` WHERE `N_referencia` in('1359','1360')
+UPDATE `tbl_cotizaciones` SET `Str_nit` = '9013937603' WHERE `tbl_cotizaciones`.`N_cotizacion` = 6391;
+
+
+1359-00 12,500 Bolsa courrier 25x33+4 cal 2.0 por 20 mil 
+1360-00  10,000 Bolsa courrier 41x45 +4 Cal 2.5 por 20 mil
+
+Kraquet Grupo Textil S.A.S
+
+802162529  - > 9013937603
+
+==================================================
