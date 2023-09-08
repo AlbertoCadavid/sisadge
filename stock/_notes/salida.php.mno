@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_salida" value="name:Almacen;datatype:string,name:Clase;datatype:string,name:Nro_Voucher;datatype:int,name:Codigo;datatype:string,name:Cantidad;datatype:real" />
+</info>
