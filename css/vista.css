@@ -1,0 +1,318 @@
+/* CSS Document para vista o informe */
+body{ margin:0; }
+/*TABLAS*/
+#tabla_total{ width:100%; }
+#tabla_semitotal { width:80%; }
+#tabla_media{ width:60%; }
+#tablaexterna {
+    width:700px; background-color: #FFFFFF; border:5px solid #D6D6D6; }
+#tablaexpande {
+     width:100%; border:0px; background-color: #FFFFFF; }
+#tablainterna { 
+    width:700px; border:0px; background-color: #FFFFFF; }
+#tablainterna2 {
+    width:700px; border:0px; background-color: #FBFCFE; }/*esta es la vista especial de cliente edit*/
+#tabladetalle { 
+    background-color: #FFFFFF; } 
+#tablailimitada { 
+    background-color: #FFFFFF; border:5px solid #CCCCCC; }
+#tabla1 {
+    width: 610px;
+    border: 5px solid #D6D6D6;/*#C5DCED*/
+    background-color:#D6D6D6; /*#FFFFFF*/
+}
+#tabla2 {
+    width:600px; border:0px; background-color: #EDEDED; }
+#tabla3 {
+    width:100%; border:0px; background-color: #FFFFFF; }
+#tabla4 { width:50%;font-weight:bold; }
+#tabla5 {
+    width:70%;  
+    border: 5px solid #000000;
+    cellpadding: 0;
+    margin: 20px 20px;
+    -webkit-border-radius: 25px 25px 25px 25px;
+    font-family: Arial;
+}
+#tabla6 {
+/*    width: 60px;
+    height:40px;*/
+    border: 4px solid #000000; 
+    cellpadding: 0;
+    margin: 2px 2px;
+    -webkit-border-radius: 25px 25px 25px 25px;
+    <!--font-family: Arial;-->
+}
+/*------------------*/
+/*LOGOS*/
+#logo_2{ width:20%; text-align:center; }
+/*LINEAS*/
+#linea1{ border-top:2px solid #CCCCCC; }
+/*---------------------------------------*/
+/*TITULOS SIN: BORDE Y FONDO*/
+#titulo{   text-align:center; font:bolder 36px Arial; color:#000066; }
+#titular1{ text-align:left;   font:bolder 20px Arial; color:#000066; }
+#titular2{ text-align:center; font:bolder 20px Arial; color:#000066; }
+#titulo1{  text-align:center; font:bolder 32px Arial; color:#003399; }
+#titulo2{  text-align:center; font:bolder 18px Arial; color:#000066; }
+/*---------------------------------------*/
+/*SUBTITULOS CON: BORDE Y FONDO*/
+#subtitulo1{ text-align:left; font: bolder 12px Verdana; color: #666;
+             background-color: #EFEFEF; border:1px solid #CCC; }
+#subtitulo2{ text-align: center;font: bolder 12px Verdana; color: #006;
+             background-color: #D6D6D6; border:1px solid #CCC; }
+#subtitulo3{ text-align: right;font: bolder 12px Verdana; color: #666;
+             background-color: #EFEFEF; border:1px solid #CCC; }
+#principal{  text-align:center; font: bolder 16px Arial; color:#006;
+             background-color: #D6D6D6; border:1px solid #CCC; }
+#subppal{    text-align:center; font: bold 10px Arial; color: #006;   
+             background-color: #D6D6D6; border:1px solid #CCC; }
+#subppal2{   text-align:center; font: normal 11px Arial; color: #006;
+             background-color: #D6D6D6; border:1px solid #CCC;  }
+#subppal3{   text-align:justify; font: normal 11px Arial; color: #006;
+             background-color: #D6D6D6; border:1px solid #CCC; }
+#subppal4{   text-align:left; font: normal 11px Arial; color: #006;
+             background-color: #D6D6D6; border:1px solid #CCC;  }
+#subtitulo{  text-align:left; font: bold 13px Arial; color: #006;
+             background-color: #D6D6D6; border:1px solid #CCC; }
+/*---------------------------------------*/
+/*SUBTITULOS CON: BORDE SIN: FONDO*/
+#numero1{    text-align:justify; font:normal 13px Arial; color:#FF0000;
+             border:1px solid #CCCCCC; }
+/*---------------------------------------*/
+/*SUBTITULOS SIN: BORDE SIN: FONDO*/
+#numero2{    text-align:center;  font:normal 20px Arial; color: #FF0000; }
+#asignado{   text-align:center; font: bolder 14px Arial; color: #000; }
+/*---------------------------------------*/
+/*FUENTES SIN BORDE SIN FONDO*/
+#fondo_1{    text-align: left;    font: normal 11px Arial; color: #000; }
+#fondo_2{    text-align: center;  font: normal 11px Arial; color: #000; }
+#fondo_3{    text-align: right;   font: normal 11px Arial; color: #000; }
+#fondo{      text-align: center;  font: normal 11px Arial; color: #006; }
+#fondo1{
+    text-align: left;
+    font: normal 11px Arial;
+    color: #006;
+}
+#fondo2{     text-align: center;  font: normal 11px Arial; color: #006; }
+#fondo3{
+    text-align: right;
+    font: normal 11px Arial;
+    color: #006;
+}
+#fondo4{
+    text-align: right;
+    font: bolder 11px Arial;
+    color: #000;
+    font-weight: bold;
+}
+#fondo5{     text-align: left;    font: bolder 11px Arial; color: #000; }
+#fondo6{     text-align: center;  font: bolder 11px Arial; color: #000; }
+#justificar{ text-align: justify; font: normal 12px Arial; color: #000; }
+/*---------------------------------------*/
+/*FUENTES CON: BORDE SIN FONDO*/
+#dato1{      text-align: left;    font: normal 12px Arial; color: #000; border:1px solid #CCC; }
+#dato2{      text-align: center;  font: normal 12px Arial; color: #000; border:1px solid #CCC; }
+#dato3{      text-align: right;   font: normal 12px Arial; color: #000; border:1px solid #CCC; }
+#detalle1{   text-align: left;    font: normal 10px Arial; color: #000; border:1px solid #CCC; }
+#detalle2{
+    text-align: center;
+    font: normal 10px Arial;
+    color: #000;
+    border: 1px solid #CCC;
+    font-size: 10px;
+}
+#detalle3{   text-align: right;   font: normal 10px Arial; color: #000; border:1px solid #CCC; }
+/*FUENTE CON: BORDE ABAJO SIN: FONDO*/
+#abajo1{      text-align: left;    font: normal 11px Arial; color: #000; border-bottom:1px solid #CCC; }
+#abajo2{      text-align: center;    font: normal 11px Arial; color: #000; border-bottom:1px solid #CCC; }
+/*---------------------------------------*/
+/*FUENTES CON: BORDE Y FONDO*/
+#nivel1{     text-align: left;    font: bold 10px Arial;   color: #000; border:1px solid #CCC;           
+             background-color: #D6D6D6; }
+#nivel2{     text-align: center;  font: bold 10px Arial;   color: #000; border:1px solid #CCC;
+             background-color: #D6D6D6; }
+#nivel3{     text-align: right;   font: bold 10px Arial;   color: #000; border:1px solid #CCC;
+             background-color: #D6D6D6; }
+#fuente1{    text-align: left;  font: normal 11px Arial; color: #000; border:1px solid #CCC;
+}
+#fuente2{    text-align: center;  font: normal 11px Arial; color: #000; border:1px solid #CCC;
+             background-color:#FFFFFF; }
+#fuente3{    text-align:justify;  font: normal 11px Arial; color: #000; border:1px solid #CCC;
+             background-color:#FFFFFF; }
+#fuente4{    text-align: center;  font: normal 13px Arial; color: #006; border:1px solid #CCC;
+             background-color: #EFEFEF; }
+#fuente5{    text-align: center;  font: bolder 13px Arial; color: #000; border:1px solid #CCC;
+             background-color:#FFFFFF; }
+#fuente6{    text-align: justify; font: normal 12px Arial; color: #000; border:1px solid #CCC;
+             background-color:#FFFFFF; }
+#fuente7{    text-align: left;    font: normal 10px Arial; color: #006; border:1px solid #CCC;
+             background-color: #EFEFEF; }
+#fuente8{    text-align: center;  font: normal 10px Arial; color: #006; border:1px solid #CCC;
+             background-color: #EFEFEF; }
+#fuente9{    text-align: left;    font: normal 12px Arial; color: #006; border:1px solid #CCC;
+             background-color: #EFEFEF; }
+#fuente10{    text-align: center;  font: normal 11px Arial; color: #0099FF; border:1px solid #CCC;
+              background-color:#FFFFFF; }
+#fuente11{    text-align: center;  font: normal 11px Arial; color: #000; border:1px solid #CCC;
+              background:#FBFCFE;}
+#fuente12{   text-align: left;  font: normal 11px Arial; color: #006; border:1px solid #CCC;
+             background-color: #EFEFEF; }
+/*FUENTES STIKERS DE EXTRU, IMPRE PARA ROLLOS*/
+#stikers_fuentN{ text-align:left; font: normal 11px Arial;}	
+#stikers_fuentNC{ text-align:center; font: normal 12px Arial;}  			 			 
+/*FUENTES STIKERS SIN BORDE SIN FONDO PARA PAQUETE*/
+#stikers_titu{ font: normal 11px Arial;}	
+#stikers_subt1{ text-align: right;   font: normal 10px Arial;}	
+#stikers_subt2{ font: normal 10px Arial;}
+#stikers_pqu1{ font: normal 7px Arial;} 
+#stikers_fuent1{ font: normal 10px Arial;} 
+#stikers_fuentN2{ font: normal 13px Arial;
+/*font: "Arial Black", 13px Gadget, sans-serif;*/
+ /*font-family: Verdana 1px, Geneva, sans-serif;*/
+ }	
+ 
+ #stikers_colas{ font: normal 10px Arial;
+ /*font-family: Verdana 1px, Geneva, sans-serif;*/
+ }
+#stikers_fuent2{   text-align:justify;  font: normal 9px Arial; } 
+#stikers_titu_grande{    text-align: center;    font: normal 30px Arial;}
+#stikers_subt_grande{    text-align: left;    font: normal 28px Arial;}
+#stikers_subt2_grande{    text-align: right;    font: normal 28px Arial;}
+#stikers_fuent1_grande{   text-align:justify;  font: normal 22px Arial;}
+#stikers_fuent2_grande{   text-align:center;  font: normal 22px Arial;} 		
+/*FUENTES STIKERS SIN BORDE SIN FONDO PARA CAJAS*/
+#stikersC_titu{
+    text-align: center;
+    font: 700 normal 21px Arial;
+    font-size: x-large;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-weight: bold;
+}	
+#stikersC_subt1{    text-align: right;    font-size: x-large;}
+#stikersC_subt2{    text-align: center;    font: normal 10px Arial;}
+#stikersC_fuent1{
+    text-align: justify;
+    font: 900 normal 17px Arial;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+} 
+#stikersC_fuentN{
+    text-align: left;
+    font: 700 normal 13px Arial;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+#talla1{
+    text-align: left;
+    color: #000000;
+    font-family:Arial;
+    font-size:10px;
+    font-weight:bold;
+}
+#fuentND{
+    text-align: left;
+    font: 700 normal 9px Arial;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+#fuentND2{
+    text-align: left;
+    font: 700 normal 7px Arial;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+#fuentNE{
+    text-align: left;
+    font: 800normal 10px Arial;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}	
+#stikersC_fuent2{
+    text-align: justify;
+    font: normal 9px Arial;
+    font-family: Arial;
+} 
+#stikersC_titu_grande{
+    text-align: center;
+    font: 500 normal 14px Arial;
+    font-family: Tahoma, YGeneva, sans-serif;
+}
+#stikersC_subt_grande{    text-align: left;    font: normal 28px Arial;}
+#stikersC_subt2_grande{    text-align: right;    font: normal 28px Arial;}
+#stikersC_fuent1_grande{   text-align:justify;  font: normal 20px Arial;}
+#stikersC_fuent2_grande{   text-align:center;  font: normal 20px Arial;} 
+#tintas { 
+    width: 340px;
+    height:auto;  
+    float:left; 	
+}
+#cabeceratiqu{ background-image:url(../images/qrcodigo.PNG); 
+            float:left;
+            position:relative;
+/*            position: absolute;*/
+            background-repeat:no-repeat;
+            text-align:right;
+}
+#cajon1{ 
+    /*position:relative;
+    left: 0px;*/
+    float:left;
+}
+#div-1 {
+    position:relative;
+}
+#div-1a {
+	margin: 25px 1px 2px 1px;
+	/*border: 2px solid #000000;*/
+	position: absolute;
+	top: 80px;/*10px*/
+	right: 1;
+	width: auto;
+	font-size: 70px;
+}
+#bordeRedondo {
+    border: 2px solid #000000;
+    cellpadding: 0;
+    text-align:left;
+    -webkit-border-radius: 5px 0px 5px 5px;
+    /*-moz-border-radius: 20px ;bordes redondos*/
+    border-radius: 3px ; 
+    margin: 2px 2px;
+    font-family: Arial;	
+}
+hr { 
+    display: block;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    color: black;
+}
+/*hr.style-four {
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0,0,0,0.5);
+}*/
+/*.flotar {
+float:right;
+clear:right;
+position: absolute;
+width:100px;
+top: 100px;
+}*/
+
+/*#div-1 {
+ position:relative;
+}
+#div-1a {
+ position:absolute;
+ top:0;
+ right:0;
+ width:200px;
+}
+#div-1b {
+ position:absolute;
+ top:0;
+ left:0;
+ width:200px;
+}*/
+

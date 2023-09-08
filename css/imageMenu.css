@@ -1,0 +1,144 @@
+
+
+
+body{ 
+	  background-color:#E1E2E4 !important;;
+	}/*background: url(../images/fondo_azul.gif) center;*/ /*background-color:#E1E2E4 !important;*/
+
+/*#divconten{
+	 background: url(../images/fondo_azul.gif) center;
+}*/
+
+ 
+/*--------------BANNER SLIDE-----------------*/
+.baderslide{
+  animation-duration: 2s;
+  animation-name: slidein;
+  /*animation-iteration-count: infinite;*/
+}
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 20%
+  }
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+/*--------------FIN-----------------*/
+
+/*--------------PRINCIPALES-----------------*/
+#cabecera{ background-image:url(../images/sisadge_nuevo.gif); margin:20px 30px; padding:70px 0px 0px 0px; background-repeat:no-repeat; background-position:bottom; }
+#cabecera1{ background-image:url(../images/sisadge.gif); margin:10px 40px; padding:25px 0px; background-repeat:no-repeat; background-position:left; text-align:right; }
+#cabecera2{ background-image:url(../images/sisadge.gif); margin:10px 30px; padding:10px 0px; background-repeat:no-repeat; background-position:left; text-align:right; }
+#pie { padding:10px; font: 10px Verdana; color:#666; text-align:center; }
+#divconten{
+	border: 8px  inset #4481B0 ;/*#6666cc*/
+	background-color: #FBFCFE;
+	-webkit-border-radius:20px  ;/*bordes redondos*/
+	-moz-border-radius: 20px ;/*bordes redondos*/ 
+	border-radius: 15px ;
+	margin: 80px 80px 80px ;	
+}
+/*#divconten{
+	border: 5px  inset #6666cc;
+	background-color: #FBFCFE;
+	-webkit-border-radius:20px  ;bordes redondos
+	-moz-border-radius: 20px ;
+	border-radius: 20px ;
+	margin: 40px 40px 40px ;	
+}*/
+/* Este es el segundo método */
+
+/*  @media all and (max-width: 600px){
+	imag{
+		width:100%;
+		height:auto;
+		margin:10px 0px 10px;
+	}
+}*/
+/*----------------TABLAS-----------------*/
+#tablacentro { width:100%; height:100%; }
+#tabla1{
+	width: 860px;
+	height:630px;
+	border: 5px  inset #4481B0;/*#6666cc*/
+	/*border: 8px groove #6666cc; anterior*/
+	background-color: #FBFCFE;
+	-webkit-border-radius:30px  ;/*bordes redondos*/
+	-moz-border-radius: 30px ;/*bordes redondos*/ 
+	border-radius: 30px ;
+}
+
+#tabla2{ width:800px; background-color:#FFFFFF; border-style:dashed; }
+/*ESPACIOS-------------------------------*/
+#
+#tdcentro { vertical-align:middle; text-align:center; }
+#justificacion{ width:780px; margin:10px 20px; padding:0; text-align:center }
+#columna1{ width:260px; /*height:420;*/margin:0px 20px; padding:0; float:left;  }
+#columna2{
+	margin: 20px 20px;
+	padding: 0;
+	font: 17px Verdana;
+	text-align: justify;
+	color: #000066;
+}
+#columna3{ width:800px; /*height:420;*/margin:0px 5px 0px 0px; padding:0; float:left; -webkit-border-radius:15px 0 20px 0 ; background-color:#F8F9FB/*bordes redondos*/}
+
+#principal2{ font:bold 15px Verdana; color:#000066; text-align:center; }
+#fuente2{ font:bold 12px Verdana; color:#000066; text-align:center; padding:2px 0px;}
+#rojo2{ font:bold 15px Verdana; color:#F00; text-align:center; padding:2px 0px;}
+#rojo3{ font:bold 12px Verdana; color:#F00; text-align:center; padding:1px 0px;}
+#verde{ font:bold 12px Verdana; color:#77B07C; text-align:center; padding:1px 0px;}
+/*MENU HORIZONTAL------------------------*/
+.navbar{ text-align: left; }
+.navbar ul{ list-style-type:none; margin:25px 20px; padding:0; top:2em; left:1em; }
+.navbar ul li{ background:#D6D6D6; margin:0.5em 0; padding:0.3em; border-right: 1em solid #369; font: 12px Verdana; color: #999; }
+.navbar ul a{ color: #369; text-decoration: none; }
+.navbar ul li a:hover, .navbar ul li a.selected{ color:#002; }
+/*MENU HORIZONTAL DERECHA-----------------*/
+.menu1{ text-align:right; font:bold 10px Tahoma; color:#000; }
+.menu1 ul{ margin:0; }
+.menu1 ul li{ display: inline; margin-right:10px; }
+.menu1 ul li a{ font:10px Tahoma; color:#333; text-decoration: none; }
+.menu1 ul li a:hover, .menu1 ul li a.selected{ color:#006; font-weight:bold; }
+/*MENU HORIZONTAL DERECHA NUEVO MENU DESPLEGABLE-----------------*/
+.menu2{ text-align:right; font:bold 15px Tahoma; color:#000; }
+.menu2 ul{ margin:0; }
+.menu2 ul li{ display: inline; margin-right:15px; }
+.menu2 ul li a{ font:15px Tahoma; color:#333; text-decoration: none; }
+.menu2 ul li a:hover, .menu2 ul li a.selected{ color:#006; font-weight:bold; }
+/*--------------BIG MENU------------------*/
+#kwick { width:auto; height:210px; padding:5px 1px 30px 1px; }
+#kwick ul{ list-style: none; }
+# .kwicks{ height: 200px; }
+#kwick li{ padding: 3px; float: left; } 
+li:after{ content: ""; }
+/*WIDTH - */
+#kwick .kwick{ display:block; cursor:pointer; overflow:hidden; height:200px; width:80px; background:#CCFFFF; border:1px solid #000066; }
+#kwick .kwick span { display:none; }
+/*WIDTH + */
+#kwick .kwick2 { display:block;	cursor:pointer;	overflow:hidden; height:200px; width:170px;
+	background:#CCFFFF;	border:1px solid #000066; }
+#kwick .kwick2 span { display:none; }
+/************************/
+#kwick .opt1{ outline: 0; background: #ECF5FF url(../images/comercial.jpg);
+border-left: 1px solid #000066; }
+#kwick .opt2{ outline: 0; background: #ECF5FF url(../images/diseno.JPG);}
+#kwick .opt3{ outline: 0; background: #ECF5FF url(../images/compras.JPG); }
+#kwick .opt4{ outline: 0; background: #ECF5FF url(../images/produccion.jpg);}
+#kwick .opt5{ outline: 0; background: #ECF5FF url(../images/mejora.jpg); }
+#kwick .opt6{ outline: 0; background: #ECF5FF url(../images/recursos.jpg); }
+#kwick .opt7{ outline: 0; background: #ECF5FF url(../images/documentos.jpg); }
+#kwick .opt8{ outline: 0; background: #ECF5FF url(../images/mantenimiento.jpg);
+border-right: 1px solid #000066; }
+#kwick .opt9{ outline: 0; background: #FFFFFF url(../images/BOLSA.jpg); }
+#kwick .opt10{outline: 0; background: #FFFFFF url(../images/LAMINA.jpg); }
+#kwick .opt11{outline: 0; background: #FFFFFF url(../images/CINTA.jpg); }
+#kwick .opt12{outline: 0; background: #FFFFFF url(../images/PACKINGLIST.jpg); }
+#kwick .opt13{outline: 0; background: #FFFFFF url(../images/costos.jpg); }
+#kwick .opt14{outline: 0; background: #FFFFFF url(../images/despacho.jpg); }
+#kwick .opt15{outline: 0; background: #FFFFFF url(../images/pedido.jpg); }
+/*-----------------------------------------*/
+ 

@@ -1,0 +1,87 @@
+body{ margin:0; }
+/*PRINCIPALES-----------------------------*/
+#cabecera2{ background-image:url(../images/general.gif); margin:0; padding:6px 0px; background-repeat:no-repeat; background-position:left; border-bottom:3px groove #4481B0;/*#6666cc*/ }
+/*TABLAS----------------------------------*/
+#tabla_1{ width:100%; background-color:#FFF; }
+#tabla_2{ width:100%; }
+/*MENU HORIZONTAL DERECHA-----------------*/
+.menu2{ text-align:right; }
+.menu2 ul{ margin:0; font: bold 10px Tahoma; color:#000; }
+.menu2 ul li{ display:inline; margin-right:10px; }
+.menu2 ul li a{ font:10px Tahoma; color:#666; text-decoration: none; }
+.menu2 ul li a:hover, .menu2 ul li a.selected{ color:#006; font-weight:bold; }
+/*TEXTO-----------------------------------*/
+#titulo_1{ text-align:left; font: bold 15px arial; color: #669; }
+#titulo_2{ text-align:center; font: bolder 14px Tahoma; color: #000066; }
+#subtitulo_2{ text-align: center; font: bolder 11px Tahoma; color:#036; }
+#dato_1{ text-align:left; font: 11px Arial; color:#000; }
+#dato_2{ text-align:center; font: 11px Arial; color:#000; }
+#dato_3{ text-align:right; font: 11px Arial; color:#000; }
+#numero_1{ text-align:left; font: bold 12px Arial; color:#F00; }
+#acceso_1{ text-align:left; font:bold 12px Arial; color:#060; }
+/*FONDOS----------------------------------*/
+#tr_1 { background-color:#ACCFE8; }
+#tr_2 { background-color:#ECF5FF; }
+
+/* CSS Document */
+.Estilo7 {
+font-size: 11px; 
+font-family: Arial; 
+color: #000000; 
+text-align: left;
+width: 15%;
+border: 1px solid #ACCFE8;
+}
+.Estilo8 {
+font-size: 10px; 
+font-family: Arial; 
+color: #000000; 
+text-align:center;
+width:15%;
+background-color:#FFFFFF;
+border: 0px;
+}
+.Estilo9 {
+font-size: 11px; 
+font-family: Arial; 
+color: #000000; 
+text-align: center;
+width: 5%;
+border: 1px solid #ACCFE8;
+}
+.Estilo10 {
+font-size: 11px; 
+font-family: Arial; 
+color: #000000; 
+text-align: left;
+width: 30%;
+border: 1px solid #ACCFE8;
+}
+/* FUENTE ENCABEZADO PARA LISTADO DE 3 COLUMNAS*/
+.Estilo11 {
+font-size: 10px; 
+font-family: Arial; 
+color: #000000; 
+text-align:center;
+width:5%;
+background-color:#FFFFFF;
+border: 0px;
+}
+.Estilo12 {
+font-size: 10px; 
+font-family: Arial; 
+color: #000000; 
+text-align:center;
+width:15%;
+background-color:#FFFFFF;
+border: 0px;
+}
+.Estilo13 {
+font-size: 10px; 
+font-family: Arial; 
+color: #000000; 
+text-align:center;
+width:30%;
+background-color:#FFFFFF;
+border: 0px;
+}

@@ -1,0 +1,495 @@
+body{ margin:0;
+font-family:Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+/*PRINCIPALES-----------------------------*/
+#cabecera_formato{ background-image:url(../images/general.gif); margin:0; padding:6px 0px; background-repeat:no-repeat; background-position:left; border-bottom:3px groove #6666cc; }
+/*TABLAS----------------------------------*/
+#tabla_formato{ width:100%; }
+#tabla_formato2 { width:60%;padding:0px 2px;border:2px solid #D6D6D6; background:#f5f5f5;}
+#tabla_borde{ border:2px solid #CCC;}
+.tabla_bordes{ 
+
+    border-top-style: double;
+    border-right-style: double;
+    border-bottom-style: double;
+    border-left-style: double;
+
+    border: 7px  inset #4481B0 ;
+    background-color: #FBFCFE;
+}
+#tabla_borde_top{ width:100%;border:20px solid #FFF; border-top:1px solid #D6D6D6; }
+/*#tabla_borde_top{ width:100%; border-top:5px solid #f5f5f5;border:1px solid #FFF; }*/
+#tabla_listado{ width:100%; background-color:#f5f5f5; text-align:center;border:20px solid #FFF; }
+/*#tabla_listado{ width:100%; background-color:#f5f5f5; }*/
+/*#listado{border:2px solid #CCC;}*/ 
+/*MENU HORIZONTAL DERECHA-----------------*/
+.menu_formato{ text-align:right; }
+.menu_formato ul{ margin:0; font: bold 10px Tahoma; color:#000; }
+.menu_formato ul li{ display:inline; margin-right:10px; }
+.menu_formato ul li a{ font:10px Tahoma; color:#666; text-decoration: none; }
+.menu_formato ul li a:hover, .menu_formato ul li a.selected{ color:#006; font-weight:bold; }
+/*MENU HORIZONTAL IZQUIERDA-----------------*/
+.menu_dos{ text-align:left; }
+.menu_dos ul{ margin:0; font: bold 10px Tahoma; color:#000; }
+.menu_dos ul li{ display:inline; margin-left:20px; }
+.menu_dos ul li a{ font:bold 10px Tahoma; color:#069; text-decoration: none; }
+.menu_dos ul li a:hover, .menu_dos ul li a.selected{ color:#F00; }
+/*LOGO-------------------------------------*/
+#logo_2{ text-align:center; }
+/*FONDOS-----------------------------------*/
+#fondo_1 { background-color:#f5f5f5; }
+#fondo_2 { background-color:#D6D6D6; }
+#fondo_3 { background-color:#CCC; }
+#fondo_4 { background-color:#FFF; }
+#fondo_5 { background-color:#006; }
+ 
+/*TITULOS Y SUBTITULOS----------------------*/
+#titulo_formato{ width:50%; text-align: center; font: bolder 14px Tahoma; color:#036;  }
+#codigo_formato{ width:25%; text-align: center; font: bolder 10px Tahoma; color:#036; }
+#titulo_formato_2{ width:50%; text-align:center; font:bolder 14px Tahoma; color:#036; border:1px solid #ACCFE8; background-color: #D6D6D6;}
+#codigo_formato_2{ width:25%; text-align:center; font:bolder 10px Tahoma; color:#036; border:1px solid #ACCFE8; background-color: #D6D6D6;}
+ 
+ 
+#subtitulo_1{ text-align:left; font:bolder 12px Verdana; color:#036; }
+#subtitulo_2{ text-align:center; font:bolder 12px Verdana; color:#036; } 
+#subtitulo4{ text-align:left; font:bolder 11px Tahoma; color:#036; border:1px solid #ACCFE8; background-color: #D6D6D6; }
+/*TEXTO CON BORDE UP--------------------------*/
+#fuente_1{ text-align:left; font:11px Verdana; color:#006; border-top:1px solid #036; }
+#fuente_2{ text-align:center; font:11px Verdana; color:#006; border-top:1px solid #036; }
+#fuente_3{ text-align:right; font:11px Verdana; color:#006; border-top:1px solid #036; }
+/*TEXTO SIN BORDE-----------------------------*/
+#dato_1{ text-align:left; font:11px Verdana; color:#000; }
+#dato_2{ text-align:center; font:11px Verdana; color:#000; }
+#dato_3{ text-align:right; font:11px Verdana; color:#000; }
+#detalle{ border:1px solid #036; }
+#detalle_1{ text-align:left; font:11px Verdana; color:#000; border:1px solid #CCC; background-color:#FFF; }
+#detalle_2{ text-align:center; font:11px Verdana; color:#000; border:1px solid #CCC; background-color:#FFF; }
+/*FUENTE PEQUEÑA SIN BORDE PARA LISTADOS------*/
+#nivel_1{ text-align:left; color:#333; font: bold 11px Arial; background-color:#E5E5E5; }
+#nivel_2{ text-align:center; color:#333; font: bold 11px Arial; background-color:#E5E5E5; }
+#nivel_3{ text-align:right; color:#333; font: bold 11px Arial; background-color:#E5E5E5; }
+#talla_1{ text-align:left; color:#666; font: bold 10px Arial; background-color:#FFF; }
+#talla_2{ text-align:center; color:#666; font: bold 10px Arial; background-color:#FFF; }
+#talla_3{ text-align:right; color:#666; font: bold 10px Arial; background-color:#FFF; }
+/*FUENTE PEQUEÑA CON BORDE PARA LISTADOS------*/
+#arriba_1{ text-align:left; color:#000; font:10px Arial; border:1px solid #ACCFE8; }
+#arriba_2{ text-align:center; color:#000; font:10px Arial; border:1px solid #ACCFE8; }
+#arriba_3{ text-align:right; color:#000; font:10px Arial; border:1px solid #ACCFE8; }
+/*AVISOS--------------------------------------*/
+#numero1{ text-align:left; font:12px Arial; color:#F00; }
+#numero2{ text-align:center; font:12px Arial; color:#F00; }
+#acceso1{ text-align:left; font:bold 12px Arial; color:#060; }
+/*ESTILOS PARA LISTADOS-----------------------*/
+.Estilo1 {
+  width:15%;
+  text-align:center;
+  font:bold 11px Arial;
+  color:#000066;
+}
+.Estilo2 { width:10%; text-align:left; font:bold 11px Arial; color:#000066; }
+.Estilo3 { width:15%; text-align:left; font:11px Arial; color:#000000; }
+.Estilo4 { width:10%; text-align:left; font:11px Arial; color:#000000; }
+.Estilo5 { width: 5%; text-align:left; font:bold 11px Arial; color:#000066; }
+.Estilo6 { width: 5%; text-align:left; font:11px Arial; color:#000000; }
+.Estilo7 {color: #21ADE0;  }
+
+.detalles{
+  border:solid 1px #eee;
+  width:90%;
+  font-size:14px;
+  margin:20px;
+  text-align:center;
+  
+}
+.detalles td{
+  padding:3px;
+  font-size:12px;
+}
+.botones_file {  font-family: Verdana; font-size: 9pt; color: black; background-color: #D6D6D6; border-color: White ; border-top-width: 1pix; border-right-width: 1pix; border-bottom-width: 1pix; border-left-width: 1pix} 
+
+.selects{
+  width: 490px;
+}
+
+.selectsGrande{
+  width: 490px;
+}
+
+.selectsMMedio{
+  width: 300px;
+}
+
+.selectsMedio{
+  width: 200px;
+}
+
+.selectsMini{
+  width: 100px;
+}
+
+.campostextMini{
+  width: 100px;
+}
+
+.campostext{
+  width: 200px;
+}
+
+.campostextGrandes{
+  width: 400px;
+}
+
+.observaciones{
+  width: 440px;
+}
+
+.gridEncabezado{
+  border:solid 1px #9E9E9E;
+  text-align: center; 
+ 
+}
+
+.grid{
+  border:solid 1px #D6D6D6;
+  text-align: left; 
+ 
+}
+.grid:hover{
+  color: #D6D6D6;
+  background-color: #ffffff;
+}
+
+
+.botonGigante 
+ {
+   width:300;  
+   padding:10px;
+   text-decoration: none;
+   font-weight: 600;
+   font-size: 15px;
+   color: #ffffff;
+   background-color: #4481B0;
+   border-radius: 3px;
+   border: 2px solid #9E9E9E;
+   cursor:pointer;
+   transition: color 0.8s linear 0.2s;
+ }
+.botonGigante:hover{
+   color: #4481B0;
+   background-color: #ffffff;
+ }
+
+.botonGeneral  
+ {
+   width:100;  
+   padding:10px;
+   text-decoration: none;
+   font-weight: 600;
+   font-size: 15px;
+   color: #ffffff;
+   background-color: #4481B0;
+   border-radius: 3px;
+   border: 2px solid #9E9E9E;
+   cursor:pointer;
+   transition: color 0.8s linear 0.2s;
+ }
+.botonGeneral:hover{
+   color: #4481B0;
+   background-color: #ffffff;
+ }
+
+  .botonGMini  
+ {
+    width:100;  
+    padding:10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 8px;
+    color: #ffffff;
+    background-color: #4481B0;
+    border-radius: 3px;
+    border: 2px solid #9E9E9E;
+    cursor:pointer;
+    transition: color 0.8s linear 0.2s; 
+  }
+   .botonGMini:hover{
+    color: #4481B0;
+    background-color: #ffffff;
+  }
+
+  .botonMini  
+ {
+    width:100;  
+    padding:10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 8px;
+    color: #ffffff;
+    background-color: #813743;
+    border-radius: 3px;
+    border: 2px solid #9E9E9E;
+    cursor:pointer;
+    transition: color 0.8s linear 0.2s;
+  }
+   .botonMini:hover{
+    color: #4481B0;
+    background-color: #ffffff;
+  }
+
+   .botonDel  
+  {
+     width:100;  
+     padding:7px;
+     text-decoration: none;
+     font-weight: 600;
+     font-size: 8px;
+     color: #ffffff;
+     background-color: #813743;
+     border-radius: 3px;
+     border: 2px solid #9E9E9E;
+     cursor:pointer;
+     transition: color 0.8s linear 0.2s;
+   }
+    .botonDel:hover{
+     color: #4481B0;
+     background-color: #ffffff; 
+   }
+
+   .botonDelMini 
+  {
+     width:60;  
+     padding:3px;
+     text-decoration: none;
+     font-weight: 300;
+     font-size: 8px;
+     color: #ffffff;
+     background-color: #813743;
+     border-radius: 1px;
+     border: 1px solid #9E9E9E;
+     cursor:pointer;
+     transition: color 0.5s linear 0.2s;
+   }
+    .botonDel:hover{
+     color: #4481B0;
+     background-color: #ffffff; 
+   }
+
+   .botonUpdate  
+  {
+     width:100;  
+     padding:7px;
+     text-decoration: none;
+     font-weight: 600;
+     font-size: 8px;
+     color: #ffffff;
+     background-color: #4481B0;
+     border-radius: 3px;
+     border: 2px solid #9E9E9E;
+     cursor:pointer;
+     transition: color 0.8s linear 0.2s;
+   }
+    .botonUpdate:hover{
+     color: #4481B0;
+     background-color: #ffffff; 
+   }
+ 
+
+   .botonUpdateMini  
+  {
+     width:100;  
+     padding:4.5px;
+     text-decoration: none;
+     font-weight: 600;
+     font-size: 8px;
+     color: #ffffff;
+     background-color: #4481B0;
+     border-radius: 3px;
+     border: 2px solid #9E9E9E;
+     cursor:pointer;
+     transition: color 0.8s linear 0.2s;
+   }
+    .botonUpdateMini:hover{
+     color: #4481B0;
+     background-color: #ffffff; 
+   }
+
+
+  .iconoAdd{ 
+    background-image:url(../images/mas_r.gif); 
+    margin:0; 
+    padding:6px 0px; 
+    background-repeat:no-repeat; background-position:left; border-bottom:3px groove #6666cc; 
+  }
+
+.botonFinalizar  
+ {
+   width:100;  
+   padding:10px;
+   text-decoration: none;
+   font-weight: 600;
+   font-size: 15px;
+   color: #ffffff;
+   background-color: #d73a28;
+   border-radius: 3px;
+   border: 2px solid #9E9E9E;
+   cursor:pointer;
+   transition: color 0.8s linear 0.2s;
+ }
+.botonFinalizar:hover{
+   color: #4481B0;
+   background-color: #ffffff;
+ }
+
+/*GRID*/
+.celdaborde1{
+  border: 1px solid #9E9E9E;
+}
+
+/*ESTILOS VISTA GENERICOS ----------------------*/
+ 
+.fuentev1{
+  text-align: left;
+}
+.fuentev2{
+  text-align: center;
+}
+.fuentev3{
+  text-align: right;
+}
+
+.check {
+width:20px;
+height:20px;
+}
+
+.contenedor {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+}
+
+.divScroll {
+  height: 100px;
+  width: 700px;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
+  overflow-y: scroll;
+}
+
+.divScrollGrande {
+  height: 600px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
+  overflow-y: scroll;
+}
+
+
+.divScrollGigante {
+  height: 600px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
+  overflow-y: scroll;
+}
+
+.divScrollMedio {
+  height: 80px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
+  overflow-y: scroll; 
+}
+.divSinMedio {
+  height: 80px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background: #f1f1f1;
+  /*overflow-y: scroll;*/
+}
+.divScrollAlerta {
+  height: 90px;
+  width: 50%;
+  border: 1px solid #ddd;
+  
+  overflow-y: scroll;
+}
+.divScrollMini {
+  height: 50px;
+  width: 25%;
+  border: 1px solid #ddd;
+  
+  overflow-y: scroll;
+}
+
+    table .rojo {
+      background-color:#EB5746 ;
+    }
+
+    table .amarillo {
+      background-color:#E0D554;
+    }
+
+    table .grisOscuro {
+      background-color:#C2C3C7;
+    }
+    table .gris {
+      background-color:#DCE1DC;
+    }
+    table .beige {
+      background-color:#EFCAAB;
+    }
+    table .azul {
+      background-color:#5DA3F6;
+    }
+
+
+     .tooltip:hover .tooltiptext {
+     visibility: visible;
+       } 
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 250px;
+      background-color: orange;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 5px 5px; 
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+    }
+    .notastexto{
+      color: orange;  
+    }
+ 
+
+.botonGeneralGris  
+ {
+   width:100;  
+   padding:10px;
+   text-decoration: none;
+   font-weight: 600;
+   font-size: 15px;
+   color: #9E9E9E;
+   background-color: #C0BEBE;
+   border-radius: 3px;
+   border: 2px solid #9E9E9E;
+   cursor:pointer; 
+ }
+
+
+/*.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 3200;
+    background: url('images/loadingcircle4.gif') 50% 50% no-repeat rgb(250,250,250);
+    background-size: 5% 10%; 
+    -moz-opacity:65;
+    opacity:0.65;
+
+}*/
