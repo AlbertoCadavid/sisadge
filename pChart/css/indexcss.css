@@ -1,0 +1,30 @@
+@charset "utf-8";
+#contenido{
+	width:900;
+	height:610;
+	border:5;   
+	  
+	  
+ }
+
+#marco{
+	width:900;
+	height:610;
+	border:2; 
+ }
+ /*img{
+  width:110;
+  heigth:90;
+
+}*/
+.boton{
+    width:110px;
+    height:40px;
+}
+#titulo{
+text-align:center;
+font-family: Arial;
+font-size:20px;
+font-weight:bolder;
+color: #000066;
+}
