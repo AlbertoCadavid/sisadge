@@ -1,0 +1,84 @@
+[19-Jan-2015 09:48:19 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 09:50:28 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 09:50:30 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:03:08 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:03:09 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:03:10 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:03:45 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:13:15 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:13:16 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xlsx for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php:82
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel2007->canRead('excel.xlsx')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xlsx')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(3): PHPExcel_IOFactory::load('excel.xlsx')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel2007.php on line 82
+[19-Jan-2015 10:19:48 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xls for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php:443
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel5->canRead('excel.xls')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xls')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(6): PHPExcel_IOFactory::load('excel.xls')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php on line 443
+[19-Jan-2015 10:19:50 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xls for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php:443
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel5->canRead('excel.xls')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xls')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(6): PHPExcel_IOFactory::load('excel.xls')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php on line 443
+[19-Jan-2015 10:19:55 America/Chicago] PHP Fatal error:  Uncaught exception 'PHPExcel_Reader_Exception' with message 'Could not open excel.xls for reading! File does not exist.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php:443
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(268): PHPExcel_Reader_Excel5->canRead('excel.xls')
+#1 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/IOFactory.php(191): PHPExcel_IOFactory::createReaderForFile('excel.xls')
+#2 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/index.php(6): PHPExcel_IOFactory::load('excel.xls')
+#3 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL3/Classes/PHPExcel/Reader/Excel5.php on line 443

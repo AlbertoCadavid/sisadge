@@ -1,0 +1,198 @@
+/* CSS Document */
+div.calendar {
+position:relative;
+}
+.calendar, .calendar table {
+background:transparent url(../imagenes/calendarioFondo.png) repeat scroll 0%;
+border:1px solid #BDB2BF;
+color:#000000;
+cursor:default;
+font-family:"trebuchet ms",verdana,tahoma,sans-serif;
+font-size:11px;
+}
+.calendar {
+border-color:#797979;
+}
+.calendar .button {
+background:transparent url(title-bg.gif) repeat-x scroll 0pt 100%;
+color:#000000;
+font-weight:bold;
+padding:2px;
+text-align:center;
+}
+.calendar .nav {
+font-family:verdana,tahoma,sans-serif;
+}
+.calendar .nav div {
+background:transparent url(menuarrow.gif) no-repeat scroll 100%;
+}
+.calendar thead tr {
+background:transparent url(title-bg.gif) repeat-x scroll 0pt 100%;
+color:#000000;
+}
+.calendar thead .title {
+background:transparent url(title-bg.gif) repeat-x scroll 0pt 100%;
+color:#000000;
+font-weight:bold;
+padding:2px;
+text-align:center;
+}
+.calendar thead .headrow {
+}
+.calendar thead .name {
+border-bottom:1px solid #797979;
+color:#000000;
+padding:2px;
+text-align:center;
+}
+.calendar thead .weekend {
+color:#CC4444;
+}
+.calendar thead .hilite {
+background:transparent url(hover-bg.gif) repeat scroll 0%;
+border-bottom:1px solid #797979;
+padding:2px 2px 1px;
+}
+.calendar thead .active {
+background:transparent url(active-bg.gif) repeat scroll 0%;
+border-bottom:1px solid #797979;
+color:#FFFFFF;
+padding:3px 1px 0px 3px;
+}
+.calendar thead .daynames {
+background:transparent url(dark-bg.gif) repeat scroll 0%;
+}
+.calendar tbody .day {
+color:#000000;
+font-family:verdana,tahoma,sans-serif;
+padding:2px 4px 2px 2px;
+text-align:right;
+width:2em;
+}
+.calendar tbody .day.othermonth {
+color:#999999;
+font-size:80%;
+}
+.calendar tbody .day.othermonth.oweekend {
+color:#FF9999;
+}
+.calendar table .wn {
+background:transparent url(dark-bg.gif) repeat scroll 0%;
+border-right:1px solid #797979;
+padding:2px 3px 2px 2px;
+}
+.calendar tbody .rowhilite td, .calendar tbody .rowhilite td.wn {
+background:transparent url(rowhover-bg.gif) repeat scroll 0%;
+}
+.calendar tbody td.today {
+font-weight:bold;
+}
+.calendar tbody td.hilite {
+background:transparent url(hover-bg.gif) repeat scroll 0%;
+border:1px solid #BBBBBB;
+padding:1px 3px 1px 1px;
+}
+.calendar tbody td.active {
+padding:2px 2px 0px;
+}
+.calendar tbody td.weekend {
+color:#CC4444;
+}
+.calendar tbody td.selected {
+background:transparent url(active-bg.gif) repeat scroll 0%;
+border:1px solid #797979;
+color:#000099;
+font-weight:bold;
+padding:1px 3px 1px 1px;
+}
+.calendar tbody .disabled {
+color:#999999;
+}
+.calendar tbody .emptycell {
+visibility:hidden;
+}
+.calendar tbody .emptyrow {
+display:none;
+}
+.calendar tfoot .footrow {
+background:#556655 none repeat scroll 0%;
+color:#FFFFFF;
+text-align:center;
+}
+.calendar tfoot .ttip {
+background:transparent url(status-bg.gif) repeat-x scroll 0pt;
+color:#000000;
+padding:2px;
+}
+.calendar tfoot .hilite {
+background:#AAFFAA none repeat scroll 0%;
+border:1px solid #008844;
+color:#000000;
+padding:1px;
+}
+.calendar tfoot .active {
+background:#77CC77 none repeat scroll 0%;
+padding:2px 0px 0px 2px;
+}
+.calendar .combo {
+background:transparent url(../imagenes/calendarioFondo75.png) repeat scroll 0%;
+border-color:#797979;
+border-style:solid;
+border-width:0pt 1px 1px;
+color:#000000;
+cursor:default;
+display:none;
+font-size:90%;
+left:0px;
+position:absolute;
+top:0px;
+width:4em;
+z-index:100;
+}
+.calendar .combo .label, .calendar .combo .label-IEfix {
+padding:1px;
+text-align:center;
+}
+.calendar .combo .label-IEfix {
+width:4em;
+}
+.calendar .combo .hilite {
+background:transparent url(../imagenes/calendarioFondo.png) repeat scroll 0%;
+color:#000000;
+}
+.calendar .combo .active {
+background:transparent url(../imagenes/calendarioFondoAmar65.png) repeat scroll 0%;
+color:#0000CC;
+font-weight:bold;
+}
+.calendar td.time {
+background:transparent url(dark-bg.gif) repeat scroll 0%;
+border-top:1px solid #797979;
+padding:1px 0px;
+text-align:center;
+}
+.calendar td.time .hour, .calendar td.time .minute, .calendar td.time .ampm {
+background:transparent url(normal-bg.gif) repeat scroll 0%;
+color:#000000;
+
+font-weight:bold;
+padding:0px 5px 0px 6px;
+}
+.calendar td.time .hour, .calendar td.time .minute {
+font-family:monospace;
+}
+.calendar td.time .ampm {
+text-align:center;
+}
+.calendar td.time .colon {
+font-weight:bold;
+padding:0px 2px 0px 3px;
+}
+.calendar td.time span.hilite {
+background:transparent url(hover-bg.gif) repeat scroll 0%;
+color:#000000;
+}
+.calendar td.time span.active {
+background:transparent url(active-bg.gif) repeat scroll 0%;
+color:#FFFFFF;
+}

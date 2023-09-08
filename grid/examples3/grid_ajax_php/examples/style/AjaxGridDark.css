@@ -1,0 +1,202 @@
+.AjaxGrid{
+	width: 100%;
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.AjaxGrid thead{
+	color: #FFFFFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    vertical-align: middle;
+    background-color: #666666;
+    text-align: center;
+}
+
+.sortable a{
+	color: #FFFFFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: n-resize;
+	display: block;
+	width: 100%;
+	background-position: right;
+    background-repeat: no-repeat;
+	background-image: url('../images/grid_sortable.gif');
+}
+
+.sortable a:hover{
+	color: #FFFF00;
+	text-decoration: underline;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: n-resize;
+	display: block;
+	width: 100%;
+	background-position: right;
+    background-repeat: no-repeat;
+}
+
+.sorted a{
+	background-color: #888888  ;
+}
+
+.asc a{
+	background-image: url('../images/grid_desc1.gif');
+}
+
+.desc a{
+	background-image: url('../images/grid_asc1.gif');
+}
+
+.odd{
+	background-color: #FDF5E6;
+}
+
+.odd td{
+	padding-left: 3px;
+}
+
+.even td{
+	padding-left: 3px;
+}
+
+.even {
+	background-color: #fcf7ee;
+}
+
+.pageLinks a{
+	color: #0000C7;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 13px;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.pageLinks{
+	color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 13px;
+    text-transform: none;
+    cursor: default;
+}
+
+.pageLinks a:hover{
+	color: #FFFF00;
+	text-decoration: underline;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 13px;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.ajaxGridInfo{
+	background-color: #FDF5E6;
+	padding-left: 6px;
+	padding-right: 6px;
+	font-size: 10px;
+	line-height: 24px;
+}
+
+.txtRowsPerPage{
+	width: 18px;
+	height: 11px;
+	background-color: #fcf7ee;
+	font-size: 9px;
+	color: black;
+	border: 1px solid #CCCCCC;
+	margin: 0px;
+	padding: 2px;
+}
+
+.ajaxGridInfo a {
+	color: #666666;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    cursor: pointer;
+}
+
+.filterMenu {
+	background-color: #F2F2F2;
+	padding: 2px;
+	color: #990000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 14px;
+    text-transform: none;
+    border: 1px solid #888888;
+}
+
+.filterMenuItem {
+	background-color: #F2F2F2;
+	padding: 0px;
+	border: 1px solid #F2F2F2;
+	cursor: pointer;
+}
+
+.filterMenuItemHover {
+	background-color: #FDF5E6;
+	color: #FF0000;
+	padding: 0px;
+	border: 1px solid #990033;
+	cursor: pointer;
+}
+
+.clearItem{
+	color: #000000;
+}
+
+.customFilterForm {
+	border-top: 1px dotted #888888;
+	border-bottom: 1px dotted #990033;
+	border-left: 0px;
+	border-right: 0px;
+	margin: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.customFilterInput {
+	width: 115px;
+	height: 11px;
+	background-color: #fcf7ee;
+	font-size: 9px;
+	color: black;
+	border: 1px solid #CCCCCC;
+	margin: 0px;
+	padding: 2px;
+}

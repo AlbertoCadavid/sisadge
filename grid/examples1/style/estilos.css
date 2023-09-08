@@ -1,0 +1,110 @@
+body{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+
+div{
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+}
+
+img{
+        border-style: none;
+}
+
+b{
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+}
+
+.title{
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: normal;
+	line-height: 20px;
+	text-transform: none;
+	vertical-align: top;
+	background-color: #C3D9FF;
+	border-top: 7px solid #FFFFFF;
+	border-bottom: 12px solid #FFFFFF;
+	border-left: 2px solid #FFFFFF;
+	border-right: 2px solid #FFFFFF
+}
+
+.tableTit1 {
+	color: #000066;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: normal;
+	line-height: 16px;
+	text-transform: none;
+	vertical-align: top;
+	background-color: #C3D9FF;
+	border-top: 7px solid #E8EEF7;
+	border-bottom: 1px solid #999999;
+	border-left: 2px solid #E8EEF7;
+	border-right: 2px solid #E8EEF7;
+}
+
+.tableCarga {
+	color: #000000;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	vertical-align: middle;
+	background-color: #FAFBFE;
+	border: 2px solid #E8EEF7;
+	padding: 3px;
+}
+
+p.MsoNormal {
+	margin:0px;
+	margin-bottom:1px;
+	font-size:8px;
+	font-family:"Times New Roman";
+	line-height: 10px;
+}
+
+.code{
+	width: 600px;
+	padding: 4px;
+	border: 1px solid #0000FF;
+	background-color: #E9E9E9;
+}
+
+.textField{
+	height: 13px;
+	width: 200px;
+	background-color: #F2F2F2;
+	color: #006699;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	border-top: 1px solid #c0c0c0;
+    border-bottom: 1px solid #E4E4E4;
+    border-left: 1px solid #d3d3d3; 
+    border-right: 2px solid #E4E4E4;	
+}
+
+.select{
+	height: 13px;
+	width: 120px;
+	background-color: #F2F2F2;
+	color: #006699;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #E4E4E4;
+	border-left: 1px solid #d3d3d3; 
+	border-right: 2px solid #E4E4E4;	
+}

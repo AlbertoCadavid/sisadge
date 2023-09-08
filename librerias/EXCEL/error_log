@@ -1,0 +1,116 @@
+[16-Jan-2015 09:16:09 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 25
+[16-Jan-2015 09:16:09 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 60
+[16-Jan-2015 09:16:09 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 73
+[16-Jan-2015 09:17:04 America/Chicago] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: YES) in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 42
+[16-Jan-2015 09:24:00 America/Chicago] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: YES) in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 42
+[16-Jan-2015 09:29:12 America/Chicago] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: YES) in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 42
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[16-Jan-2015 09:50:36 America/Chicago] PHP Warning:  ZipArchive::close() [<a href='ziparchive.close'>ziparchive.close</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 1526
+[16-Jan-2015 09:50:36 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(39): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[16-Jan-2015 15:29:56 America/Chicago] PHP Warning:  ZipArchive::close() [<a href='ziparchive.close'>ziparchive.close</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 1526
+[16-Jan-2015 15:29:56 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(39): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[19-Jan-2015 06:41:38 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[19-Jan-2015 06:41:38 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[19-Jan-2015 06:41:38 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(39): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[19-Jan-2015 09:35:09 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 25
+[19-Jan-2015 09:35:09 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 60
+[19-Jan-2015 09:35:09 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 73
+[19-Jan-2015 10:42:50 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:42:50 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:42:51 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:42:51 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:42:54 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:42:54 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:20 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:20 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:22 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:22 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:23 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:43:23 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:44:09 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:44:09 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:44:11 America/Chicago] PHP Warning:  require_once(Connections/conexion1.php) [<a href='function.require-once'>function.require-once</a>]: failed to open stream: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:44:11 America/Chicago] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'Connections/conexion1.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 1
+[19-Jan-2015 10:45:50 America/Chicago] PHP Warning:  mysql_select_db() expects parameter 2 to be resource, null given in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 61
+[19-Jan-2015 10:47:12 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 26
+[19-Jan-2015 10:47:12 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 62
+[19-Jan-2015 10:47:12 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 75
+[19-Jan-2015 11:06:05 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 26
+[19-Jan-2015 11:06:05 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 62
+[19-Jan-2015 11:06:05 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 75
+[19-Jan-2015 11:07:12 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 26
+[19-Jan-2015 11:07:12 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 62
+[19-Jan-2015 11:07:12 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 75
+[19-Jan-2015 13:06:47 America/Chicago] PHP Warning:  copy() [<a href='function.copy'>function.copy</a>]: Filename cannot be empty in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 26
+[19-Jan-2015 13:06:47 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 62
+[19-Jan-2015 13:06:47 America/Chicago] PHP Warning:  unlink(bak_) [<a href='function.unlink'>function.unlink</a>]: No such file or directory in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php on line 75
+[20-Jan-2015 07:14:41 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[20-Jan-2015 07:14:41 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[20-Jan-2015 07:14:41 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[22-Jan-2015 07:00:58 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[22-Jan-2015 07:00:58 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[22-Jan-2015 07:00:58 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[30-Jan-2015 06:13:30 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[30-Jan-2015 06:13:30 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[30-Jan-2015 06:13:30 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[10-Feb-2015 07:03:57 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[10-Feb-2015 07:03:57 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[10-Feb-2015 07:03:57 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 300
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  ZipArchive::getFromName() [<a href='ziparchive.getfromname'>ziparchive.getfromname</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 303
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[10-Feb-2015 07:04:09 America/Chicago] PHP Warning:  ZipArchive::close() [<a href='ziparchive.close'>ziparchive.close</a>]: Invalid or unitialized Zip object in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 1526
+[10-Feb-2015 07:04:09 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365
+[13-Feb-2015 06:42:53 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 373
+[13-Feb-2015 06:42:53 America/Chicago] PHP Warning:  Invalid argument supplied for foreach() in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel/Reader/Excel2007.php on line 410
+[13-Feb-2015 06:42:53 America/Chicago] PHP Fatal error:  Uncaught exception 'Exception' with message 'Active sheet index is out of bounds.' in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php:365
+Stack trace:
+#0 /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/importar.php(67): PHPExcel->setActiveSheetIndex(0)
+#1 {main}
+  thrown in /home/acycia/public_html/app/webroot/intranet/librerias/EXCEL/Classes/PHPExcel.php on line 365

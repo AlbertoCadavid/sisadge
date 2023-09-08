@@ -1,0 +1,14 @@
+create table ajax_client(
+	clientID int not null primary key,
+	firstname varchar(255),
+	lastname varchar(255),
+	address varchar(255),
+	zipCode varchar(15),
+	city varchar(128),
+	country varchar(64));
+	
+	
+insert into ajax_client(clientID,firstname,lastname,address,zipCode,city,country)values('1001','John','Alastname','Queens street 15','4000','STAVANGER','NORWAY');
+insert into ajax_client(clientID,firstname,lastname,address,zipCode,city,country)values('1002','Mary','Something','Kings square 10','4070','RANDABERG','NORWAY');
+insert into ajax_client(clientID,firstname,lastname,address,zipCode,city,country)values('1003','Peter','Jensen','Main road','5000','BERGEN','NORWAY');
+insert into ajax_client(clientID,firstname,lastname,address,zipCode,city,country)values('1004','Laura','Olsson','','7000','TRONDHEIM','NORWAY');

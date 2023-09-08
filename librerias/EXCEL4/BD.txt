@@ -1,0 +1,13 @@
+CREATE DATABASE `ejemplo` /*!40100 DEFAULT CHARACTER SET latin1 */;
+ 
+CREATE TABLE `cliente1` (
+`idCliente` int(11) NOT NULL AUTO_INCREMENT,
+`Nombres` varchar(45) NOT NULL,
+`Apellidos` varchar(45) NOT NULL,
+`Direccion` varchar(200) DEFAULT NULL,
+`Telefono` varchar(45) DEFAULT NULL,
+`Movil` varchar(45) DEFAULT NULL,
+`Cedula` varchar(45) DEFAULT NULL,
+`TipoDocumento` varchar(45) DEFAULT NULL,
+PRIMARY KEY (`idCliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;

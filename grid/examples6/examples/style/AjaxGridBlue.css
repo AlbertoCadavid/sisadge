@@ -1,0 +1,243 @@
+.AjaxGrid{
+	width: 100%;
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.AjaxGrid thead{
+	color: #000066;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    vertical-align: middle;
+    background-color: #CCCCCC;
+    text-align: center;
+}
+
+.sortable a{
+	color: #0000C7;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: n-resize;
+	display: block;
+	width: 100%;
+	background-position: right;
+    background-repeat: no-repeat;
+	background-image: url('../images/grid_sortable.gif');
+}
+
+.sortable a:hover{
+	color: #0000EE;
+	text-decoration: underline;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: n-resize;
+	display: block;
+	width: 100%;
+	background-position: right;
+    background-repeat: no-repeat;
+}
+
+.sorted a{
+	background-color: #D9D9D9;
+}
+
+.asc a{
+	background-image: url('../images/grid_desc.gif');
+}
+
+.desc a{
+	background-image: url('../images/grid_asc.gif');
+}
+
+.odd{
+	background-color: #DFE8F4;
+}
+
+.odd td{
+	color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+	padding-left: 3px;
+}
+
+.even td{
+	color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+	padding-left: 3px;
+}
+
+.even {
+	background-color: #E3EBF5;
+}
+
+.pageLinks a{
+	color: #0000C7;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.pageLinks{
+	color: #000066;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 17px;
+    text-transform: none;
+    cursor: default;
+}
+
+.pageLinks a:hover{
+	color: #0000EE;
+	text-decoration: underline;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 15px;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.ajaxGridInfo{
+	color: #000066;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 24px;
+    text-transform: none;
+    vertical-align: middle;
+    background-color: #D9D9D9;
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.txtRowsPerPage{
+	width: 18px;
+	height: 11px;
+	background-color: #fcf7ee;
+	font-size: 9px;
+	color: black;
+	border: 1px solid #CCCCCC;
+	margin: 0px;
+	padding: 2px;
+}
+
+.ajaxGridInfo input {
+	height: 13px;
+	width: 25px;
+	background-color: #F2F2F2;
+	color: #000066;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #E4E4E4;
+	border-left: 1px solid #d3d3d3; 
+	border-right: 2px solid #E4E4E4;
+}
+
+.ajaxGridInfo a {
+	color: #0000C7;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    cursor: pointer;
+}
+
+.filterMenu {
+	background-color: #F2F2F2;
+	padding: 2px;
+	color: #000066;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    font-variant: normal;
+    line-height: 14px;
+    text-transform: none;
+    border: 1px solid #CCCCCC;
+}
+
+.filterMenuItem {
+	background-color: #F2F2F2;
+	padding: 0px;
+	border: 1px solid #F2F2F2;
+	cursor: pointer;
+}
+
+.filterMenuItemHover {
+	background-color: #E3EBF5;
+	color: #0000C7;
+	padding: 0px;
+	border: 1px solid #0000CC;
+	cursor: pointer;
+}
+
+.clearItem{
+	color: #000000;
+}
+
+.customFilterForm {
+	border-top: 1px dotted #CCCCCC;
+	border-bottom: 1px dotted #0000CC;
+	border-left: 0px;
+	border-right: 0px;
+	margin: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.customFilterInput {
+	height: 13px;
+	width: 115px;
+	background-color: #F2F2F2;
+	color: #000066;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #E4E4E4;
+	border-left: 1px solid #d3d3d3; 
+	border-right: 2px solid #E4E4E4;
+}

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_sql" value="name:nombre;datatype:string,name:apellido;datatype:string,name:web;datatype:string" />
+</info>
