@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Documento sin t&iacute;tulo</title>
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/jquery.tablesorter.js" type="text/javascript"></script> 
+<script language="javascript" type="application/javascript"> 
+$(document).ready(function() 
+    { 
+        $("#miTabla").tablesorter(); 
+    } 
+); 
+</script>
+<style type="text/css">
+.cabeceratabla{
+	background: url(Imagenes/bgcabeceragrid.gif) repeat-x center;
+	padding-top:5px;
+	padding-bottom:5px;
+	font: bold 13px Verdana, Arial, Helvetica, sans-serif;
+	color: #15428b;
+	text-align:center;
+	border:1px solid #99bbe8;
+	width:730px;
+	margin-right: auto;
+	margin-left: auto;
+}
+table#miTabla {
+	table-layout: fixed;
+	background-color: white;
+	font: 11px Verdana, Arial, Helvetica, sans-serif;
+	color: #777;
+	width:730px;
+}
+table#miTabla tbody td  {
+	padding: 2px;
+	padding-top:4px;
+	padding-bottom:4px;
+	text-align: left;
+	border-bottom: 1px solid #e2e2e2;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+	
+table#miTabla th  {
+	padding: 2px;
+	padding-top:4px;
+	padding-bottom:4px;
+	border-bottom: 1px solid #d0d0d0;
+	border-left: 1px solid #d0d0d0;
+	text-align: left;
+	overflow: hidden;
+	color:#222;
+	background-image: url(Imagenes/bgthgrid.gif);
+	font: 11px Verdana, Arial, Helvetica, sans-serif;
+	cursor:pointer;
+}
+	
+body {
+	background-color: #E2E2FA;
+}
+</style>
+</head>
+
+<body>
+<div align="center"><img src="http://ejemplos.infrabios.com/JavaSctip/mooRainbow/images/infraenemplos.png" alt="" width="500" height="100" />
+  
+</div>
+<div class="cabeceratabla">
+  <div align="center">Mi tabla</div>
+</div>
+<div align="center">
+  <table cellpadding="0" cellspacing="0" id="miTabla"> 
+    <thead> 
+      <tr> 
+        <th><div align="center">Nombre</div></th> 
+        <th><div align="center">Apellidos</div></th> 
+        <th><div align="center">Email</div></th> 
+        <th><div align="center">Cargo</div></th> 
+      </tr> 
+    </thead> 
+    <tbody> 
+      <tr> 
+        <td><div align="center">Manolo</div></td> 
+        <td><div align="center">P&eacute;rez </div></td> 
+        <td><div align="center">Manolo@gmail.com</div></td> 
+        <td><div align="center">WebMaster</div></td> 
+      </tr> 
+      <tr> 
+        <td><div align="center">Pako</div></td> 
+        <td><div align="center">Hern&aacute;ndez </div></td> 
+        <td><div align="center">Pako@yahoo.com</div></td> 
+        <td><div align="center">Diseñadora</div></td> 
+      </tr> 
+      <tr> 
+        <td><div align="center">Ana</div></td> 
+        <td><div align="center">Sanabria</div></td> 
+        <td><div align="center">Ana@gmail.com</div></td> 
+        <td><div align="center">Programadora</div></td> 
+      </tr> 
+      <tr> 
+        <td><div align="center">Javier</div></td> 
+        <td><div align="center">D&iacute;az</div></td> 
+        <td><div align="center">Javier@gmail.com</div></td> 
+        <td><div align="center">Administradora</div></td> 
+      </tr>
+      <tr>
+        <td><div align="center">Juan</div></td>
+      <td><div align="center">Alvez</div></td>
+      <td><div align="center">Juan@hotmail.com</div></td>
+      <td><div align="center">T&eacute;cnico</div></td>
+      </tr> 
+    </tbody> 
+  </table>
+</div>
+</body>
+</html>
