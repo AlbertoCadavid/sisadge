@@ -301,38 +301,6 @@ $id = $consecutivo['id_solicitud'];
                         </table>
                       </form>
 
-
-
-                      <!-- tabla para paginacion opcional -->
-                      <table border="0" width="50%" align="center">
-                        <tr>
-                          <td width="23%" id="dato2"><?php if ($pageNum_registros > 0) { // Show if not first page 
-                                                      ?>
-                              <a href="<?php printf("%s?pageNum_registros=%d%s", $currentPage, 0, $queryString_registros); ?>">Primero</a>
-                            <?php } // Show if not first page 
-                            ?>
-                          </td>
-                          <td width="31%" id="dato2"><?php if ($pageNum_registros > 0) { // Show if not first page 
-                                                      ?>
-                              <a href="<?php printf("%s?pageNum_registros=%d%s", $currentPage, max(0, $pageNum_registros - 1), $queryString_registros); ?>">Anterior</a>
-                            <?php } // Show if not first page 
-                            ?>
-                          </td>
-                          <td width="23%" id="dato2"><?php if ($pageNum_registros < $totalPages_registros) { // Show if not last page 
-                                                      ?>
-                              <a href="<?php printf("%s?pageNum_registros=%d%s", $currentPage, min($totalPages_registros, $pageNum_registros + 1), $queryString_registros); ?>">Siguiente</a>
-                            <?php } // Show if not last page 
-                            ?>
-                          </td>
-                          <td width="23%" id="dato2"><?php if ($pageNum_registros < $totalPages_registros) { // Show if not last page 
-                                                      ?>
-                              <a href="<?php printf("%s?pageNum_registros=%d%s", $currentPage, $totalPages_registros, $queryString_registros); ?>">&Uacute;ltimo</a>
-                            <?php } // Show if not last page 
-                            ?>
-                          </td>
-                        </tr>
-                      </table>
-
                     </div> <!-- contenedor -->
                   </div>
                 </div>
@@ -384,24 +352,12 @@ $id = $consecutivo['id_solicitud'];
     if ($("#insumo").val() == '') {
       swal("Error", "Debe agregar un valor al campo insumo! :)", "error");
       return false;
-    } else if ($("#peso").val() == '' && $("#precio").val() == '') {
-      swal("Error", "Debe agregar un valor al campo peso o precio! :)", "error");
-      return false;
     } else if ($("#cantidad").val() == '') {
       swal("Error", "Debe agregar un valor al campo cantidad! :)", "error");
       return false;
     } else {
-      guardarConAlertItems();
+      //guardarConAlertItems();
     }
 
   });
 </script>
-<?php
-
-mysqli_free_result($usuario);
-mysqli_free_result($ver_nuevo);
-mysqli_free_result($proveedores);
-mysqli_free_result($insumos);
-
-
-?>

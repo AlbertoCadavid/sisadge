@@ -118,19 +118,19 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                             <td><input id="id_solicitud" name="id_solicitud" type="hidden" value="<?php echo $row_existe['id_solicitud']; ?>">
                               <input id="codigo" name="codigo" type="hidden" value="<?php echo $row_existe['codigo']; ?>">
                               <strong>NOMBRE SOLICITANTE:</strong>
-                              <input class="form-control" type="text" required="required" id="nombre" name="nombre" value="<?php echo $row_existe['nombre']; ?>">
+                              <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> class="form-control" type="text" required="required" id="nombre" name="nombre" value="<?php echo $row_existe['nombre']; ?>">
                             </td>
                             <td>
                               <strong>AREA&nbsp;&nbsp;</strong>
-                              <input class="form-control" type="text" required="required" id="area" name="area" value="<?php echo $row_existe['area']; ?>">
+                              <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> class="form-control" type="text" required="required" id="area" name="area" value="<?php echo $row_existe['area']; ?>">
                             </td>
                           </tr>
                           <tr>
                             <td>
-                              <strong>MAQUINA</strong>&nbsp;&nbsp;<input type="text" id="maquina" name="maquina" value="<?php echo $row_existe['maquina']; ?>" class="form-control ">
+                              <strong>MAQUINA</strong>&nbsp;&nbsp;<input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="text" id="maquina" name="maquina" value="<?php echo $row_existe['maquina']; ?>" class="form-control ">
                             </td>
                             <td>
-                              <strong>FECHA:</strong>&nbsp;&nbsp;<input type="date" id="fecha" name="fecha" value="<?php echo $row_existe['fecha']; ?>" class="form-control">
+                              <strong>FECHA:</strong>&nbsp;&nbsp;<input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="date" id="fecha" name="fecha" value="<?php echo $row_existe['fecha']; ?>" class="form-control">
                             </td>
                           </tr>
 
@@ -151,16 +151,16 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                 <?php foreach ($row_insumos as $insumos) { ?>
                                   <tr><input id="id[]" name="id[]" type="hidden" value="<?php echo $insumos['id_material']; ?>">
                                     <td colspan="12" id="dato1">
-                                      <input type="hidden" name="solicitud_id" id="solicitud_id" value="<?php echo $num; ?>" style="width:70px">&nbsp;
-                                      <input type="text" placeholder="Material" id="insumo[]" name="insumo[]" value="<?php echo $insumos['material']; ?>" style="width:383px"> &nbsp;
-                                      <input type="number" placeholder="Cantidad" id="cantidad[]; ?>" name="cantidad[]" value="<?php echo $insumos['cantidad']; ?>" style="width:72px">&nbsp;
-                                      <input type="text" placeholder="Orden de Compra" id="oc[]" name="oc[]" value="<?php echo $insumos['oc']; ?>" style="width:108px">&nbsp;
-                                      <select id="estado[]" name="estado[]" style="width:98px" value="">
+                                      <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="hidden" name="solicitud_id" id="solicitud_id" value="<?php echo $num; ?>" style="width:70px">&nbsp;
+                                      <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="text" placeholder="Material" id="insumo[]" name="insumo[]" value="<?php echo $insumos['material']; ?>" style="width:383px"> &nbsp;
+                                      <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="number" placeholder="Cantidad" id="cantidad[]; ?>" name="cantidad[]" value="<?php echo $insumos['cantidad']; ?>" style="width:72px">&nbsp;
+                                      <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="text" placeholder="Orden de Compra" id="oc[]" name="oc[]" value="<?php echo $insumos['oc']; ?>" style="width:108px">&nbsp;
+                                      <select <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> id="estado[]" name="estado[]" style="width:98px" value="">
                                         <option value="<?php echo $insumos['estado']; ?>"><?php echo $insumos['estado']; ?></option>
                                         <option value="PENDIENTE">PENDIENTE</option>
                                         <option value="FINALIZADO">FINALIZADO</option>
                                         <option value="CANCELADO">CANCELADO</option>
-                                        <option value="ENTREGADO">ENTREGADO</option>
+                                        <option value="EN PROCESO">EN PROCESO</option>
 
                                       </select> &nbsp;
                                     </td>
@@ -180,18 +180,18 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                           <tr>
                             <td colspan="2">
                               <strong>OBSERVACIONES:</strong>
-                              <textarea class="form-control" id="observaciones" name="observaciones" cols="50" rows="3"><?php echo $row_existe['observaciones']; ?></textarea>
+                              <textarea <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> class="form-control" id="observaciones" name="observaciones" cols="50" rows="3"><?php echo $row_existe['observaciones']; ?></textarea>
                             </td>
                           </tr>
 
                           <tr>
                             <td>
                               <strong>RESPONSABLE DE LA COMPRA: </strong>
-                              <input type="text" placeholder="Responsable" id="responsable" name="responsable" value="<?php echo $row_existe['responsable']; ?>" class='form-control'>
+                              <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="text" placeholder="Responsable" id="responsable" name="responsable" value="<?php echo $row_existe['responsable']; ?>" class='form-control'>
                             </td>
                             <td>
                               <strong>AUTORIZADO POR: </strong>
-                              <input type="text" placeholder="Autorizado" id="autorizado" name="autorizado" value="<?php echo $row_existe['autorizado']; ?>" class='form-control'>
+                              <input <?php if($_GET['editar'] == 'NO'){echo 'readonly';} ?> type="text" placeholder="Autorizado" id="autorizado" name="autorizado" value="<?php echo $row_existe['autorizado']; ?>" class='form-control'>
                             </td>
                           </tr>
 
@@ -220,7 +220,7 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                   <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email1 ?></a>
                                 </td>
                                 <td align="center" id="fondo_3">
-                                  <input type="radio" name="correo" id="correo" value="<?php echo $email1 ?>" <?php if ($row_existe['correoaut'] == $email1) { ?>checked="checked" <?php } ?>>
+                                  <input <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> type="radio" name="correo" id="correo" value="<?php echo $email1 ?>" <?php if ($row_existe['correoaut'] == $email1) { ?>checked="checked" <?php } ?>>
                                 </td>
                               </tr>
 
@@ -230,7 +230,7 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                   <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email2 ?></a>
                                 </td>
                                 <td align="center" id="fondo_3">
-                                  <input type="radio" name="correo" id="correo2" value="<?php echo $email2 ?>" <?php if ($row_existe['correoaut'] == $email2) { ?>checked="checked" <?php } ?>>
+                                  <input <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> type="radio" name="correo" id="correo2" value="<?php echo $email2 ?>" <?php if ($row_existe['correoaut'] == $email2) { ?>checked="checked" <?php } ?>>
                                 </td>
                               </tr>
 
@@ -240,7 +240,7 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                   <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email3 ?></a>
                                 </td>
                                 <td align="center" id="fondo_3">
-                                  <input type="radio" name="correo" id="correo" value="<?php echo $email3 ?>" <?php if ($row_existe['correoaut'] == $email3) { ?>checked="checked" <?php } ?>>
+                                  <input <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> type="radio" name="correo" id="correo" value="<?php echo $email3 ?>" <?php if ($row_existe['correoaut'] == $email3) { ?>checked="checked" <?php } ?>>
                                 </td>
                               </tr>
 
@@ -250,7 +250,7 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                   <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email4 ?></a>
                                 </td>
                                 <td align="center" id="fondo_3">
-                                  <input type="radio" name="correo" id="correo2" value="<?php echo $email4 ?>" <?php if ($row_existe['correoaut'] == $email4) { ?>checked="checked" <?php } ?>>
+                                  <input <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> type="radio" name="correo" id="correo2" value="<?php echo $email4 ?>" <?php if ($row_existe['correoaut'] == $email4) { ?>checked="checked" <?php } ?>>
                                 </td>
                               </tr>
 
@@ -260,7 +260,7 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
                                   <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email5 ?></a>
                                 </td>
                                 <td align="center" id="fondo_3">
-                                  <input type="radio" name="correo" id="correo2" value="<?php echo $email5 ?>" <?php if ($row_existe['correoaut'] == $email5) { ?>checked="checked" <?php } ?>>
+                                  <input <?php if($_GET['editar'] == 'NO'){echo 'disabled';} ?> type="radio" name="correo" id="correo2" value="<?php echo $email5 ?>" <?php if ($row_existe['correoaut'] == $email5) { ?>checked="checked" <?php } ?>>
                                 </td>
                               </tr>
 
@@ -280,7 +280,9 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
 
                             <td colspan="2">
                               <div class="panel-footer" id="continuar" align="center">
-                                <button id="btnEnviarG" name="btnEnviarG" type="submit" class="botonGeneral" autofocus="" onclick="guardarConAlert(<?php $num ?>)">ACTUALIZAR</button>
+                                <?php if($_GET['editar'] != 'NO') : ?>
+                                <button id="btnEnviarG" name="btnEnviarG" type="submit" class="botonGeneral"  onclick="guardarConAlert(<?php $num ?>)">ACTUALIZAR</button>
+                                <?php endif ?>
                                 <div align="left">
                                   <a class="botonMini " href="view_index.php?c=Csolicitud_compras&a=inicioListado">ATRAS SIN GUARDAR</a>
                                 </div>
@@ -355,6 +357,8 @@ $row_insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "O
 </html>
 
 <script type="text/javascript">
+
+
   /* 
   $("#btnEnviarItems").on("click", function() {
 

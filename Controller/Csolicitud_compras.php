@@ -16,12 +16,12 @@ class Csolicitud_comprasController
 
         if ($idGenerado != false) {
             $res2 = $objMsolicitud->guardarItems($idGenerado, $_REQUEST['insumo'], $_REQUEST['cantidad'], $_REQUEST['oc'], $_REQUEST['estado']);
-            
+
             if ($res2 == 1) {
                 $alerta = 2;
-                
-                
-                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta='.$alerta);
+
+
+                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
                 //$objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad']);
             } else {
                 echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los Items");</script>';
@@ -41,8 +41,8 @@ class Csolicitud_comprasController
             $res2 = $objMsolicitud->actualizarItems($_REQUEST['id'], $_REQUEST['insumo'], $_REQUEST['cantidad'], $_REQUEST['oc'], $_REQUEST['estado']);
             if ($res2 == 1) {
                 $alerta = 1;
-                
-                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta='.$alerta);
+
+                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
             } else {
                 echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los Items");</script>';
             }
@@ -74,6 +74,33 @@ class Csolicitud_comprasController
         ];
     }
 
+    public function mostrarListado()
+    {
+
+        $objMmostrarListado = new Msolicitud_compras($_POST['id'], $_POST['id_solicitud'], $_POST['area'], $_POST['nombre'], $_POST['fecha'], $_POST['maquina'], $_POST['observaciones'], strtoupper($_POST['responsable']), strtoupper($_POST['autorizado']), strtolower($_POST['correo']));
+        $busqueda = $_GET['busqueda'];
+        $busquedaEstado = $_GET['estado'];
+        $colname_busqueda = "-1";
+
+        if (isset($_GET["valor"]) || isset($_GET["estado"])) {
+            if (isset($_GET["estado"]) && !isset($_GET["valor"])) {
+                return $objMmostrarListado->mostrarListado("", "WHERE estado2 = '$busquedaEstado'");
+            } else 
+            if (isset($_GET["estado"]) && isset($_GET["valor"])){
+                $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
+                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "WHERE estado2 = '$busquedaEstado'");
+            } else 
+            if (!isset($_GET["estado"]) && isset($_GET["valor"])){
+                $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
+                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "");
+            }
+        } else {
+            return $objMmostrarListado->mostrarListado("","");
+        }
+        //return $objMmostrarListado->mostrarListado();
+        
+    }
+
     public function Inicio()
     {
         $vista = 'view_solicitud_compras.php';
@@ -100,7 +127,4 @@ class Csolicitud_comprasController
             require_once("views/view_solicitud_compras.php?");
         }
     }
-
 }
-
-

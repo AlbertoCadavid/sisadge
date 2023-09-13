@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
+include_once("./Controller/Csolicitud_compras.php");
 ?>
 <?php
 
@@ -22,6 +23,8 @@ if (isset($_GET['pageNum_registros'])) {
 $startRow_registros = $pageNum_registros * $maxRows_registros;
 
 $conexion = new ApptivaDB();
+$llenarListado = new Csolicitud_comprasController;
+
 
 $colname_usuario = "1";
 if (isset($_SESSION['MM_Username'])) {
@@ -32,18 +35,8 @@ $row_usuario = $conexion->buscar('usuario', 'usuario', $colname_usuario);
 
 $colname_cliente = "-1";
 $colname_entrada = "-1";
-$colname_busqueda = "-1";
-$busqueda = $_GET["busqueda"];
 
-$colname_busqueda = "-1";
-if (isset($_GET["valor"])) {
-  $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
-  $registros = $conexion->buscarListar("tbl_info_solicitud_compras", "*", "ORDER BY id_solicitud DESC, fecha DESC", "", $maxRows_registros, $pageNum_registros, "where $busqueda LIKE'$colname_busqueda%'");
-} else {
-  $registros = $conexion->buscarListar("tbl_info_solicitud_compras", "*", "ORDER BY id_solicitud DESC, fecha DESC", "", $maxRows_registros, $pageNum_registros, "");
-}
-
-
+$rowsLlenarListado = $llenarListado->mostrarListado("");
 
 
 if (isset($_GET['totalRows_registros'])) {
@@ -127,58 +120,54 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                       <br>
                       <!-- COLUMNAS -->
                       <form id="consulta" name="consulta" action="envio.php" method="get">
-
-                        <div class="row contenedor ">
-
-                          <div style="padding:20px" class="span3"> <strong>FECHA: </strong>
-                            <div>
-                              <input type="date" id="fecha" name="fecha" class=' buscar' value="<?php if (!(strcmp("fecha", $_GET['busqueda']))) {
-                                                                                                  echo $_GET['valor'];
-                                                                                                } ?>">
-                            </div>
-                          </div>
-
-                          <div style="padding:20px" class="span3"> <strong>NOMBRE:</strong>
-                            <div>
-                              <input type="text" id="nombre" name="nombre" class=' buscar' value="<?php if (!(strcmp("nombre", $_GET['busqueda']))) {
+                        <fieldset style="border: 1px solid #000; padding:10px">
+                          <legend style="border: 0.5px solid">BUSQUEDA</legend>
+                          <div class="row contenedor " style="justify-content:space-between">
+                            <div style="padding:10px" class="span3"> <strong>FECHA: </strong>
+                              <div>
+                                <input type="date" id="fecha" name="fecha" class=' buscar' value="<?php if (!(strcmp("fecha", $_GET['busqueda']))) {
                                                                                                     echo $_GET['valor'];
                                                                                                   } ?>">
+                              </div>
                             </div>
-                          </div>
 
-                          <div style="padding:20px" class="span3"> <strong>AREA:</strong>
-                            <div>
-                              <input type="text" id="area" name="area" class=' buscar' value="<?php if (!(strcmp("area", $_GET['busqueda']))) {
-                                                                                                echo $_GET['valor'];
-                                                                                              } ?>">
+                            <div style="padding:10px" class="span3"> <strong>NOMBRE:</strong>
+                              <div>
+                                <input type="text" id="nombre" name="nombre" class=' buscar' value="<?php if (!(strcmp("nombre", $_GET['busqueda']))) {
+                                                                                                      echo $_GET['valor'];
+                                                                                                    } ?>">
+                              </div>
                             </div>
-                          </div>
 
-                          <div style="padding:20px" class="span3"> <strong>ESTADO:</strong>
-
-                            <div>
-                              <select name="busquedaEstado" id="busquedaEstado">
-                                <option value="">Seleccione</option>
-                                <option value="PENDIENTE" <?php if (!(strcmp("PENDIENTE", $_GET['estado']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>PENDIENTE</option>
-                                <option value="TERMINADO" <?php if (!(strcmp("TERMINADO", $_GET['estado']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>TERMINADO</option>
-                              </select>
+                            <div style="padding:10px" class="span3"> <strong>AREA:</strong>
+                              <div>
+                                <input  type="text" id="area" name="area" class=' buscar' value="<?php if (!(strcmp("area", $_GET['busqueda']))) {
+                                                                                                  echo $_GET['valor'];
+                                                                                                } ?>">
+                              </div>
                             </div>
-                            <!-- <input type="text" id="area" name="area" class=' buscar' value="<?php if (!(strcmp("area", $_GET['busqueda']))) {
-                                                                                                    echo $_GET['valor'];
-                                                                                                  } ?>"> -->
-                          </div>
 
-                        </div>
-                        <div>
-                          <div class="contenedor">
-                            <a href="view_index.php?c=Csolicitud_compras&a=inicioListado" class="botonGeneral">Resetear busqueda</a>
-                          </div>
+                            <div style="padding:10px" class="span3"> <strong>ESTADO:</strong>
 
-                        </div>
+                              <div>
+                                <select name="busquedaEstado" id="busquedaEstado" >
+                                  <option value="">Seleccione</option>
+                                  <option value="PENDIENTE" <?php if (!(strcmp("PENDIENTE", $_GET['estado']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>PENDIENTE</option>
+                                  <option value="TERMINADO" <?php if (!(strcmp("TERMINADO", $_GET['estado']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>TERMINADO</option>
+                                  <option value="EN PROCESO" <?php if (!(strcmp("EN PROCESO", $_GET['estado']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>EN PROCESO</option>
+                                </select>
+                              </div>
+                                                                                          
+                            </div>
+
+                          </div>
+                        </fieldset>
                       </form>
                       <br>
                       <br>
@@ -203,11 +192,11 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                           <div class="col-sm-1"><strong>VER</strong></div>
                         </div>
 
-                        <?php foreach ($registros as $row_registros) {  ?>
-                          <?php if (estado($row_registros['codigo'])[1] == $_GET['estado']) { ?>
+                        <?php foreach ($rowsLlenarListado as $row_registros) {  ?>
+                          
                             <div class="row celdaborde1">
                               <div class="col-sm-1" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo estado($row_registros['codigo'])[0]; ?></a></p>
+                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['cantidad_elementos']; ?></a></p>
                               </div>
                               <div class="col-sm-2" id="fondo_2" style="padding:0">
                                 <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['codigo']; ?></a></p>
@@ -219,55 +208,31 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                                 <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['area']; ?></a></p>
                               </div>
                               <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:<?php if (estado($row_registros['codigo'])[1] == "PENDIENTE") {
+                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:<?php if ($row_registros['estado2'] == "PENDIENTE") {
                                                                                                                                                                                                                                                                   echo "red";
                                                                                                                                                                                                                                                                 } else {
                                                                                                                                                                                                                                                                   echo "green";
-                                                                                                                                                                                                                                                                } ?>"><?php echo estado($row_registros['codigo'])[1]; ?> </a></p>
+                                                                                                                                                                                                                                                                } ?>"><?php echo $row_registros['estado2']; ?> </a></p>
                               </div>
                               <div class="col-sm-2" id="fondo_2" style="padding:0">
                                 <p> <a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['fecha']; ?></a></p>
                               </div>
-                              <?php if ($_SESSION['acceso']) : ?>
+                              <?php if ($_SESSION['acceso']) { ?>
                                 <div class="col-sm-1" id="fondo_2" style="padding:0">
                                   <p><a href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" target="_top" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" width="20" height="18" /> </a></p>
                                 </div>
-                              <?php endif; ?>
-                            </div>
-                          <?php  } else if ($_GET['estado'] == '') { ?>
-                            <div class="row celdaborde1">
-                              <div class="col-sm-1" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo estado($row_registros['codigo'])[0]; ?></a></p>
-                              </div>
-                              <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['codigo']; ?></a></p>
-                              </div>
-                              <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"><?php echo $row_registros['nombre']; ?></a></p>
-                              </div>
-                              <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['area']; ?></a></p>
-                              </div>
-                              <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p><a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:<?php if (estado($row_registros['codigo'])[1] == "PENDIENTE") {
-                                                                                                                                                                                                                                                                  echo "red";
-                                                                                                                                                                                                                                                                } else {
-                                                                                                                                                                                                                                                                  echo "green";
-                                                                                                                                                                                                                                                                } ?>"><?php echo estado($row_registros['codigo'])[1]; ?> </a></p>
-                              </div>
-                              <div class="col-sm-2" id="fondo_2" style="padding:0">
-                                <p> <a <?php if ($_SESSION['acceso']) : ?> href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" <?php endif ?> target="_top" style="text-decoration:none; color:#000000"> <?php echo $row_registros['fecha']; ?></a></p>
-                              </div>
-                              <?php if ($_SESSION['acceso']) : ?>
+                              <?php } else { ?>
                                 <div class="col-sm-1" id="fondo_2" style="padding:0">
-                                  <p><a href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>" target="_top" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" width="20" height="18" /> </a></p>
+                                  <p><a href="view_index.php?c=Csolicitud_compras&a=inicioEdit&id_consecutivo=<?php echo $row_registros['id_solicitud']; ?>&editar=NO" target="_top" style="text-decoration:none; color:#000000"><img src="images/adelante.gif" alt="VER" title="VER" border="0" style="cursor:hand;" width="20" height="18" /> </a></p>
                                 </div>
-                              <?php endif; ?>
+                              <?php } ?>
                             </div>
+                          
 
-                          <?php  } ?>
+                          
                         <?php  } ?>
                       </div>
+
                       <!-- tabla para paginacion opcional -->
                       <table border="0" width="50%" align="center">
                         <tr>
@@ -318,30 +283,31 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
     </div>
   </div>
 
-  <!-- js Bootstrap-->
-  <!-- <script src="bootstrap-4/js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="bootstrap-4/js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="bootstrap-4/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
-
 </body>
 
 </html>
 
 <script type="text/javascript">
+
+
   $(document).ready(function() {
+
     $(".buscar").change(function() {
       var name = $(this).attr('name');
       var value = $(this).val();
       url = '<?php echo BASE_URL; ?>';
-      window.location.assign(url + 'view_index.php?c=Csolicitud_compras&a=inicioListado&busqueda=' + name + '&valor=' + value)
+      if (value != "") {
+        window.location.assign(url + 'view_index.php?c=Csolicitud_compras&a=inicioListado&busqueda=' + name + '&valor=' + value)
+      } else {
+        window.location.assign(url + 'view_index.php?c=Csolicitud_compras&a=inicioListado')
+      }
     });
   });
 
   window.setTimeout(function() {
     window.location.reload();
     window.location.assign('<?php echo BASE_URL; ?>' + 'view_index.php?c=Csolicitud_compras&a=inicioListado');
-
-  }, 40000);
+  }, 60000);
 
   setTimeout(function() {
     $("#alertG").fadeOut();
@@ -349,35 +315,13 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
 
   $('#busquedaEstado').on('change', function() {
     idbusqueda = $('#busquedaEstado').val();
-    url = '<?php echo BASE_URL; ?>';
+    url = '<?php echo $_SERVER['REQUEST_URI'] ?>';
+    
     if (document.getElementById('busquedaEstado').value == "") {
       window.location = "view_index.php?c=Csolicitud_compras&a=inicioListado";
     } else {
-      window.location.assign(url + 'view_index.php?c=Csolicitud_compras&a=inicioListado&estado=' + idbusqueda);
+      window.location.assign(url + "&estado=" + idbusqueda);
     };
   })
+
 </script>
-
-
-<?php
-mysql_free_result($usuario);
-
-
-function estado($codigo)
-{
-  $conexion = new ApptivaDB();
-  $insumos = $conexion->buscarListar('tbl_listado_materiales_compras', '*', "ORDER BY material", "", 10, 0, "where codigo ='$codigo'");
-  $count = 0;
-  foreach ($insumos as $estados) {
-    if ($estados['estado'] == "PENDIENTE" || $estados['estado'] == "") {
-      $count++;
-    }
-  };
-
-  if ($count > 0) {
-    return [sizeof($insumos), "PENDIENTE"];
-  } else {
-    return [sizeof($insumos), "TERMINADO"];
-  }
-}
-?>
