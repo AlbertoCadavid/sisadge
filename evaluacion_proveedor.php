@@ -173,6 +173,7 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
                   <option value="PRODUCTOS">PRODUCTO</option>
                   <option value="SERVICIOS" selected="selected">SERVICIOS</option>
                   <option value="PRODUCTO-SERVICIOS">PRODUCTO-SERVICIOS</option>
+                  <option value="SST">SST</option>
               </select>
 
               <!-- <select name="evaluacion">
