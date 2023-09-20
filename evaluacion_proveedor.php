@@ -215,7 +215,8 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
               </td>
               <td colspan="3" id="dato3">
                 <?php if($_GET['evaluacion'] === "SST") { ?>
-                <a href="evaluacion_proveedor_carta.php?" ><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
+                  
+                  <a href="evaluacion_proveedor_carta_sst.php?id_p=<?php echo $_GET['id_p'] ?>&evaluacion=<?php echo $_GET['evaluacion']; ?> " ><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
                 <?php } else { ?>
                   <a href="evaluacion_proveedor_add.php?id_p=<?php echo $_GET['id_p']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>" ><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
                   <?php } ?>
@@ -259,7 +260,7 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
                   <?php elseif ($row_evaluaciones['tipo_servicio_p'] == 'PRODUCTO-SERVICIOS') : ?>
                     <a href="evaluacion_proveedor_carta_producto_servicio.php?id_ev=<?php echo $row_evaluaciones['id_ev']; ?>&tipo_evaluacion=<?php echo $row_evaluaciones['tipo_servicio_p']; ?>"><img src="images/carta.gif" alt="CARTA" title="PRODUCTO-SERVICIO" border="0" style="cursor:hand;"></a>
                   <?php elseif ($row_evaluaciones['tipo_servicio_p'] == 'SST') : ?>
-                    <a href="evaluacion_proveedor_carta_producto_servicio.php?id_ev=<?php echo $row_evaluaciones['id_ev']; ?>&tipo_evaluacion=<?php echo $row_evaluaciones['tipo_servicio_p']; ?>"><img src="images/carta.gif" alt="CARTA" title="PRODUCTO-SERVICIO" border="0" style="cursor:hand;"></a>
+                    <a href="evaluacion_proveedor_carta_sst_vista.php?id_ev=<?php echo $row_evaluaciones['id_ev']; ?>&tipo_evaluacion=<?php echo $row_evaluaciones['tipo_servicio_p']; ?>"><img src="images/carta.gif" alt="CARTA" title="SST" border="0" style="cursor:hand;"></a>
                   <?php endif; ?>
                 </td>
               </tr>
