@@ -180,6 +180,7 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
                             <h4> Actualizo Correctamente </h4>
                           </span> <?php endif; ?>
                         <?php if ($_GET['alerta'] == 2) : ?> <span id="alertG" style="color: blue;">Se Guardo Correctamente </span> <?php endif; ?>
+                        <?php if ($_GET['alerta'] == 3) : ?> <span id="alertG" style="color: blue;">No se envio el correo </span> <?php endif; ?>
                         <div style="text-align: right;">NUEVO <a href="view_index.php?c=Csolicitud_compras&a=Inicio"><img src="images/masazul.PNG" alt="AGREGAR SOLICITUD DE COMPRA" title="AGREGAR SOLICITUD DE COMPRA" border="0" style="cursor:hand;" /></a></div>
                         <hr>
                         <div class="row align-items-start">

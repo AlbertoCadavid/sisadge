@@ -162,7 +162,8 @@ class Msolicitud_compras
         $body = $body . "<br>" . "OBSERVACIONES:" . "<br>" . $this->observaciones;
 
 
-        $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
+        $confirmacion = $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
+        return $confirmacion;
     }
 
     public function mostrarListado($condicion = "", $condicion2 = "")

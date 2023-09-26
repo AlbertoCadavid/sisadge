@@ -156,6 +156,7 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos/$maxRows_proceso_rol
     </tr>
 	  <tr>
 	  <td id="fuente2"><a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO"title="ADD ROLLO" border="0" style="cursor:hand;"/></a></td>
+    <td id="fuente2"><a href="produccion_extrusion_listado_rollos_informe.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/clip.gif" alt="INFORME"title="INFORME" border="0" style="cursor:hand;"/></a></td>
   </tr>
 </table>
 
