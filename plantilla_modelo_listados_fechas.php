@@ -135,14 +135,24 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
-  <!-- jquery -->
-  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-  <!-- css Bootstrap-->
-  <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-<body>
+    <!-- select2 -->
+    <link href="select2/css/select2.min.css" rel="stylesheet"/>
+    <script src="select2/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/general.css"/>
+
+    <!-- css Bootstrap hace mas grande el formato-->
+    <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  </head>
+  <body>
+    <script>
+        $(document).ready(function() { $(".busqueda").select2(); });
+    </script>
   <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
       <table style="width: 80%"><!-- id="tabla1" -->
@@ -198,24 +208,24 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;
               </div>
              <hr>
               <div class="row align-items-start">  
-                 <div class="col-lg-1" ><strong>O.C</strong></div>
-                 <div class="col-lg-1" ><strong>INSUMO</strong></div>
-                 <div class="col-lg-2" ><strong>RECIBIO</strong></div>
-                 <div class="col-lg-2" ><strong>FECHA RECIBIDO </strong></div>
-                 <div class="col-lg-1" ><strong>FACTURA</strong></div>
-                 <div class="col-lg-1" ><strong>ENTREGA</strong></div>
-                 <div class="col-lg-1" ><strong>CANT. PEDIDA</strong></div>
-                 <div class="col-lg-1" ><strong>SALDO ANTES</strong></div>
-                 <div class="col-lg-1" ><strong>CANT. RECIBIDA</strong></div>
-                 <div class="col-lg-1" ><strong>FALTAN</strong></div>
-                 <div class="col-lg-1" ><strong>VER</strong></div>   
+                 <div class="col" ><strong>O.C</strong></div>
+                 <div class="col" ><strong>INSUMO</strong></div>
+                 <div class="col" ><strong>RECIBIO</strong></div>
+                 <div class="col" ><strong>FECHA RECIBIDO </strong></div>
+                 <div class="col" ><strong>FACTURA</strong></div>
+                 <div class="col" ><strong>ENTREGA</strong></div>
+                 <div class="col" ><strong>CANT. PEDIDA</strong></div>
+                 <div class="col" ><strong>SALDO ANTES</strong></div>
+                 <div class="col" ><strong>CANT. RECIBIDA</strong></div>
+                 <div class="col" ><strong>FALTAN</strong></div>
+                 <div class="col" ><strong>VER</strong></div>   
               </div> 
              <?php foreach($registros as $row_verificacion_insumo) {  ?>
             <div class="row celdaborde1">
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['n_oc_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="insumos_interno_entrada_salida_editar.php?id=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_top" style="text-decoration:none; color:#000000">
                   <?php   
                     $row_ver_nuevo = $conexion->buscar('insumo','id_insumo',$row_verificacion_insumo['id_insumo_vi']); 
@@ -224,31 +234,31 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;
                   </a>
                 </p>
               </div>
-              <div class="col-lg-2" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['recibido_vi']; ?></a></p>
               </div> 
-              <div class="col-lg-2" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['fecha_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['factura_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['entrega_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['cantidad_solicitada_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['verificacion_det']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['cantidad_recibida_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"> <?php echo $row_verificacion_insumo['faltantes_vi']; ?></a></p>
               </div>
-              <div class="col-lg-1" id="fondo_2">
+              <div class="col" id="fondo_2">
                 <p><a href="verificacion_insumo_vista.php?n_vi=<?php echo $row_verificacion_insumo['n_vi']; ?>" target="_target" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" width="20" height="18" /> </a></p>
               </div>
 
@@ -304,6 +314,16 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;
 </body>
 </html>
 <script type="text/javascript">
+
+  //evita q se vaya el form con enter
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type=text]').forEach( node => node.addEventListener('keypress', e => {
+      if(e.keyCode == 13) {
+        e.preventDefault();
+      }
+    }))
+  });//fin
+  
   $(document).ready(function(){
  
    $(".buscar").change(function(){

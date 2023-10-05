@@ -363,7 +363,7 @@ $totalRows_detalle = mysql_num_rows($detalle);
                   <td id="dato1"><strong>CELULAR: </strong><?php echo $row_proveedor['celular_c_p']; ?></td>
                 </tr>
                 <tr>
-                  <td colspan="4" id="dato1"><strong>CORREO ELECTRONICO: </strong><?php echo $row_proveedor['email_c_p']; ?></td> 
+                  <td colspan="4" id="dato1"><strong>CORREO ELECTRÓNICO CLIENTE : </strong><?php echo $row_proveedor['email_c_p']; ?></td> 
                 </tr>
               </table>
             </td>

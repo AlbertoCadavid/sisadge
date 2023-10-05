@@ -1083,7 +1083,7 @@
      $LabelG		= isset($Format["LabelG"]) ? $Format["LabelG"] : 0;
      $LabelB		= isset($Format["LabelB"]) ? $Format["LabelB"] : 0;
      $LabelAlpha	= isset($Format["LabelAlpha"]) ? $Format["LabelAlpha"] : 100;
-     $Cf		= isset($Format["Cf"]) ? $Format["Cf"] : 20;
+     $Cf		    = isset($Format["Cf"]) ? $Format["Cf"] : 20;
      $WriteValues	= isset($Format["WriteValues"]) ? $Format["WriteValues"] : NULL;
      $ValuePadding	= isset($Format["ValuePadding"]) ? $Format["ValuePadding"] : $SliceHeight + 15;
      $ValuePosition	= isset($Format["ValuePosition"]) ? $Format["ValuePosition"] : PIE_VALUE_OUTSIDE;

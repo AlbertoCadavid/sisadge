@@ -81,6 +81,7 @@ include('rud_cotizaciones/rud_cotizacion_packing.php');//SISTEMA RUW PRA LA BASE
 
 $conexion = new ApptivaDB();
 
+
 $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
@@ -92,7 +93,7 @@ $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
 //aqui traigo el precio del la cotiz antes de todos los cambios del impuesto al plastico
-if (isset($_GET['id_ref']) && $_GET['id_ref']!=''){  
+if (isset($_GET['id_ref']) && $_GET['id_ref']!='0'){  
 $nit_c=$_GET['Str_nit'];
 $precio_old = $conexion->llenarCampos('Tbl_referencia ref ',"LEFT JOIN Tbl_cotiza_packing cb ON ref.cod_ref=cb.N_referencia_c LEFT JOIN Tbl_egp te ON ref.n_egp_ref = te.n_egp WHERE ref.tipo_bolsa_ref='PACKING LIST' AND cb.fecha_creacion < '2023-03-15' AND ref.id_ref= ".$_GET['id_ref']." AND Str_nit='$nit_c' ORDER BY cb.fecha_creacion DESC LIMIT 1  ",""," cb.N_precio_vnta as N_precio_old ");
 }
@@ -144,7 +145,7 @@ if (isset($_GET['id_ref']))
   $colname_ver_packing = (get_magic_quotes_gpc()) ? $_GET['id_ref'] : addslashes($_GET['id_ref']);
 }
 
-if (isset($_GET['id_ref']) && $_GET['id_ref']!='' && isset($_GET['Str_nit']) && $_GET['Str_nit']!='') 
+if (isset($_GET['id_ref']) && $_GET['id_ref']!='0' && isset($_GET['Str_nit']) && $_GET['Str_nit']!='') 
 { 
 mysql_select_db($database_conexion1, $conexion1);
 $query_packing = sprintf("SELECT * FROM Tbl_cotiza_packing,Tbl_referencia,Tbl_egp WHERE  Tbl_referencia.id_ref='%s' AND Tbl_referencia.cod_ref=Tbl_cotiza_packing.N_referencia_c AND Tbl_referencia.tipo_bolsa_ref='PACKING LIST' AND  Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_cotiza_packing.B_estado in(1,3) ORDER BY Tbl_cotiza_packing.N_cotizacion DESC LIMIT 1",$colname_ver_packing,$colname_nit3);
@@ -164,8 +165,29 @@ $query_obs = sprintf("SELECT * FROM Tbl_referencia,Tbl_cotiza_packing_obs WHERE 
 $obs = mysql_query($query_obs, $conexion1) or die(mysql_error());
 $row_obs = mysql_fetch_assoc($obs);
 $totalRows_obs = mysql_num_rows($obs);
+
+//EVALUAR LAS REFERENCIAS EXISTENTE
+$colname_nit2 = "-1";
+if (isset($_GET['Str_nit'])) {
+  $colname_nit2 = (get_magic_quotes_gpc()) ? $_GET['Str_nit'] : addslashes($_GET['Str_nit']);
+}
+$colname_cotiz2 = "-1";
+if (isset($_GET['N_cotizacion'])) {
+  $colname_cotiz2 = (get_magic_quotes_gpc()) ? $_GET['N_cotizacion'] : addslashes($_GET['N_cotizacion']);
+}
+ 
+ 
+
+//EXISTENTES
+$row_referencias2 = $conexion->llenaListas("Tbl_cliente_referencia, Tbl_referencia","","WHERE Tbl_cliente_referencia.Str_nit ='$colname_nit2' AND Tbl_cliente_referencia.N_referencia = Tbl_referencia.cod_ref AND Tbl_referencia.tipo_bolsa_ref='PACKING LIST' AND Tbl_cliente_referencia.N_referencia NOT IN(SELECT Tbl_cotiza_packing.N_referencia_c FROM Tbl_cotiza_packing WHERE Tbl_cotiza_packing.N_cotizacion = '$colname_cotiz2' and Tbl_cotiza_packing.B_generica='0') ORDER BY CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) DESC","DISTINCT Tbl_referencia.id_ref,Tbl_referencia.cod_ref");
+//GENERICAS
+$row_referencias = $conexion->llenaListas('Tbl_cotiza_packing,Tbl_referencia','',"WHERE Tbl_referencia.B_generica='1' AND Tbl_referencia.tipo_bolsa_ref='PACKING LIST' AND Tbl_referencia.n_cotiz_ref=Tbl_cotiza_packing.N_cotizacion ORDER BY Tbl_referencia.id_ref ASC",'DISTINCT Tbl_referencia.id_ref,Tbl_referencia.cod_ref,Tbl_referencia.n_cotiz_ref,Tbl_cotiza_packing.N_cotizacion'); 
+
+ 
+
+
 //EVALUAR LAS REFERENCIAS GENERICA
-$colname_nit = "-1";
+/*$colname_nit = "-1";
 if (isset($_GET['Str_nit'])) {
   $colname_nit = (get_magic_quotes_gpc()) ? $_GET['Str_nit'] : addslashes($_GET['Str_nit']);
 }
@@ -191,7 +213,7 @@ mysql_select_db($database_conexion1, $conexion1);
 $query_referencias2 = sprintf("SELECT DISTINCT Tbl_referencia.id_ref,Tbl_referencia.cod_ref FROM Tbl_cliente_referencia, Tbl_referencia WHERE Tbl_cliente_referencia.Str_nit ='%s' AND Tbl_cliente_referencia.N_referencia = Tbl_referencia.cod_ref AND Tbl_referencia.tipo_bolsa_ref='PACKING LIST' AND Tbl_cliente_referencia.N_referencia NOT IN(SELECT Tbl_cotiza_packing.N_referencia_c FROM Tbl_cotiza_packing WHERE Tbl_cotiza_packing.N_cotizacion = '%s' and Tbl_cotiza_packing.B_generica='0' )",$colname_nit2,$colname_cotiz2);
 $referencias2 = mysql_query($query_referencias2, $conexion1) or die(mysql_error());
 $row_referencias2 = mysql_fetch_assoc($referencias2);
-$totalRows_referencias2 = mysql_num_rows($referencias2);
+$totalRows_referencias2 = mysql_num_rows($referencias2);*/
 //TRAE EL NUMRO DE REFERENCIA +1 PARA GUARDARLO SI NO ESCOGE GENERICA
 mysql_select_db($database_conexion1, $conexion1);
 $query_ref= "SELECT N_referencia FROM Tbl_cliente_referencia ORDER BY N_referencia DESC";
@@ -212,6 +234,11 @@ $row_refer = mysql_fetch_assoc($refer);
 $totalRows_refer = mysql_num_rows($refer);
 
 
+mysql_select_db($database_conexion1, $conexion1);
+$query_ref= "SELECT N_referencia FROM Tbl_cliente_referencia ORDER BY N_referencia DESC";
+$ref = mysql_query($query_ref, $conexion1) or die(mysql_error());
+$row_ref = mysql_fetch_assoc($ref);
+$totalRows_ref = mysql_num_rows($ref);
 
 /*if(isset($_GET['Str_nit']) && $_GET['Str_nit']!='' ){
 
@@ -334,7 +361,7 @@ swal({
                       <tr id="tr1">
                         <td width="176" nowrap="nowrap" id="codigo">CODIGO : R1-F08 </td>
                         <td colspan="2" nowrap="nowrap" id="titulo2">Cotizacion Packing List</td>
-                        <td colspan="2" nowrap="nowrap" id="codigo">VERSION: 2 </td>
+                        <td colspan="4" nowrap="nowrap" id="codigo">VERSION: 2 </td>
                       </tr>
                       <tr>
                         <td rowspan="9" id="fuente2"><img src="images/logoacyc.jpg"></td>
@@ -377,8 +404,14 @@ swal({
                               <option value="3"<?php if (!(strcmp("3", $row_packing['B_estado']))) {echo "selected=\"selected\"";} ?>>Obsoleta</option>
                             </select></td>
                             <td id="dato4">
+                              <select name="ref" id="ref" onchange="if(form1.ref.value!='') { consultagenerica5(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
+                                  <option value="0">-REF-</option>
+                                     <?php  foreach($row_referencias as $row_referencias ) { ?>
+                                  <option value="<?php echo $row_referencias['id_ref']?>"<?php if (!(strcmp($row_referencias['id_ref'], $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias['cod_ref']?></option>
+                              <?php } ?>
+                                </select> <!-- 
                               <select name="ref" id="ref" onchange="if(form1.ref.value) { consultagenerica5(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
-                              <option value="" <?php if (!(strcmp("", $_GET['id_ref']))) {echo "selected=\"selected\"";} ?> >Select</option>
+                              <option value="<?php echo $row_referencias['id_ref']?>" <?php if (!(strcmp("", $_GET['id_ref']))) {echo "selected=\"selected\"";} ?> >Select</option>
                               <?php
                               do {  
                                 ?>
@@ -391,10 +424,17 @@ swal({
                                 $row_referencias = mysql_fetch_assoc($referencias);
                               }
                               ?>
-                            </select></td>
-                            <td id="dato4">
-                              <select name="ref2" id="ref2" onchange="if(form1.ref2.value) { consultaexistente5(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
-                              <option value="" <?php if (!(strcmp("", $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>>Select</option>
+                            </select> --></td>
+                            <td colspan="3" id="dato4">
+                              <select name="ref2" id="ref2" onchange="if(form1.ref2.value!='') { consultaexistente5(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
+                                   <option value="0">-REF-</option>
+                                      <?php  foreach($row_referencias2 as $row_referencias2 ) { ?>
+                                   <option value="<?php echo $row_referencias2['id_ref']?>"<?php if (!(strcmp($row_referencias2['id_ref'], $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias2['cod_ref']?></option>
+                               <?php } ?>
+                               </select> 
+
+                              <!-- <select name="ref2" id="ref2" onchange="if(form1.ref2.value) { consultaexistente5(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
+                              <option value="<?php echo $row_referencias['id_ref']?>" <?php if (!(strcmp("", $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>>Select</option>
                               <?php
                               do {  
                                 ?>
@@ -407,11 +447,12 @@ swal({
                                 $row_referencias2 = mysql_fetch_assoc($referencias2);
                               }
                               ?>
-                            </select>
+                            </select> -->
+                            <strong id="numero1"><?php if(isset($_GET['id_ref'] ) && $_GET['id_ref']=='0') {  echo 'Ref: ';echo $row_ref['N_referencia']+1; }?></strong>
                           </td>
                           </tr>
                           <tr>
-                            <td colspan="2" id="fuente1">Nombre del Cliente</td>
+                            <td colspan="4" id="fuente1">Nombre del Cliente</td>
                           </tr>
                           <tr>
                             <td colspan="4" id="fuente1">
@@ -694,9 +735,7 @@ swal({
                               <input type="hidden" name="Str_tipo" id="Str_tipo" value="PACKING LIST" />
                               <input name="responsable_modificacion" type="hidden" value="" />
                               <input name="fecha_modificacion" type="hidden" value="<?php echo date("Y-m-d");?>" />
-
-                              <?php if( $_GET['id_ref']!=''){echo "<input name='B_generica' type='hidden' value='1'/>";}else{echo "<input name='B_generica' type='hidden' value='0'/>";} ?>
-
+                              <input name='B_generica' id='B_generica' type='hidden' value='0'/> 
                               <input name="N_referencia" type="hidden" value="<?php if( $row_packing['cod_ref']!=''){echo $row_packing['cod_ref'];} else{echo $row_ref['N_referencia']+1;}?>" />
                               <input name="hora_modificacion" type="hidden" value="" />
                               <input name="tipo_usuario" type="hidden" value="<?php echo $row_usuario['tipo_usuario']; ?>" />
@@ -722,10 +761,31 @@ swal({
 </body>
 </html>
 <script>
-  $(document).ready(function(){
-    sumaImpuestoPacking($("#N_precio_p").val(),$("#valor_impuesto").val());
 
+     $(document).ready(function(){
+
+             var ref=$("#ref").val();
+             var ref2=$("#ref2").val(); 
+               
+              if( ref !='0' && ref2 =='0'){  
+                   $("#B_generica").val("1"); 
+                  
+              }else 
+              if( ref =='0' && ref2 !='0'){   
+                   $("#B_generica").val("1"); 
+                   
+              }else   
+              if( ref !='0' && ref2 !='0'){   
+                   $("#B_generica").val("1"); 
+                    
+              }else{
+                   $("#B_generica").val("0");
+                  
+              }
+  
+     sumaImpuestoPacking($("#N_precio_p").val(),$("#valor_impuesto").val());
   });
+
 
            
     $('#impuesto').on('change', function() { 

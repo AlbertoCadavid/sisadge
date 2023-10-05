@@ -171,33 +171,35 @@ $totalRows_ticket = mysql_num_rows($ticket);
   <div style="text-align: center;"  id="seleccion"  onClick="cerrar('seleccion');"><!--onClick="javascript:imprSelec('seleccion')"-->
     <div class="container-fluid"   > 
 
-      <table style="width:100%;text-align: center;" border="2"   >
+      <table style="width:9cm; height:9cm; text-align: center;" border="2">
+          <tr>  
+             <td colspan="4" > 
+             <samp style="font-size:15px;" class="text"> ETIQUETA DE BULTO</samp>
+           </td>
+           </tr>
         <tr> 
           <!-- <td rowspan="2" id="fondo"><img style="width: 110px; height: 80px;" src="images/logoacyc.jpg" /><br></td> -->
-            <td colspan="4">
-             <samp style="font-size:50px;" class="text"> ETIQUETA DE BULTO</samp></td>
-             <p> </p>
-           </tr>
-           <tr>
-            <td colspan="2" style="font-size:20px;"> 
+          
+            <td colspan="4" > 
                <?php  
                   $codigobarras[] = 'ENVIO '.$CODIGO;
                   $consecutivo[] = $i;
                 ?>
                 
-              <samp id="codigoqrs_cod<?php echo $i; ?>" style="display: none; font-size:40px;" > &nbsp;&nbsp; <span id="qr<?php echo $i; ?>" class="qrcode"></span>&nbsp;&nbsp; </samp>
-              <samp id="codigobarras_cod<?php echo $i; ?>" style="display: none; font-size:40px;" > &nbsp;&nbsp; <canvas id="codigo<?php echo $i; ?>"></canvas>&nbsp;&nbsp; </samp> 
+              <samp id="codigoqrs_cod<?php echo $i; ?>">  <span id="qr<?php echo $i; ?>" class="qrcode"></span> </samp> <!-- style="display: none; font-size:7cm;"  -->
+              <!-- <samp id="codigobarras_cod<?php echo $i; ?>" style="display: none; font-size:3cm;" >  <canvas id="codigo<?php echo $i; ?>"></canvas> </samp>  -->
              
             </td>
-            
-            <td id="codigoqrs<?php echo $i; ?>" colspan="2" style="font-size:25px; text-align: left;">
-              <strong>ENVIO <?php echo $CODIGO.$i; ?></strong><br>
+            </tr>
+            <tr>
+            <td colspan="2" id="codigoqrs<?php echo $i; ?>" colspan="2" style="font-size:15px; text-align: left;">
+              <strong>ENVIO <?php echo $CODIGO.$i; ?></strong> 
               ALBERTOCADAVIDRCIASA <br> 
               ID: <?php echo $ID;?>
             </td>
           </tr>
           <tr id="codigobarras<?php echo $i; ?>" style="display: none; " >
-            <td colspan="2" style="font-size:25px;">ALBERTOCADAVIDRCIASA - ID: <?php echo $ID;?></td>
+            <td colspan="2" style="font-size:15px;">ALBERTOCADAVIDRCIASA - ID: <?php echo $ID;?></td>
           </tr>
         </table>  
       </div>
@@ -210,15 +212,11 @@ $totalRows_ticket = mysql_num_rows($ticket);
           </table>
         </div>
         <?php $consecfinal = $i; } ?>
+
           <input name="consecutivo" id="consecutivo" type="hidden" value="<?php echo $consecfinal; ?>">
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <p> </p>
- 
+      
       </body>
-      </html>
-      </html>
+      </html> 
       <script>
 //codigo barras 
 $(document).ready(function() { 

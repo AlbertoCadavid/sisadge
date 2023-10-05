@@ -208,7 +208,7 @@ $totalRows_proveedor = mysql_num_rows($proveedor);
 			if($tipo_p == '2')
 			{ ?>
 			<tr>
-			<td colspan="2" id="numero2">NO se registra la encuesta para la calificación por que es un proveedor TIPO B (NO CRITICO)</td>
+			<td colspan="2" id="numero2">NO se registra la encuesta para la calificacion por que es un proveedor TIPO B (NO CRITICO)</td>
 			</tr>
 			<?php
 			}
@@ -216,166 +216,156 @@ $totalRows_proveedor = mysql_num_rows($proveedor);
 			{		
 			?>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios,los subcontrata o tiene distribuidores ?</td>
+        <td colspan="2" id="fuente1"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="directo_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="directo_p" onChange="calificacion()"> 
           <option value="5">Directo</option>
           <option value="3">Distribuidor</option>
-          <option value="1">Subcontrata</option>
+          <option value="1">internacional</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Puntos de distribuci&oacute;n ? </td>
+        <td colspan="2" id="fuente1"> Cuenta con otros puntos de distribucion nacionales o internacionales ? </td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="punto_dist_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>2</strong>. Ofrece Formas de Pago ? </td>
+        <td colspan="2" id="fuente1"><strong>2</strong>. Ofrece Formas de Pago y precios competitivos ? </td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="forma_pago_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">30 a 60 dias</option>
-          <option value="3">15 a 29 dias</option>
-          <option value="1">Contado a 14 dias</option>
+        <td colspan="2" id="dato1"><select name="forma_pago_p" onChange="calificacion()"> 
+          <option value="5">Contado</option>
+          <option value="3">30 a 60 dias</option>
+          <option value="1">50-50</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Otra, Cual ? </td>
+        <td colspan="2" id="fuente1">Otra forma de pago, Cual ? </td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="otra_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>3</strong>. Tiene Sistema de Gesti&oacute;n de Calidad certificado ?</td>
+        <td colspan="2" id="fuente1"><strong>3</strong>.  Es una empresa con documentos que acrediten la existencia y/o representacion legal ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="sist_calidad_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="sist_calidad_p" onChange="calificacion()">
+          <option value="5">Si</option>
+          <option value="3">No</option>
+          <option value="1">No Aplica</option>
+                </select></td>
+        </tr>
+      <tr>
+        <td colspan="2" id="fuente1"> Cuales?</td>
+        </tr>
+      <tr>
+        <td colspan="2" id="dato1"><textarea name="norma_p" cols="70" rows="2"></textarea></td>
+        </tr>
+      <tr id="tr1">
+        <td colspan="2" id="fuente1"><strong>4</strong>.  Es una empresa que cuenta con Sistemas de Gestion de Calidad ?</td>
+        </tr>
+      <tr>
+        <td colspan="2" id="dato1"><select name="certificado_p" onChange="calificacion()"> 
           <option value="5">Si</option>
           <option value="3">En proceso</option>
           <option value="1">No</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Con cual Norma y que porcentaje de Avance ?</td>
-        </tr>
-      <tr>
-        <td colspan="2" id="dato1"><textarea name="norma_p" cols="70" rows="2"></textarea></td>
-        </tr>
-      <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>4</strong>. Entrega certificado de calidad de sus productos con cada despacho (insumos) u ofrece garantia al servicio ?</td>
-        </tr>
-      <tr>
-        <td colspan="2" id="dato1"><select name="certificado_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">Si</option>
-          <option value="3">Algunas veces</option>
-          <option value="1">No</option>
-                </select></td>
-        </tr>
-      <tr>
-        <td colspan="2" id="fuente1">Con que frecuencia ?</td>
+        <td colspan="2" id="fuente1">  Que avance de Proceso?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="frecuencia_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>5</strong>. Realiza analisis de control de calidad a cada lote de material ?</td>
+        <td colspan="2" id="fuente1"><strong>5</strong>.  Cuenta con Sistema de Gestion Seguridad y Salud en el Trabajo ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="analisis_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="analisis_p" onChange="calificacion()"> 
           <option value="5">Si</option>
-          <option value="3">Por muestreo</option>
+          <option value="3">En proceso</option>
           <option value="1">No</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Si es por muestra, cada cuanto ?</td>
+        <td colspan="2" id="fuente1"> Que avance de Implementacion?</td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="muestra_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>6</strong>. Requiere orden de compra con anterioridad ?</td>
+        <td colspan="2" id="fuente1"><strong>6</strong>.  Cual es el porcentaje de implementacion de su Sistema de Seguridad y Salud en el Trabajo ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="orden_compra_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">1 a 15 d&iacute;as</option>
-          <option value="3">16 a 30 d&iacute;as</option>
-          <option value="1">Mayor a 30 d&iacute;as</option>
+        <td colspan="2" id="dato1"><select name="orden_compra_p" onChange="calificacion()"> 
+          <option value="5">>85%</option>
+          <option value="3">Entre 75% y 84%</option>
+          <option value="1"><75%</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Si es mayor a 30 en cuanto tiempo?</td>
+        <td colspan="2" id="fuente1">Tiempo?</td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="mayor_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>7</strong>. Tiene establecido un tiempo para la agilidad de respuesta ante un reclamo ?</td>
+        <td colspan="2" id="fuente1"><strong>7</strong>.  Cuenta con Sistema de Gestion Ambiental ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="tiempo_agil_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">El mismo dia</option>
-          <option value="3">1 semana</option>
-          <option value="1">1 mes</option>
+        <td colspan="2" id="dato1"><select name="tiempo_agil_p" onChange="calificacion()">
+          <option value="5">Si</option>
+          <option value="3">En proceso</option>
+          <option value="1">No</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Cuanto tiempo ?</td>
+        <td colspan="2" id="fuente1"> Lo tiene Implementado ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="tiempo_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>8</strong>. Realiza entrega del producto o servicio en las instalaciones de la empresa ?</td>
+        <td colspan="2" id="fuente1"><strong>8</strong>.  Cuenta con procedimientos o politicas relacionados con el tratamiento de SQR y tiempo de respuesta ante reclamaciones ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="entrega_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">Si</option>
-          <option value="3">Con intermediario</option>
+        <td colspan="2" id="dato1"><select name="entrega_p" onChange="calificacion()"> 
+          <option value="5">Si</option> 
           <option value="1">No</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Otros metodos ?</td>
+        <td colspan="2" id="fuente1"> Cuanto Tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="metodos_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>9</strong>. El flete correspondiente a la entrega corre por parte del proveedor ?</td>
+        <td colspan="2" id="fuente1"><strong>9</strong>.  Requiere orden de compra u orden de Servicio con anterioridad ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="flete_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">Si</option>
-          <option value="1">No</option>
+        <td colspan="2" id="dato1"><select name="flete_p" onChange="calificacion()">
+          <option value="5">1 a 15 dias</option>
+          <option value="3">16 a 30 dias</option>
+          <option value="1">>30 dias</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">&oacute; cuando se establece ese requisito ?</td>
+        <td colspan="2" id="fuente1"> Si es mayor a 30 dias en cuanto tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="requisito_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>10</strong>. Tiene establecido un plan de mejora para el producto, servicios y/o sus procesos?</td>
+        <td colspan="2" id="fuente1"><strong>10</strong>.  Cuenta con la capacidad instalada para cumplir con los requerimientos realizados a su empresa ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="plan_mejora_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="plan_mejora_p" onChange="calificacion()"> 
           <option value="5">Si</option>
           <option value="1">No</option>
-                </select></td>
+        </select></td>
         </tr>
       <tr>
         <td colspan="2" id="fuente1">En que aspectos ?</td>
@@ -384,14 +374,13 @@ $totalRows_proveedor = mysql_num_rows($proveedor);
         <td colspan="2" id="dato1"><textarea name="aspecto_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>11</strong>. Maneja listado de precios actualizado ?</td>
+        <td colspan="2" id="fuente1"><strong>11</strong>.  Cual es su tiempo de entrega para productos, servicios, productos/servicios o SGST, nuevos o recurrentes ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="precios_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">Anual</option>
-          <option value="3">Semestral</option>
-          <option value="1">Otro (&lt; 6 meses)</option>
+        <td colspan="2" id="dato1"><select name="precios_p" onChange="calificacion()"> 
+          <option value="5">Inmediata</option>
+          <option value="3">1 a 5 dias</option>
+          <option value="1">6 a 16 dias</option>
                 </select></td>
         </tr>
       <tr>
@@ -401,14 +390,13 @@ $totalRows_proveedor = mysql_num_rows($proveedor);
         <td colspan="2" id="dato1"><textarea name="otro_caso_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>12</strong>. Asigna asesores comerciales a cada empresa ?</td>
+        <td colspan="2" id="fuente1"><strong>12</strong>. Asigna asesores comerciales a la empresa ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="asesor_com_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="asesor_com_p" onChange="calificacion()"> 
           <option value="5">Si</option>
           <option value="3">No</option>
-                </select></td>
+        </select></td>
         </tr>
       <tr>
         <td colspan="2" id="fuente1">Nombre ? </td>
@@ -417,30 +405,25 @@ $totalRows_proveedor = mysql_num_rows($proveedor);
         <td colspan="2" id="dato1"><textarea name="nombre_asesor_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>13</strong>. Tiene limites minimos de pedido ?</td>
+        <td colspan="2" id="fuente1"><strong>13</strong>.  Cuenta con procedimiento de gestion de energia, agua o recursos naturales ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="limite_min_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
-          <option value="5">No</option>
-          <option value="1">Si</option>
-                                        </select></td>
-        </tr>
-      <tr>
-        <td colspan="2" id="fuente1">Cuanto ?</td>
-      </tr>
+        <td colspan="2" id="dato1"><select name="limite_min_p" onChange="calificacion()"> 
+          <option value="5">Si</option>
+          <option value="1">No</option>
+         </select></td>
+        </tr> 
       <tr>
         <td colspan="2" id="dato1"><textarea name="cuanto_p" cols="70" rows="2"></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>14</strong>. Cuentan con un proceso definido para preservar y manejar el material o equipo suministrado por el cliente ?</td>
+        <td colspan="2" id="fuente1"><strong>14</strong>.  Cuenta con canales de comunicacion si se presenta una urgencia ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="proceso_p" onBlur="calificacion()">
-          <option value="0">N.A.</option>
+        <td colspan="2" id="dato1"><select name="proceso_p" onChange="calificacion()"> 
           <option value="5">Si</option>
           <option value="1">No</option>
-                </select></td>
+         </select></td>
         </tr>
       <tr id="tr1">
         <td colspan="2" id="fuente1"><strong>Nota</strong>: En algunos casos puede que su empresa no aplique a alguno de los items anteriores. Por ejemplo, si la pregunta hace referencia a un producto (tangible) y su empresa es de servicios, si es el caso por favor se&ntilde;ale la casilla <strong>NO</strong> de la columna <strong> No Aplica</strong></td>

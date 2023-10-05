@@ -179,7 +179,11 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
               <form action="view_index.php?c=cmezclas&a=Guardar&id=<?php echo $_GET['cod_ref'];?>" method="post" enctype="multipart/form-data" name="form1">
                 <table class="table table-bordered table-sm">
                 <tr id="tr1">
-                  <td colspan="10" id="titulo2">CARACTERISTICAS DE EXTRUSION </td>
+                 
+                    <td width="113" nowrap="nowrap" id="codigo">CODIGO : R1-F08 </td>
+                    <td colspan="7" id="titulo2">CARACTERISTICAS DE EXTRUSION </td>
+                    <td colspan="3" nowrap="nowrap" id="codigo">VERSION: 5 </td>
+                 
                 </tr>
                 <tr>
                   <td colspan="3" rowspan="5" id="dato2"><img src="images/logoacyc.jpg"/></td>

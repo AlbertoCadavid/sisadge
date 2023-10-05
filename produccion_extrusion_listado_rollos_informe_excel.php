@@ -137,7 +137,9 @@ if (isset($_GET['info'])) {
           <tr>
             <td id="subtitulo1">KILOS TOTALES:</td>
             <td id="fuente2" class="kilos"><?php echo $_GET['kilos'] ?></td>
-            
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
           </tr>
 
         </table>
@@ -200,7 +202,7 @@ if (isset($_GET['info'])) {
       </td>
     </tr>
   </table>
-  <?php echo $conexion->header('footer'); ?>
+  
 </body>
 
 </html>

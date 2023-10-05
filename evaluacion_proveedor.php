@@ -205,8 +205,8 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
               </td>
             </tr>
           </table>
-        <?php }
-        if ($id_p != '') { // && $evaluacion == 'PRODUCTOS' 
+        <?php } ?>
+        <?php if ($id_p != '' && $evaluacion != 'SST') { // && $evaluacion == 'PRODUCTOS' 
         ?>
           <table id="tabla3">
             <tr>
@@ -214,12 +214,7 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
                 <?php echo $row_proveedor['proveedor_p']; ?>
               </td>
               <td colspan="3" id="dato3">
-                <?php if($_GET['evaluacion'] === "SST") { ?>
-                  
-                  <a href="evaluacion_proveedor_carta_sst.php?id_p=<?php echo $_GET['id_p'] ?>&evaluacion=<?php echo $_GET['evaluacion']; ?> " ><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
-                <?php } else { ?>
-                  <a href="evaluacion_proveedor_add.php?id_p=<?php echo $_GET['id_p']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>" ><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
-                  <?php } ?>
+                <a href="evaluacion_proveedor_add.php?id_p=<?php echo $_GET['id_p']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>"><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
                 <a href="evaluacion_proveedor.php"><img src="images/e.gif" alt="CAMBIAR DE PROVEEDOR" border="0" style="cursor:hand;" /></a>
                 <a href="proveedores.php"><img src="images/p.gif" alt="PROVEEDORES" border="0" /></a>
                 <a href="insumos.php"><img src="images/i.gif" style="cursor:hand;" alt="INSUMOS" border="0" /></a>
@@ -240,7 +235,7 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
               <td id="titulo4">% TOTAL</td>
               <td id="titulo4">CARTA</td>
             </tr>
-            <?php foreach ($row_evaluaciones as $row_evaluaciones) {  ?>
+            <?php foreach ($row_evaluaciones as $row_evaluaciones) { if($row_evaluaciones['porcentaje_fpago_ev'] == "") { ?>
               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF" bordercolor="#ACCFE8">
                 <td id="detalle3"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['n_ev']; ?></a></td>
                 <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['periodo_desde_ev']; ?></a></td>
@@ -264,9 +259,63 @@ $row_evaluaciones = $conexion->llenaSelect('proveedor pr left join evaluacion_pr
                   <?php endif; ?>
                 </td>
               </tr>
-            <?php } ?>
+            <?php } } ?>
           </table>
         <?php } ?>
+
+        <?php if ($id_p != '' && $evaluacion == 'SST') {  
+        ?>
+          <table id="tabla3">
+            <tr>
+              <td colspan="8" id="fuente1"><strong>PROVEEDOR : </strong>
+                <?php echo $row_proveedor['proveedor_p']; ?>
+              </td>
+              <td colspan="3" id="dato3">
+                
+                <a href="evaluacion_proveedor_carta_sst.php?id_p=<?php echo $_GET['id_p'] ?>&evaluacion=<?php echo $_GET['evaluacion']; ?> "><img src="images/mas.gif" alt="ADD EVALUACION" border="0" style="cursor:hand;" /></a>
+                <a href="evaluacion_proveedor.php"><img src="images/e.gif" alt="CAMBIAR DE PROVEEDOR" border="0" style="cursor:hand;" /></a>
+                <a href="proveedores.php"><img src="images/p.gif" alt="PROVEEDORES" border="0" /></a>
+                <a href="insumos.php"><img src="images/i.gif" style="cursor:hand;" alt="INSUMOS" border="0" /></a>
+                <a href="orden_compra.php"><img src="images/o.gif" style="cursor:hand;" alt="ORDENES DE COMPRA" border="0" /></a>
+                <a href="verificaciones_criticos.php"><img src="images/v.gif" style="cursor:hand;" alt="VERIFICACIONES (INSUMOS CRITICOS)" border="0" /></a>
+              </td>
+            </tr>
+            <tr>
+              <td id="titulo4">N&deg;</td>
+              <td id="titulo4">DESDE</td>
+              <td id="titulo4">HASTA</td>
+              <td id="titulo4">% PRECIO/FORMA DE PAGO </td>
+              <td id="titulo4">% TRAYECTORIA/TIEMPO DE RESPUESTA</td>
+              <td id="titulo4">% ASPECTO LEGAL </td>
+              <td id="titulo4">% ENTREGA/CUMPLIMIENTO </td>
+              <td id="titulo4">% GARANTIA/CALIDAD DEL SERVICIO </td>
+              <td id="titulo4">% OPORTUNIDAD EN LA RESPUESTA A LOS REQUERIMIENTOS </td>
+              <td id="titulo4">% TOTAL</td>
+              <td id="titulo4">CARTA</td>
+            </tr>
+            <?php foreach ($row_evaluaciones as $row_evaluaciones) {  if($row_evaluaciones['porcentaje_fpago_ev'] != ""){ ?>
+              <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF" bordercolor="#ACCFE8">
+                <td id="detalle3"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['n_ev']; ?></a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['periodo_desde_ev']; ?></a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['periodo_hasta_ev']; ?></a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_fpago_ev']; ?>%</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_trespuesta_ev']; ?>%</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_alegal_ev']; ?> %</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_entrega_ev']; ?> %</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_garantias_ev']; ?> %</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_respuesta_ev']; ?> %</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_vista.php?id_p= <?php echo $row_evaluaciones['id_p_ev']; ?>&evaluacion=<?php echo $_GET['evaluacion']; ?>&id_ev= <?php echo $row_evaluaciones['id_ev']; ?>&desde=<?php echo $row_evaluaciones['periodo_desde_ev']; ?>&hasta=<?php echo $row_evaluaciones['periodo_hasta_ev']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_evaluaciones['porcentaje_final_ev']; ?> %</a></td>
+                <td id="detalle2"><a href="evaluacion_proveedor_carta_sst_vista.php?id_ev=<?php echo $row_evaluaciones['id_ev']; ?>&tipo_evaluacion=<?php echo $row_evaluaciones['tipo_servicio_p']; ?>"><img src="images/carta.gif" alt="CARTA" title="SST" border="0" style="cursor:hand;"></a>
+                  
+                </td>
+              </tr>
+            <?php } } ?>
+          </table>
+        <?php } ?>          
+
+
+
+
         <?php echo $conexion->header('footer'); ?>
 </body>
 

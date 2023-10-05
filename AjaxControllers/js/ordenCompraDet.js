@@ -40,6 +40,7 @@
   }else{
     document.form1.submit();
      //form1.submit();
+    
      return true;
       }
  

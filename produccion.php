@@ -44,7 +44,6 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) {
     // Parse the strings into arrays. 
     $arrUsers = Explode(",", $strUsers); 
     $arrGroups = Explode(",", $strGroups); 
-    
     if (in_array($UserName, $arrUsers)) { 
       $isValid = true; 
     } 

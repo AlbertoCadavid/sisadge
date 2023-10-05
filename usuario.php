@@ -18,6 +18,7 @@ if (isset($_GET['accesscheck'])) {
 
 if (isset($_POST['usuario'])) {
   $loginUsername = $_POST['usuario'];
+  //$password = password_verify($_POST['clave_usuario'], PASSWORD_DEFAULT );
   $password = $_POST['clave_usuario'];
   $MM_fldUserAuthorization = "";
   $MM_redirectLoginSuccess = "menu.php";
@@ -26,7 +27,11 @@ if (isset($_POST['usuario'])) {
 
   $conexion = new ApptivaDB();
 
-  $loginFoundUser = $conexion->buscarDos('usuario', 'usuario', $loginUsername, 'clave_usuario', $password);
+
+  $loginFoundUser = $conexion->buscar('usuario', 'usuario', $loginUsername);
+  //$loginFoundUser = $conexion->buscar('usuario', 'usuario', $loginUsername, $password, 'clave_usuario');
+
+  $userTrue = password_verify($password, $loginFoundUser['clave_usuario']);
 
   /*  mysql_select_db($database_conexion1, $conexion1);
   $LoginRS__query=sprintf("SELECT id_usuario, usuario, clave_usuario FROM usuario WHERE usuario='%s' AND clave_usuario='%s'",
@@ -35,7 +40,7 @@ if (isset($_POST['usuario'])) {
   $LoginRS = mysql_query($LoginRS__query, $conexion1) ;
   $loginFoundUser = mysql_num_rows($LoginRS);*/
 
-  if ($loginFoundUser) {
+  if ($userTrue) {
     $loginStrGroup = "";
 
     //declare two session variables and assign them
@@ -111,6 +116,7 @@ if (isset($_POST['usuario'])) {
         <br>El proposito fundamental de este desarrollo es seguir paso a paso la metodologia del sistema de Gesti&oacute;n de Calidad para la linea comercial, de dise&ntilde;o, producci&oacute;n y comercializaci&oacute;n de bolsas de seguridad para el empaque y transporte de valores.<br><br>
       </div>
       <div class="col-md-4">
+        <!-- <strong>POLITICA DE CALIDAD</strong><br><br>Se busca la completa satisfaccion de los clientes a trav&eacute;s del mejoramiento continuo y con un grupo humano comprometido, verificando que durante todo el proceso se este cumpliendo con sus requisitos, necesidades y expectativas garantizando un producto y servicio de excelente calidad en el menor tiempo y a un precio justo, generando en ellos lealtad y confianza. -->
         <strong>PROPOSITO ORGANIZACIONAL</strong><br><br>En Alberto Cadavid R.& CIA estamos comprometidos con la generación y suministro de soluciones seguras y confiables de empaques para el transporte de documentos, valores u otros productos que mantenga la satisfacción, confianza y fidelización con el cliente y partes interesadas.
         <br> Gestionamos eficientemente nuestros procesos con una infraestructura adecuada y el desarrollo de las competencias de nuestros colaboradores, garantizando la calidad de nuestros productos, el cumplimiento a los requisitos aplicables y el mejoramiento continuo de nuestros Sistema de Gestión.
         <button id="accordion" class="accordion">Continuar Leyendo....</button>
@@ -119,6 +125,7 @@ if (isset($_POST['usuario'])) {
           <br> Fomentamos el cumplimiento de normas y procedimientos de seguridad en beneficio de la realización de un trabajo seguro y productivo, en los empleados, contratistas y personal temporal, quienes serán responsables de notificar oportunamente todas aquellas condiciones que puedan generar consecuencias y contingencias en la empresa.
           <br> A partir del cumplimiento de nuestro propósito, nuestra empresa mantendrá el reconocimiento y posicionamiento a nivel nacional e internacional, con un liderazgo y un crecimiento que garantice el desarrollo sostenible de nuestra empresa.
         </div>
+
       </div>
     </div>
 
@@ -126,3 +133,18 @@ if (isset($_POST['usuario'])) {
 </body>
 
 </html>
+
+
+<script>
+  let ac = document.getElementById('accordion')
+
+  ac.addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  });
+</script>

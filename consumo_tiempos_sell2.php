@@ -88,7 +88,7 @@ $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
-$maxRows_costos = 20;
+$maxRows_costos = 5;
 $pageNum_costos = 0;
 if (isset($_GET['pageNum_costos'])) {
   $pageNum_costos = $_GET['pageNum_costos'];
@@ -127,7 +127,7 @@ if (isset($_GET['totalRows_costos'])) {
   $totalRows_costos = mysql_num_rows($all_costos);
 }
 $totalPages_costos = ceil($totalRows_costos/$maxRows_costos)-1;
-
+ 
 $queryString_costos = "";
 if (!empty($_SERVER['QUERY_STRING'])) {
   $params = explode("&", $_SERVER['QUERY_STRING']);

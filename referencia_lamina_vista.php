@@ -131,6 +131,8 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);
 <tr>
   <td rowspan="8" id="fuente2"><img src="images/logoacyc.jpg"/></td>
   <td colspan="5" nowrap="nowrap" id="dato3"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()"/><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" border="0" />
+
+
     <?php $ref=$row_referenciaver['id_ref'];
 	  $sqlcv="SELECT * FROM Tbl_caracteristicas_valor WHERE id_ref_cv='$ref'";
 	  $resultcv= mysql_query($sqlcv);
@@ -191,7 +193,22 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);
   <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL"title="MENU PRINCIPAL" border="0"/></a><a href="referencia_copia.php"><img src="images/opciones.gif" style="cursor:hand;" alt="LISTADO COTIZACIONES"title="LISTADO COTIZACIONES" border="0" /></a><a href="disenoydesarrollo.php"></a><a href="menu.php"><img src="images/salir.gif" style="cursor:hand;" alt="SALIR"title="SALIR" onClick="window.close() "/></a></td>
   </tr>
 <tr>
-  <td colspan="5" nowrap="nowrap" id="fondo4"><?php $ref=$row_vista_egl['id_ref'];
+  <td colspan="5" nowrap="nowrap" id="fondo4">
+
+       <?php 
+       $id_ref_pr=$row_referenciaver['cod_ref']; 
+       $sqlop="SELECT * FROM tbl_caracteristicas_prod WHERE cod_ref='$id_ref_pr' AND proceso = '1' ORDER BY cod_ref DESC LIMIT 1"; 
+       $resultca = mysql_query($sqlop); 
+       $numca=mysql_num_rows($resultca);
+        
+       if($numca >= '1'){ 
+        $id_codp = mysql_result($resultca, 0, 'int_cod_ref_cp');       
+        ?> 
+        <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $row_referenciaver['cod_ref'];?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA NUEVAS" title="VISUALIZAR CARACTERISTICA NUEVAS" border="0" /></a><?php 
+      }else { ?>
+        <a href="javascript:popUp('produccion_mezclas_add.php?id_ref=<?php echo $row_referenciaver['id_ref'];?>&cod_ref=<?php echo $row_referenciaver['cod_ref'];?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER NUEVAS" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER NUEVAS" border="0" /></a>
+    <?php } ?>
+    <?php $ref=$row_vista_egl['id_ref'];
 	  $sqlpm="SELECT * FROM Tbl_produccion_mezclas WHERE id_ref_pm='$ref' and id_proceso='1'";
 	  $resultpm= mysql_query($sqlpm);
 	  $row_pm = mysql_fetch_assoc($resultpm);

@@ -276,27 +276,27 @@ function cerrar(num) {
   </tr>-->
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Desregis:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['desf_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['desf_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['desf2_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Empates:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['empat_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['empat_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['tante2_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Color:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['color_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['color_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['manch2_r']; ?></td>
     </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Manchas:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['manch_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['manch_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['color2_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Tanteo:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['tante_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['tante_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['empat2_r']; ?></td>
     <td id="stikersC_fuentN" style="border-left: 3px solid #000000;">Medida:</td>
-    <td id="stikers_fuentN" ><?php echo $row_rollo_impresion['medid_r']; ?></td>
+    <td id="stikers_fuentN" ><?php echo $row_rollo_impresion['medid_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['medid2_r']; ?></td>
     </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN" >Rasqueta:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['rasqueta_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['rasqueta_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['rasqueta2_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Montaje:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['montaje_r']; ?></td> 
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['montaje_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['apagon2_r']; ?></td> 
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Apagón:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['apagon_r']; ?></td> 
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['apagon_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['montaje2_r']; ?></td> 
   </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN" ><input type="hidden" name="MM_update" value="form1"></td>

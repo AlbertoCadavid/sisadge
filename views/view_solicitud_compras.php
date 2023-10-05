@@ -58,11 +58,6 @@ $id = $consecutivo['id_solicitud'];
 </head>
 
 <body onKeyDown="javascript:Verificar()">
-  
-  <div class="loading show">
-    <div class="spin"></div>
-  </div>
-
   <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
       <table id="tabla1">
@@ -300,9 +295,7 @@ $id = $consecutivo['id_solicitud'];
                           <input type="hidden" name="MM_insert" value="form1">
                           <tr>
                             <td>
-                              <!-- <div class="loading show">
-                                <div class="spin"></div>
-                              </div> -->
+
                             </td>
                           </tr>
                         </table>
@@ -346,7 +339,6 @@ $id = $consecutivo['id_solicitud'];
       swal("Error", "Debe agregar un valor al campo insumo! :)", "error");
       return false;
     } else {
-
       //guardarSolicitudConAlert($("#id_solicitud").val());
     }
 
@@ -368,84 +360,4 @@ $id = $consecutivo['id_solicitud'];
     }
 
   });
-
-  var Loading = (loadingDelayHidden = 0) => {
-    let loading = null;
-    const myLoadingDelayHidden = loadingDelayHidden;
-    let imgs = [];
-    let lenImgs = 0;
-    let counterImgsLoading = 0;
-
-    function incrementCounterImgs() {
-      counterImgsLoading += 1;
-      if (counterImgsLoading === lenImgs) {
-        hideLoading()
-      }
-    }
-
-    function hideLoading() {
-      if (loading !== null) {
-        loading.classList.remove('show');
-        setTimeout(function() {
-          loading.remove()
-        }, myLoadingDelayHidden)
-      }
-    }
-
-    function init() {
-      document.addEventListener('DOMContentLoaded', function() {
-        loading = document.querySelector('.loading');
-        imgs = Array.from(document.images);
-        lenImgs = imgs.length;
-        if (imgs.length === 0) {
-          hideLoading()
-        } else {
-          imgs.forEach(function(img) {
-            img.addEventListener('load', incrementCounterImgs, false)
-          })
-        }
-      })
-    }
-    return {
-      'init': init
-    }
-  }
-
-  Loading(1000).init();
 </script>
-
-<style>
-    .loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: 1s all;
-      opacity: 0;
-    }
-
-    .loading.show {
-      opacity: 1;
-    }
-
-    .loading .spin {
-      border: 3px solid hsla(185, 100%, 62%, 0.2);
-      border-top-color: #3cefff;
-      border-radius: 50%;
-      width: 3em;
-      height: 3em;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  </style>

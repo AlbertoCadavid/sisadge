@@ -72,7 +72,7 @@ $row_proveedor = $conexion->buscar('proveedor', 'id_p', $colname_proveedor);
 
 if ($_POST['guardar_imprimir'] == 'form') {
 	$conexion->insertar('evaluacion_proveedor', "`id_ev`, `n_ev`, `id_p_ev`, `periodo_desde_ev`, `periodo_hasta_ev`, `total_oc_ev`, `total_verificacion_ev`, `total_oportunos_ev`, `total_no_oportunos_ev`, `porcentaje_oportunos_ev`, `total_cumple_ev`, `total_no_cumple_ev`, `porcentaje_cumple_ev`, `total_conforme_ev`, `total_no_conforme_ev`, `porcentaje_conforme_ev`, `total_atencion_ev`, `total_no_atencion_ev`, `porcentaje_atencion_ev`, `porcentaje_final_ev`, `calificacion_ev`, `calificacion_texto_ev`, `responsable_registro_ev`, `fecha_registro_ev`, `evaluacion`, `porcentaje_fpago_ev`, `porcentaje_trespuesta_ev`, `porcentaje_alegal_ev`, `porcentaje_entrega_ev`, `porcentaje_garantias_ev`, `porcentaje_respuesta_ev`", "'',$_POST[n_ev], $_POST[id_p_ev], '$_POST[periodoInicial]', '$_POST[periodoFinal]','','','','','','','','','','','','','','', $_POST[porcentaje_final], $_POST[calificacion_ev], '$_POST[calificacion_texto]', '$_POST[nombre_usuario]', '$_POST[fecha_registro]', '', $_POST[precioUsuario], $_POST[trayectoriaUsuario], $_POST[aspectoUsuario], $_POST[entregaUsuario], $_POST[garantiaUsuario], $_POST[respuestaUsuario]");
-	header('Location: ' . "evaluacion_proveedor.php?id_p=512&evaluacion=SST&Submit=EVALUACION");
+	header('Location: ' . "evaluacion_proveedor.php?id_p=".$_GET['id_p']."&evaluacion=SST&Submit=EVALUACION");
 }
 
 $ultimo_numero = $conexion->llenarCampos("evaluacion_proveedor", "WHERE id_p_ev =" . $_GET['id_p'], " ORDER BY n_ev DESC", "*");
@@ -227,7 +227,7 @@ $ultimo_numero = $conexion->llenarCampos("evaluacion_proveedor", "WHERE id_p_ev 
 								<tr>
 									<td><strong>PRECIO/FORMA DE PAGO</strong> <br>
 										De acuerdo al promedio del mercado </td>
-									<td id="dato2">10%</td>
+									<td id="dato2" class="porcentaje1" >10%</td>
 									<td id="dato2"><input class="dato" style="width:25px; text-align:center" type="text" name="precioUsuario" id="precioUsuario" value=""> % </td>
 								</tr>
 								<tr>
@@ -235,27 +235,27 @@ $ultimo_numero = $conexion->llenarCampos("evaluacion_proveedor", "WHERE id_p_ev 
 										<strong>RESPUESTA DE COTIZACIÓN. </strong><br>
 										Reconocimiento y competencia
 									</td>
-									<td id="dato2"> 10%</td>
+									<td id="dato2" class="porcentaje2"> 10%</td>
 									<td id="dato2" style="vertical-align: middle"><input class="dato" style="width:25px; text-align:center" type="text" name="trayectoriaUsuario" id="trayectoriaUsuario" value=""> % </td>
 								</tr>
 								<tr>
 									<td><strong>ASPECTO LEGAL</strong> <br>
 										Cumplimiento en los requisitos legales
 									</td>
-									<td id="dato2">20%</td>
+									<td id="dato2" class="porcentaje3">20%</td>
 									<td id="dato2"><input class="dato" style="width:25px; text-align:center" type="text" name="aspectoUsuario" id="aspectoUsuario" value=""> % </td>
 								</tr>
 
 								<tr>
 									<td><strong>ENTREGA/CUMPLIMIENTO</strong> <br>
 										(<=0 dias) </td>
-									<td id="dato2">20%</td>
+									<td id="dato2" class="porcentaje4">20%</td>
 									<td id="dato2"><input class="dato" style="width:25px; text-align:center" type="text" name="entregaUsuario" id="entregaUsuario" value=""> % </td>
 								</tr>
 
 								<tr>
 									<td><strong>GARANTIA/CALIDAD DEL BIEN Y/O SERVICIO</strong></td>
-									<td id="dato2">20%</td>
+									<td id="dato2" class="porcentaje5">20%</td>
 									<td id="dato2"><input class="dato" style="width:25px; text-align:center" type="text" name="garantiaUsuario" id="garantiaUsuario" value=""> % </td>
 								</tr>
 
@@ -263,7 +263,7 @@ $ultimo_numero = $conexion->llenarCampos("evaluacion_proveedor", "WHERE id_p_ev 
 									<td><strong>OPORTUNIDAD EN LA RESPUESTA A LOS</strong> <br>
 										<strong>REQUERIMIENTOS DE LA ORGANIZACIÓN </strong>
 									</td>
-									<td id="dato2">20%</td>
+									<td id="dato2" class="porcentaje6">20%</td>
 									<td id="dato2"><input class="dato" style="width:25px; text-align:center" type="text" name="respuestaUsuario" id="respuestaUsuario" value=""> % </td>
 								</tr>
 
@@ -381,7 +381,7 @@ mysqli_free_result($evaluacion_proveedor);
 
 	imprimir.addEventListener("click", function() {
 		if (precio.value == "" || trayectoria.value == "" || entrega.value == "" || garantia.value == "" || respuesta.value == "") {
-			swal("ERROR", "Debe llenar todos los campos de Calificacion");
+			swal("ERROR", "Debe llenar todos los campos de Calificacion","warning");
 		} else {
 			document.form.submit();
 
@@ -396,22 +396,53 @@ mysqli_free_result($evaluacion_proveedor);
 	})
 
 	precio.addEventListener("change", function(e) {
-		suma(e.target.value, 0);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje1").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+		} else {
+		suma(e.target.value, 0); }
 	})
 	trayectoria.addEventListener("change", function(e) {
-		suma(e.target.value, 1);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje2").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+		} else {
+		suma(e.target.value, 1);}
 	})
 	aspecto.addEventListener("change", function(e) {
-		suma(e.target.value, 2);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje3").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+		} else {
+		suma(e.target.value, 2);}
 	})
 	entrega.addEventListener("change", function(e) {
-		suma(e.target.value, 3);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje4").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+		} else {
+		suma(e.target.value, 3);}
 	})
 	garantia.addEventListener("change", function(e) {
-		suma(e.target.value, 4);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje5").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+
+		} else {
+		suma(e.target.value, 4);}
 	})
 	respuesta.addEventListener("change", function(e) {
-		suma(e.target.value, 5);
+		let porcentajeRef = parseInt( document.querySelector(".porcentaje6").innerHTML.replace("%","") );
+		if(e.target.value > porcentajeRef){
+			alertMessage();
+			e.target.value = "";
+		} else {
+		suma(e.target.value, 5);}
 	})
 
 	var valores = [];
@@ -456,5 +487,9 @@ mysqli_free_result($evaluacion_proveedor);
 		if (num >= '81' && num <= '100') {
 			return [3, "Esta entre 81% - 100%: Se considera que cumple para la organizacion."];
 		}
+	}
+
+	function alertMessage(){
+		swal("Error", "El Valor de la calificacion no debe superar el Porcentaje establecido", "warning");
 	}
 </script>

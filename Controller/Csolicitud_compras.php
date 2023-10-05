@@ -19,11 +19,10 @@ class Csolicitud_comprasController
 
             if ($res2 == 1) {
                 $alerta = 2;
-                $confirmacion = $objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad']);
-                if($confirmacion){
-                    $alerta = 3;
-                }
+
+
                 header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
+                $objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad']);
             } else {
                 echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los Items");</script>';
             }

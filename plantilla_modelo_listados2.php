@@ -126,7 +126,7 @@ if (isset($_GET['totalRows_registros'])) {
 } else {
   $totalRows_registros = $conexion->conteo('verificacion_insumos'); 
 } 
-$totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;
+$totalPages_registros = floor($totalRows_registros/$maxRows_registros)-1;
 
 
 $queryString_registros = "";
@@ -195,7 +195,7 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
                  </div>
                  <div class="panel-heading" align="left" ></div><!--color azul-->
                     <div id="cabezamenu">
-                     <ul id="menuhorizontal">
+                     <ul id="menuhorizontal"> 
                       <li id="nombreusuario" ><?php echo $_SESSION['Usuario']; ?></li>
                       <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
                       <li><a href="menu.php">MENU PRINCIPAL</a></li> 

@@ -34,7 +34,6 @@ if($resulrt){
 }
 //fin
 
-
 //guardado de remision interna Item
  
 if(isset($_POST['remision_id'] ) && $_POST['remision_id']!='' ) { 

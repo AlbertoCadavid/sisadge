@@ -106,10 +106,12 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 //////////////////////////////////////////////////////////////////////////////
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+  $passHash = password_hash($_POST['clave_usuario'], PASSWORD_DEFAULT);
+  
   $insertSQL = sprintf("INSERT INTO usuario (id_usuario, usuario, clave_usuario, nombre_usuario, tipo_usuario, codigo_usuario, responsable, fecha_registro, responsable_edit, fecha_edit, email_usuario) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
    GetSQLValueString($_POST['id_usuario'], "int"),
    GetSQLValueString($_POST['usuario'], "text"),
-   GetSQLValueString($_POST['clave_usuario'], "text"),
+   GetSQLValueString($passHash, "text"),
    GetSQLValueString($_POST['nombre_usuario'], "text"),
    GetSQLValueString($_POST['tipo_usuario'], "text"),
    GetSQLValueString($_POST['codigo_usuario'], "text"),
@@ -195,96 +197,95 @@ $totalRows_cliente = mysql_num_rows($cliente);
 </head>
 <body>
       <?php echo $conexion->header('listas'); ?>
-                  <form action="<?php echo $editFormAction; ?>" method="post" name="form1" onSubmit="MM_validateForm('fecha_registro','','R','usuario','','R','clave_usuario','','R','nombre_usuario','','R','email_usuario','','R');return document.MM_returnValue">
-                    <table class="table table-bordered table-sm">    
-                      <tr>
-                        <td width="162" rowspan="8" id="dato2"><img src="images/logoacyc.jpg"></td>
-                        <td colspan="2" id="fuente2"><strong>ADICIONAR USUARIO</strong></td>
-                        <td id="dato2"><img src="images/ciclo1.gif" style="cursor:hand;" alt="RESTAURAR" onClick="window.history.go()" ><a href="usuarios.php"><img src="images/cat.gif" alt="LISTADO DE USUARIOS" border="0" style="cursor:hand;"></a></td>
-                      </tr>
-                      <tr>
-                        <td id="fuente2">Fecha
-                          <input name="id_usuario" type="hidden" value="<?php $num=$row_ver_nuevo['id_usuario']+1; echo $num; ?>">
-                        Registro</td>
-                        <td colspan="2" id="fuente1">Registrado por </td>
-                      </tr>
-                      <tr>
-                        <td id="dato2"><input name="fecha_registro" type="text" id="fecha_registro" size="10" value="<?php echo date("Y/m/d"); ?>"></td>
-                        <td colspan="2" id="detalle1"><?php echo $row_usuario_nuevo['nombre_usuario']; ?>
-                          <input name="responsable" type="hidden" id="responsable" value="<?php echo $row_usuario_nuevo['nombre_usuario']; ?>"></td>
-                        </tr>
-                        <tr>
-                          <td id="fuente2">Usuario</td>
-                          <td id="fuente2">Clave de Acceso</td>
-                          <td id="fuente2">Nombre de Usuario</td>
-                        </tr>
-                        <tr>
-                          <td id="dato2"><input name="usuario" type="text" id="usuario" onBlur="if (form1.usuario.value) { DatosUsuario(form1.usuario.value); } else { alert('Debe digitar el usuario de acceso para validar su existencia en la BD'); }" value="" size="20"></td>
-                          <td id="dato2"><input name="clave_usuario" type="text" id="clave_usuario" size="20"></td>
-                          <td id="dato2"><input name="nombre_usuario" type="text" id="nombre_usuario" value="" size="30"></td>
-                        </tr>
-                        <tr>
-                          <td id="fuente2">&nbsp;</td>
-                          <td colspan="2" id="fuente2">E-mail de la compa&ntilde;ia</td>
-                        </tr>
-                        <tr>
-                          <td id="dato2">&nbsp;</td>
-                          <td colspan="2" id="dato2"><label for="email_usuario"></label>
-                            <input type="text" name="email_usuario" id="email_usuario" size="50"></td>
-                          </tr>
-                          <tr>
-                            <td id="dato2"><div id="existe"></div></td>
-                            <td colspan="2" id="dato2">Nota: No se ingresara el usuario si existe en la BD!! </td>
-                          </tr>
-                          <tr id="tr2">
-                            <td colspan="2" id="titulo4">TIPO DE USUARIO </td>
-                            <td colspan="2" id="titulo4">CODIGO DE USUARIO </td>
-                            <td colspan="2" id="titulo4">ACCESO </td>
-                            <td colspan="2" id="titulo4">SUPER ACCESO </td>
-                          </tr>
-                          <tr>      
-                            <td colspan="2" id="dato2">
-                              <select name="tipo_usuario" onChange="DefinicionUsuario(form1.tipo_usuario.value,<?php echo $_SESSION['MM_IdUsername'];?>);">
-                               <option value="">Seleccione</option>
-                            <?php
-                               do {  
-                               ?>
-                                 <option value="<?php echo $row_ver_tipo_user['id_tipo']?>"><?php echo $row_ver_tipo_user['nombre_tipo']?></option><?php
-                               } while ($row_ver_tipo_user = mysql_fetch_assoc($ver_tipo_user));
-                                 $rows = mysql_num_rows($ver_tipo_user);
-                              if($rows > 0) {
-                                 mysql_data_seek($ver_tipo_user, 0);
-                                 $row_ver_tipo_user = mysql_fetch_assoc($ver_tipo_user);
-                               }
-                            ?>
-                          </select></td>
-                          <td colspan="2" id="dato2"><div id="definicion"></div></td>
-                          <td colspan="2" id="dato2">
-                            <select name="acceso">
-                              <option value="0" selected>SIN ACCESO</option> 
-                              <option value="1">CON ACCESO</option>
-                            </select>
-                          </td>
-                          <td colspan="2" id="dato2">
-                            <select name="superacceso">
-                              <option value="0" selected>SIN SUPERACCESO</option> 
-                              <option value="1">CON SUPERACCESO</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colspan="4" id="fuente2">Alguna inquietud o recomendaci&oacute;n favor comunicarse con sistemas@acycia.com
-                            <input name="responsable_edit" type="hidden" id="responsable_edit" value="">
-                            <input name="fecha_edit" type="hidden" id="fecha_edit" value=""></td>
-                          </tr>    
-                          <tr>
-                            <td colspan="4" id="dato2"><input type="submit" value="Add Usuario"></td>
-                          </tr>
-                        </table>
-                        <input type="hidden" name="MM_insert" value="form1">
-                      </form>
-            
-                  <?php echo $conexion->header('footer'); ?>
+        <form action="<?php echo $editFormAction; ?>" method="post" name="form1" onSubmit="MM_validateForm('fecha_registro','','R','usuario','','R','clave_usuario','','R','nombre_usuario','','R','email_usuario','','R');return document.MM_returnValue">
+          <table class="table table-bordered table-sm">    
+            <tr>
+              <td width="162" rowspan="8" id="dato2"><img src="images/logoacyc.jpg"></td>
+              <td colspan="2" id="fuente2"><strong>ADICIONAR USUARIO</strong></td>
+              <td id="dato2"><img src="images/ciclo1.gif" style="cursor:hand;" alt="RESTAURAR" onClick="window.history.go()" ><a href="usuarios.php"><img src="images/cat.gif" alt="LISTADO DE USUARIOS" border="0" style="cursor:hand;"></a></td>
+            </tr>
+            <tr>
+              <td id="fuente2">Fecha
+                <input name="id_usuario" type="hidden" value="<?php $num=$row_ver_nuevo['id_usuario']+1; echo $num; ?>">
+              Registro</td>
+              <td colspan="2" id="fuente1">Registrado por </td>
+            </tr>
+            <tr>
+              <td id="dato2"><input name="fecha_registro" type="text" id="fecha_registro" size="10" value="<?php echo date("Y/m/d"); ?>"></td>
+              <td colspan="2" id="detalle1"><?php echo $row_usuario_nuevo['nombre_usuario']; ?>
+                <input name="responsable" type="hidden" id="responsable" value="<?php echo $row_usuario_nuevo['nombre_usuario']; ?>"></td>
+              </tr>
+              <tr>
+                <td id="fuente2">Usuario</td>
+                <td id="fuente2">Clave de Acceso</td>
+                <td id="fuente2">Nombre de Usuario</td>
+              </tr>
+              <tr>
+                <td id="dato2"><input name="usuario" type="text" id="usuario" onBlur="if (form1.usuario.value) { DatosUsuario(form1.usuario.value); } else { alert('Debe digitar el usuario de acceso para validar su existencia en la BD'); }" value="" size="20"></td>
+                <td id="dato2"><input name="clave_usuario" type="text" id="clave_usuario" size="20"></td>
+                <td id="dato2"><input name="nombre_usuario" type="text" id="nombre_usuario" value="" size="30"></td>
+              </tr>
+              <tr>
+                <td id="fuente2">&nbsp;</td>
+                <td colspan="2" id="fuente2">E-mail de la compa&ntilde;ia</td>
+              </tr>
+              <tr>
+                <td id="dato2">&nbsp;</td>
+                <td colspan="2" id="dato2"><label for="email_usuario"></label>
+                  <input type="text" name="email_usuario" id="email_usuario" size="50"></td>
+                </tr>
+                <tr>
+                  <td id="dato2"><div id="existe"></div></td>
+                  <td colspan="2" id="dato2">Nota: No se ingresara el usuario si existe en la BD!! </td>
+                </tr>
+                <tr id="tr2">
+                  <td colspan="2" id="titulo4">TIPO DE USUARIO </td>
+                  <td colspan="2" id="titulo4">CODIGO DE USUARIO </td>
+                  <td colspan="2" id="titulo4">ACCESO </td>
+                  <td colspan="2" id="titulo4">SUPER ACCESO </td>
+                </tr>
+                <tr>      
+                  <td colspan="2" id="dato2">
+                    <select name="tipo_usuario" onChange="DefinicionUsuario(form1.tipo_usuario.value,<?php echo $_SESSION['MM_IdUsername'];?>);">
+                     <option value="">Seleccione</option>
+                  <?php
+                     do {  
+                     ?>
+                       <option value="<?php echo $row_ver_tipo_user['id_tipo']?>"><?php echo $row_ver_tipo_user['nombre_tipo']?></option><?php
+                     } while ($row_ver_tipo_user = mysql_fetch_assoc($ver_tipo_user));
+                       $rows = mysql_num_rows($ver_tipo_user);
+                    if($rows > 0) {
+                       mysql_data_seek($ver_tipo_user, 0);
+                       $row_ver_tipo_user = mysql_fetch_assoc($ver_tipo_user);
+                     }
+                  ?>
+                </select></td>
+                <td colspan="2" id="dato2"><div id="definicion"></div></td>
+                <td colspan="2" id="dato2">
+                  <select name="acceso">
+                    <option value="0" selected>SIN ACCESO</option> 
+                    <option value="1">CON ACCESO</option>
+                  </select>
+                </td>
+                <td colspan="2" id="dato2">
+                  <select name="superacceso">
+                    <option value="0" selected>SIN SUPERACCESO</option> 
+                    <option value="1">CON SUPERACCESO</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" id="fuente2">Alguna inquietud o recomendaci&oacute;n favor comunicarse con sistemas@acycia.com
+                  <input name="responsable_edit" type="hidden" id="responsable_edit" value="">
+                  <input name="fecha_edit" type="hidden" id="fecha_edit" value=""></td>
+                </tr>    
+                <tr>
+                  <td colspan="4" id="dato2"><input type="submit" value="Add Usuario"></td>
+                </tr>
+              </table>
+              <input type="hidden" name="MM_insert" value="form1">
+            </form>
+              <?php echo $conexion->header('footer'); ?>
               </body>
               </html>
               <?php

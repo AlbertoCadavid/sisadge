@@ -196,14 +196,14 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
         <fieldset style="width:70%">
           <legend>Filtro de Rollos</legend>
           <label for="desde">Desde</label>
-          <input style="width:40px" type="number" min="0" name="rolloDesde" id="rolloDesde" value="<?php if ((strcmp("rolloDesde",$_GET['desde']))) {
-                                                                                              echo $_GET['desde'];
-                                                                                            } ?>">
+          <input style="width:40px" type="number" min="0" name="rolloDesde" id="rolloDesde" value="<?php if ((strcmp("rolloDesde", $_GET['desde']))) {
+                                                                                                      echo $_GET['desde'];
+                                                                                                    } ?>">
 
           <label for="hasta">Hasta</label>
-          <input style="width:40px" type="number" min="0" name="rolloHasta" id="rolloHasta" value="<?php if ((strcmp("rolloDesde",$_GET['hasta']))) {
-                                                                                              echo $_GET['hasta'];
-                                                                                            } ?>">
+          <input style="width:40px" type="number" min="0" name="rolloHasta" id="rolloHasta" value="<?php if ((strcmp("rolloDesde", $_GET['hasta']))) {
+                                                                                                      echo $_GET['hasta'];
+                                                                                                    } ?>">
 
           <button class="buscar" type="button">Buscar</button>
           <img style="width:20px; margin-bottom:-5px" class="reset" src="./images/14.png" alt="Borrar Busqueda"><br><br>
@@ -274,10 +274,9 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
       </table>
       </td>
       </tr>
-
+      <?php echo $conexion->header('footer'); ?>
     </table>
 
-    <?php echo $conexion->header('footer'); ?>
 </body>
 
 </html>
@@ -289,7 +288,6 @@ mysql_free_result($rollo_estrusion);
 ?>
 
 <script type="text/javascript">
-  
   let rollos = document.querySelector(".rollos");
   let metros = document.querySelectorAll(".metros");
   let kilos = document.querySelectorAll(".kilos");
@@ -409,19 +407,18 @@ mysql_free_result($rollo_estrusion);
     let desde = document.querySelector("#rolloDesde").value;
     let hasta = document.querySelector("#rolloHasta").value;
     let id = '<?php echo $_GET['id_op_r'] ?>'
-    
+
     url = '<?php echo $_SERVER['PHP_SELF'] ?>';
     if (desde != "" || hasta != "") {
-      window.location.assign(url + "?id_op_r="+ id +"&desde=" + desde + "&hasta=" + hasta)
+      window.location.assign(url + "?id_op_r=" + id + "&desde=" + desde + "&hasta=" + hasta)
     } else {
-      window.location.assign(url + "?id_op_r="+ id)
+      window.location.assign(url + "?id_op_r=" + id)
     }
   })
 
   reset.addEventListener("click", function() {
     let id = '<?php echo $_GET['id_op_r'] ?>'
     url = '<?php echo $_SERVER['PHP_SELF'] ?>';
-    window.location.assign(url + "?id_op_r="+ id)
+    window.location.assign(url + "?id_op_r=" + id)
   })
-
 </script>

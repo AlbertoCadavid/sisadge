@@ -1,264 +1,102 @@
-CREATE TABLE `tbl_proceso_compras_liquidacion` (
-  `id` int(30) NOT NULL,
-  `proforma` varchar(25) NOT NULL,
-  `precio_proforma` varchar(30) DEFAULT NULL,
-  `pedido` varchar(20) NOT NULL,
-  `do_agencia_aduanas1` varchar(20) DEFAULT NULL,
-  `oc_acycia_sa1` varchar(10) DEFAULT NULL,
-  `proveedor1` varchar(100) DEFAULT NULL,
-  `material1` varchar(100) DEFAULT NULL,
-  `factura1` varchar(20) DEFAULT NULL,
-  `fecha_factura1` varchar(12) DEFAULT NULL,
-  `precio_compra_unidad_usd1` varchar(10) DEFAULT NULL,
-  `doc_transp1` varchar(15) DEFAULT NULL,
-  `fecha_doc_transp1` varchar(12) DEFAULT NULL,
-  `declara_importacion1` varchar(20) DEFAULT NULL,
-  `fecha_declara_importacion1` varchar(15) DEFAULT NULL,
-  `trm1` varchar(10) DEFAULT NULL,
-  `cantidad1` varchar(10) DEFAULT NULL,
-  `precio_unit_fob1` varchar(12) DEFAULT NULL,
-  `total_fob1` varchar(12) DEFAULT NULL,
-  `flete_internal_seguro1` varchar(12) DEFAULT NULL,
-  `total_cif1` varchar(12) DEFAULT NULL,
-  `total_cop1` varchar(12) DEFAULT NULL,
-  `do_agencia_aduanas2` varchar(20) DEFAULT NULL,
-  `oc_acycia_sa2` varchar(10) DEFAULT NULL,
-  `proveedor2` varchar(100) DEFAULT NULL,
-  `material2` varchar(100) DEFAULT NULL,
-  `factura2` varchar(20) DEFAULT NULL,
-  `fecha_factura2` varchar(12) DEFAULT NULL,
-  `precio_compra_unidad_usd2` varchar(10) DEFAULT NULL,
-  `doc_transp2` varchar(15) DEFAULT NULL,
-  `fecha_doc_transp2` varchar(12) DEFAULT NULL,
-  `declara_importacion2` varchar(20) DEFAULT NULL,
-  `fecha_declara_importacion2` varchar(15) DEFAULT NULL,
-  `trm2` varchar(10) DEFAULT NULL,
-  `cantidad2` varchar(10) DEFAULT NULL,
-  `precio_unit_fob2` varchar(12) DEFAULT NULL,
-  `total_fob2` varchar(12) DEFAULT NULL,
-  `flete_internal_seguro2` varchar(12) DEFAULT NULL,
-  `total_cif2` varchar(12) DEFAULT NULL,
-  `total_cop2` varchar(12) DEFAULT NULL,
-  `do_agencia_aduanas3` varchar(20) DEFAULT NULL,
-  `oc_acycia_sa3` varchar(10) DEFAULT NULL,
-  `proveedor3` varchar(100) DEFAULT NULL,
-  `material3` varchar(100) DEFAULT NULL,
-  `factura3` varchar(20) DEFAULT NULL,
-  `fecha_factura3` varchar(12) DEFAULT NULL,
-  `precio_compra_unidad_usd3` varchar(10) DEFAULT NULL,
-  `doc_transp3` varchar(15) DEFAULT NULL,
-  `fecha_doc_transp3` varchar(12) DEFAULT NULL,
-  `declara_importacion3` varchar(20) DEFAULT NULL,
-  `fecha_declara_importacion3` varchar(15) DEFAULT NULL,
-  `trm3` varchar(10) DEFAULT NULL,
-  `cantidad3` varchar(10) DEFAULT NULL,
-  `precio_unit_fob3` varchar(12) DEFAULT NULL,
-  `total_fob3` varchar(12) DEFAULT NULL,
-  `flete_internal_seguro3` varchar(12) DEFAULT NULL,
-  `total_cif3` varchar(12) DEFAULT NULL,
-  `total_cop3` varchar(12) DEFAULT NULL,
-  `do_agencia_aduanas4` varchar(20) DEFAULT NULL,
-  `oc_acycia_sa4` varchar(10) DEFAULT NULL,
-  `proveedor4` varchar(100) DEFAULT NULL,
-  `material4` varchar(100) DEFAULT NULL,
-  `factura4` varchar(20) DEFAULT NULL,
-  `fecha_factura4` varchar(12) DEFAULT NULL,
-  `precio_compra_unidad_usd4` varchar(10) DEFAULT NULL,
-  `doc_transp4` varchar(15) DEFAULT NULL,
-  `fecha_doc_transp4` varchar(12) DEFAULT NULL,
-  `declara_importacion4` varchar(20) DEFAULT NULL,
-  `fecha_declara_importacion4` varchar(15) DEFAULT NULL,
-  `trm4` varchar(10) DEFAULT NULL,
-  `cantidad4` varchar(10) DEFAULT NULL,
-  `precio_unit_fob4` varchar(12) DEFAULT NULL,
-  `total_fob4` varchar(12) DEFAULT NULL,
-  `flete_internal_seguro4` varchar(12) DEFAULT NULL,
-  `total_cif4` varchar(12) DEFAULT NULL,
-  `total_cop4` varchar(12) DEFAULT NULL,
-  `do_agencia_aduanas5` varchar(20) DEFAULT NULL,
-  `oc_acycia_sa5` varchar(10) DEFAULT NULL,
-  `proveedor5` varchar(100) DEFAULT NULL,
-  `material5` varchar(100) DEFAULT NULL,
-  `factura5` varchar(20) DEFAULT NULL,
-  `fecha_factura5` varchar(12) DEFAULT NULL,
-  `precio_compra_unidad_usd5` varchar(10) DEFAULT NULL,
-  `doc_transp5` varchar(15) DEFAULT NULL,
-  `fecha_doc_transp5` varchar(12) DEFAULT NULL,
-  `declara_importacion5` varchar(20) DEFAULT NULL,
-  `fecha_declara_importacion5` varchar(15) DEFAULT NULL,
-  `trm5` varchar(10) DEFAULT NULL,
-  `cantidad5` varchar(10) DEFAULT NULL,
-  `precio_unit_fob5` varchar(12) DEFAULT NULL,
-  `total_fob5` varchar(12) DEFAULT NULL,
-  `flete_internal_seguro5` varchar(12) DEFAULT NULL,
-  `total_cif5` varchar(12) DEFAULT NULL,
-  `total_cop5` varchar(12) DEFAULT NULL,
-  `emision_b_l1` varchar(15) DEFAULT NULL,
-  `liberacion_doc_transp1` varchar(15) DEFAULT NULL,
-  `opera_portuaria1` varchar(15) DEFAULT NULL,
-  `doc_uso_instalaciones1` varchar(15) DEFAULT NULL,
-  `manejo_carga1` varchar(15) DEFAULT NULL,
-  `bodegaje_o_almacen1` varchar(15) DEFAULT NULL,
-  `montac_o_elevador1` varchar(15) DEFAULT NULL,
-  `otros1` varchar(15) DEFAULT NULL,
-  `inspeccion_preinspec1` varchar(15) DEFAULT NULL,
-  `costos_financieros1` varchar(15) DEFAULT NULL,
-  `limpiezas_moras_otros_contenedor1` varchar(15) DEFAULT NULL,
-  `emision_b_l2` varchar(15) DEFAULT NULL,
-  `liberacion_doc_transp2` varchar(15) DEFAULT NULL,
-  `opera_portuaria2` varchar(15) DEFAULT NULL,
-  `doc_uso_instalaciones2` varchar(15) DEFAULT NULL,
-  `manejo_carga2` varchar(15) DEFAULT NULL,
-  `bodegaje_o_almacen2` varchar(15) DEFAULT NULL,
-  `montac_o_elevador2` varchar(15) DEFAULT NULL,
-  `otros2` varchar(15) DEFAULT NULL,
-  `inspeccion_preinspec2` varchar(15) DEFAULT NULL,
-  `costos_financieros2` varchar(15) DEFAULT NULL,
-  `limpiezas_moras_otros_contenedor2` varchar(15) DEFAULT NULL,
-  `emision_b_l3` varchar(15) DEFAULT NULL,
-  `liberacion_doc_transp3` varchar(15) DEFAULT NULL,
-  `opera_portuaria3` varchar(15) DEFAULT NULL,
-  `doc_uso_instalaciones3` varchar(15) DEFAULT NULL,
-  `manejo_carga3` varchar(15) DEFAULT NULL,
-  `bodegaje_o_almacen3` varchar(15) DEFAULT NULL,
-  `montac_o_elevador3` varchar(15) DEFAULT NULL,
-  `otros3` varchar(15) DEFAULT NULL,
-  `inspeccion_preinspec3` varchar(15) DEFAULT NULL,
-  `costos_financieros3` varchar(15) DEFAULT NULL,
-  `limpiezas_moras_otros_contenedor3` varchar(15) DEFAULT NULL,
-  `emision_b_l4` varchar(15) DEFAULT NULL,
-  `liberacion_doc_transp4` varchar(15) DEFAULT NULL,
-  `opera_portuaria4` varchar(15) DEFAULT NULL,
-  `doc_uso_instalaciones4` varchar(15) DEFAULT NULL,
-  `manejo_carga4` varchar(15) DEFAULT NULL,
-  `bodegaje_o_almacen4` varchar(15) DEFAULT NULL,
-  `montac_o_elevador4` varchar(15) DEFAULT NULL,
-  `otros4` varchar(15) DEFAULT NULL,
-  `inspeccion_preinspec4` varchar(15) DEFAULT NULL,
-  `costos_financieros4` varchar(15) DEFAULT NULL,
-  `limpiezas_moras_otros_contenedor4` varchar(15) DEFAULT NULL,
-  `emision_b_l5` varchar(15) DEFAULT NULL,
-  `liberacion_doc_transp5` varchar(15) DEFAULT NULL,
-  `opera_portuaria5` varchar(15) DEFAULT NULL,
-  `doc_uso_instalaciones5` varchar(15) DEFAULT NULL,
-  `manejo_carga5` varchar(15) DEFAULT NULL,
-  `bodegaje_o_almacen5` varchar(15) DEFAULT NULL,
-  `montac_o_elevador5` varchar(15) DEFAULT NULL,
-  `otros5` varchar(15) DEFAULT NULL,
-  `inspeccion_preinspec5` varchar(15) DEFAULT NULL,
-  `costos_financieros5` varchar(15) DEFAULT NULL,
-  `limpiezas_moras_otros_contenedor5` varchar(15) DEFAULT NULL,
-  `comision_por_intermedia_aduanera1` varchar(15) DEFAULT NULL,
-  `elabora_declara_importa1` varchar(15) DEFAULT NULL,
-  `declara_andina_valor1` varchar(15) DEFAULT NULL,
-  `gastos_operativos1` varchar(15) DEFAULT NULL,
-  `trasmi_siglo_xxi1` varchar(15) DEFAULT NULL,
-  `aranceles1` varchar(15) DEFAULT NULL,
-  `descargue_directo1` varchar(15) DEFAULT NULL,
-  `comision_por_intermedia_aduanera2` varchar(15) DEFAULT NULL,
-  `elabora_declara_importa2` varchar(15) DEFAULT NULL,
-  `declara_andina_valor2` varchar(15) DEFAULT NULL,
-  `gastos_operativos2` varchar(15) DEFAULT NULL,
-  `trasmi_siglo_xxi2` varchar(15) DEFAULT NULL,
-  `aranceles2` varchar(15) DEFAULT NULL,
-  `descargue_directo2` varchar(15) DEFAULT NULL,
-  `comision_por_intermedia_aduanera3` varchar(15) DEFAULT NULL,
-  `elabora_declara_importa3` varchar(15) DEFAULT NULL,
-  `declara_andina_valor3` varchar(15) DEFAULT NULL,
-  `gastos_operativos3` varchar(15) DEFAULT NULL,
-  `trasmi_siglo_xxi3` varchar(15) DEFAULT NULL,
-  `aranceles3` varchar(15) DEFAULT NULL,
-  `descargue_directo3` varchar(15) DEFAULT NULL,
-  `comision_por_intermedia_aduanera4` varchar(15) DEFAULT NULL,
-  `elabora_declara_importa4` varchar(15) DEFAULT NULL,
-  `declara_andina_valor4` varchar(15) DEFAULT NULL,
-  `gastos_operativos4` varchar(15) DEFAULT NULL,
-  `trasmi_siglo_xxi4` varchar(15) DEFAULT NULL,
-  `aranceles4` varchar(15) DEFAULT NULL,
-  `descargue_directo4` varchar(15) DEFAULT NULL,
-  `comision_por_intermedia_aduanera5` varchar(15) DEFAULT NULL,
-  `elabora_declara_importa5` varchar(15) DEFAULT NULL,
-  `declara_andina_valor5` varchar(15) DEFAULT NULL,
-  `gastos_operativos5` varchar(15) DEFAULT NULL,
-  `trasmi_siglo_xxi5` varchar(15) DEFAULT NULL,
-  `aranceles5` varchar(15) DEFAULT NULL,
-  `descargue_directo5` varchar(15) DEFAULT NULL,
-  `sellos_de_seguridad1` varchar(15) DEFAULT NULL,
-  `fletes_devol_contenedor1` varchar(15) DEFAULT NULL,
-  `descargue_servientrega1` varchar(15) DEFAULT NULL,
-  `flete_terrestre1` varchar(15) DEFAULT NULL,
-  `itr_puerto1` varchar(15) DEFAULT NULL,
-  `sellos_de_seguridad2` varchar(15) DEFAULT NULL,
-  `fletes_devol_contenedor2` varchar(15) DEFAULT NULL,
-  `descargue_servientrega2` varchar(15) DEFAULT NULL,
-  `flete_terrestre2` varchar(15) DEFAULT NULL,
-  `itr_puerto2` varchar(15) DEFAULT NULL,
-  `sellos_de_seguridad3` varchar(15) DEFAULT NULL,
-  `fletes_devol_contenedor3` varchar(15) DEFAULT NULL,
-  `descargue_servientrega3` varchar(15) DEFAULT NULL,
-  `flete_terrestre3` varchar(15) DEFAULT NULL,
-  `itr_puerto3` varchar(15) DEFAULT NULL,
-  `sellos_de_seguridad4` varchar(15) DEFAULT NULL,
-  `fletes_devol_contenedor4` varchar(15) DEFAULT NULL,
-  `descargue_servientrega4` varchar(15) DEFAULT NULL,
-  `flete_terrestre4` varchar(15) DEFAULT NULL,
-  `itr_puerto4` varchar(15) DEFAULT NULL,
-  `sellos_de_seguridad5` varchar(15) DEFAULT NULL,
-  `fletes_devol_contenedor5` varchar(15) DEFAULT NULL,
-  `descargue_servientrega5` varchar(15) DEFAULT NULL,
-  `flete_terrestre5` varchar(15) DEFAULT NULL,
-  `itr_puerto5` varchar(15) DEFAULT NULL,
-  `valor_factura1` varchar(16) DEFAULT NULL,
-  `gastos_portuarios1` varchar(16) DEFAULT NULL,
-  `valor_gastos_nacional1` varchar(16) DEFAULT NULL,
-  `valor_transp_interno1` varchar(16) DEFAULT NULL,
-  `total1` varchar(16) DEFAULT NULL,
-  `costo_cop_planta1` varchar(16) DEFAULT NULL,
-  `limp_material1` varchar(100) DEFAULT NULL,
-  `num_factura1` varchar(20) DEFAULT NULL,
-  `fecha_planta1` varchar(15) DEFAULT NULL,
-  `valor_factura2` varchar(16) DEFAULT NULL,
-  `gastos_portuarios2` varchar(16) DEFAULT NULL,
-  `valor_gastos_nacional2` varchar(16) DEFAULT NULL,
-  `valor_transp_interno2` varchar(16) DEFAULT NULL,
-  `total2` varchar(16) DEFAULT NULL,
-  `costo_cop_planta2` varchar(16) DEFAULT NULL,
-  `limp_material2` varchar(100) DEFAULT NULL,
-  `num_factura2` varchar(20) DEFAULT NULL,
-  `fecha_planta2` varchar(15) DEFAULT NULL,
-  `valor_factura3` varchar(16) DEFAULT NULL,
-  `gastos_portuarios3` varchar(16) DEFAULT NULL,
-  `valor_gastos_nacional3` varchar(16) DEFAULT NULL,
-  `valor_transp_interno3` varchar(16) DEFAULT NULL,
-  `total3` varchar(16) DEFAULT NULL,
-  `costo_cop_planta3` varchar(16) DEFAULT NULL,
-  `limp_material3` varchar(100) DEFAULT NULL,
-  `num_factura3` varchar(20) DEFAULT NULL,
-  `fecha_planta3` varchar(15) DEFAULT NULL,
-  `valor_factura4` varchar(16) DEFAULT NULL,
-  `gastos_portuarios4` varchar(16) DEFAULT NULL,
-  `valor_gastos_nacional4` varchar(16) DEFAULT NULL,
-  `valor_transp_interno4` varchar(16) DEFAULT NULL,
-  `total4` varchar(16) DEFAULT NULL,
-  `costo_cop_planta4` varchar(16) DEFAULT NULL,
-  `limp_material4` varchar(100) DEFAULT NULL,
-  `num_factura4` varchar(20) DEFAULT NULL,
-  `fecha_planta4` varchar(15) DEFAULT NULL,
-  `valor_factura5` varchar(16) DEFAULT NULL,
-  `gastos_portuarios5` varchar(16) DEFAULT NULL,
-  `valor_gastos_nacional5` varchar(16) DEFAULT NULL,
-  `valor_transp_interno5` varchar(16) DEFAULT NULL,
-  `total5` varchar(16) DEFAULT NULL,
-  `costo_cop_planta5` varchar(16) DEFAULT NULL,
-  `limp_material5` varchar(100) DEFAULT NULL,
-  `num_factura5` varchar(20) DEFAULT NULL,
-  `fecha_planta5` varchar(15) DEFAULT NULL,
-  `depositos1` varchar(16) DEFAULT NULL,
-  `nota1` varchar(100) DEFAULT NULL,
-  `depositos2` varchar(16) DEFAULT NULL,
-  `nota2` varchar(100) DEFAULT NULL,
-  `depositos3` varchar(16) DEFAULT NULL,
-  `nota3` varchar(100) DEFAULT NULL,
-  `nota4` varchar(100) DEFAULT NULL,
-  `nota5` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+UPDATE tbl_remisiones SET factura_r='FE0034363'  where str_numero_oc_r='21089PW';
+UPDATE tbl_remisiones SET factura_r='FE0034364'  where str_numero_oc_r='21091PW';
+UPDATE tbl_remisiones SET factura_r='FE0034365'  where str_numero_oc_r='21097PW';
+UPDATE tbl_remisiones SET factura_r='FE0034366'  where str_numero_oc_r='21099PW';
+UPDATE tbl_remisiones SET factura_r='FE0034367'  where str_numero_oc_r='21104PW';
+UPDATE tbl_remisiones SET factura_r='FE0034368'  where str_numero_oc_r='21105PW';
+UPDATE tbl_remisiones SET factura_r='FE0034371'  where str_numero_oc_r='21107PW';
+UPDATE tbl_remisiones SET factura_r='FE0034372'  where str_numero_oc_r='21103PW';
+UPDATE tbl_remisiones SET factura_r='FE0034423'  where str_numero_oc_r='21113PW';
+UPDATE tbl_remisiones SET factura_r='FE0034425'  where str_numero_oc_r='21118PW';
+UPDATE tbl_remisiones SET factura_r='FE0034426'  where str_numero_oc_r='21119PW';
+UPDATE tbl_remisiones SET factura_r='FE0034427'  where str_numero_oc_r='21122PW';
+UPDATE tbl_remisiones SET factura_r='FE0034428'  where str_numero_oc_r='21124PW';
+UPDATE tbl_remisiones SET factura_r='FE0034429'  where str_numero_oc_r='20950PW';
+UPDATE tbl_remisiones SET factura_r='FE0034433'  where str_numero_oc_r='21125PW';
+UPDATE tbl_remisiones SET factura_r='FE0034434'  where str_numero_oc_r='21133PW';
+UPDATE tbl_remisiones SET factura_r='FE0034435'  where str_numero_oc_r='21134PW';
+UPDATE tbl_remisiones SET factura_r='FE0034436'  where str_numero_oc_r='21145PW';
+UPDATE tbl_remisiones SET factura_r='FE0034437'  where str_numero_oc_r='21146PW';
+UPDATE tbl_remisiones SET factura_r='FE0034438'  where str_numero_oc_r='21152PW';
+UPDATE tbl_remisiones SET factura_r='FE0034439'  where str_numero_oc_r='21154PW';
+UPDATE tbl_remisiones SET factura_r='FE0034440'  where str_numero_oc_r='21155PW';
+UPDATE tbl_remisiones SET factura_r='FE0034441'  where str_numero_oc_r='21157PW';
+UPDATE tbl_remisiones SET factura_r='FE0034442'  where str_numero_oc_r='21161PW';
+UPDATE tbl_remisiones SET factura_r='FE0034443'  where str_numero_oc_r='21164PW';
+UPDATE tbl_remisiones SET factura_r='FE0034444'  where str_numero_oc_r='21165PW';
+UPDATE tbl_remisiones SET factura_r='FE0034445'  where str_numero_oc_r='21166PW';
+UPDATE tbl_remisiones SET factura_r='FE0034446'  where str_numero_oc_r='21167PW';
+UPDATE tbl_remisiones SET factura_r='FE0034466'  where str_numero_oc_r='20798PW';
+UPDATE tbl_remisiones SET factura_r='FE0034469'  where str_numero_oc_r='21141PW';
+UPDATE tbl_remisiones SET factura_r='FE0034472'  where str_numero_oc_r='21169PW';
+UPDATE tbl_remisiones SET factura_r='FE0034473'  where str_numero_oc_r='21170PW';
+UPDATE tbl_remisiones SET factura_r='FE0034474'  where str_numero_oc_r='21173PW';
+UPDATE tbl_remisiones SET factura_r='FE0034475'  where str_numero_oc_r='21174PW';
+UPDATE tbl_remisiones SET factura_r='FE0034476'  where str_numero_oc_r='21175PW';
+UPDATE tbl_remisiones SET factura_r='FE0034477'  where str_numero_oc_r='21178PW';
+UPDATE tbl_remisiones SET factura_r='FE0034478'  where str_numero_oc_r='21168PW';
+UPDATE tbl_remisiones SET factura_r='FE0034499'  where str_numero_oc_r='21184PW';
+UPDATE tbl_remisiones SET factura_r='FE0034490'  where str_numero_oc_r='21185PW';
+UPDATE tbl_remisiones SET factura_r='FE0034498'  where str_numero_oc_r='21186PW';
+UPDATE tbl_remisiones SET factura_r='FE0034491'  where str_numero_oc_r='21187PW';
+UPDATE tbl_remisiones SET factura_r='FE0034492'  where str_numero_oc_r='21188PW';
+UPDATE tbl_remisiones SET factura_r='FE0034497'  where str_numero_oc_r='21190PW';
+UPDATE tbl_remisiones SET factura_r='FE0034493'  where str_numero_oc_r='21192PW';
+UPDATE tbl_remisiones SET factura_r='FE0034494'  where str_numero_oc_r='21199PW';
+UPDATE tbl_remisiones SET factura_r='FE0034495'  where str_numero_oc_r='21205PW';
+UPDATE tbl_remisiones SET factura_r='FE0034496'  where str_numero_oc_r='21207PW';
+UPDATE tbl_remisiones SET factura_r='FE0034539'  where str_numero_oc_r='21177PW';
+UPDATE tbl_remisiones SET factura_r='FE0034546'  where str_numero_oc_r='21207PW';
+UPDATE tbl_remisiones SET factura_r='FE0034547'  where str_numero_oc_r='21208PW';
+UPDATE tbl_remisiones SET factura_r='FE0034548'  where str_numero_oc_r='21209PW';
+UPDATE tbl_remisiones SET factura_r='FE0034549'  where str_numero_oc_r='21215PW';
+UPDATE tbl_remisiones SET factura_r='FE0034550'  where str_numero_oc_r='21216PW';
+UPDATE tbl_remisiones SET factura_r='FE0034551'  where str_numero_oc_r='21218PW';
+UPDATE tbl_remisiones SET factura_r='FE0034552'  where str_numero_oc_r='21221PW';
+UPDATE tbl_remisiones SET factura_r='FE0034553'  where str_numero_oc_r='21223PW';
+UPDATE tbl_remisiones SET factura_r='FE0034554'  where str_numero_oc_r='21225PW';
+UPDATE tbl_remisiones SET factura_r='FE0034562'  where str_numero_oc_r='21226PW';
+UPDATE tbl_remisiones SET factura_r='FE0034563'  where str_numero_oc_r='21228PW';
+UPDATE tbl_remisiones SET factura_r='FE0034565'  where str_numero_oc_r='21156PW';
+UPDATE tbl_remisiones SET factura_r='FE0034567'  where str_numero_oc_r='21168PW';
+UPDATE tbl_remisiones SET factura_r='FE0034568'  where str_numero_oc_r='21089PW';
+UPDATE tbl_remisiones SET factura_r='FE0034569'  where str_numero_oc_r='21091PW';
+UPDATE tbl_remisiones SET factura_r='FE0034570'  where str_numero_oc_r='21097PW';
+UPDATE tbl_remisiones SET factura_r='FE0034571'  where str_numero_oc_r='21099PW';
+UPDATE tbl_remisiones SET factura_r='FE0034572'  where str_numero_oc_r='21103PW';
+UPDATE tbl_remisiones SET factura_r='FE0034573'  where str_numero_oc_r='21104PW';
+UPDATE tbl_remisiones SET factura_r='FE0034574'  where str_numero_oc_r='21105PW';
+UPDATE tbl_remisiones SET factura_r='FE0034575'  where str_numero_oc_r='21107PW';
+UPDATE tbl_remisiones SET factura_r='FE0034576'  where str_numero_oc_r='21090PW';
+UPDATE tbl_remisiones SET factura_r='FE0034369'  where str_numero_oc_r='21094TB';
+UPDATE tbl_remisiones SET factura_r='FE0034370'  where str_numero_oc_r='21102TB';
+UPDATE tbl_remisiones SET factura_r='FE0034373'  where str_numero_oc_r='21058TB';
+UPDATE tbl_remisiones SET factura_r='FE0034421'  where str_numero_oc_r='21110TB';
+UPDATE tbl_remisiones SET factura_r='FE0034422'  where str_numero_oc_r='21111TB';
+UPDATE tbl_remisiones SET factura_r='FE0034424'  where str_numero_oc_r='21114TB';
+UPDATE tbl_remisiones SET factura_r='FE0034430'  where str_numero_oc_r='21013TB';
+UPDATE tbl_remisiones SET factura_r='FE0034431'  where str_numero_oc_r='21088TB';
+UPDATE tbl_remisiones SET factura_r='FE0034432'  where str_numero_oc_r='21120TB';
+UPDATE tbl_remisiones SET factura_r='FE0034467'  where str_numero_oc_r='21126TB';
+UPDATE tbl_remisiones SET factura_r='FE0034468'  where str_numero_oc_r='21131TB';
+UPDATE tbl_remisiones SET factura_r='FE0034470'  where str_numero_oc_r='21142TB';
+UPDATE tbl_remisiones SET factura_r='FE0034471'  where str_numero_oc_r='21150TB';
+UPDATE tbl_remisiones SET factura_r='FE0034538'  where str_numero_oc_r='21172TB';
+UPDATE tbl_remisiones SET factura_r='FE0034540'  where str_numero_oc_r='21183TB';
+UPDATE tbl_remisiones SET factura_r='FE0034541'  where str_numero_oc_r='21189TB';
+UPDATE tbl_remisiones SET factura_r='FE0034542'  where str_numero_oc_r='21196TB';
+UPDATE tbl_remisiones SET factura_r='FE0034543'  where str_numero_oc_r='21201TB';
+UPDATE tbl_remisiones SET factura_r='FE0034544'  where str_numero_oc_r='21203TB';
+UPDATE tbl_remisiones SET factura_r='FE0034545'  where str_numero_oc_r='21204TB';
+UPDATE tbl_remisiones SET factura_r='FE0034555'  where str_numero_oc_r='21197TB';
+UPDATE tbl_remisiones SET factura_r='FE0034556'  where str_numero_oc_r='21211TB';
+UPDATE tbl_remisiones SET factura_r='FE0034557'  where str_numero_oc_r='21212TB';
+UPDATE tbl_remisiones SET factura_r='FE0034558'  where str_numero_oc_r='21219TB';
+UPDATE tbl_remisiones SET factura_r='FE0034559'  where str_numero_oc_r='21220TB';
+UPDATE tbl_remisiones SET factura_r='FE0034560'  where str_numero_oc_r='21222TB';
+UPDATE tbl_remisiones SET factura_r='FE0034561'  where str_numero_oc_r='21224TB';
+UPDATE tbl_remisiones SET factura_r='FE0034564'  where str_numero_oc_r='21217TB';
+UPDATE tbl_remisiones SET factura_r='FE0034566'  where str_numero_oc_r='21153TB';
+UPDATE tbl_remisiones SET factura_r='FE0034577'  where str_numero_oc_r='21094TB';
+UPDATE tbl_remisiones SET factura_r='FE0034578'  where str_numero_oc_r='21102TB';
+UPDATE tbl_remisiones SET factura_r='FE0034579'  where str_numero_oc_r='21108TB';

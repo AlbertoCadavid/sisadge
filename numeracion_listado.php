@@ -1,3 +1,7 @@
+<?php
+   require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+   require (ROOT_BBDD); 
+?>  
 <?php require_once('Connections/conexion1.php'); ?>
 <?php
 //initialize the session

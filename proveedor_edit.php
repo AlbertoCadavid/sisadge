@@ -463,12 +463,12 @@ do {
   <?php 
   } while ($row_insumos = mysql_fetch_assoc($insumos));       
     ?>
-	<?php if($row_proveedor['tipo_p'] != '2') { ?>
+	<?php //if($row_proveedor['tipo_p'] != '2') { ?>
           <tr id="tr1">
             <td colspan="4" id="titulo1">III. ENCUESTA PARA LA CALIFICACION DEL PROVEEDOR <?php if($row_proveedor_seleccion['id_seleccion']=='') { ?>
               <a href="proveedor_seleccion_add.php?id_p=<?php echo $row_proveedor['id_p']; ?>"><img src="images/mas.gif" alt="ADD ENCUESTA" border="0" style="cursor:hand;"></a> 
               <?php } else { ?>
-              <a href="proveedor_seleccion_edit.php?id_p=<?php echo $row_proveedor['id_p']; ?>"><img src="images/menos.gif" alt="EDITAR ENCUESTA" border="0" style="cursor:hand;"></a>              <?php } ?></td>
+              <a href="proveedor_seleccion_edit.php?id_p=<?php echo $row_proveedor['id_p']; ?>"><img src="images/menos.gif" alt="EDITAR ENCUESTA" border="0" style="cursor:hand;"></a> <?php } ?></td>
             </tr><?php if($row_proveedor_seleccion['id_seleccion']!='') { ?>
           <tr id="tr1">
             <td id="fuente1">CALIFICACION INICIAL (%) </td>
@@ -495,7 +495,7 @@ do {
             <td>&nbsp;</td>
             <td colspan="2" id="dato2">&nbsp;</td>
             <td id="dato2">&nbsp;</td>
-          </tr><?php } ?>
+          </tr><?php // } ?>
           <tr>
             <td>&nbsp;</td>
             <td colspan="2" id="dato2"><input name="submit" class="botonGMini" type="submit" value="EDITA PROVEEDOR"></td>

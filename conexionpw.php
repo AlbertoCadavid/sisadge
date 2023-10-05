@@ -96,7 +96,7 @@ function getVentasbyDay()
 	MAX(CASE WHEN META_KEY = '_billing_company' THEN meta_value END) AS EMPRESA
 	FROM  wp5s_postmeta  GROUP BY POST_ID) T 
 	LEFT JOIN acycia_ventas V ON(T.ORDEN = V.ORDER_ID)
-	WHERE V.ORDER_ID IS NULL and T.FECHA_COMPLETADA LIKE  '%".$fecha."%' AND (T.METODO_PAGO = 'Transferencia bancaria directa' or T.METODO_PAGO = 'PlacetoPay') ";
+	WHERE T.FECHA_COMPLETADA LIKE  '%".$fecha."%' AND (T.METODO_PAGO = 'Transferencia bancaria directa' or T.METODO_PAGO = 'PlacetoPay')  AND V.ORDER_ID IS NULL";
 	
 	logs("Consultando Ventas del dia");
 	$resultado = $conexion->query($sql); 
@@ -158,13 +158,9 @@ function getVentasbyDay()
 			}
 		}
 
-     
 
-
-	 /*echo "<pre>";
-	 print_r($exportacion);die;    */
-
-
+	//echo "<pre>";
+	//print_r($exportacion);die;
 
 	//inicia insert
 		inserts($exportacion,$conexion);
@@ -255,16 +251,6 @@ function getVentasbyDay()
 
 				}
  
-                
-
-                //insert tabla de control
-               $fechaVenta =  $cliente['FECHA_COMPLETADA'] =='' ? date('Y-m-d H:i:s') : $cliente['FECHA_COMPLETADA'];
-               $insert = "INSERT INTO acycia_ventas (ORDER_ID, FECHA, FECHA_INSERT) VALUES('".$cliente['ORDEN']."', '".date('Y-m-d')."', '".$fechaVenta."')";
-               $conexion->query($insert);
-               
-
-
-
 
                 //insert en la tabla de orden de compra
 
@@ -276,7 +262,7 @@ function getVentasbyDay()
                 	$obser_guia=$guia;
                 }*/
 
-                 
+                
                 /*$obser_guia = empty($guia) ? 'NOMBRE: '.$nombresEnvio.', RAZON SOCIAL: '.$razon_social.', DIRECCION FACTURA: '.$cliente['DIRECCION_1F'].' '.$cliente['DIRECCION_2F'].', CIUDAD FAC: '.$cliente['CIUDADF'].', DIRECCION ENVIO: '.$cliente['DIRECCION_1'].' '.$cliente['DIRECCION_2'].', CIUDAD ENVIO: '.$cliente['CIUDAD']. ', DEPART: '. $cliente['DEPARTAMENTO'].', CORREO: '. $emaill.', TELEFONO: '.$telefono : $guia;*/
 
                 $obser_guia =  ($obser_guia);
@@ -290,7 +276,7 @@ function getVentasbyDay()
 
 
                 //INSERT ID COTIZ
-                $cons_cotiz = $conexionpw->query("SELECT MAX(n_cotizacion+1) FROM tbl_cotizaciones ");//$conexionpw->query("SELECT MAX(n_cotizacion+1) FROM Tbl_cotiza_bolsa  ");
+                $cons_cotiz = $conexionpw->query("SELECT MAX(n_cotizacion+1) FROM Tbl_cotiza_bolsa  ");
                 $cotiz_id = $cons_cotiz->fetch_row(); 
 
 
@@ -306,7 +292,7 @@ function getVentasbyDay()
 	        	      $conexionpw->query($insertSQL4);*/
 
                 $contador = 0;//consecutivo de items en oc
- 
+
                 foreach ($cliente['detalle'] as $key => $itemsoc) 
                 {
                 	
@@ -314,72 +300,58 @@ function getVentasbyDay()
                     
 
                     $sku_ref = explode("-", $itemsoc['sku']);//quito version si es ref normal
-
-                    $sku_ref_especial = $sku_ref[0];
-
-
+                    $sku_ref = $sku_ref[0];
                     
-                    if($sku_ref_especial=='1130'){ 
-                    		$unidades = 50; 
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='735'){ 
-                    		$unidades = 3000; 
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWC059'){ 
-                    		$unidades = 200;//producto combo 
-                    		$sku_ref_codigo = explode("PWC", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWC688'){ 
+                    switch ($sku_ref) {
+                    	case '1130':
+                    		$unidades = 50;
+                    		break;
+                    	case '735':
+                    		$unidades = 3000;
+                    		break;
+                    	case 'PWC059':
                     		$unidades = 200;//producto combo
-                    		$sku_ref_codigo = explode("PWC", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWC686'){ 
+                    		break;
+                    	case 'PWC688':
+                    		$unidades = 200;//producto combo
+                    		break;
+                    	case 'PWC686':
                     		$unidades = 400;//producto combo
-                    		$sku_ref_codigo = explode("PWC", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWC685'){ 
+                    		break;
+                    	case 'PWC685':
                     		$unidades = 500;//producto combo
-                    		$sku_ref_codigo = explode("PWC", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWCA02'){ 
+                    		break;
+                    	case 'PWCA02':
                     		$unidades = 2;//producto combo
-                    		$sku_ref_codigo = explode("PWCA", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWCA06'){ 
+                    		break;
+                    	case 'PWCA06':
                     		$unidades = 6;//producto combo
-                    		$sku_ref_codigo = explode("PWCA", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWST01'){ 
+                    		break;
+                    	case 'PWST01':
                     		$unidades = 1;//producto combo
-                    		$sku_ref_codigo = explode("PWST", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1];
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else if($sku_ref_especial=='PWPB01'){ 
+                    		break;
+                    	case 'PWPB01':
                     		$unidades = 1;//producto combo
-                    		$sku_ref_codigo = explode("PWPB", $sku_ref_especial);
-                    		$sku_ref = $sku_ref_codigo[1]; 
-                    		$precioUnidad = "PRECIO COMBOS";
-                    }else{ 
+                    		break;
+                    	
+                    	default:
                     		$unidades = 100;
-                    		$sku_ref = $sku_ref[0];
-                    		$precioUnidad = "PRECIO UNITARIO";
-                    		 
+                    		break;
                     }
-                      
-                   
-                    /* $sku_ref = explode("-", $itemsoc['sku']);//quito version 
-                    $sku_ref = $sku_ref[0];*/
+
+                    //$unidades = medidas($itemsoc['sku']);
+             
+                    $sku_ref = explode("-", $itemsoc['sku']);//quito version
                     
-                	$cantidadItem = ($itemsoc['cantidad'] * $unidades);//para saber el valor en unidades total de las bolsas
+                    /*$sku_refPWC = str_split($itemsoc['sku'], 3);//si es pwc
+                    $sku_ref = $sku_refPWC[0] == "PWC" ? $sku_refPWC[1] : $sku_ref[0];//ya q el # ref va en posicion 1*/
+                    
+                    $sku_ref = $sku_ref[0];
+
+                	$cantidadItem = ($itemsoc['cantidad'] * $unidades);
                 	$contador += 1;
 
-                	$valorunidad = ($itemsoc['valor_total'] / $cantidadItem);//ya viene el valor bolsa con impuesto *2.12
+                	$valorunidad = ($itemsoc['valor_total'] / $cantidadItem);
 
 
                 	if($itemsoc['envio']=='Recogida local'){
@@ -387,38 +359,10 @@ function getVentasbyDay()
                 	}else{
                 		$tipoenvio = $dirEnvio;
                 	}
-                     
 
-                     //Quito impuesto para guardarlo en precio_old y la bolsa ya viene sumado
-                     $query_quitarimpuesto = $conexionpw->query("SELECT peso_millar_ref,peso_millar_bols,valor_impuesto FROM tbl_referencia WHERE cod_ref='".$sku_ref."' ");
-                     $result_quitarimpuesto = $query_quitarimpuesto->fetch_row(); 
-                     $precioImpuesto = $result_quitarimpuesto[2]=='' ? 0 : $result_quitarimpuesto[2]; //($millar_bolsa+$millar_bolsillo)*2.12;//impuesto a la bolsa
-                     /*$millar_bolsa=$result_quitarimpuesto[0];
-                     $millar_bolsillo=$result_quitarimpuesto[1];*/
-                     $restoImpuesto=($valorunidad - $precioImpuesto);//quito el impuesto para guardar en columna sin impuesto
-                     $valorunidad_sinimpuesto = $restoImpuesto;//number_format($restoImpuesto, 2, ",", ".");
-
-                     
-                     //dejo el precio antiguo de la ultima cotizacion
-                     $query_precioold = $conexionpw->query("(SELECT N_precio AS N_precio FROM Tbl_cotiza_bolsa WHERE Str_nit='$cedulanit' and N_referencia_c='$sku_ref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-                		UNION (SELECT N_precio_k AS N_precio FROM Tbl_cotiza_laminas WHERE Str_nit='$cedulanit' and N_referencia_c='$sku_ref'  ORDER BY fecha_creacion DESC LIMIT 0,1)
-                		UNION (SELECT N_precio_vnta AS N_precio FROM Tbl_cotiza_packing WHERE Str_nit='$cedulanit' and N_referencia_c='$sku_ref'  ORDER BY fecha_creacion DESC LIMIT 0,1)
-                		UNION (SELECT N_precio_vnta AS N_precio FROM Tbl_cotiza_materia_p WHERE Str_nit='$cedulanit' and Str_referencia='$sku_ref'  ORDER BY fecha_creacion DESC LIMIT 0,1)");
-                     $result_precioold = $query_precioold->fetch_row(); 
-                     $precioOld = $result_precioold[0]=='' ? $valorunidad_sinimpuesto : $result_precioold[0];
-
- 
-                      
 				 	  //insert en la tabla de items orden compra
-                	$insertSQL3 = "INSERT INTO tbl_items_ordenc (id_pedido_io,str_numero_io,int_consecutivo_io,int_cod_ref_io,int_cantidad_io,int_cantidad_rest_io,str_unidad_io,fecha_entrega_io,fecha_modif_io,responsable_modif_io,int_precio_io,int_total_item_io,str_moneda_io, str_direccion_desp_io,int_vendedor_io,b_estado_io,N_precio_old,valor_impuesto,cotiz) VALUES (".$idpedido.",'".$cliente['ORDEN'].$codigo_orden."',".$contador.", '".$sku_ref."','".$cantidadItem."','".$cantidadItem."','UNIDAD','".$fechaCumplimiento."','".$fecha."', 'PW', '".$precioOld."', '".$itemsoc['valor_total']."','COL$','".$tipoenvio."','10', '0', '".$valorunidad."', '".$result_quitarimpuesto[2]."', '".$cotiz_id[0]."' )";    
+                	$insertSQL3 = "INSERT INTO tbl_items_ordenc (id_pedido_io,str_numero_io,int_consecutivo_io,int_cod_ref_io,int_cantidad_io,int_cantidad_rest_io,str_unidad_io,fecha_entrega_io,fecha_modif_io,responsable_modif_io,int_precio_io,int_total_item_io,str_moneda_io, str_direccion_desp_io,int_vendedor_io,b_estado_io) VALUES (".$idpedido.",'".$cliente['ORDEN'].$codigo_orden."',".$contador.", '".$sku_ref."','".$cantidadItem."','".$cantidadItem."','UNIDAD','".$fechaCumplimiento."','".$fecha."', 'PW', '".$valorunidad."', '".$itemsoc['valor_total']."','COL$','".$tipoenvio."','10', '0')";    
                 	$conexionpw->query($insertSQL3);
-                    
-                    //consulto id_items
-                	$query_iditems = $conexionpw->query("SELECT id_items FROM tbl_items_ordenc WHERE id_pedido_io='".$idpedido."' ");
-                	$result_iditems = $query_iditems->fetch_row(); 
-                     
-                	$insertSQL4 = "INSERT INTO tbl_items_ordenc_historico (id_items,id_pedido_io,str_numero_io,int_consecutivo_io,int_cod_ref_io,int_cantidad_io,int_cantidad_rest_io,str_unidad_io,fecha_entrega_io,fecha_modif_io,responsable_modif_io,int_precio_io,int_total_item_io,str_moneda_io, str_direccion_desp_io,int_vendedor_io,b_estado_io,N_precio_old,valor_impuesto,cotiz) VALUES ('".$result_iditems[0]."', ".$idpedido.",'".$cliente['ORDEN'].$codigo_orden."',".$contador.", '".$sku_ref."','".$cantidadItem."','".$cantidadItem."','UNIDAD','".$fechaCumplimiento."','".$fecha."', 'PW', '".$precioOld."', '".$itemsoc['valor_total']."','COL$','".$tipoenvio."','10', '0', '".$valorunidad."', '".$result_quitarimpuesto[2]."', '".$cotiz_id[0]."' )";    
-                	$conexionpw->query($insertSQL4);
 
 				 	  //insert en la tabla de remision detalle
                       /*$insertSQL6 = "INSERT INTO tbl_remision_detalle (int_remision_r_rd,str_numero_oc_rd,fecha_rd,int_ref_io_rd,estado_rd) VALUES (".$remision_id[0].",'".$cliente['ORDEN'].$codigo_orden."','".$fecha."','".$itemsoc['sku']."','1')";    
@@ -428,27 +372,17 @@ function getVentasbyDay()
                       //GUARDO COTIZACION
                       if($cotiz_id[0]){
                       	//INFO DE REF
-                      	$query_ref = $conexionpw->query("SELECT ancho_ref,largo_ref,solapa_ref,n_fuelle,calibre_ref,bolsillo_guia_ref,tipo_bolsa_ref FROM Tbl_referencia WHERE cod_ref='".$sku_ref."' ");
+                      	$query_ref = $conexionpw->query("SELECT ancho_ref,largo_ref,solapa_ref,n_fuelle,calibre_ref,bolsillo_guia_ref FROM Tbl_referencia WHERE cod_ref='".$sku_ref."' ");
                       	$result_ref = $query_ref->fetch_row();
 
-                      	$insertCotizmaster = "INSERT INTO tbl_cotizaciones (N_cotizacion, Str_nit, Str_tipo, fecha) VALUES('".$cotiz_id[0]."','".$cedulanit."','BOLSA', '".$fecha."' )";    
+                      	$insertCotizmaster = "INSERT INTO  tbl_cotizaciones(N_cotizacion, Str_nit, Str_tipo, fecha) VALUES('".$cotiz_id[0]."','".$cedulanit."','BOLSA', '".$fecha."' )";    
                       	$conexionpw->query($insertCotizmaster); 
 
-                      	$insertCotizrel = "INSERT INTO tbl_cliente_referencia (N_referencia, N_cotizacion, Str_nit) VALUES('".$sku_ref."','".$cotiz_id[0]."','".$cedulanit."' )";    
+                      	$insertCotizrel = "INSERT INTO tbl_cliente_referencia(N_referencia, N_cotizacion, Str_nit) VALUES('".$sku_ref."','".$cotiz_id[0]."','".$cedulanit."' )";    
                       	$conexionpw->query($insertCotizrel); 
-                      
-                      if($result_ref[6]=='PACKING LIST'){
-                        $insertCotiz = "INSERT INTO tbl_cotiza_packing (N_cotizacion, N_referencia_c, Str_nit, Str_moneda, N_precio_vnta, Str_unidad_vta, N_cant_impresion, fecha_creacion, Str_usuario, B_estado,B_generica,N_ancho,N_alto,N_solapa,B_fuelle,N_calibre,N_tamano_bolsillo,N_precio_old,valor_impuesto) VALUES (".$cotiz_id[0].",'".$sku_ref."', '".$cedulanit."', 'COL$', '".$precioOld."','".$precioUnidad."','".$cantidadItem."','".$fecha."', '65', '1', '1','".$result_ref[0]."','".$result_ref[1]."','".$result_ref[2]."','".$result_ref[3]."','".$result_ref[4]."','".$result_ref[5]."','".$valorunidad."', '".$precioImpuesto."' )";    
-                        $conexionpw->query($insertCotiz); 
 
-                      }else if($result_ref[6]=='LAMINA'){
-                         $insertCotiz = "INSERT INTO tbl_cotiza_laminas (N_cotizacion, N_referencia_c, Str_nit, Str_moneda, N_precio_k, Str_unidad_vta, N_cant_impresion, fecha_creacion, Str_usuario, B_estado,B_generica,N_ancho,N_alto,N_solapa,B_fuelle,N_calibre,N_tamano_bolsillo,N_precio_old,valor_impuesto) VALUES (".$cotiz_id[0].",'".$sku_ref."', '".$cedulanit."', 'COL$', '".$precioOld."','".$precioUnidad."','".$cantidadItem."','".$fecha."', '65', '1', '1','".$result_ref[0]."','".$result_ref[1]."','".$result_ref[2]."','".$result_ref[3]."','".$result_ref[4]."','".$result_ref[5]."','".$valorunidad."', '".$precioImpuesto."' )";    
+                      	$insertCotiz = "INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c, Str_nit, Str_moneda, N_precio, Str_unidad_vta, N_cant_impresion, fecha_creacion, Str_usuario, B_estado,B_generica,N_ancho,N_alto,N_solapa,B_fuelle,N_calibre,N_tamano_bolsillo) VALUES (".$cotiz_id[0].",'".$sku_ref."', '".$cedulanit."', 'COL$', '".$valorunidad."','PRECIO UNITARIO','".$cantidadItem."','".$fecha."', '65', '1', '1','".$result_ref[0]."','".$result_ref[1]."','".$result_ref[2]."','".$result_ref[3]."','".$result_ref[4]."','".$result_ref[5]."')";    
                       	$conexionpw->query($insertCotiz); 
-                      }else{
-                      	$insertCotiz = "INSERT INTO tbl_cotiza_bolsa (N_cotizacion, N_referencia_c, Str_nit, Str_moneda, N_precio, Str_unidad_vta, N_cant_impresion, fecha_creacion, Str_usuario, B_estado,B_generica,N_ancho,N_alto,N_solapa,B_fuelle,N_calibre,N_tamano_bolsillo,N_precio_old,valor_impuesto) VALUES (".$cotiz_id[0].",'".$sku_ref."', '".$cedulanit."', 'COL$', '".$precioOld."','".$precioUnidad."','".$cantidadItem."','".$fecha."', '65', '1', '1','".$result_ref[0]."','".$result_ref[1]."','".$result_ref[2]."','".$result_ref[3]."','".$result_ref[4]."','".$result_ref[5]."','".$valorunidad."', '".$precioImpuesto."' )";    
-                      	$conexionpw->query($insertCotiz); 
-
-                      }
 
 
 
@@ -457,16 +391,17 @@ function getVentasbyDay()
 
 
 
-                  } //termina foreach de items de orden c
-
+                  } 
               }
-
 				  //exit($insertCotizrel);        
 
           }
+	//insert tabla de control
+          $fechaVenta =  $cliente['FECHA_COMPLETADA'] =='' ? date('Y-m-d H:i:s') : $cliente['FECHA_COMPLETADA'];
+          $insert = "INSERT INTO acycia_ventas (ORDER_ID, FECHA, FECHA_INSERT) VALUES('".$cliente['ORDEN']."', '".date('Y-m-d')."', '".$fechaVenta."')";
+          $conexion->query($insert);
 
-	     logs($cliente['ORDEN']);//PARA MOSTRAR LAS ORDENES QUE SE INGRESARON
-       
+          logs($cliente['ORDEN']);
 	    //exit();
 
       }

@@ -85,14 +85,7 @@ if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
 $row_usuario = $conexion->buscar('usuario','usuario',$colname_usuario); 
-//BOLSA
-$row_referencianueva=$conexion->llenarCampos("tbl_cotiza_bolsa","WHERE Tbl_cotiza_bolsa.B_estado = '1' AND Tbl_cotiza_bolsa.B_generica = '0' AND  Tbl_cotiza_bolsa.N_referencia_c NOT IN(SELECT Tbl_referencia.cod_ref FROM  Tbl_referencia)","","*");
 
-//PACKING
-$row_referencianueva2=$conexion->llenarCampos("tbl_cotiza_packing","WHERE Tbl_cotiza_packing.B_estado = '1' AND Tbl_cotiza_packing.B_generica = '0' AND Tbl_cotiza_packing.N_referencia_c NOT IN(SELECT Tbl_referencia.cod_ref FROM  Tbl_referencia)","","*");
-
-//LAMINAS
-$row_referencianueva2=$conexion->llenarCampos("tbl_cotiza_laminas","WHERE Tbl_cotiza_laminas.B_estado = '1' AND Tbl_cotiza_laminas.B_generica = '0' AND Tbl_cotiza_laminas.N_referencia_c NOT IN(SELECT Tbl_referencia.cod_ref FROM  Tbl_referencia)","","*");
  
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

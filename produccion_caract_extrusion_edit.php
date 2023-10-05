@@ -19,7 +19,7 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
   unset($_SESSION['MM_Username']);
   unset($_SESSION['MM_UserGroup']);
   unset($_SESSION['PrevUrl']);
-	
+  
   $logoutGoTo = "usuario.php";
   if ($logoutGoTo) {
     header("Location: $logoutGoTo");
@@ -141,10 +141,10 @@ $totalRows_usuario = mysql_num_rows($usuario);
 <td colspan="2" align="center"><img src="images/cabecera.jpg"></td></tr>
 <tr><td id="nombreusuario"><?php echo $row_usuario['nombre_usuario']; ?></td>
   <td id="cabezamenu"><ul id="menuhorizontal">
-	<li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
-	<li><a href="menu.php">MENU PRINCIPAL</a></li>
-	<li><a href="produccion_mezclas_add.php">EXTRUSION</a></li>		
-	</ul>
+  <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
+  <li><a href="menu.php">MENU PRINCIPAL</a></li>
+  <li><a href="produccion_mezclas_add.php">EXTRUSION</a></li>   
+  </ul>
 </td>
 </tr>  
   <tr>

@@ -68,6 +68,7 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup)
   return $isValid;
 }
 
+
 $MM_restrictGoTo = "usuario.php";
 if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {
   $MM_qsChar = "?";
@@ -97,6 +98,7 @@ $usuario = mysql_query($query_usuario, $conexion1);
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
+
 //PRIORIDAD
 mysql_select_db($database_conexion1, $conexion1);
 $query_prioridad = "SELECT * FROM Tbl_orden_produccion WHERE b_visual_op <> '0' AND b_borrado_op='0' ORDER BY b_visual_op ASC";
@@ -112,6 +114,8 @@ if (isset($_GET['pageNum_orden_produccion'])) {
 $startRow_orden_produccion = $pageNum_orden_produccion * $maxRows_orden_produccion;
 
 mysql_select_db($database_conexion1, $conexion1);
+
+
 $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE b_borrado_op='0' ORDER BY b_visual_op,id_op DESC";
 $query_limit_orden_produccion = sprintf("%s LIMIT %d, %d", $query_orden_produccion, $startRow_orden_produccion, $maxRows_orden_produccion);
 $orden_produccion = mysql_query($query_limit_orden_produccion, $conexion1);
@@ -162,7 +166,7 @@ $row_mensual = mysql_fetch_assoc($mensual);
 $totalRows_mensual = mysql_num_rows($mensual);
 
 $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
-
+ 
 ?>
 <html>
 
@@ -235,8 +239,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                   <div class="panel-heading" align="left"></div><!--color azul-->
                   <div id="cabezamenu">
                     <ul id="menuhorizontal">
-                      <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
-                      <li><a href="menu.php">MENU PRINCIPAL</a></li>
+                      <li><a class="permitido" href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
+                      <li><a class="permitido" href="menu.php">MENU PRINCIPAL</a></li>
                       <li><a href="produccion_registro_extrusion_listado.php">EXTRUSION</a></li>
                     </ul>
                   </div>
@@ -251,7 +255,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
                         <table class="table table-bordered table-sm">
                           <tr>
-                            <td id="fuente2" colspan="9">ORDENES DE PRODUCCION PARA EXTRUIR</td>
+                            <td id="fuente2" colspan="9">ORDENES DE PRODUCCION PARA EXTRUIR </td>
                           </tr>
                           <tr>
                             <!-- <td id="fuente3" colspan="2">
@@ -414,7 +418,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                   <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_prioridad['fecha_registro_op']; ?></a></td>
                                   <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_prioridad['b_borrado_op'] == '0') {
                                                                                                                                                                                           echo "ACTIVA";
-                                                                                                                                                                                        } else {
+                                                                                                                                                                                        } else if ($row_prioridad['b_borrado_op'] == '1') {
                                                                                                                                                                                           echo "INACTIVA";
                                                                                                                                                                                         } ?></a></td>
                                   <td id="dato2">
@@ -434,7 +438,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                       $tienerollos = 0;
                                     } else {
                                       $tienerollos = 1; ?>
-                                      <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
+                                      <a class="permitido" href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
                                     <?php } ?>
                                   </td>
                                   <td id="dato2">
@@ -557,7 +561,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {
                                                                                                                                                                                                 echo "ACTIVA";
-                                                                                                                                                                                              } else {
+                                                                                                                                                                                              } else if ($row_orden_produccion['b_borrado_op'] == '1') {
                                                                                                                                                                                                 echo "INACTIVA";
                                                                                                                                                                                               } ?></a></td>
                                 <td id="dato2">
@@ -577,7 +581,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                     $tienerollos = 0;
                                   } else {
                                     $tienerollos = 1; ?>
-                                    <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
+                                    <a class="permitido" href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
 
                                   <?php } ?>
                                 </td>
@@ -698,8 +702,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
 </html>
 <script>
-  $('#op').select2({
-    ajax: {
+  $('#op').select2(
+    $.ajax({
       url: "select3/proceso.php",
       type: "post",
       dataType: 'json',
@@ -721,8 +725,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
         };
       },
       cache: true
-    }
-  });
+    })
+  );
 
 
   $('#id_ref').select2({
@@ -774,6 +778,27 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
     consultaPorcentajesProduccion(mes, anyolis, ref, ops, estado);
 
     /* } */
+  });
+
+  $(document).ready(function() {
+    var editar = "<?php echo $_SESSION['no_edita']; ?>"; //es una excepcion
+
+    var usuario_especifico = "<?php echo $_SESSION['id_usuario']; ?>"; //es una excepcion$_SESSION['Usuario']
+    //excepcion para el de planchas
+    
+    if (usuario_especifico == 10 ) { //es una excepcion 23 sistemas, 26 produccion, extruder 31
+   
+      $("href").attr('disabled', 'disabled');
+      $(".permitido").removeAttr('disabled');
+
+      $('a').each(function() {
+        if (!$(this).hasClass('permitido')) {
+          $(this).attr('href', '#');
+        }
+      });
+
+      swal("No Autorizado", "Sin permisos para editar :)", "error");
+    }
   });
 </script>
 

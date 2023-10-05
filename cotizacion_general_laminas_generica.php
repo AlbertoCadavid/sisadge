@@ -185,12 +185,27 @@ $totalRows_referencias2 = mysql_num_rows($referencias2);*/
 
 $row_referencias2 = $conexion->llenaListas("Tbl_cliente_referencia, Tbl_referencia","","WHERE Tbl_cliente_referencia.Str_nit ='$colname_nit2' AND Tbl_cliente_referencia.N_referencia = Tbl_referencia.cod_ref AND Tbl_referencia.tipo_bolsa_ref='LAMINA' AND Tbl_cliente_referencia.N_referencia NOT IN(SELECT Tbl_cotiza_laminas.N_referencia_c FROM Tbl_cotiza_laminas WHERE Tbl_cotiza_laminas.N_cotizacion = '$colname_cotiz2' and Tbl_cotiza_laminas.B_generica='0') ORDER BY CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) DESC","DISTINCT Tbl_referencia.id_ref,Tbl_referencia.cod_ref");
 
+
+$colname_refer = "-1";
+if (isset($_GET['id_ref'])) 
+{
+  $colname_refer = (get_magic_quotes_gpc()) ? $_GET['id_ref'] : addslashes($_GET['id_ref']);
+} 
+
+mysql_select_db($database_conexion1, $conexion1);
+$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols FROM Tbl_referencia WHERE Tbl_referencia.id_ref ='%s'  ",$colname_refer);
+$refer = mysql_query($query_refer, $conexion1) or die(mysql_error());
+$row_refer = mysql_fetch_assoc($refer);
+$totalRows_refer = mysql_num_rows($refer);
+
 //TRAE EL NUMRO DE REFERENCIA +1 PARA GUARDARLO SI NO ESCOGE GENERICA
 mysql_select_db($database_conexion1, $conexion1);
 $query_ref= "SELECT N_referencia FROM Tbl_cliente_referencia ORDER BY N_referencia DESC";
 $ref = mysql_query($query_ref, $conexion1) or die(mysql_error());
 $row_ref = mysql_fetch_assoc($ref);
 $totalRows_ref = mysql_num_rows($ref);
+
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -203,13 +218,14 @@ $totalRows_ref = mysql_num_rows($ref);
 <link href="css/formato.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/formato.js"></script>
 <script type="text/javascript" src="js/delete.js"></script>
-<script type="text/javascript" src="js/adjuntos.js"></script>
+<script type="text/javascript" src="js/adjuntar.js"></script>
 <script type="text/javascript" src="js/validacion_numerico.js"></script>
 <script type="text/javascript" src="js/consulta.js"></script>
 
   <link rel="stylesheet" type="text/css" href="css/general.css"/>
   <link rel="stylesheet" type="text/css" href="css/formato.css"/>
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
+  <script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
 <!-- sweetalert -->
 <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
 <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
@@ -304,7 +320,7 @@ swal({
                     <tr id="tr1">
                       <td width="113" nowrap="nowrap" id="codigo">CODIGO : R1-F08 </td>
                       <td colspan="2" nowrap="nowrap" id="titulo2">Cotizacion Laminas</td>
-                      <td colspan="2" nowrap="nowrap" id="codigo">VERSION: 2 </td>
+                      <td colspan="3" nowrap="nowrap" id="codigo">VERSION: 2 </td>
                     </tr>
                     <tr>
                       <td rowspan="9" id="fuente2"><img src="images/logoacyc.jpg"></td>
@@ -336,7 +352,7 @@ swal({
                       <tr>
                         <td colspan="2" id="fuente1">Estado de la Cotizaci&oacute;n</td>
                         <td id="fuente1">Generica </td>
-                        <td id="fuente1"> Existente</td>
+                        <td colspan="2" id="fuente1"> Existente</td>
                       </tr>
                       <tr>
                         <td colspan="2" id="fuente1"><select name="B_estado" id="B_estado">
@@ -367,8 +383,9 @@ swal({
                             $row_referencias = mysql_fetch_assoc($referencias);
                           }
                           ?>
-                        </select> --></td>
-                        <td id="dato4">
+                        </select> -->
+                      </td>
+                        <td colspan="2" id="dato4">
 
                           <select name="ref2" id="ref2" onchange="if(form1.ref2.value) { consultaexistente4(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
                                <option value="0">-REF-</option>
@@ -392,6 +409,8 @@ swal({
                           }
                           ?>
                         </select> -->
+
+                       <strong id="numero1"><?php if(isset($_GET['id_ref'] ) && $_GET['id_ref']=='0') {  echo 'Ref: ';echo $row_ref['N_referencia']+1; }?></strong>
                       </td>
                       </tr>
                       <tr>
@@ -432,10 +451,10 @@ swal({
                         <td colspan="2" id="fuente1">&nbsp;</td>
                       </tr>       
                       <tr id="tr1">
-                        <td colspan="5" id="titulo2">LAMINAS</td>
+                        <td colspan="7" id="titulo2">LAMINAS</td>
                       </tr>
                       <tr id="tr1">
-                        <td colspan="5" id="titulo1">CARACTERISTICAS PRINCIPALES</td>
+                        <td colspan="7" id="titulo1">CARACTERISTICAS PRINCIPALES</td>
                       </tr>
                       <tr>
                         <td id="fuente1">&nbsp;</td>
@@ -458,7 +477,7 @@ swal({
                         <td colspan="2" id="fuente5">&nbsp;</td>
                       </tr>
                       <tr id="tr1">
-                        <td colspan="5" id="titulo1">MATERIAL COEXTRUSION</td>
+                        <td colspan="7" id="titulo1">MATERIAL COEXTRUSION</td>
                       </tr>      <tr>
                         <td id="fuente1">Material</td>
                         <td colspan="2" id="fuente7">&nbsp;</td>
@@ -488,10 +507,10 @@ swal({
                         </select></td>
                       </tr>
                       <tr>
-                        <td colspan="5" id="fuente1">&nbsp;</td>
+                        <td colspan="7" id="fuente1">&nbsp;</td>
                       </tr>
                       <tr id="tr1">
-                        <td colspan="5" id="titulo1">IMPRESION</td>
+                        <td colspan="7" id="titulo1">IMPRESION</td>
                       </tr>
                       <tr>
                         <td colspan="3" id="fuente1">Impresion:
@@ -519,9 +538,9 @@ swal({
                             </select></td>
                           </tr>
                           <tr>
-                            <td colspan="5" id="fuente1">&nbsp;</td>
+                            <td colspan="7" id="fuente1">&nbsp;</td>
                           </tr>
-                          <td colspan="5" id="titulo1">PRESENTACION</td>
+                          <td colspan="7" id="titulo1">PRESENTACION</td>
                           <tr>
                             <td colspan="2" id="fuente1">Diametro Maximo x Rollo  (cms)</td>
                             <td id="fuente1">Peso Maximo x Rollo(kgr)</td>
@@ -532,26 +551,53 @@ swal({
                             <td colspan="2" id="fuente1"><input name="N_diametro_max_l" type="number" style=" width:70px" min="0" step="1" id="N_diametro_max_l" value="<?php echo $row_lamina['N_diametro_max_l']?>"/></td>
                             <td id="dato1"><input name="N_peso_max"  type="number" style=" width:70px" min="0" step="1" id="N_peso_max" value="<?php echo $row_lamina['N_peso_max_l'] ?>"/></td>
                             <td id="fuente1"><input name="N_cantidad_metros_r_l" type="number" style=" width:70px" min="0" step="1" id="N_cantidad_metros_r_l" size="15" value="<?php echo $row_lamina['N_cantidad_metros_r_l']?>"/></td>
-                            <td id="fuente1"><input name="N_embobinado" type="number" style=" width:70px" min="0" step="1" id="N_embobinado" value="<?php echo $row_lamina['N_embobinado'] ?>" onKeyUp="conMayusculas(this)" />
+                            <td colspan="2" id="fuente1"><input name="N_embobinado" type="number" style=" width:70px" min="0" step="1" id="N_embobinado" value="<?php echo $row_lamina['N_embobinado'] ?>" onKeyUp="conMayusculas(this)" />
                               <a href="javascript:verFoto('embobinado_lamina.php','575','510')" >Ver Cuadro</a></td>
                             </tr>
                             <tr>
-                              <td colspan="5" id="fuente1">&nbsp;</td>      
+                              <td colspan="7" id="fuente1">&nbsp;</td>      
                               <tr id="tr1">
-                                <td colspan="5" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
+                                <td colspan="7" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
                                 <tr>
-                                  <td colspan="2" id="fuente1">Moneda / Precio x Kilo</td>
-                                  <td colspan="2" id="fuente1">Plazo de pago</td>
-                                  <td width="219" id="fuente1">Cantidad Solicitada (Kilos)</td>
+                                  <td colspan="7">
+                                    <br>
+                                    <span style="color: red;" >IMPUESTO PLASTICO</span> <input type="checkbox" name="impuesto" id="impuesto" checked value="1"> <label for="impuesto"> &nbsp;&nbsp;<!-- Adjunto PDF: <input name="pdf_impuesto" type="file" size="20" maxlength="60"class="botones_file"> -->
+                                    <?php if($row_cliente['pdf_impuesto']): ?>
+                                      Adjunto PDF:   
+                                                    <a href="javascript:verFoto('archivosc/impuesto/<?php echo $row_cliente['pdf_impuesto']; ?>','610','490')"> 
+                                                      <?php if($row_cliente['pdf_impuesto']!='') echo "Impuesto"; ?><em> (Este pdf se adjunta en Cliente) </em>
+                                                    </a>
+                                    <?php endif; ?>
+                                  </td>
                                 </tr>
                                 <tr>
-                                  <td colspan="2" id="fuente1"><select name="Str_moneda_l" id="Str_moneda_l">
+                                  <td id="fuente1">Moneda</td>
+                                  <td id="fuente1">Precio Anterior</td>
+                                  <td id="fuente1">Impuesto</td>
+                                  <td id="fuente1">Precio Impuesto</td>
+                                  <td id="fuente1">Plazo de pago</td>
+                                  <td id="fuente1">Cantidad Solicitada (Kilos)</td>
+                                </tr>
+                                <tr>
+                                  <td id="fuente1">
+                                    <select name="Str_moneda_l" id="Str_moneda_l">
                                     <option value="COL$"<?php if (!(strcmp("COL$", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>COL$</option>
                                     <option value="USD$"<?php if (!(strcmp("USD$", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>USD$</option>
                                     <option value="EUR&euro;"<?php if (!(strcmp("EUR&euro;", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>EUR&euro;</option>
                                   </select>
-                                  <input name="N_precio_k" type="number" style="width: 100px" min="0" step="0.01" id="N_precio_k" value="<?php echo $row_lamina['N_precio_k']?>" /></td>
-                                  <td colspan="2" id="dato1"><select name="Str_plazo" id="Str_plazo">
+                                </td>
+                                <td id="fuente5">
+                                  <input name="N_precio_k" id="N_precio_k" type="number" style="width: 100px" min="0" step="0.01"  value="<?php echo $row_lamina['N_precio_k']?>" />
+                                </td>
+                                  <td id="fuente5">
+                                       <input name="valor_impuesto" title="Valor de la ultima cotiz" type="text" style="width:80px" min="0" step="0.01" id="valor_impuesto" value="<?php echo $row_lamina['valor_impuesto']=='0'?$row_refer['valor_impuesto']:$row_lamina['valor_impuesto'];?>"/> 
+                                     </td>
+                                   <td id="fuente5">
+                                      <input name="N_precio_old" type="text" style="width:100px" min="0" step="0.01" id="N_precio_old" value="<?php echo $row_lamina['N_precio_old']?>"/>
+                                     </td>
+                                  </td>
+
+                                  <td id="dato1"><select name="Str_plazo" id="Str_plazo">
                                     <option>*</option>
                                     <option value="ANTICIPADO"<?php if (!(strcmp("ANTICIPADO", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Anticipado</option>
                                     <option value="PAGO DE CONTADO"<?php if (!(strcmp("PAGO DE CONTADO", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Pago de Contado</option>
@@ -560,8 +606,10 @@ swal({
                                     <option value="PAGO A 45 DIAS"<?php if (!(strcmp("PAGO A 45 DIAS", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Pago a 45 Dias</option>
                                     <option value="PAGO A 60 DIAS"<?php if (!(strcmp("PAGO A 60 DIAS", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Pago a 60 Dias</option>
                                     <option value="PAGO A 90 DIAS"<?php if (!(strcmp("PAGO A 90 DIAS", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Pago a 90 Dias</option>
-                                  </select></td>
-                                  <td id="fuente1"><input name="N_cantidad_l" type="number" style=" width:100px" min="0" id="N_cantidad_l" step="0.01" value="<?php echo $row_lamina['N_cantidad'] ?>" /><!--onKeyUp="puntos(this,this.value.charAt(this.value.length-1))"--></td>
+                                  </select>
+                                </td>
+                                  <td id="fuente1"><input name="N_cantidad_l" type="number" style=" width:100px" min="0" id="N_cantidad_l" step="0.01" value="<?php echo $row_lamina['N_cantidad'] ?>" /><!--onKeyUp="puntos(this,this.value.charAt(this.value.length-1))"-->
+                                  </td>
                                 </tr>
                                 <tr>
                                   <td id="fuente1">Incoterms: </td>
@@ -615,24 +663,24 @@ swal({
                                       <strong>%</strong></td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" id="fuente1"></td>
+                                      <td colspan="7" id="fuente1"></td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" id="fuente1"> Observaciones:</td>
+                                      <td colspan="7" id="fuente1"> Observaciones:</td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" id="dato1"><textarea name="nota_l" cols="78" rows="2" id="nota_l"onKeyUp="conMayusculas(this)"></textarea></td>
+                                      <td colspan="7" id="dato1"><textarea name="nota_l" cols="78" rows="2" id="nota_l"onKeyUp="conMayusculas(this)"></textarea></td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" id="dato1">&nbsp;</td>
+                                      <td colspan="7" id="dato1">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                      <td colspan="5" id="fuente2">
+                                      <td colspan="7" id="fuente2">
                                         <input type="hidden" name="Str_tipo" id="Str_tipo" value="LAMINA" />
                                         <input type="hidden" name="Str_unidad_vta" id="Str_unidad_vta" value="KILO" />
                                         <input name="responsable_modificacion" type="hidden" value="" />
                                         <input name="fecha_modificacion" type="hidden" value="<?php echo date("Y-m-d");?>" />
-                                        <?php if( $_GET['id_ref']!=''){echo "<input name='B_generica' type='hidden' value='1'/>";}else{echo "<input name='B_generica' type='hidden' value='0'/>";} ?>
+                                        <input name='B_generica' id='B_generica' type='hidden' value='0'/>
 
                                         <input name="N_referencia" type="hidden" value="<?php if( $row_lamina['cod_ref']!=''){echo $row_lamina['cod_ref'];} else{echo $row_ref['N_referencia']+1;}?>" />
                                         <input name="hora_modificacion" type="hidden" value="" />
@@ -661,6 +709,50 @@ swal({
     </body>
 </html>
 <script>
+
+     $(document).ready(function(){
+
+             var ref=$("#ref").val();
+             var ref2=$("#ref2").val(); 
+ 
+             if( ref !='0' && ref2 =='0'){  
+                  $("#B_generica").val("1"); 
+                 
+             }else 
+             if( ref =='0' && ref2 !='0'){   
+                  $("#B_generica").val("1"); 
+                  
+             }else   
+             if( ref !='0' && ref2 !='0'){   
+                  $("#B_generica").val("1"); 
+                   
+             }else{
+                  $("#B_generica").val("0");
+                 
+             }
+  
+     
+              sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+           });
+
+
+                    
+             $('#impuesto').on('change', function() { 
+                    sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+             
+             });
+
+            $('#valor_impuesto').on('change', function() { 
+                   sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+           
+            });
+
+
+            $('#N_precio_k').on('change', function() { 
+                   sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+            
+            });
+
      //FILTROS
        $(document).ready(function(){  
              $('#clientes').select2({ 

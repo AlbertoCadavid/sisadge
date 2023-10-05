@@ -180,6 +180,19 @@ $query_id_refcliente = sprintf("SELECT * FROM Tbl_cliente_referencia WHERE N_cot
 $id_refcliente = mysql_query($query_id_refcliente, $conexion1) or die(mysql_error());
 $row_id_refcliente = mysql_fetch_assoc($id_refcliente);
 $totalRows_id_refcliente = mysql_num_rows($id_refcliente);
+
+$colname_refer = "-1";
+if (isset($_GET['cod_ref'])) 
+{
+  $colname_refer = (get_magic_quotes_gpc()) ? $_GET['cod_ref'] : addslashes($_GET['cod_ref']);
+} 
+
+mysql_select_db($database_conexion1, $conexion1);
+$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols FROM Tbl_referencia WHERE Tbl_referencia.cod_ref ='%s'  ",$colname_refer);
+$refer = mysql_query($query_refer, $conexion1) or die(mysql_error());
+$row_refer = mysql_fetch_assoc($refer);
+$totalRows_refer = mysql_num_rows($refer);
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -188,15 +201,16 @@ $totalRows_id_refcliente = mysql_num_rows($id_refcliente);
   <link href="css/formato.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="js/formato.js"></script>
   <script type="text/javascript" src="js/delete.js"></script>
-  <script type="text/javascript" src="js/adjuntos.js"></script>
+  <script type="text/javascript" src="js/adjuntar.js"></script>
   <script type="text/javascript" src="js/validacion_numerico.js"></script>
 
   <link rel="stylesheet" type="text/css" href="css/general.css"/>
   <link rel="stylesheet" type="text/css" href="css/formato.css"/>
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
-  <!-- sweetalert -->
-  <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
-  <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+  <script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
+<!-- sweetalert -->
+<script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -210,6 +224,7 @@ $totalRows_id_refcliente = mysql_num_rows($id_refcliente);
 
   <!-- css Bootstrap hace mas grande el formato-->
   <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 
   <script type="text/javascript">
 function MM_popupMsg(msg) { //v1.0
@@ -250,7 +265,7 @@ function MM_popupMsg(msg) { //v1.0
                       <tr id="tr1">
                         <td width="113" nowrap="nowrap" id="codigo">CODIGO : R1-F08 </td>
                         <td colspan="2" nowrap="nowrap" id="titulo2">Cotizacion Laminas</td>
-                        <td colspan="2" nowrap="nowrap" id="codigo">VERSION: 2 </td>
+                        <td colspan="3" nowrap="nowrap" id="codigo">VERSION: 2 </td>
                       </tr>
                       <tr>
                         <td rowspan="9" id="fuente2"><img src="images/logoacyc.jpg"></td>
@@ -309,10 +324,10 @@ function MM_popupMsg(msg) { //v1.0
                       <td colspan="2" id="fuente1">&nbsp;</td>
                     </tr>       
                     <tr id="tr1">
-                      <td colspan="5" id="titulo2">LAMINAS</td>
+                      <td colspan="7" id="titulo2">LAMINAS</td>
                     </tr>
                     <tr id="tr1">
-                      <td colspan="5" id="titulo1">CARACTERISTICAS PRINCIPALES</td>
+                      <td colspan="7" id="titulo1">CARACTERISTICAS PRINCIPALES</td>
                     </tr>
                     <tr>
                       <td id="fuente1">&nbsp;</td>
@@ -335,7 +350,7 @@ function MM_popupMsg(msg) { //v1.0
                       <td colspan="2" id="fuente5">&nbsp;</td>
                     </tr>
                     <tr id="tr1">
-                      <td colspan="5" id="titulo1">MATERIAL COEXTRUSION</td>
+                      <td colspan="7" id="titulo1">MATERIAL COEXTRUSION</td>
                     </tr>      <tr>
                       <td id="fuente1">Material</td>
                       <td colspan="2" id="fuente7">&nbsp;</td>
@@ -364,10 +379,10 @@ function MM_popupMsg(msg) { //v1.0
                       </select></td>
                     </tr>
                     <tr>
-                      <td colspan="5" id="fuente1">&nbsp;</td>
+                      <td colspan="7" id="fuente1">&nbsp;</td>
                     </tr>
                     <tr id="tr1">
-                      <td colspan="5" id="titulo1">IMPRESION</td>
+                      <td colspan="7" id="titulo1">IMPRESION</td>
                     </tr>
                     <tr>
                       <td colspan="3" id="fuente1">Impresion:
@@ -396,9 +411,9 @@ function MM_popupMsg(msg) { //v1.0
                         </select></td>
                       </tr>
                       <tr>
-                        <td colspan="5" id="fuente1">&nbsp;</td>
+                        <td colspan="7" id="fuente1">&nbsp;</td>
                       </tr>
-                      <td colspan="5" id="titulo1">PRESENTACION</td>
+                      <td colspan="7" id="titulo1">PRESENTACION</td>
                       <tr>
                         <td colspan="2" id="fuente1">Diametro Maximo x Rollo  (cms)</td>
                         <td id="fuente1">Peso Maximo x Rollo(kgr)</td>
@@ -409,26 +424,54 @@ function MM_popupMsg(msg) { //v1.0
                         <td colspan="2" id="fuente1"><input name="N_diametro_max_l" type="number" style=" width:70px" min="0" step="1" id="N_diametro_max_l" value="<?php echo $row_lamina['N_diametro_max']?>"/></td>
                         <td id="dato1"><input name="N_peso_max" type="number" style=" width:70px" min="0" step="1" id="N_peso_max"  value="<?php echo $row_lamina['N_peso_max'] ?>"/></td>
                         <td id="fuente1"><input name="N_cantidad_metros_r_l" type="number" style=" width:70px" min="0" step="1" id="N_cantidad_metros_r_l" value="<?php echo $row_lamina['N_cantidad_metros_r']?>"/></td>
-                        <td id="fuente1"><input  name="N_embobinado" type="number" style=" width:70px" min="0" step="1" id="N_embobinado"value="<?php echo $row_lamina['N_embobinado'] ?>" size="2" maxlength="2"onKeyUp="conMayusculas(this)" />
+                        <td colspan="2" id="fuente1"><input  name="N_embobinado" type="number" style=" width:70px" min="0" step="1" id="N_embobinado"value="<?php echo $row_lamina['N_embobinado'] ?>" size="2" maxlength="2"onKeyUp="conMayusculas(this)" />
                           <a href="javascript:verFoto('embobinado_lamina.php','575','510')" >Ver Cuadro</a></td>
                         </tr>
                         <tr>
-                          <td colspan="5" id="fuente1">&nbsp;</td>      
+                          <td colspan="7" id="fuente1">&nbsp;</td>      
                           <tr id="tr1">
-                            <td colspan="5" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
-                            <tr>
-                              <td colspan="2" id="fuente1">Moneda / Precio x Kilo</td>
-                              <td colspan="2" id="fuente1">Plazo de pago</td>
-                              <td width="219" id="fuente1">Cantidad Solicitada (Kilos)</td>
+                            <td colspan="7" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
                             </tr>
                             <tr>
-                              <td colspan="2" id="fuente1"><select name="Str_moneda_l" id="Str_moneda_l">
+                              <td colspan="7">
+                                <br>
+                                <span style="color: red;" >IMPUESTO PLASTICO</span> <input type="checkbox" name="impuesto" id="impuesto"   value="1"<?php if (!(strcmp($row_lamina['impuesto'],1))) {echo "checked=\"checked\"";} ?>> <label for="impuesto"> &nbsp;&nbsp;<!-- Adjunto PDF: <input name="pdf_impuesto" type="file" size="20" maxlength="60"class="botones_file"> -->
+                                <?php if($row_cliente['pdf_impuesto']): ?>
+                                  Adjunto PDF:   
+                                                <a href="javascript:verFoto('archivosc/impuesto/<?php echo $row_cliente['pdf_impuesto']; ?>','610','490')"> 
+                                                  <?php if($row_cliente['pdf_impuesto']!='') echo "Impuesto"; ?><em> (Este pdf se adjunta en Cliente) </em>
+                                                </a>
+                                <?php endif; ?>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td id="fuente1">Moneda</td>
+                              <td id="fuente1">Precio Anterior</td>
+                              <td id="fuente1">Impuesto</td>
+                              <td id="fuente1">Precio Impuesto</td>
+                              <td id="fuente1">Plazo de pago</td>
+                              <td id="fuente1">Cantidad Solicitada (Kilos)</td>
+                            </tr>
+                            <tr>
+                              <td  id="fuente1">
+                                <select name="Str_moneda_l" id="Str_moneda_l">
                                 <option value="COL$"<?php if (!(strcmp("COL$", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>COL$</option>
                                 <option value="USD$"<?php if (!(strcmp("USD$", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>USD$</option>
                                 <option value="EUR&euro;"<?php if (!(strcmp("EUR&euro;", $row_lamina['Str_moneda']))) {echo "selected=\"selected\"";} ?>>EUR&euro;</option>
                               </select>
-                              <input name="N_precio_k" type="number" style="width: 100px" min="0" step="0.01" id="N_precio_k" value="<?php echo $row_lamina['N_precio_k']?>" /></td>
-                              <td colspan="2" id="dato1"><select name="Str_plazo" id="Str_plazo">
+
+                              </td>
+                              <td id="fuente5">
+                                  <input name="N_precio_k" type="number" style="width: 100px" min="0" step="0.01" id="N_precio_k" value="<?php echo $row_lamina['N_precio_k']?>" /></td>
+                               </td>
+                                <td id="fuente5">
+                                     <input name="valor_impuesto" title="Valor de la ultima cotiz" type="text" style="width:80px" min="0" step="0.01" id="valor_impuesto" value="<?php echo $row_lamina['valor_impuesto']=='0'?$row_refer['valor_impuesto']:$row_lamina['valor_impuesto'];?>"/> 
+                                   </td>
+                                 <td id="fuente5">
+                                    <input name="N_precio_old" type="text" style="width:100px" min="0" step="0.01" id="N_precio_old" value="<?php echo $row_lamina['N_precio_old']?>"/>
+                                   </td> 
+                              <td  id="dato1">
+                                <select name="Str_plazo" id="Str_plazo">
                                 <option>*</option>
                                 <option value="ANTICIPADO"<?php if (!(strcmp("ANTICIPADO", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Anticipado</option>
                                 <option value="PAGO DE CONTADO"<?php if (!(strcmp("PAGO DE CONTADO", $row_lamina['Str_plazo']))) {echo "selected=\"selected\"";} ?>>Pago de Contado</option>
@@ -483,19 +526,19 @@ function MM_popupMsg(msg) { //v1.0
                                 <strong>%</strong></td>
                               </tr>
                               <tr>
-                                <td colspan="5" id="fuente1"></td>
+                                <td colspan="7" id="fuente1"></td>
                               </tr>
                               <tr>
-                                <td colspan="5" id="fuente1"> Observaciones:</td>
+                                <td colspan="7" id="fuente1"> Observaciones:</td>
                               </tr>
                               <tr>
-                                <td colspan="5" id="dato1"><textarea name="nota_l" cols="78" rows="2" id="nota_l"onKeyUp="conMayusculas(this)"><?php echo $row_obs['texto'] ?></textarea></td>
+                                <td colspan="7" id="dato1"><textarea name="nota_l" cols="78" rows="2" id="nota_l"onKeyUp="conMayusculas(this)"><?php echo $row_obs['texto'] ?></textarea></td>
                               </tr>
                               <tr>
-                                <td colspan="5" id="dato1">&nbsp;</td>
+                                <td colspan="7" id="dato1">&nbsp;</td>
                               </tr>
                               <tr>
-                                <td colspan="5" id="fuente2"><input type="hidden" name="Str_tipo" id="Str_tipo" value="LAMINA" />
+                                <td colspan="7" id="fuente2"><input type="hidden" name="Str_tipo" id="Str_tipo" value="LAMINA" />
                                   <input name="responsable_modificacion" type="hidden" value="" />
                                   <input name="fecha_modificacion" type="hidden" value="<?php echo date("Y-m-d");?>" />
                                   <input name="hora_modificacion" type="hidden" value="" />
@@ -522,6 +565,27 @@ function MM_popupMsg(msg) { //v1.0
     </div>
   </body>
   </html>
+<script>
+
+     $(document).ready(function(){
+             $('#impuesto').on('change', function() { 
+              alert($("#valor_impuesto").val())
+                    sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+             
+             });
+
+            $('#valor_impuesto').on('change', function() { 
+                   sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+           
+            });
+
+
+            $('#N_precio_k').on('change', function() { 
+                   sumaImpuestoLamina($("#N_precio_k").val(),$("#valor_impuesto").val());
+            
+            });
+      });
+ </script> 
   <?php
   mysql_free_result($usuario);
   mysql_free_result($cliente);

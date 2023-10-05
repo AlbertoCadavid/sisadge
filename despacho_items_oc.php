@@ -134,8 +134,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
      $tieneadjunto1 = adjuntarArchivo($tieneadjunto1, $directorio, $name,$_FILES['comprobante_file']['tmp_name'],'NUEVOS');
       
      $enviar = new EnvioEmails();    
-     $to = 'lidersistemas@acycia.com';
-     $to2 = 'andres85684@outlook.com';
+     $to = 'auxcartera@acycia.com';
+     $to2 = 'mauricio.ruiz@acycia.com';
      /* $to = 'sistemas@acycia.com';
      $to2 = 'robinrt144@gmail.com';  */
      $file = $name!='' ? $name : $tieneadjunto1; 
@@ -204,7 +204,7 @@ $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 //ASIGNA NUMERO CONSECUTIVO DE REMISION
 mysql_select_db($database_conexion1, $conexion1);
-$query_remision = "SELECT * FROM Tbl_remisiones ORDER BY id_r DESC";
+$query_remision = "SELECT * FROM Tbl_remisiones ORDER BY int_remision DESC";
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);
 $totalRows_remision = mysql_num_rows($remision);
@@ -354,7 +354,7 @@ $totalRows_items = mysql_num_rows($items);
                       </tr>
                       <tr>
                         <td colspan="2" id="dato1">ORDEN DE COMPRA N&deg : <b> <?php echo $row_orden_compra['str_numero_oc']; ?></b>
-                         <br><?php if($numeroRemision): ?> <em>Ya Tiene la remision: <?php echo $numeroRemision; ?> creada</em><?php endif; ?> </td>
+                         <br><?php if($numeroRemision): ?> <em style="color: red;" >Ya Tiene la remision: <?php echo $numeroRemision; ?> creada</em><?php endif; ?> </td>
                       </tr>
                       <tr>
                         <td colspan="2" id="dato4">&nbsp;</td>

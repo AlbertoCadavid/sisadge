@@ -110,6 +110,11 @@ if ( isset($_GET["valor"]) ) {
   $registros=$conexion->buscarListar("verificacion_insumos","*","ORDER BY n_vi DESC","",$maxRows_registros,$pageNum_registros,"" );
 }
 
+
+$row_fact = $conexion->llenarCampos("tbl_orden_compra", "WHERE factura_oc='".$factura."' ", " ", "str_numero_oc, factura_oc,fecha_cierre_fac ");
+
+$row_tipo = $conexion->llenaSelect('tipo',"","ORDER BY nombre_tipo ASC");  
+
 //$registros=$conexion->buscarListar("verificacion_insumos","*","ORDER BY n_vi DESC","",$maxRows_registros,$pageNum_registros,"" );
  
 if (isset($_GET['totalRows_registros'])) {
@@ -147,6 +152,7 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
   <script type="text/javascript" src="js/usuario.js"></script>
   <script type="text/javascript" src="js/formato.js"></script>
+  
   <script type="text/javascript" src="js/listado.js"></script> <!-- importante dejarlo resalta las filas-->
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" /> <!-- importante dejarlo imprime todo lo nuevo-->
   <!-- sweetalert -->
@@ -296,7 +302,7 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
               </div>
 
               <div class="panel-footer" > 
-                 <!-- <a class="botonGeneral" href="?c=ocomercial&id=<?php echo $dato['id_pedido']; ?>">SALIR</a>  -->
+                 <!-- <a class="botonGeneral" class="botonGMini" href="?c=ocomercial&id=<?php echo $dato['id_pedido']; ?>">SALIR</a>  -->
                  <a class="botonFinalizar" style="text-decoration:none; "href="?id=<?php echo $dato['id_pedido']; ?>">SALIR</a> 
                 
               </div>

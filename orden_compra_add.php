@@ -77,7 +77,6 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 }
 ?>
 <?php
-
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
 {
   $theValue = (!get_magic_quotes_gpc()) ? addslashes($theValue) : $theValue;
@@ -221,7 +220,7 @@ $totalRows_proveedores = mysql_num_rows($proveedores);
           <tr>
             <td colspan="2" id="dato1"><select name="id_p_oc" id="id_p_oc" onChange="DatosGestiones('3','id_p',form1.id_p_oc.value);">
               <option value="">SELECCIONE</option>
-              <?php
+              <!-- <?php
                  do {  
                  ?>
                   <option value="<?php echo $row_proveedores['id_p']?>"><?php echo $row_proveedores['proveedor_p']?></option><?php
@@ -231,7 +230,7 @@ $totalRows_proveedores = mysql_num_rows($proveedores);
                        mysql_data_seek($proveedores, 0);
                  	  $row_proveedores = mysql_fetch_assoc($proveedores);
                    }
-                 ?>
+                 ?> -->
             </select></td>
             </tr>
           <tr>
@@ -241,6 +240,11 @@ $totalRows_proveedores = mysql_num_rows($proveedores);
             <td colspan="3" id="dato2"><input class="botonGeneral" type="submit" value="SIGUIENTE"></td>
             </tr>
         </table>
+        <!-- <span>
+          <?php
+            echo $conexion->test();
+          ?>
+        </span> -->
         <input type="hidden" name="responsable_oc" value="<?php echo $row_usuario['nombre_usuario']; ?>">
         <input type="hidden" name="MM_insert" value="form1">
       </form> 
@@ -249,8 +253,8 @@ $totalRows_proveedores = mysql_num_rows($proveedores);
 </html>
 
 <script>
-  
- $('#id_p_oc').select2({ 
+$(document).ready(function(){
+  $('#id_p_oc').select2({ 
         ajax: {
             url: "select3/proceso.php",
             type: "post",
@@ -274,8 +278,8 @@ $totalRows_proveedores = mysql_num_rows($proveedores);
             },
             cache: true
         }
-    }); 
-
+      }); 
+    });
  
 </script>
 
@@ -286,3 +290,4 @@ mysql_free_result($ultimo);
 
 mysql_free_result($proveedores);
 ?>
+

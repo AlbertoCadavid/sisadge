@@ -17,9 +17,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
    //BUSCAR UNO
   public function buscar($tabla, $columna, $condicion){
     //echo "SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC";die;
-    $query = "SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC";
-    
-    $resultado = $this->conexion->query($query) or die($this->conexion->error);
+    $resultado = $this->conexion->query("SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC") or die($this->conexion->error);
     if($resultado)
       $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
     $total = $fila; 
@@ -81,9 +79,8 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
 
     //LLENA COMBOS CONVIERTE 
      public function llenaSelect($tabla, $condicion='', $orden='' ){ 
-      $query =  "SELECT * FROM $tabla $condicion $orden ";
-      
-       $resultado = $this->conexion->query($query) or die($this->conexion->error); 
+       
+       $resultado = $this->conexion->query("SELECT * FROM $tabla $condicion $orden ") or die($this->conexion->error); 
        if($resultado) 
          //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 
          return self::getResultados($resultado);

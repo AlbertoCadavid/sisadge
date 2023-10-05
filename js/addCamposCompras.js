@@ -1,61 +1,55 @@
 // J /* Abrimos etiqueta de código Javascript */
-var num=0;
-num++;
-var posicionCampo=1;
-
-function addremision(){
-
-nuevaFila = document.getElementById("tablaremision").insertRow(-1);
-
-nuevaFila.id=posicionCampo;
-
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='text' value="+num+++" size='2' name='int_caja_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='text' size='10' name='int_numd_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='text' size='10' name='int_numh_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='text' size='10' name='int_cant_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='text' size='10' name='int_peso_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='hidden' size='10' name='int_pesoneto_rd["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td> <input type='hidden' size='10' name='agregar["+posicionCampo+"]' ></td>";
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda=nuevaFila.insertCell(-1);
-
-nuevaCelda.innerHTML="<td><input type='button' value='Eliminar' onclick='eliminarremision(this)'></td>";
-
-posicionCampo++;
-
+function AddItemCompra() {
+  var tbody = null;
+  var tablaf = document.getElementById("tablaf");
+  var nodes = tablaf.childNodes;
+  for (var x = 0; x<nodes.length;x++) {
+    if (nodes[x].nodeName == 'TBODY') {
+      tbody = nodes[x];
+      break;
+    }
+  }
+  if (tbody != null) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="text" name="int_desde_f[]" Totalizar(this);" value="" autofocus="autofocus" required="required"/></td><td><input type="text" name="int_hasta_f[]" Totalizar(this);"  value="" required="required"/></td><td><input type="text" size="2" name="int_total_f[]" readonly /></td><td><button type="button" value="Borrar" onclick="eliminaDinamicos(this);Totalizar(this);">Borrar</button></td>';
+    tbody.appendChild(tr);
+  }
 }
 
-function eliminarremision(obj){
+//------------------FUNCION PARA RESTAR HASTA MENOS DESDE----//
+function Totalizar(ele) {
+  var num="",caden="",l="",b="",c="",d="",e="",g="",h="",desde="", sal="",sal2="",cadena="";
+  var int_desde_f = 0, int_hasta_f = 0, int_total_f = 0;
+  var tr = ele.parentNode.parentNode;
+  var nodes = tr.childNodes; 
+  for (var x = 0; x<nodes.length;x++) { 
+       //------------------CADENA DEFINIDA DESDE-------------------// 
+       if (nodes[x].firstChild.name == 'int_desde_f[]') {
+        adesde = (nodes[x].firstChild.value);      
+       }//FIN IF INPUT DESDE
+       //------------------CADENA DEFINIDA HASTA-------------------// 
+       if (nodes[x].firstChild.name == 'int_hasta_f[]') {
+        ahasta = (nodes[x].firstChild.value);  
+       }//FIN IF INPUT HASTA
 
-var oTr = obj;
+    }//FIN FOR DE NODOS
 
-while(oTr.nodeName.toLowerCase()!='tr'){
 
-oTr=oTr.parentNode;
+}//FIN FUNCION Totalizar
 
-}
 
-var root = oTr.parentNode;
 
-root.removeChild(oTr);
+//---FUNCION ELIMINA LINEA DE INPUT DE FALTANTES DINAMICOS-----//
+function eliminaDinamicos(obj){
+  var oTr = obj;
 
-}
-
+  while(oTr.nodeName.toLowerCase()!='tr'){
+    oTr=oTr.parentNode;
+  } 
+  var root = oTr.parentNode;
+  root.removeChild(oTr);
+} 
+ 
 /* Cerramos el código Javascript */
 icremento =0;
 function crear(obj) {
@@ -67,11 +61,19 @@ function crear(obj) {
   field.appendChild(contenedor); 
   
   boton = document.createElement('input'); 
-  boton.type = 'text'; 
-  boton.size='30';
+  boton.type = 'checkbox';  
   boton.placeholder='NOMBRE';
-  <!--boton.value='responsable';-->
-  boton.name = 'responsable_dest'+'[]'; 
+  boton.disabled ='disabled';
+  boton.value='';
+  boton.name = 'items'+'[]'; 
+  contenedor.appendChild(boton); 
+
+  boton = document.createElement('select'); 
+  boton.type = 'text'; 
+  boton.placeholder='Seleccione Proveedor';
+  boton.value='proveedor';
+  boton.style='200px';
+  boton.name = 'proveedor'+'[]'; 
   contenedor.appendChild(boton); 
    
   boton = document.createElement('input'); 
@@ -109,106 +111,17 @@ function crear(obj) {
   boton.name = 'ciudad_dest'+'[]'; 
   contenedor.appendChild(boton);    
    
-  boton = document.createElement('input'); 
+/*  boton = document.createElement('input'); 
   boton.type = 'button'; 
   boton.value = 'Borrar'; 
   boton.name = 'div'+icremento; 
   boton.onclick = function () {borrar(this.name)} 
-  contenedor.appendChild(boton); 
+  contenedor.appendChild(boton); */
 }
 function borrar(obj) {
   field = document.getElementById('field'); 
   field.removeChild(document.getElementById(obj)); 
-}
-/* CREAR CAMPOS EN ORDEN DE COMPRAt */
-icremento =0;
-function crearrem(obj) {
-  icremento++;
-  
-  field = document.getElementById('field'); 
-  contenedor = document.createElement('div');
-  contenedor.id = 'div'+icremento; 
-  field.appendChild(contenedor); 
-  
-  boton = document.createElement('input');
-  boton.type = 'int'; 
-  boton.size='1';
-  boton.name = 'int_consecutivo_io'+'[]'; 
-  contenedor.appendChild(boton); 
-   
-  boton = document.createElement('input'); 
-  boton.type = 'text';
-  boton.name = 'int_cod_ref_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-  boton = document.createElement('input'); 
-  boton.type = 'text'; 
-  boton.name = 'int_cod_cliente_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-  boton = document.createElement('input'); 
-  boton.type = 'int';
-  boton.size='3';
-  boton.name = 'int_cantidad_io'+'[]'; 
-  contenedor.appendChild(boton);
-  
-  boton = document.createElement('input'); 
-  boton.type = 'text'; 
-  boton.size='5';
-  boton.name = 'str_unidad_io'+'[]'; 
-  contenedor.appendChild(boton);   
-  
-  boton = document.createElement('input'); 
-  boton.type = 'date';
-  boton.size='7';
-  boton.name = 'fecha_entrega_io'+'[]'; 
-  contenedor.appendChild(boton);  
-  
-    boton = document.createElement('input'); 
-  boton.type = 'int'; 
-  boton.size='3';
-  boton.name = 'int_precio_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-    boton = document.createElement('input'); 
-  boton.type = 'int'; 
-  boton.size='3';
-  boton.name = 'int_total_item_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-    boton = document.createElement('input'); 
-  boton.type = 'text'; 
-  boton.name = 'str_moneda_io'+'[]'; 
-  contenedor.appendChild(boton);
-  
-    boton = document.createElement('input'); 
-  boton.type = 'text'; 
-  boton.size='15';
-  boton.name = 'str_direccion_desp_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-    boton = document.createElement('input'); 
-  boton.type = 'int'; 
-  boton.name = 'int_vendedor_io'+'[]'; 
-  contenedor.appendChild(boton); 
-  
-    boton = document.createElement('input'); 
-  boton.type = 'int'; 
-  boton.size='1';
-  boton.name = 'int_comision_io'+'[]'; 
-  contenedor.appendChild(boton);    
-   
-  boton = document.createElement('input'); 
-  boton.type = 'button'; 
-  boton.value = 'Borrar'; 
-  boton.name = 'div'+icremento; 
-  boton.onclick = function () {borrar(this.name)} 
-  contenedor.appendChild(boton); 
-}
-function borrar(obj) {
-  field = document.getElementById('field'); 
-  field.removeChild(document.getElementById(obj)); 
-}
+} 
 
 
 $(document).ready(function() {
@@ -226,7 +139,7 @@ $(document).ready(function() {
         {
             FieldCount++;
             //agregar campo
-            $(contenedor).append('<div><input type="text" name="mitexto[]" id="campo_'+ FieldCount +'" placeholder="Texto '+ FieldCount +'"/><a href="#" class="eliminar">&times;</a></div>');
+            $(contenedor).append('<input type="text" name="mitexto[]" id="campo_'+ FieldCount +'" placeholder="Texto '+ FieldCount +'"/><a href="#" class="eliminar">&times;</a> ');
             x++; //text box increment
         }
         return false;

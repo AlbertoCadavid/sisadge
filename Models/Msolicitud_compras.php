@@ -34,21 +34,6 @@ class Msolicitud_compras
         $this->correo = $correo;
     }
 
-    /* public function setConsecutivo($consecutivo){
-        $this->consecutivo = $consecutivo;
-    }
-
-    public function getConsecutivo(){
-        return $this->consecutivo;
-    }
-
-    public function setMaquina($maquina){
-        $this->maquina = $maquina;
-    }
-
-    public function getMaquina(){
-        return $this->maquina;
-    } */
 
     public function traerConsecutivo()
     {
@@ -153,6 +138,7 @@ class Msolicitud_compras
         //$to = $this->correo;
         $to = "lidersistemas@acycia.com";
         $to2 = 'andres85684@outlook.com';
+        //$to2 = 'compras@acycia.com';
         //$from = ;
         $asunto = 'Solicitud para aprobacion de compras';
         $body = "Hola se requiere autorizar a " . $this->nombre . ", los siguientes materiales: " . "<br>";
@@ -162,8 +148,7 @@ class Msolicitud_compras
         $body = $body . "<br>" . "OBSERVACIONES:" . "<br>" . $this->observaciones;
 
 
-        $confirmacion = $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
-        return $confirmacion;
+        $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
     }
 
     public function mostrarListado($condicion = "", $condicion2 = "")

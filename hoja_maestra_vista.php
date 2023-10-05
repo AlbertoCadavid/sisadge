@@ -759,7 +759,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
        <?php if($row_cualexiste['id_ref_pm']=='') : ?> 
                                          <tr id="tr1">
-                                              <td colspan="9" id="fuente2"><strong>CARACTERISTICAS DE IMPRESION</strong></td>
+                                              <td colspan="9" id="fuente2"><strong>MEZCLAS DE IMPRESION</strong></td>
                                           </tr>
                                           <tr> 
                                           <td colspan="11">
@@ -915,7 +915,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                         </tr>
                                         <!-- INICIA CARACTERISTICAS -->
                        <tr id="tr1">
-                         <td colspan="100%" id="fuente2"><strong>CARACTERISTICAS</strong> </td>
+                         <td colspan="100%" id="fuente2"><strong>CARACTERISTICAS DE IMPRESION</strong> </td>
                        </tr> 
                         <tr>
                             <?php  for ($x=0;$x<=$totalRows_caract_valor-1;$x++) { ?>          

@@ -124,6 +124,37 @@ function sumaImpuestoPacking( precio='',vimpuesto='' ){
  
 }
 
+
+function sumaImpuestoLamina( precio='',vimpuesto='' ){    
+ 
+ 
+     bolsa = parseFloat(precio)+parseFloat(vimpuesto);
+     bolsa = bolsa.toFixed(2);
+ if(!this.checked) {
+    $('#N_precio_old').val(precio); 
+ } 
+  //check
+ if( $('#impuesto').prop('checked') ) {
+      $('#valor_impuesto').val(vimpuesto); 
+      $( "#adjuntos" ).show();
+      $('#N_precio_old').val(bolsa);//nuevoprecio con impuesto
+      $('#int_precio_io').val(precio);//campo de la oc detalle 
+      $('#precioreal').val(precio);//campo de la oc detalle 
+      $("#impuesto").val(1);
+  }else{
+      $('#valor').val(precio);//campo de la oc detalle
+      $('#N_precio_old').val(precio);
+      $('#precioreal').val(precio);//campo de la oc detalle 
+      $('#int_precio_io').val(precio);//campo de la oc detalle
+      $('#valor_impuesto').val(vimpuesto);
+      $("#impuesto").val(0); 
+      $( "#adjuntos" ).show();
+  }
+ 
+  
+ 
+}
+
 function pesoMillar(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio='',millar='',millarBols=''){    
  
   
@@ -191,7 +222,7 @@ function pesoMillarPacking( precio='',millar='',millarBols=''){
  
 }
 
-function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio=''){    
+function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio =''){    
  
   
     
