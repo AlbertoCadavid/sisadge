@@ -43,7 +43,7 @@ if (isset($_POST['email_usuario'])) {
           <div class="col-md-4"> 
             <div class="menu2"><ul>
               <li><?php echo $row_usuario['nombre_usuario']; ?></li>
-              <li><a href="<?php echo $logoutAction ?>">SALIR</a></li>
+              <li><a href="usuario.php">SALIR</a></li>
               </ul>
             </div> 
           </div>
@@ -75,8 +75,8 @@ if (isset($_POST['email_usuario'])) {
 				<br>El proposito fundamental de este desarrollo es seguir paso a paso la metodologia del sistema de Gesti&oacute;n de Calidad para la linea comercial, de dise&ntilde;o, producci&oacute;n y comercializaci&oacute;n de bolsas de seguridad para el empaque y transporte de valores.<br><br>           
                </div>
                 <div class="col-md-4">
-                <strong>CAMBIO DE CONTRASEÑA</strong><br><br>
- 				 El sistema puedes cambiar tu contraseña, siempre y cuando tengas un correo de la compañia.<br><br>
+                <strong>CAMBIO DE CONTRASEï¿½A</strong><br><br>
+ 				 El sistema puedes cambiar tu contraseï¿½a, siempre y cuando tengas un correo de la compaï¿½ia.<br><br>
               </div>                     
           </div>
 

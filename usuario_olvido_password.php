@@ -1,6 +1,10 @@
-<?php require_once('Connections/conexion1.php'); ?>
+<?php require_once('Connections/conexion1.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+require(ROOT_BBDD); ?>
 <?php
 // *** Validate request to login to this site.
+$conexion = new ApptivaDB();
+
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -10,30 +14,32 @@ if (isset($_POST['usuario'])&&isset($_POST['email_usuario'])) {
   $emailUsername=$_POST['email_usuario'];
   $MM_redirectLoginSuccess = "usuario_olvido_password.php?id_m=1";
   $MM_redirectLoginFailed = "usuario_olvido_password.php?id_m=2";
-  mysql_select_db($database_conexion1, $conexion1);
+
+  $LoginRS = $conexion->buscarTres('usuario', 'usuario, email_usuario', "WHERE email_usuario = '$_POST[email_usuario]' AND usuario = '$_POST[usuario]'");  
   
-  $LoginRS__query=sprintf("SELECT usuario, email_usuario, clave_usuario FROM usuario WHERE usuario='%s' AND email_usuario='%s'",
-    get_magic_quotes_gpc() ? $loginUsername : addslashes($loginUsername), get_magic_quotes_gpc() ? $emailUsername : addslashes($emailUsername)); 
-   
-  $LoginRS = mysql_query($LoginRS__query, $conexion1) or die(mysql_error());
-  $loginFoundUser = mysql_num_rows($LoginRS);
-  if ($loginFoundUser !='') {
-	$usuario=mysql_result($LoginRS,0,'usuario');
-	$clave=mysql_result($LoginRS,0,'clave_usuario');
-	$email=mysql_result($LoginRS,0,'email_usuario');
+  //mysql_select_db($database_conexion1, $conexion1);
+  
+  if ($LoginRS !='') {
+	$usuario= $LoginRS['usuario'];
+	$email=$LoginRS['email_usuario'];
+
+  $temporalPassword = $usuario."123";
+  $newPassword = password_hash($temporalPassword, PASSWORD_DEFAULT);
+  $conexion->actualizar("usuario", "clave_usuario='$newPassword'", "email_usuario= '$email'");
 	  
 //ENVIO DE E-MAIL AL USUARIO
 				   $headers = "MIME-Version: 1.0\r\n"; 
 				   $headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
-				   //dirección del remitente 
+				   //direcciï¿½n del remitente 
 				   $headers .= "From: ACYCIA\r\n"; 
-				   //dirección de respuesta, si queremos que sea distinta que la del remitente 
+				   //direcciï¿½n de respuesta, si queremos que sea distinta que la del remitente 
 				   $headers .= "ACYCIA\r\n"; 			   
 				   $to = $email;  // correo del usuario
-				   $mensaje = "<p>Usted solicito informacion de la contraseña para ingresar al programa SISADGE:</p></b>";				   
-                   $mensaje .= "<p>Usuario: $usuario </p><p>Clave: $clave </p><p>E-mail: $email</p>"; 
+				   $mensaje = "<p>Usted solicito informacion de la contraseï¿½a para ingresar al programa SISADGE:</p></b>";				   
+                   $mensaje .= "<p>Usuario: $usuario </p><p>Clave: $temporalPassword </p><p>E-mail: $email</p></b>";
+                   $mensaje .="<p><strong> ESTA CLAVE ES TEMPORAL, USTED DEBE IR AL SISADGE A CAMBIAR LA CLAVE POR UNA NUEVA </strong></p> ";
 				   $mensaje .= "<p><span style=\"color: #FF0000\">No responder este correo.</span> </p></b>";
-				  (mail("$to","Olvido su Contraseña",$mensaje,$headers));  
+				  (mail("$to","Olvido su Contraseï¿½a",$mensaje,$headers));  
 	      
     header("Location: " . $MM_redirectLoginSuccess );
   }
@@ -59,7 +65,7 @@ if (isset($_POST['usuario'])&&isset($_POST['email_usuario'])) {
           <div class="col-md-4"> 
             <div class="menu2"><ul>
               <li><?php echo $row_usuario['nombre_usuario']; ?></li>
-              <li><a href="<?php echo $logoutAction ?>">SALIR</a></li>
+              <li><a href="usuario.php">SALIR</a></li>
               </ul>
             </div> 
           </div>
