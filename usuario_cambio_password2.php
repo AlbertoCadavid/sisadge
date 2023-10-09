@@ -182,7 +182,7 @@ if (isset($_POST['clave_antigua']) && isset($_POST['clave_nueva1']) && isset($_P
         <div class="menu2">
           <ul>
             <li><?php echo $row_usuario['nombre_usuario']; ?></li>
-            <li><a href="<?php echo $logoutAction ?>">SALIR</a></li>
+            <li><a href="usuario.php">SALIR</a></li>
           </ul>
         </div>
       </div>
