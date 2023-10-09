@@ -108,15 +108,23 @@ $row_fact = $conexion->llenarCampos("tbl_orden_compra", "WHERE factura_oc='".$fa
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
   <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
   <!-- select2 -->
   <link href="select2/css/select2.min.css" rel="stylesheet"/>
   <script src="select2/js/select2.min.js"></script>
-  <!-- css Bootstrap-->
-  <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">  
+  <link rel="stylesheet" type="text/css" href="css/general.css"/>
+
+  <!-- css Bootstrap hace mas grande el formato-->
+  <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
+  <script>
+      $(document).ready(function() { $(".busqueda").select2(); });
+  </script>
   <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
       <table style="width: 100%">
@@ -142,7 +150,7 @@ $row_fact = $conexion->llenarCampos("tbl_orden_compra", "WHERE factura_oc='".$fa
                 </div> 
                <div class="panel-body">
                  <br> 
-                 <div ><!--  SI QUITO  class="container" SE ALINEA A LA IZQUIERDA TODO EL CONTENIDO DE ESTE -->
+                 <div ><!--  SI QUITO  class="container" SE ALINEA A LA IZQUIERDA TODO EL CONTENIDO DE ESTE Y SE REDUCE -->
                   <div class="row">
                     <div class="span12">
                      <table id="tabla2"> 
@@ -182,7 +190,8 @@ $row_fact = $conexion->llenarCampos("tbl_orden_compra", "WHERE factura_oc='".$fa
                 </tr>
                 <tr>
                   <td><em> CREAR PROFORMA</em>&nbsp;&nbsp;&nbsp;&nbsp;<a href="?action=editar&id=<?php echo $r->id; ?>" style="text-decoration:none;" >CREAR PROFORMA >>></a></td>
-                  <td> </td> 
+                  <td><strong >OBSERVACIONES:</strong>
+                      <textarea class="observaciones" name="observacion_oc" cols="50" rows="3"><?php echo $row_proveedores['observacion_p']; ?></textarea></td> 
                 </tr>
                 <tr>
                   <td> <a class="botonGeneral" style="text-decoration:none; "href="?id=<?php echo $dato['id_pedido']; ?>">SALIR</a> 
@@ -221,6 +230,15 @@ $row_fact = $conexion->llenarCampos("tbl_orden_compra", "WHERE factura_oc='".$fa
 </body>
 </html>
 <script type="text/javascript">
+  //evita q se vaya el form con enter
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('input[type=text]').forEach( node => node.addEventListener('keypress', e => {
+      if(e.keyCode == 13) {
+        e.preventDefault();
+      }
+    }))
+  });//fin
+
   $(document).ready(function(){
  
    $(".buscar").change(function(){

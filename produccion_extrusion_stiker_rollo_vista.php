@@ -192,7 +192,10 @@ function cerrar(num) {
   <form action="<?php echo $editFormAction; ?>" method="POST" name="form1">
   <table id="tabla6" cellspacing="0" cellpadding="0">
   <tr>
-    <td rowspan="2" nowrap="nowrap" id="fuentND" style="border-bottom: 3px solid #000000;"><img src="images/logoacyc.jpg" width="80" height="50"/><div class="marca-de-agua"></div></td>
+    <td rowspan="2" nowrap="nowrap" id="fuentND" style="border-bottom: 3px solid #000000;"> 
+     <?php if($row_rollo_estrusion['id_c_r']=='5735'): ?> <img src="images/logocodiplax.jpg" width="100" height="50"/> <?php else: ?> <img src="images/logoacyc.jpg" width="80" height="50"/> <?php endif; ?>
+      <div class="marca-de-agua"></div>
+    </td>
     <td colspan="5" nowrap="nowrap" id="stikersC_titu_grande" style="border-left: 3px solid #000000;">MATERIALES EXTRUSION</td>
   </tr>
   <tr>
@@ -323,30 +326,48 @@ function cerrar(num) {
   </tr>-->
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Reventon:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['reven_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['reven_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['reven2_r']; ?>
+    </td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Medida:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['medid_r']; ?></td>
-    <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Pigmentación:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['calib_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['medid_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['medid2_r']; ?>
+    </td>
+    <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Pigment:</td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['calib_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['corte2_r']; ?>
+    </td>
     </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Cort/Hue:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['corte_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['corte_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['desca2_r']; ?>
+    </td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Descalibre:</td>
-    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['desca_r']; ?></td>
-    <td id="stikersC_fuentN" style="border-left: 3px solid #000000;">Tratamien:</td>
-    <td id="stikers_fuentN" ><?php echo $row_rollo_estrusion['trata_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['desca_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['calib2_r']; ?>
+    </td>
+    <td id="stikersC_fuentN" style="border-left: 3px solid #000000;">Tratam:</td>
+    <td id="stikers_fuentN" ><?php echo $row_rollo_estrusion['trata_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['trata2_r']; ?>
+    </td>
     </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Arrugas:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['arrug_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['arrug_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['arrug2_r']; ?>
+    </td>
     <td nowrap="nowrap" id="stikersC_fuentN"style="border-left: 3px solid #000000;">Apagón:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['apagon_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['apagon_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['apagon2_r']; ?>
+    </td>
     <td id="stikersC_fuentN" style="border-left: 3px solid #000000;">&nbsp;</td>  
     </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Montaje:</td>
-    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['montaje_r']; ?></td>
+    <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['montaje_r']; ?>
+      &nbsp;/&nbsp;<?php echo $row_rollo_estrusion['montaje2_r']; ?>
+    </td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">TOTAL B:</td>
     <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['bandera_r']; ?></td>
     <td id="stikersC_fuentN" style="border-left: 3px solid #000000;">&nbsp;</td>

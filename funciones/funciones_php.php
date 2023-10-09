@@ -821,6 +821,7 @@ function ceros($numero){
 }*/
 
 
+
 function eliminar_tildes($cadena){
 
     //Codificamos la cadena en formato utf8 en caso de que nos de errores
@@ -860,7 +861,6 @@ function eliminar_tildes($cadena){
 
     return $cadena;
 }
-
 
 
 ?>

@@ -130,6 +130,19 @@ $row_usuario = $conexion->buscar('usuario','usuario',$colname_usuario);
 </table>
 </body>
 </html>
+<script type="text/javascript">
+$(document).ready(function () {
+    //Disable cut copy paste
+    $('body').bind('cut copy paste', function (e) {
+        e.preventDefault();
+    });
+   
+    //Disable mouse right click
+    $("body").on("contextmenu",function(e){
+        return false;
+    });
+});
+</script>
 <?php
 mysql_free_result($usuario);
 

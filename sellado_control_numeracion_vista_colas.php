@@ -216,10 +216,4 @@ height:30px;
 <?php } ?>
 </body>
 </html>
-<?php
-
  
- 
-
-
-?>

@@ -93,3 +93,4 @@ echo "NINGUN REGISTRO SELECCIONADO";
 <?php
 mysql_free_result($usuario);mysql_close($conexion1);
 ?>
+

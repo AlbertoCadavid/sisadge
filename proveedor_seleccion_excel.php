@@ -1,0 +1,537 @@
+<?php require_once('Connections/conexion1.php'); ?>
+<?php
+ header('Pragma: public'); 
+header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); 
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); 
+header('Cache-Control: no-store, no-cache, must-revalidate'); 
+header('Cache-Control: pre-check=0, post-check=0, max-age=0'); 
+header('Pragma: no-cache'); 
+header('Expires: 0'); 
+header('Content-Transfer-Encoding: none'); 
+header('Content-Type: application/vnd.ms-excel'); 
+header('Content-type: application/x-msexcel'); 
+header('Content-Disposition: attachment; filename="calificacion_proveedor.xls"'); 
+?>
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+$MM_authorizedUsers = "";
+$MM_donotCheckaccess = "true";
+
+// *** Restrict Access To Page: Grant or deny access to this page
+function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) { 
+  // For security, start by assuming the visitor is NOT authorized. 
+  $isValid = False; 
+
+  // When a visitor has logged into this site, the Session variable MM_Username set equal to their username. 
+  // Therefore, we know that a user is NOT logged in if that Session variable is blank. 
+  if (!empty($UserName)) { 
+    // Besides being logged in, you may restrict access to only certain users based on an ID established when they login. 
+    // Parse the strings into arrays. 
+    $arrUsers = Explode(",", $strUsers); 
+    $arrGroups = Explode(",", $strGroups); 
+    if (in_array($UserName, $arrUsers)) { 
+      $isValid = true; 
+    } 
+    // Or, you may restrict access to only certain users based on their username. 
+    if (in_array($UserGroup, $arrGroups)) { 
+      $isValid = true; 
+    } 
+    if (($strUsers == "") && true) { 
+      $isValid = true; 
+    } 
+  } 
+  return $isValid; 
+}
+
+$MM_restrictGoTo = "usuario.php";
+if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {   
+  $MM_qsChar = "?";
+  $MM_referrer = $_SERVER['PHP_SELF'];
+  if (strpos($MM_restrictGoTo, "?")) $MM_qsChar = "&";
+  if (isset($QUERY_STRING) && strlen($QUERY_STRING) > 0) 
+  $MM_referrer .= "?" . $QUERY_STRING;
+  $MM_restrictGoTo = $MM_restrictGoTo. $MM_qsChar . "accesscheck=" . urlencode($MM_referrer);
+  header("Location: ". $MM_restrictGoTo); 
+  exit;
+}
+?>
+<?php
+$colname_usuario = "-1";
+if (isset($_SESSION['MM_Username'])) {
+  $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_usuario = sprintf("SELECT * FROM usuario WHERE usuario = '%s'", $colname_usuario);
+$usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
+$row_usuario = mysql_fetch_assoc($usuario);
+$totalRows_usuario = mysql_num_rows($usuario);
+
+$colname_proveedor = "-1";
+if (isset($_GET['id_p'])) {
+  $colname_proveedor = (get_magic_quotes_gpc()) ? $_GET['id_p'] : addslashes($_GET['id_p']);
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_proveedor = sprintf("SELECT * FROM proveedor WHERE id_p = %s", $colname_proveedor);
+$proveedor = mysql_query($query_proveedor, $conexion1) or die(mysql_error());
+$row_proveedor = mysql_fetch_assoc($proveedor);
+$totalRows_proveedor = mysql_num_rows($proveedor);
+
+$colname_proveedor_seleccion = "-1";
+if (isset($_GET['id_p'])) {
+  $colname_proveedor_seleccion = (get_magic_quotes_gpc()) ? $_GET['id_p'] : addslashes($_GET['id_p']);
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_proveedor_seleccion = sprintf("SELECT * FROM proveedor_seleccion WHERE id_p_seleccion = %s", $colname_proveedor_seleccion);
+$proveedor_seleccion = mysql_query($query_proveedor_seleccion, $conexion1) or die(mysql_error());
+$row_proveedor_seleccion = mysql_fetch_assoc($proveedor_seleccion);
+$totalRows_proveedor_seleccion = mysql_num_rows($proveedor_seleccion);
+
+mysql_select_db($database_conexion1, $conexion1);
+$query_insumos = "SELECT * FROM insumo WHERE id_insumo IN(SELECT id_in FROM TblProveedorInsumo WHERE id_p=$colname_proveedor_seleccion) ORDER BY descripcion_insumo ASC";
+$insumos = mysql_query($query_insumos, $conexion1) or die(mysql_error());
+$row_insumos = mysql_fetch_assoc($insumos);
+$totalRows_insumos = mysql_num_rows($insumos);
+
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>SISADGE AC &amp; CIA</title>
+<link href="css/vista.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/vista.js"></script>
+</head>
+<body>
+<div align="center">
+<table id="tablainterna" border="1" >
+<tr>
+  <td id="subppal">CODIGO : A3-F03</td>
+  <td colspan="2" nowrap="nowrap" id="principal">SELECCION INTEGRAL DE PROVEEDORES </td>
+  <td id="subppal">VERSION : 0</td>
+</tr>
+<tr>
+  <td rowspan="6" id="fondo"> </td>
+  <td colspan="2" id="fondo"> N&deg; <?php echo $row_proveedor['id_p']; ?></td>
+  <td id="noprint">
+   </td>
+</tr>
+<tr>
+  <td nowrap="nowrap" id="subppal2">FECHA DE REGISTRO </td>
+  <td colspan="2" nowrap="nowrap" id="subppal2">REGISTRADO POR </td>
+  </tr>
+<tr>
+  <td id="fuente2"><?php echo $row_proveedor['fecha_registro_p']; ?></td>
+  <td colspan="2" id="fuente2"><?php echo $row_proveedor['registro_p']; ?></td>
+  </tr>
+<tr>
+  <td id="subppal2">FECHA MODIFICACION </td>
+  <td colspan="2" id="subppal2"> MODIFICADO POR </td>
+  </tr>
+<tr>
+  <td id="fuente2"><?php if($row_proveedor['fecha_modif_p'] == '') { echo "- -"; } else { echo $row_proveedor['fecha_modif_p']; } ?></td>
+  <td colspan="2" id="fuente2"><?php if($row_proveedor['modificacion_p'] == '') { echo "- -"; } else { echo $row_proveedor['modificacion_p']; } ?></td>
+  </tr>
+<tr>
+  <td colspan="3" id="fondo">Validaci&oacute;n de proveedores que afectan directamente la calidad del producto. </td>
+  </tr>
+<tr>
+  <td colspan="4" id="subtitulo">I. INFORMACION COMERCIAL </td>
+  </tr>
+<tr>
+  <td colspan="2" id="subppal2">RAZON SOCIAL </td>
+  <td id="subppal2">NIT. - C.C. - ID </td>
+  <td id="subppal2">TIPO DE PROVEEDOR </td>
+</tr>
+<tr>
+  <td colspan="2" id="fuente3"><?php echo $row_proveedor['proveedor_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['nit_p']; ?></td>
+  <td id="fuente3"><?php $tipo_p = $row_proveedor['tipo_p'];
+  if($tipo_p != '')
+  {
+  $sqltipo = "SELECT * FROM tipo WHERE id_tipo ='$tipo_p'";
+  $resultipo = mysql_query($sqltipo);
+  $numtipo = mysql_num_rows($resultipo);
+  if($numtipo >='1') 
+  { 
+  $nombre_tipo = mysql_result($resultipo,0,'nombre_tipo'); 
+  echo $nombre_tipo;
+  }
+  }
+  ?></td>
+</tr>
+<tr>
+  <td colspan="4" id="subppal2">DIRECCION COMERCIAL </td>
+  </tr>
+<tr>
+  <td colspan="4" id="fuente3"><?php echo $row_proveedor['direccion_p']; ?></td>
+  </tr>
+<tr>
+  <td colspan="2" id="subppal2">CONTACTO COMERCIAL </td>
+  <td id="subppal2">TELEFONO</td>
+  <td id="subppal2">FAX</td>
+</tr>
+<tr>
+  <td colspan="2" id="fuente3"><?php echo $row_proveedor['contacto_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['telefono_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['fax_p']; ?></td>
+</tr>
+<tr>
+  <td id="subppal2">CELULAR</td>
+  <td id="subppal2">PAIS</td>
+  <td id="subppal2">PROVINCIA</td>
+  <td id="subppal2">CIUDAD</td>
+</tr>
+<tr>
+  <td id="fuente3"><?php echo $row_proveedor['celular_c_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['pais_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['dpto_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['ciudad_p']; ?></td>
+</tr>
+<tr>
+  <td id="subppal2">EMAIL</td>
+  <td id="subppal2">REGIMEN</td>
+  <td colspan="2" id="subppal2">&nbsp;</td>
+  </tr>
+<tr>
+  <td id="fuente3"><?php echo $row_proveedor['email_c_p']; ?></td>
+  <td id="fuente3"><?php echo $row_proveedor['regimen_p']; ?></td>
+  <td id="fuente3"><input <?php if (!(strcmp($row_proveedor['contribuyentes_p'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="checkbox" value="1" />
+    CONTRIBUYENTES</td>
+  <td id="fuente3"><input <?php if (!(strcmp($row_proveedor['autoretenedores_p'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="checkbox2" value="1" />
+    AUTORETENEDORES</td>
+</tr>
+<tr>
+  <td id="subppal2">PRODUCTO / SERVICIO</td>
+  <td id="subppal2">&nbsp;</td>
+  <td colspan="2" id="subppal2">&nbsp;</td>
+  </tr>
+<tr>
+  <td id="fuente3"><?php echo $row_proveedor['tipo_servicio_p']; ?></td>
+  <td id="fuente3">&nbsp;</td>
+  <td id="fuente3">&nbsp;</td>
+  <td id="fuente3">&nbsp;</td>
+</tr>
+ 
+  </tr>
+ 
+  
+<tr>
+  <td colspan="4" id="subtitulo">II. INFORMACION DEL PROCESO - PRODUCTO / SERVICIO </td>
+  </tr>
+<tr>
+  <td colspan="4" id="subppal2">PRODUCTOS O SERVICIOS QUE SUMINISTRA </td>
+  </tr>
+<tr>
+  <td colspan="4" id="fuente3"><?php if($row_proveedor['prod_serv_p']=='') { echo "- -"; } else { echo $row_proveedor['prod_serv_p']; } ?></td>
+ 
+  </tr>
+  
+  <?php
+ $item=0;
+   do {
+	?>
+    <tr><td colspan="4" id="fuente3"> 
+	<?php    
+   $item ++;
+  echo $item."-".$row_insumos['descripcion_insumo']."<BR>";
+  ?>
+  </td>
+    </tr>
+  <?php 
+  } while ($row_insumos = mysql_fetch_assoc($insumos));       
+    ?>
+    
+</table><?php $tipo_p=$row_proveedor['tipo_p'];
+			if($tipo_p != '2')
+			{ ?>
+<table id="tablainterna" border="1">
+<tr>
+<td colspan="4" id="subtitulo">III. ENCUESTA PARA LA CALIFICACION DEL PROVEEDOR </td>
+    </tr><?php if($row_proveedor_seleccion['id_seleccion']!='') { ?>	
+      <tr>
+        <td colspan="4" id="subppal2"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3">
+		<?php switch($row_proveedor_seleccion['directo_p'])
+		{ 
+		case 0: echo "N.A."; break;
+		case 5: echo "DIRECTO"; break;
+		case 3: echo "DISTRIBUIDOR"; break;
+		case 1: echo "INTERNACIONAL"; break;
+		}
+		?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Cuenta con otros puntos de distribucion nacionales o internacionales ? </td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['punto_dist_p'] == '') { echo "- -"; } else { echo $row_proveedor_seleccion['punto_dist_p']; } ?></td>
+      </tr>
+      <tr id="tr1">
+        <td colspan="4" id="subppal2"><strong>2</strong>. Ofrece Formas de Pago y precios competitivos ?  </td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3">
+		<?php $forma_pago_p=$row_proveedor_seleccion['forma_pago_p']; 
+		if($forma_pago_p == '0')
+		{ echo "N.A.";}
+		if($forma_pago_p == '5')
+		{ echo "Contado"; }
+		if($forma_pago_p == '3')
+		{ echo "30 a 60 dias"; }
+		if($forma_pago_p == '1')
+		{ echo "50-50";}
+		?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2">Otra forma de pago, Cual ? </td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['otra_p'] == '') { echo "- -"; } else { echo $row_proveedor_seleccion['otra_p']; } ?></td>
+      </tr>
+      <tr id="tr1">
+        <td colspan="4" id="subppal2"><strong>3</strong>.  Es una empresa con documentos que acrediten la existencia y/o representacion legal ?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3">
+          <?php switch($row_proveedor_seleccion['sist_calidad_p']){
+		case 5: echo "Si"; break; 
+		case 3: echo "No"; break;
+		case 1: echo "No Aplica"; break;
+		} ?>
+      
+    </td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Cuales?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['norma_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['norma_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>4</strong>.  Es una empresa que cuenta con Sistemas de Gestion de Calidad ?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['certificado_p']) 
+		{  
+		case 5: echo "Si"; break;
+		case 3: echo "En proceso"; break;
+		case 1: echo "No"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Que avance de Proceso?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['frecuencia_p']=='') { echo ""; } else { echo $row_proveedor_seleccion['frecuencia_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>5</strong>.  Cuenta con Sistema de Gestion Seguridad y Salud en el Trabajo ?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['analisis_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 3: echo "En proceso"; break;
+		case 1: echo "No"; break;
+		 }?>		</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Que avance de Implementacion?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['muestra_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['muestra_p'];  } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>6</strong>.  Cual es el porcentaje de implementacion de su Sistema de Seguridad y Salud en el Trabajo ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['orden_compra_p'])
+		{
+		case 5: echo ">85%"; break;
+		case 3: echo "Entre 75% y 84%"; break;
+		case 1: echo "<75%"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2">Tiempo?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['mayor_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['mayor_p']; } ?></td>
+    </tr>
+      <tr id="tr1">
+        <td colspan="4" id="subppal2"><strong>7</strong>.  Cuenta con Sistema de Gestion Ambiental ?</td>
+    </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['tiempo_agil_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 3: echo "En proceso"; break;
+		case 1: echo "No"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Lo tiene Implementado ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['tiempo_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['tiempo_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>8</strong>.  Cuenta con procedimientos o politicas relacionados con el tratamiento de SQR y tiempo de respuesta ante reclamaciones ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['entrega_p'])
+		{ 
+		case 5: echo "Si"; break; 
+		case 1: echo "No"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Cuanto Tiempo ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['metodos_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['metodos_p']; } ?></td>
+    </tr>
+      <tr id="tr1">
+        <td colspan="4" id="subppal2"><strong>9</strong>.  Requiere orden de compra u orden de Servicio con anterioridad ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['flete_p'])
+		{
+		case 5: echo "1 a 15 dias"; break;
+		case 3: echo "16 a 30 dias"; break;
+		case 1: echo "30 dias"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"> Si es mayor a 30 dias en cuanto tiempo ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['requisito_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['requisito_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>10</strong>.  Cuenta con la capacidad instalada para cumplir con los requerimientos realizados a su empresa ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['plan_mejora_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 1: echo "No"; break;
+		}?></td></tr>
+      <tr>
+        <td colspan="4" id="subppal2">En que aspectos ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['aspecto_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['aspecto_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>11</strong>.  Cual es su tiempo de entrega para productos, servicios, productos/servicios o SGST, nuevos o recurrentes ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['precios_p'])
+		{ 
+		case 5: echo "Inmediata"; break;
+		case 3: echo "1 a 5 dias"; break;
+		case 1: echo "6 a 16 dias"; break;
+		} ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2">En caso de otro, explique.</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['otro_caso_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['otro_caso_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>12</strong>. Asigna asesores comerciales a la empresa ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['asesor_com_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 3: echo "No"; break;
+		 }?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2">Nombre ? </td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['nombre_asesor_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['nombre_asesor_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>13</strong>.  Cuenta con procedimiento de gestion de energia, agua o recursos naturales ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['limite_min_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 1: echo "No"; break;
+		}?></td>
+    </tr> 
+      <tr>
+        <td colspan="4" id="fuente3"><?php if($row_proveedor_seleccion['cuanto_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['cuanto_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal2"><strong>14</strong>.  Cuenta con canales de comunicacion si se presenta una urgencia ?</td>
+      </tr>
+      <tr>
+        <td colspan="4" id="fuente3"><?php
+		switch($row_proveedor_seleccion['proceso_p'])
+		{ 
+		case 5: echo "Si"; break;
+		case 1: echo "No"; break;
+		}?></td>
+    </tr>
+      <tr>
+        <td colspan="4" id="subppal3"><strong>Nota</strong>: En algunos casos puede que su empresa no aplique a alguno de los items anteriores. Por ejemplo, si la pregunta hace referencia a un producto (tangible) y su empresa es de servicios, si es el caso por favor se&ntilde;ale la casilla <strong>NO</strong> de la columna <strong> No Aplica</strong></td>
+      </tr>
+      <tr>
+        <td id="subppal2">CALIFICACION INICIAL (%) </td>
+        <td id="subppal2">FECHA ENCUESTA</td>
+      </tr>
+      <tr>
+        <td id="fuente2"><?php echo $row_proveedor_seleccion['primera_calificacion_p']; ?></td>
+        <td id="fuente2"><?php echo $row_proveedor_seleccion['fecha_encuesta_p']; ?></td>
+      </tr>
+      <tr>
+        <td id="subppal2">NOMBRE DEL ENCUESTADOR </td>
+        <td id="subppal2">CARGO DEL ENCUESTADOR </td>
+      </tr>
+      <tr>
+        <td id="fuente2"><?php echo $row_proveedor_seleccion['encuestador_p']; ?></td>
+        <td id="fuente2"><?php echo $row_proveedor_seleccion['cargo_p']; ?></td>
+</tr>
+      <tr>
+        <td id="subppal2">ULTIMA CALIFICACION (%) </td>
+        <td id="subppal2">FECHA DE ULTIMA CALIFICACION</td>
+      </tr>
+      <tr>
+        <td id="fuente2"><?php if($row_proveedor_seleccion['ultima_calificacion_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['ultima_calificacion_p']; } ?></td>
+        <td id="fuente2"><?php if($row_proveedor_seleccion['fecha_ultima_calificacion_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['fecha_ultima_calificacion_p'] ; } ?></td>
+      </tr> <?php } else {?>
+	  <tr>
+	    <td colspan="4" id="numero1">ES UN PROVEEDOR CRITICO Y NO EXISTE ENCUESTA REGISTRADA. </td>
+	  </tr><?php } ?>
+</table>
+<?php } ?>
+</div>
+</body>
+</html>
+<?php
+mysql_free_result($usuario);
+
+mysql_free_result($proveedor);
+
+mysql_free_result($proveedor_seleccion);
+?>

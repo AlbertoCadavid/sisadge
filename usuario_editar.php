@@ -108,10 +108,11 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
- 
+  $passHash = password_hash($_POST['clave_usuario'], PASSWORD_DEFAULT);
+
   $updateSQL = sprintf("UPDATE usuario SET usuario=%s, clave_usuario=%s, nombre_usuario=%s, tipo_usuario=%s, codigo_usuario=%s, responsable=%s, fecha_registro=%s, responsable_edit=%s, fecha_edit=%s, email_usuario=%s WHERE id_usuario=%s",
                        GetSQLValueString($_POST['usuario'], "text"),
-                       GetSQLValueString($_POST['clave_usuario'], "text"),
+                       GetSQLValueString($passHash, "text"),
                        GetSQLValueString($_POST['nombre_usuario'], "text"),
                        GetSQLValueString($_POST['tipo_usuario'], "text"),
                        GetSQLValueString($_POST['codigo_usuario'], "text"),

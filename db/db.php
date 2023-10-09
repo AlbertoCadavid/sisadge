@@ -4,9 +4,9 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
 class Conectar{
     public static function conexion(){
     	if($_SESSION['ambiente']=='acycia')
-    	$conexion=new mysqli("localhost", "acycia_root", "ac2006", "acycia_intranet");
+    	$conexion=new mysqli(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
     else
-        $conexion=new mysqli("localhost", "acycia_dev", "acycia_dev", "acycia_intranet_dev");
+        $conexion=new mysqli(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
 
         $conexion->query("SET NAMES 'utf8'");
         return $conexion;

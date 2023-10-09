@@ -480,7 +480,7 @@ document.form1.int_pesom_op.value=millar_t;// millar para o.p sin bolsillo en ex
 }*/
 
 
- 
+
 function calcular_op()
 {
 	var tipo_lamina=document.form1.str_tipo_bolsa_op.value;
@@ -511,19 +511,19 @@ function calcular_op()
 		if(v_solapa=='1'){
 			var v_sol='2';
 	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=(largo*2+dsolapa+fuelle);
+	  var aRext=((largo*2)+dsolapa+fuelle);
 	  document.form1.int_ancho_rollo_op.value=aRext;
 	}else
 	if(v_solapa=='2'){
 		var v_sol='1';
 	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=(largo*2+dsolapa+fuelle);
+	  var aRext=((largo*2)+dsolapa+fuelle);
 	  document.form1.int_ancho_rollo_op.value=aRext;
 	}else
 	if(v_solapa=='0'){
 		var v_sol='0';
 	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=(largo*2+dsolapa+fuelle);
+	  var aRext=((largo*2)+dsolapa+fuelle);
 	  document.form1.int_ancho_rollo_op.value=aRext;
 	}
 }else {
@@ -1804,10 +1804,10 @@ function consulta_ref_op_interna(selec)
 {
 	window.location ='produccion_op_interna.php?int_cliente_op='+document.form1.int_cliente_op.value+'&str_numero_oc_op='+document.form1.str_numero_oc_op.value+'&int_cod_ref_op='+document.form1.int_cod_ref_op.value;
 }  
-/*function consulta_ref_op_edit(selec) 
+function consulta_ref_op_edit(selec) 
 {
 window.location ='produccion_op_edit.php?int_cliente_op='+document.form1.int_cliente_op.value+'&str_numero_oc_op='+document.form1.str_numero_oc_op.value+'&int_cod_ref_op='+document.form1.int_cod_ref_op.value+'&id_op='+document.form1.id_op.value;
-} */ 
+}
 function consulta_ref_mezcla(selec) 
 {
 	window.location ='produccion_mezclas_add.php?id_ref='+document.form1.id_ref.value+'&cod_ref='+document.form1.cod_ref.value+'&ref='+document.form1.ref.value;
@@ -1856,80 +1856,80 @@ function calificacion()
 {
 	document.form1.primera_calificacion_p.value=0;
 	$contador=0;
-	$var11=parseFloat(document.form1.directo_p.value);
-	if($var11=="5" || $var11=="3" || $var11=="1")
+	$pregunta1=parseFloat(document.form1.directo_p.value);
+	if($pregunta1=="5" || $pregunta1=="3" || $pregunta1=="1")
 	{
 		++$contador;
 	}
-	$var12=parseFloat(document.form1.forma_pago_p.value);
-	if($var12=="5" || $var12=="3" || $var12=="1")
+	$pregunta2=parseFloat(document.form1.forma_pago_p.value);
+	if($pregunta2=="5" || $pregunta2=="3" || $pregunta2=="1")
 	{
 		++$contador;
 	}
-	$var13=parseFloat(document.form1.sist_calidad_p.value);
-	if($var13=="5" || $var13=="3" || $var13=="1")
+	$pregunta3=parseFloat(document.form1.sist_calidad_p.value);
+	if($pregunta3=="5" || $pregunta3=="3" || $pregunta3=="1")
 	{
 		++$contador;
 	}
-	$var14=parseFloat(document.form1.certificado_p.value);
-	if($var14=="5" || $var14=="3" || $var14=="1")
+	$pregunta4=parseFloat(document.form1.certificado_p.value);
+	if($pregunta4=="5" || $pregunta4=="3" || $pregunta4=="1")
 	{
 		++$contador;
 	}
-	$var15=parseFloat(document.form1.analisis_p.value);
-	if($var15=="5" || $var15=="3" || $var15=="1")
+	$pregunta5=parseFloat(document.form1.analisis_p.value);
+	if($pregunta5=="5" || $pregunta5=="3" || $pregunta5=="1")
 	{
 		++$contador;
 	}
-	$var16=parseFloat(document.form1.orden_compra_p.value);
-	if($var16=="5" || $var16=="3" || $var16=="1")
+	$pregunta6=parseFloat(document.form1.orden_compra_p.value);
+	if($pregunta6=="5" || $pregunta6=="3" || $pregunta6=="1")
 	{
 		++$contador;
 	}
-	$var17=parseFloat(document.form1.tiempo_agil_p.value);
-	if($var17=="5" || $var17=="3" || $var17=="1")
+	$pregunta7=parseFloat(document.form1.tiempo_agil_p.value);
+	if($pregunta7=="5" || $pregunta7=="3" || $pregunta7=="1")
 	{
 		++$contador;
 	}
-	$var18=parseFloat(document.form1.entrega_p.value);
-	if($var18=="5" || $var18=="3" || $var18=="1")
+	$pregunta8=parseFloat(document.form1.entrega_p.value);
+	if($pregunta8=="5" || $pregunta8=="3" || $pregunta8=="1")
 	{
 		++$contador;
 	}
-	$var19=parseFloat(document.form1.flete_p.value);
-	if($var19=="5" || $var19=="1")
+	$pregunta9=parseFloat(document.form1.flete_p.value);
+	if($pregunta9=="5" || $pregunta9=="1")
 	{
 		++$contador;
 	}
-	$var20=parseFloat(document.form1.plan_mejora_p.value);
-	if($var20=="5" || $var20=="1")
+	$pregunta10=parseFloat(document.form1.plan_mejora_p.value);
+	if($pregunta10=="5" || $pregunta10=="1")
 	{
 		++$contador;
 	}
-	$var21=parseFloat(document.form1.precios_p.value);
-	if($var21=="5" || $var21=="3" || $var21=="1")
+	$pregunta11=parseFloat(document.form1.precios_p.value);
+	if($pregunta11=="5" || $pregunta11=="3" || $pregunta11=="1")
 	{
 		++$contador;
 	}
-	$var22=parseFloat(document.form1.asesor_com_p.value);
-	if($var22=="5" || $var22=="3" || $var22=="1")
+	$pregunta12=parseFloat(document.form1.asesor_com_p.value);
+	if($pregunta12=="5" || $pregunta12=="3" || $pregunta12=="1")
 	{
 		++$contador;
 	}
-	$var23=parseFloat(document.form1.limite_min_p.value);
-	if($var23=="5" || $var23=="1")
+	$pregunta13=parseFloat(document.form1.limite_min_p.value);
+	if($pregunta13=="5" || $pregunta13=="1")
 	{
 		++$contador;
 	}
-	$var24=parseFloat(document.form1.proceso_p.value);
-	if($var24=="5" || $var24=="1")
+	$pregunta14=parseFloat(document.form1.proceso_p.value);
+	if($pregunta14=="5" || $pregunta14=="1")
 	{
 		++$contador;
 	}
 
 	$var25=parseFloat($contador);
 	$var26=$var25*5;
-	$var27=$var11+$var12+$var13+$var14+$var15+$var16+$var17+$var18+$var19+$var20+$var21+$var22+$var23+$var24;
+	$var27=$pregunta1+$pregunta2+$pregunta3+$pregunta4+$pregunta5+$pregunta6+$pregunta7+$pregunta8+$pregunta9+$pregunta10+$pregunta11+$pregunta12+$pregunta13+$pregunta14;
 	$var28=($var27/$var26)*100;
 	$num=Math.round($var28*100)/100;
 	document.form1.primera_calificacion_p.value=$num;

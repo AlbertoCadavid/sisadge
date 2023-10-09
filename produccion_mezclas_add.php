@@ -297,8 +297,11 @@ document.getElementById('select_sh2').disabled = false;
 <?php echo $conexion->header('vistas'); ?>
   <form action="view_index.php?c=cmezclas&a=GuardarMezcla&cod_ref=<?php echo $_GET['cod_ref'];?>" method="post" enctype="multipart/form-data" name="form1">
     <table id="table table-bordered table-sm">
+      
       <tr id="tr1">
-        <td colspan="7" id="titulo2">PROCESO EXTRUSION MEZCLAS</td>
+        <td width="113" nowrap="nowrap" id="codigo">CODIGO : R1-F08 </td>
+        <td colspan="5" id="titulo2">PROCESO EXTRUSION MEZCLAS NUEVAS</td>
+        <td colspan="3" nowrap="nowrap" id="codigo">VERSION: 5 </td>
         </tr>
       <tr>
         <td width="137" rowspan="6" id="dato2"><img src="images/logoacyc.jpg"/></td>

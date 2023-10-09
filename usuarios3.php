@@ -1,3 +1,7 @@
+<?php
+require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+require (ROOT_BBDD); 
+?>
 <?php require_once('Connections/conexion1.php'); ?><?php
 session_start();
 $MM_authorizedUsers = "";
@@ -42,6 +46,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 }
 ?>
 <?php
+$conexion = new ApptivaDB();
+
 $colname_usuario_usuarios = "1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario_usuarios = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
@@ -71,6 +77,25 @@ $totalRows_ver_tipo_user = mysql_num_rows($ver_tipo_user);
 <title>SISADGE AC &amp; CIA</title>
 <link rel="StyleSheet" href="css/formato.css" type="text/css">
 <script type="text/javascript" src="js/listado.js"></script>
+<!-- desde aqui para listados nuevos -->
+<link rel="stylesheet" type="text/css" href="css/desplegable.css" />
+<link rel="stylesheet" type="text/css" href="css/general.css"/>
+
+<!-- sweetalert -->
+<script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!-- select2 -->
+<link href="select2/css/select2.min.css" rel="stylesheet"/>
+<script src="select2/js/select2.min.js"></script>
+
+<!-- css Bootstrap-->
+<link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 <div align="center">

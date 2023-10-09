@@ -137,7 +137,9 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   mysql_select_db($database_conexion1, $conexion1);
   $ResultFecha = mysql_query($updateFecha, $conexion1) or die(mysql_error()); 
   
-  $updateSQL = sprintf("UPDATE Tbl_items_ordenc SET b_estado_io=%s WHERE id_items=%s",
+  $updateSQL = sprintf("UPDATE Tbl_items_ordenc SET fecha_entrega_io=%s,fecha_despacho_io=%s, b_estado_io=%s WHERE id_items=%s",
+             GetSQLValueString($_POST['fecha_entrega_io'], "text"),
+             GetSQLValueString($_POST['fecha_entrega_io'], "text"),//es la misma fecha fecha_entrega_io
 					   GetSQLValueString($_POST['b_estado_io'], "int"),
 					   GetSQLValueString($_POST['id_items'], "int"));
   mysql_select_db($database_conexion1, $conexion1);
@@ -302,7 +304,9 @@ if (isset($_SESSION['MM_Username'])) {
                   <td id="talla2"><?php echo $row_remision_detalle['int_peso_rd']; $peso=$peso+$row_remision_detalle['int_peso_rd']; ?></td>
                   <td id="talla2"><?php echo $row_remision_detalle['int_pesoneto_rd'];$peson= $peson+$row_remision_detalle['int_pesoneto_rd']; ?></td>
                   
-                  <td nowrap="nowrap" id="talla2"><?php if($row_remision_detalle['b_estado_io']=='5'){echo "Facturado Total";}else if($row_remision_detalle['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_remision_detalle['b_estado_io']=='1'){echo "Ingresado";}else if($row_remision_detalle['b_estado_io']=='2'){echo "Programado";}else if($row_remision_detalle['b_estado_io']=='3'){echo "Remisionado";}else if($row_remision_detalle['b_estado_io']=='6'){echo "Muestras reposicion";}?></td>
+                  <td nowrap="nowrap" id="talla2"><?php if($row_remision_detalle['b_estado_io']=='5'){echo "Facturado Total";}else if($row_remision_detalle['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_remision_detalle['b_estado_io']=='1'){echo "Ingresado";}else if($row_remision_detalle['b_estado_io']=='2'){echo "Programado";}else if($row_remision_detalle['b_estado_io']=='3'){echo "Remisionado";}else if($row_remision_detalle['b_estado_io']=='6'){echo "Muestras reposicion";}?>
+                    
+                  </td>
                 </tr>
                 <?php } while ($row_remision_detalle = mysql_fetch_assoc($remision_detalle)); ?>
 
@@ -325,6 +329,7 @@ if (isset($_SESSION['MM_Username'])) {
               <!--<img src="images/rf.gif" width="31" height="18" onClick="javascript:submit();window.opener.location.reload();window.close();">--></td>
             </tr>
         </table>
+        <input name="fecha_entrega_io" id="fecha_entrega_io" type="hidden" value="<?php echo $row_remision_detalle['fecha_entrega_io']; ?>"> 
         <input type="hidden" name="MM_update" value="form1">
       </form></td>
   </tr>

@@ -217,7 +217,7 @@ $totalRows_ref_op = mysql_num_rows($ref_op);
                             </tr>
                             <tr>
                               <td id="detalle2"><?php echo $row_ref_op['str_matrial_op']; ?></td>
-                              <td colspan="2" id="detalle2"><?php echo $row_ref_op['str_presentacion_op']; ?></td> 
+                              <td id="detalle2" colspan="2"><?php echo $row_ref_op['str_presentacion_op']; ?></td> 
                               <td id="detalle2"><?php echo $row_ref_op['str_tratamiento_op']; ?></td>
                               <td id="detalle2"><?php echo $anchoporc=$row_ref_op['ancho_ref']; ?></td>
                               <td id="detalle2"><?php echo $row_ref_op['largo_ref']; ?></td>

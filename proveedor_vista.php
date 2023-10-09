@@ -88,19 +88,22 @@ $totalRows_insumos = mysql_num_rows($insumos);
 <title>SISADGE AC &amp; CIA</title>
 <link href="css/vista.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/vista.js"></script>
+<script type="text/javascript" src="AjaxControllers/js/envioListado.js"></script>
 </head>
 <body>
 <div align="center">
 <table id="tablainterna">
 <tr>
   <td id="subppal">CODIGO : A3-F03</td>
-  <td colspan="2" nowrap="nowrap" id="principal">SELECCION DE PROVEEDORES </td>
+  <td colspan="2" nowrap="nowrap" id="principal">SELECCION INTEGRAL DE PROVEEDORES </td>
   <td id="subppal">VERSION : 0</td>
 </tr>
 <tr>
   <td rowspan="6" id="fondo"><img src="images/logoacyc.jpg"/></td>
   <td colspan="2" id="fondo"> N&deg; <?php echo $row_proveedor['id_p']; ?></td>
-  <td id="noprint"><a href="proveedor_edit.php?id_p=<?php echo $row_proveedor['id_p']; ?>"><img src="images/menos.gif" alt="EDITAR PROVEEDOR" border="0" style="cursor:hand;" /></a><img src="images/impresor.gif" onclick="window.print();" style="cursor:hand;" alt="INPRIMIR" /><a href="proveedor_add.php"><img src="images/mas.gif" alt="ADD PROVEEDOR" border="0" style="cursor:hand;"></a><a href="proveedores.php"><img src="images/cat.gif" style="cursor:hand;" alt="LISTADO PROVEEDORES" border="0"/></a><a href="proveedor_busqueda.php"><img src="images/embudo.gif" alt="FILTRO" border="0" style="cursor:hand;"/></a><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" onclick="window.close() "/></td>
+  <td id="noprint">
+    <input type="image" src="images/excel.png" type="submit" onClick="envioexcell();" style="width:18px; height:18px" >
+    <a href="proveedor_edit.php?id_p=<?php echo $row_proveedor['id_p']; ?>"><img src="images/menos.gif" alt="EDITAR PROVEEDOR" border="0" style="cursor:hand;" /></a><img src="images/impresor.gif" onclick="window.print();" style="cursor:hand;" alt="INPRIMIR" /><a href="proveedor_add.php"><img src="images/mas.gif" alt="ADD PROVEEDOR" border="0" style="cursor:hand;"></a><a href="proveedores.php"><img src="images/cat.gif" style="cursor:hand;" alt="LISTADO PROVEEDORES" border="0"/></a><a href="proveedor_busqueda.php"><img src="images/embudo.gif" alt="FILTRO" border="0" style="cursor:hand;"/></a><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" onclick="window.close() "/></td>
 </tr>
 <tr>
   <td nowrap="nowrap" id="subppal2">FECHA DE REGISTRO </td>
@@ -256,7 +259,7 @@ $totalRows_insumos = mysql_num_rows($insumos);
 <td colspan="2" id="subtitulo">III. ENCUESTA PARA LA CALIFICACION DEL PROVEEDOR </td>
     </tr><?php if($row_proveedor_seleccion['id_seleccion']!='') { ?>	
       <tr>
-        <td colspan="2" id="subppal2"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios,los subcontrata o tiene distribuidores ?</td>
+        <td colspan="2" id="subppal2"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios?</td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3">
@@ -265,18 +268,18 @@ $totalRows_insumos = mysql_num_rows($insumos);
 		case 0: echo "N.A."; break;
 		case 5: echo "DIRECTO"; break;
 		case 3: echo "DISTRIBUIDOR"; break;
-		case 1: echo "SUBCONTRATA"; break;
+		case 1: echo "INTERNACIONAL"; break;
 		}
 		?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Puntos de distribuci&oacute;n ? </td>
+        <td colspan="2" id="subppal2">¿Cuenta con otros puntos de distribución nacionales o internacionales ? </td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['punto_dist_p'] == '') { echo "- -"; } else { echo $row_proveedor_seleccion['punto_dist_p']; } ?></td>
       </tr>
       <tr id="tr1">
-        <td colspan="2" id="subppal2"><strong>2</strong>. Ofrece Formas de Pago ? </td>
+        <td colspan="2" id="subppal2"><strong>2</strong>. Ofrece Formas de Pago y precios competitivos ?  </td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3">
@@ -284,156 +287,152 @@ $totalRows_insumos = mysql_num_rows($insumos);
 		if($forma_pago_p == '0')
 		{ echo "N.A.";}
 		if($forma_pago_p == '5')
-		{ echo "30 a 60 dias"; }
+		{ echo "Contado"; }
 		if($forma_pago_p == '3')
-		{ echo "15 a 29 dias"; }
+		{ echo "30 a 60 dias"; }
 		if($forma_pago_p == '1')
-		{ echo "Contado a 14 dias";}
+		{ echo "50-50";}
 		?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Otra, Cual ? </td>
+        <td colspan="2" id="subppal2">Otra forma de pago, Cual ? </td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['otra_p'] == '') { echo "- -"; } else { echo $row_proveedor_seleccion['otra_p']; } ?></td>
       </tr>
       <tr id="tr1">
-        <td colspan="2" id="subppal2"><strong>3</strong>. Tiene Sistema de Gesti&oacute;n de Calidad certificado ?</td>
+        <td colspan="2" id="subppal2"><strong>3</strong>. ¿Es una empresa con documentos que acrediten la existencia y/o representación legal ?</td>
     </tr>
       <tr>
-        <td colspan="2" id="fuente3"><?php switch($row_proveedor_seleccion['sist_calidad_p']){
-		case 0: echo "N.A."; break;
+        <td colspan="2" id="fuente3">
+          <?php switch($row_proveedor_seleccion['sist_calidad_p']){
+		case 5: echo "Si"; break; 
+		case 3: echo "No"; break;
+		case 1: echo "No Aplica"; break;
+		} ?>
+      
+    </td>
+    </tr>
+      <tr>
+        <td colspan="2" id="subppal2">¿Cuales?</td>
+    </tr>
+      <tr>
+        <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['norma_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['norma_p']; } ?></td>
+    </tr>
+      <tr>
+        <td colspan="2" id="subppal2"><strong>4</strong>. ¿Es una empresa que cuenta con Sistemas de Gestión de Calidad ?</td>
+    </tr>
+      <tr>
+        <td colspan="2" id="fuente3"><?php 
+		switch($row_proveedor_seleccion['certificado_p']) 
+		{  
 		case 5: echo "Si"; break;
 		case 3: echo "En proceso"; break;
 		case 1: echo "No"; break;
 		} ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Con cual Norma y que porcentaje de Avance ?</td>
-    </tr>
-      <tr>
-        <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['norma_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['norma_p']; } ?></td>
-    </tr>
-      <tr>
-        <td colspan="2" id="subppal2"><strong>4</strong>. Entrega certificado de calidad de sus productos con cada despacho (insumos) u ofrece garantia al servicio ?</td>
-    </tr>
-      <tr>
-        <td colspan="2" id="fuente3"><?php 
-		switch($row_proveedor_seleccion['certificado_p']) 
-		{ 
-		case 0: echo "N.A."; break;
-		case 5: echo "Si"; break;
-		case 3: echo "Algunas veces"; break;
-		case 1: echo "No"; break;
-		} ?></td>
-    </tr>
-      <tr>
-        <td colspan="2" id="subppal2">Con que frecuencia ?</td>
+        <td colspan="2" id="subppal2">¿Que avance de Proceso?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['frecuencia_p']=='') { echo ""; } else { echo $row_proveedor_seleccion['frecuencia_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>5</strong>. Realiza analisis de control de calidad a cada lote de material ?</td>
+        <td colspan="2" id="subppal2"><strong>5</strong>. ¿Cuenta con Sistema de Gestión Seguridad y Salud en el Trabajo ?</td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php 
 		switch($row_proveedor_seleccion['analisis_p'])
-		{
-		case 0: echo "N.A."; break;
+		{ 
 		case 5: echo "Si"; break;
-		case 3: echo "Por muestreo"; break;
+		case 3: echo "En proceso"; break;
 		case 1: echo "No"; break;
 		 }?>		</td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Si es por muestra, cada cuanto ?</td>
+        <td colspan="2" id="subppal2">¿Que avance de Implementación?</td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['muestra_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['muestra_p'];  } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>6</strong>. Requiere orden de compra con anterioridad ?</td>
+        <td colspan="2" id="subppal2"><strong>6</strong>. ¿Cual es el porcentaje de implementación de su Sistema de Seguridad y Salud en el Trabajo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['orden_compra_p'])
 		{
-		case 0: echo "N.A."; break;
-		case 5: echo "1 a 15 dias"; break;
-		case 3: echo "16 a 30 dias"; break;
+		case 5: echo ">85%"; break;
+		case 3: echo "Entre 75% y 84%"; break;
+		case 1: echo "<75%"; break;
 		} ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Si es mayor a 30 en cuanto tiempo?</td>
+        <td colspan="2" id="subppal2">Tiempo?</td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['mayor_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['mayor_p']; } ?></td>
     </tr>
       <tr id="tr1">
-        <td colspan="2" id="subppal2"><strong>7</strong>. Tiene establecido un tiempo para la agilidad de respuesta ante un reclamo ?</td>
+        <td colspan="2" id="subppal2"><strong>7</strong>. ¿Cuenta con Sistema de Gestión Ambiental ?</td>
     </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php 
 		switch($row_proveedor_seleccion['tiempo_agil_p'])
-		{
-		case 0: echo "N.A."; break;
-		case 5: echo "El mismo dia"; break;
-		case 3: echo "1 semana"; break;
-		case 1: echo "1 mes"; break;
+		{ 
+		case 5: echo "Si"; break;
+		case 3: echo "En proceso"; break;
+		case 1: echo "No"; break;
 		} ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Cuanto tiempo ?</td>
+        <td colspan="2" id="subppal2">¿Lo tiene Implementado ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['tiempo_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['tiempo_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>8</strong>. Realiza entrega del producto o servicio en las instalaciones de la empresa ?</td>
+        <td colspan="2" id="subppal2"><strong>8</strong>. ¿Cuenta con procedimientos o politicas relacionados con el tratamiento de SQR y tiempo de respuesta ante reclamaciones ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php 
 		switch($row_proveedor_seleccion['entrega_p'])
-		{
-		case 0: echo "N.A."; break;
-		case 5: echo "Si"; break;
-		case 3: echo "Con intermediario"; break;
+		{ 
+		case 5: echo "Si"; break; 
 		case 1: echo "No"; break;
 		} ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">Otros metodos ?</td>
+        <td colspan="2" id="subppal2">¿Cuanto Tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['metodos_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['metodos_p']; } ?></td>
     </tr>
       <tr id="tr1">
-        <td colspan="2" id="subppal2"><strong>9</strong>. El flete correspondiente a la entrega corre por parte del proveedor ?</td>
+        <td colspan="2" id="subppal2"><strong>9</strong>. ¿Requiere orden de compra u orden de Servicio con anterioridad ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php 
 		switch($row_proveedor_seleccion['flete_p'])
 		{
-		case 0: echo "N.A."; break;
-		case 5: echo "Si"; break;
-		case 1: echo "No"; break;
+		case 5: echo "1 a 15 días"; break;
+		case 3: echo "16 a 30 días"; break;
+		case 1: echo "30 días"; break;
 		} ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2">&oacute; cuando se establece ese requisito ?</td>
+        <td colspan="2" id="subppal2">¿Si es mayor a 30 dias en cuanto tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['requisito_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['requisito_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>10</strong>. Tiene establecido un plan de mejora para el producto, servicios y/o sus procesos?</td>
+        <td colspan="2" id="subppal2"><strong>10</strong>. ¿Cuenta con la capacidad instalada para cumplir con los requerimientos realizados a su empresa ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['plan_mejora_p'])
-		{
-		case 0: echo "N.A."; break;
+		{ 
 		case 5: echo "Si"; break;
 		case 1: echo "No"; break;
 		}?></td></tr>
@@ -444,16 +443,15 @@ $totalRows_insumos = mysql_num_rows($insumos);
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['aspecto_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['aspecto_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>11</strong>. Maneja listado de precios actualizado ?</td>
+        <td colspan="2" id="subppal2"><strong>11</strong>. ¿Cual es su tiempo de entrega para productos, servicios, productos/servicios o SGST, nuevos o recurrentes ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['precios_p'])
-		{
-		case 0: echo "N.A."; break;
-		case 5: echo "Anual"; break;
-		case 3: echo "Semestral"; break;
-		case 1: echo "Otro (< 6 meses)"; break;
+		{ 
+		case 5: echo "Inmediata"; break;
+		case 3: echo "1 a 5 días"; break;
+		case 1: echo "6 a 16 días"; break;
 		} ?></td>
     </tr>
       <tr>
@@ -463,13 +461,12 @@ $totalRows_insumos = mysql_num_rows($insumos);
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['otro_caso_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['otro_caso_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>12</strong>. Asigna asesores comerciales a cada empresa ?</td>
+        <td colspan="2" id="subppal2"><strong>12</strong>. Asigna asesores comerciales a la empresa ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['asesor_com_p'])
-		{
-		case 0: echo "N.A."; break;
+		{ 
 		case 5: echo "Si"; break;
 		case 3: echo "No"; break;
 		 }?></td>
@@ -481,31 +478,26 @@ $totalRows_insumos = mysql_num_rows($insumos);
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['nombre_asesor_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['nombre_asesor_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>13</strong>. Tiene limites minimos de pedido ?</td>
+        <td colspan="2" id="subppal2"><strong>13</strong>. ¿Cuenta con procedimiento de gestión de energía, agua o recursos naturales ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['limite_min_p'])
-		{
-		case 0: echo "N.A."; break;
-		case 5: echo "No"; break;
-		case 1: echo "Si"; break;
+		{ 
+		case 5: echo "Si"; break;
+		case 1: echo "No"; break;
 		}?></td>
-    </tr>
-      <tr>
-        <td colspan="2" id="subppal2">Cuanto ?</td>
-      </tr>
+    </tr> 
       <tr>
         <td colspan="2" id="fuente3"><?php if($row_proveedor_seleccion['cuanto_p']=='') { echo "- -"; } else { echo $row_proveedor_seleccion['cuanto_p']; } ?></td>
     </tr>
       <tr>
-        <td colspan="2" id="subppal2"><strong>14</strong>. Cuentan con un proceso definido para preservar y manejar el material o equipo suministrado por el cliente ?</td>
+        <td colspan="2" id="subppal2"><strong>14</strong>. ¿Cuenta con canales de comunicación si se presenta una urgencia ?</td>
       </tr>
       <tr>
         <td colspan="2" id="fuente3"><?php
 		switch($row_proveedor_seleccion['proceso_p'])
-		{
-		case 0: echo "N.A."; break;
+		{ 
 		case 5: echo "Si"; break;
 		case 1: echo "No"; break;
 		}?></td>
@@ -545,6 +537,16 @@ $totalRows_insumos = mysql_num_rows($insumos);
 </div>
 </body>
 </html>
+<script>
+  function envioexcell(){
+    var form = "id_p=<?php echo $_GET['id_p']; ?>";
+
+     
+    var vista = 'proveedor_seleccion_excel.php';
+    
+       enviovarListados(form,vista); 
+  }
+</script>
 <?php
 mysql_free_result($usuario);
 

@@ -668,7 +668,7 @@ $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_b
       </tr>
       <tr>
         <td id="fuente1">
-          <select name="Str_presentacion" id="opciones2" style="width:100px" onchange="anchoRolloRef();">
+          <select name="Str_presentacion" id="opciones2" style="width:100px" onchange="anchodelRollo()">
           <option value="LAMINA" <?php if (!(strcmp('LAMINA', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
           <option value="TUBULAR" <?php if (!(strcmp('TUBULAR', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>TUBULAR</option>
        <option value="SEMITUBULAR" <?php if (!(strcmp('SEMITUBULAR', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>SEMITUBULAR</option>

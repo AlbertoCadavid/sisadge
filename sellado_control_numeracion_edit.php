@@ -307,7 +307,7 @@ if($row_control_paquete['int_cod_ref_op']=='096'){
 
 
  //AGREGADA PARA Q NO USEN EL VIEJO SISTEMA
-header ("Location:view_index.php?c=csellado&a=Inicio");
+//header ("Location:view_index.php?c=csellado&a=Inicio");
 ?>
 <html>
 <head>

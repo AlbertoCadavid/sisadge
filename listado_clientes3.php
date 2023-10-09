@@ -317,6 +317,19 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
 <script>
     $(document).ready(function() { $(".combos2").select2(); });
 </script>
+<script type="text/javascript">
+$(document).ready(function () {
+    //Disable cut copy paste
+    $('body').bind('cut copy paste', function (e) {
+        e.preventDefault();
+    });
+   
+    //Disable mouse right click
+    $("body").on("contextmenu",function(e){
+        return false;
+    });
+});
+</script>
 <?php
 mysql_free_result($usuario);mysql_close($conexion1);
 

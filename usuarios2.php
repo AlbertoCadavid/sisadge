@@ -1,3 +1,7 @@
+<?php
+require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+require (ROOT_BBDD); 
+?>
 <?php require_once('Connections/conexion1.php'); ?>
 <?php
 //initialize the session
@@ -65,6 +69,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 }
 ?>
 <?php
+$conexion = new ApptivaDB();
+
 $colname_usuario_usuarios = "1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario_usuarios = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
@@ -81,27 +87,36 @@ $totalRows_usuario_usuarios = mysql_num_rows($usuario_usuarios);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>SISADGE AC &amp; CIA</title>
 <link rel="StyleSheet" href="css/formato.css" type="text/css">
+<!-- desde aqui para listados nuevos -->
+<link rel="stylesheet" type="text/css" href="css/desplegable.css" />
+<link rel="stylesheet" type="text/css" href="css/general.css"/>
+
+<!-- sweetalert -->
+<script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!-- select2 -->
+<link href="select2/css/select2.min.css" rel="stylesheet"/>
+<script src="select2/js/select2.min.js"></script>
+
+<!-- css Bootstrap-->
+<link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 <div align="center">
-<table id="tabla1" align="center"><tr>
-<td colspan="2" align="center"><img src="images/cabecera.jpg"></td></tr>
-<tr><td id="nombreusuario"><?php echo $row_usuario_usuarios['nombre_usuario']; ?></td>
-<td id="cabezamenu"><ul id="menuhorizontal">
-           <li><a href="<?php echo $logoutAction ?>" target="_top">CERRAR SESION</a></li>
-		   <li><a href="menu.php" target="_top">MENU PRINCIPAL</a></li>
-           <li><a href="administrador.php" target="_top">ADMINISTRADOR</a></li>
-		   </ul></td>
-</tr>
-<tr>
-	<td align="center" colspan="2" id="linea1">
-	<table id="tabla1">
+<?php echo $conexion->header('listas'); ?>
+	<table class="table table-bordered table-sm">
   <tr>
     <td id="titulo2">LISTADO DE USUARIOS </td>
     <td id="titulo2"><a href="usuario_nuevo.php" target="_top"><img src="images/mas.gif" alt="ADD USUARIO" border="0" style="cursor:hand;" ></a></td>
   </tr>
 </table>
-</td></tr></table>
+<?php echo $conexion->header('footer'); ?>
 </div>
 </body>
 </html>

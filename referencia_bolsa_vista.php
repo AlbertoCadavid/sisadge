@@ -156,6 +156,22 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
   <tr>
     <td id="dato3">Menu de Produccion</td>
     <td colspan="8" id="dato3">
+
+         <?php 
+         $id_ref_pr=$row_referencia_egp['cod_ref']; 
+         $sqlop="SELECT * FROM tbl_caracteristicas_prod WHERE cod_ref='$id_ref_pr' AND proceso = '1' ORDER BY cod_ref DESC LIMIT 1"; 
+         $resultca = mysql_query($sqlop); 
+         $numca=mysql_num_rows($resultca);
+          
+         if($numca >= '1'){ 
+          $id_codp = mysql_result($resultca, 0, 'int_cod_ref_cp');       
+          ?> 
+          <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $row_referencia_egp['cod_ref'];?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA NUEVAS" title="VISUALIZAR CARACTERISTICA NUEVAS" border="0" /></a><?php 
+        }else { ?>
+          <a href="javascript:popUp('produccion_mezclas_add.php?id_ref=<?php echo $row_referencia_egp['id_ref'];?>&cod_ref=<?php echo $row_referencia_egp['cod_ref'];?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER NUEVAS" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER NUEVAS" border="0" /></a>
+      <?php } ?>
+
+
     <?php $ref=$row_referencia_egp['id_ref'];
    	  $sqlpm="SELECT id_pm FROM tbl_produccion_mezclas WHERE id_ref_pm='$ref' and id_proceso='1'";//antigua-nueva
    	  $resultpm= mysql_query($sqlpm);
@@ -163,9 +179,9 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
    	  $numpm= mysql_num_rows($resultpm);
 	  if($numpm >='1')
 	   { ?>
-      <a class="editar" href="produccion_caract_extrusion_mezcla_vista.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>"><img src="images/e.gif" style="cursor:hand;" alt="EXTRUSION" title="EXTRUSION" border="0" /></a>
+      <a class="editar" href="produccion_caract_extrusion_mezcla_vista.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>"><img src="images/e.gif" style="cursor:hand;" alt="EXTRUSION VIEJAS" title="EXTRUSION VIEJAS" border="0" /></a>
       <?php } else { ?>
-      <a class="editar" href="produccion_mezclas_add.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&cod_ref=<?php echo $row_referencia_egp['cod_ref']; ?>"><img src="images/e_rojo.gif" style="cursor:hand;" alt="ADD FORMULA EXTRUSION" title="ADD FORMULA EXTRUSION" border="0" /></a>
+      <a class="editar" href="produccion_mezclas_add.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&cod_ref=<?php echo $row_referencia_egp['cod_ref']; ?>"><img src="images/e_rojo.gif" style="cursor:hand;" alt="ADD FORMULA EXTRUSION VIEJAS" title="ADD FORMULA EXTRUSION VIEJAS" border="0" /></a>
     <?php } ?>    
       
     <?php
@@ -175,9 +191,9 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
   	  $numcv= mysql_num_rows($resultcv);
 	  if($numcv < '1')
 	  { ?>
-          <a class="editar" href="produccion_caract_extrusion_add.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>" ><img src="images/c_rojo.gif" style="cursor:hand;" alt="FALTA CARACTERISTICA EXTRUSION" title="FALTA CARACTERISTICA EXTRUSION" border="0" /></a>
+          <a class="editar" href="produccion_caract_extrusion_add.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>" ><img src="images/c_rojo.gif" style="cursor:hand;" alt="FALTA CARACTERISTICA EXTRUSION VIEJAS" title="FALTA CARACTERISTICA EXTRUSION VIEJAS" border="0" /></a>
     <?php } else {?>
-          <a class="editar" href="produccion_caract_extrusion_mezcla_vista.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>" ><img src="images/c.gif" style="cursor:hand;" alt="FALTA CARACTERISTICA EXTRUSION" title="FALTA CARACTERISTICA EXTRUSION" border="0" /></a>
+          <a class="editar" href="produccion_caract_extrusion_mezcla_vista.php?id_ref=<?php echo $row_referencia_egp['id_ref']; ?>&id_pm=<?php echo $row_pm['id_pm']; ?>" ><img src="images/c.gif" style="cursor:hand;" alt="FALTA CARACTERISTICA EXTRUSION VIEJAS" title="FALTA CARACTERISTICA EXTRUSION VIEJAS" border="0" /></a>
     <?php } ?>
       
 

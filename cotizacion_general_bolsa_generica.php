@@ -93,7 +93,7 @@ $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
  
 //aqui traigo el precio del la cotiz antes de todos los cambios del impuesto al plastico
-if (isset($_GET['id_ref'])&& $_GET['id_ref']!='' && isset($_GET['Str_nit'])&& $_GET['Str_nit']!=''){  
+if (isset($_GET['id_ref'])&& $_GET['id_ref']!='0' && isset($_GET['Str_nit'])&& $_GET['Str_nit']!=''){  
 
 $precio_old = $conexion->llenarCampos('Tbl_referencia ref ',"LEFT JOIN Tbl_cotiza_bolsa cb ON ref.cod_ref=cb.N_referencia_c LEFT JOIN Tbl_egp te ON ref.n_egp_ref = te.n_egp WHERE ref.tipo_bolsa_ref<>'LAMINA' and ref.tipo_bolsa_ref<>'PACKING LIST' AND cb.fecha_creacion < '2023-03-15' AND ref.id_ref= ".$_GET['id_ref']." AND Str_nit=".$_GET['Str_nit']." ORDER BY cb.fecha_creacion DESC LIMIT 1  ",""," cb.N_precio as N_precio_old ");
 }
@@ -429,7 +429,7 @@ swal({
                             </select> 
 
                         </td>
-                          <td id="dato1">
+                          <td colspan="2" id="dato1">
 
                           <select name="ref3" id="ref3" onchange="if(form1.ref3.value!='') { consultaotros3(); } else{ alert('Debe Seleccionar una REFERENCIA'); }" class="busqueda selectsMini">
                                 <option value="0">-REF-</option>
@@ -437,11 +437,11 @@ swal({
                                 <option value="<?php echo $row_referencias3['id_ref']?>"<?php if (!(strcmp($row_referencias3['id_ref'], $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias3['cod_ref']?></option>
                             <?php } ?>
                             </select>
-
+                          <strong id="numero1"><?php if(isset($_GET['id_ref'] ) && $_GET['id_ref']=='0') {  echo 'Ref: ';echo $row_ref['N_referencia']+1; }?></strong>
                           </td>
                         </tr>
                         <tr>
-                          <td colspan="2" id="fuente1">Nombre del Cliente</td>
+                          <td colspan="4" id="fuente1">Nombre del Cliente</td>
                         </tr>
                         <tr>
                           <td colspan="5" id="fuente1">

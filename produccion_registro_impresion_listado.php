@@ -439,7 +439,9 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                       <?php if($procesoNuevo==2 ): ?>
                         <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $refNueva;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a>
 
-                        <?php else: ?>   
+                        <?php else: ?> 
+                        <!-- <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $refNueva;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a> -->
+                          
                           <a href="javascript:popUp('produccion_caract_impresion_vista.php?id_ref=<?php echo $row_orden_produccion['id_ref_op'];?>','870','600')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA ANTIGUA" title="VISUALIZAR CARACTERISTICA ANTIGUA" border="0" /></a>
                         <?php endif; ?>
                         <?php else: ?>

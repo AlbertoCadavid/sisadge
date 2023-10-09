@@ -206,7 +206,7 @@ if (isset($_GET['id_op'])) {
   $colname_totalKilos = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' ORDER BY fechaI_r ASC LIMIT 100",$colname_totalKilos);
+$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' ORDER BY fechaI_r ASC LIMIT 210",$colname_totalKilos);
 $totalKilos = mysql_query($query_totalKilos, $conexion1) or die(mysql_error());// AND rollo_r > $rollo_liqu
 $row_totalKilos = mysql_fetch_assoc($totalKilos);
 $totalRows_totalKilos = mysql_num_rows($totalKilos);

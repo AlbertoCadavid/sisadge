@@ -417,7 +417,7 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
                <br>
                <!-- grid --> 
 
-               <form action="<?php echo $editFormAction; ?>" method="post" name="form1" onSubmit="MM_validateForm('repeticion_cirel','','R','rodillo_cirel','','R','distancia_logos_cirel','','R');return document.MM_returnValue">
+               <form action="<?php echo $editFormAction; ?>" method="post" name="form1" enctype="multipart/form-data" onSubmit="MM_validateForm('repeticion_cirel','','R','rodillo_cirel','','R','distancia_logos_cirel','','R');return document.MM_returnValue">
                 <table id="tabla_formato">
                   <tr id="fondo_3">
                     <td id="subtitulo_2">PANTONE</td>
@@ -665,7 +665,7 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
 
 
 <div class="container-fluid"> 
-<form id="formPlanchas" name="formPlanchas" action="guardar.php" method="post">
+<form id="formPlanchas" name="formPlanchas" action="guardar.php" method="post" enctype="multipart/form-data" >
    <hr>
    <h2 id="dato2"><strong>REPORTE DE PLANCHAS MALAS</strong></h2>
      <input name="ref" id="ref" value="<?php echo $row_ref_egp['cod_ref'];?>" type="text" placeholder="ref" style="width: 100px;">&nbsp;&nbsp;
@@ -697,12 +697,17 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
      <input name="fecha_reporte" id="fecha_reporte" value="<?php echo date('Y-m-d'); ?>" type="date" placeholder="fecha_reporte" style="width: 120px;">&nbsp;&nbsp;
      <input name="se_hizo_repo" id="se_hizo_repo" value="" type="text" placeholder="se hizo reposicion" style="width: 100px;">&nbsp;&nbsp;
      <input name="fecha_repo" id="fecha_repo" value="" type="date" placeholder="fecha_repo" style="width: 120px;">&nbsp;&nbsp;
-     <input name="responsable" id="responsable" value="<?php echo $_SESSION['Usuario']; ?>" type="text" placeholder="responsable" style="width: 120px;">&nbsp;&nbsp;  
+     <input name="responsable" id="responsable" value="<?php echo $_SESSION['Usuario']; ?>" type="text" placeholder="responsable" style="width: 120px;">&nbsp;&nbsp;    
+     <input type="file" name="adjunto" id="adjunto" size="100" maxlength="100" class="botones_file"/>
+     <input name="obs" id="obs" value="" type="text" placeholder="obs" style="width: 120px;">&nbsp;&nbsp;  
      <!-- <button id='botondeenvio' type="submit" onclick="validarTodos(); return false;"><img type="image" style="width: 20px; height: 20px;" name="botondeenvio" id="botondeenvio" src="images/save3.PNG" alt="GUARDAR"title="GUARDAR"></button> -->
      <button id="btnEnviarItems" name="btnEnviarItems" type="button" autofocus="" ><img type="image" style="width: 20px; height: 20px;" name="botondeenvio" id="botondeenvio" src="images/save3.PNG" alt="GUARDAR"title="GUARDAR"></button>
      <input name="id_verif_p" id="id_verif_p" value="<?php echo $row_verificar_cirel['id_verif']; ?>" type="hidden" > 
      <input name="verificacion" id="verificacion" value="verificacion" type="hidden" >
    </form>
+
+
+   
      <p></p>
      <em style="display: none;  align-items: center; justify-content: center;color: red; " id="busqueda" ></em> 
      <em style="display: none;  align-items: center; justify-content: center;color: red; " id="AlertItem" ></em> 
@@ -723,6 +728,8 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
                 <th id="fuente_1" style="width: 200px;"><strong> SE HIZO REPOSICION</strong> </th>
                 <th id="fuente_1" style="width: 150px;"><strong> FECHA REPOSICION</strong> </th>
                 <th id="fuente_1" style="width: 150px;"><strong> RESPONSABLE</strong> </th>
+                <th id="fuente_1" style="width: 150px;"><strong> ADJUNTO</strong> </th>
+                <th id="fuente_1" style="width: 150px;"><strong> OBS</strong> </th>
                 <th id="fuente_1" style="width: 150px;"><strong> DELETE</strong> </th>
                 <th id="fuente_1" style="width: 150px;"><strong> VISTA</strong> </th>
 

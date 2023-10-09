@@ -346,12 +346,7 @@ $queryString_ingresos = sprintf("&totalRows_ingresos=%d%s", $totalRows_ingresos,
       
       <?php } ?>
       </select>
-
-
  
-
-
-
     <input type="submit" name="Submit" value="FILTRO" class="botonGMini" onClick="if(consulta.n_oc.value=='0' && consulta.id_p.value=='0' && consulta.fecha.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }"/>
   <input type="button" id="excel" name="excel" class="botonDel" value="Descarga Excel" onclick="myFunction()">
 </td>

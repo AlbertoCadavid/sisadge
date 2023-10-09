@@ -376,7 +376,7 @@ WHERE a.tipo_empleado IN(7,9) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_SE
   $columnasRollo = ["id_op_r"=>"id_op_r","ref_r"=>"ref_r","bolsas_r"=>"bolsas_r","metro_r"=>"metro_r","metroIni_r"=>"metroIni_r","kilos_r"=>"kilos_r","reproceso_r"=>"reproceso_r","rollo_r"=>"rollo_r","maquina_r"=>"maquina_r","numIni_r"=>"numIni_r","numFin_r"=>"numFin_r","cod_empleado_r"=>"cod_empleado_r","cod_auxiliar_r"=>"cod_auxiliar_r","turno_r"=>"turno_r","fechaI_r"=>"fechaI_r","fechaF_r"=>"fechaF_r","kilopendiente_r"=>"kilopendiente_r","rolloParcial_r"=>"rolloParcial_r","costo_r"=>"costo_r"
   ];
 
-
+  
 
    if(isset($_POST['id_op_rp']) && $nuevovalorRollo){
      $myRollo->RegistrarGen("tblselladorollo", $columnasRollo, $nuevovalorRollo);

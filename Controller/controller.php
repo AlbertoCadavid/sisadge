@@ -78,7 +78,8 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
     }
 
     //LLENA COMBOS CONVIERTE 
-     public function llenaSelect($tabla, $condicion='', $orden='' ){  
+     public function llenaSelect($tabla, $condicion='', $orden='' ){ 
+       
        $resultado = $this->conexion->query("SELECT * FROM $tabla $condicion $orden ") or die($this->conexion->error); 
        if($resultado) 
          //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 

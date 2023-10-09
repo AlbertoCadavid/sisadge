@@ -599,9 +599,7 @@ $conexion = new ApptivaDB();
     }
   });
 
-  function mensaje(){
-    alert("si");
-  }
+
 
   function resetear(){
     window.location ="view_index.php?c=csicoq&a=Inicio&controladas=<?php echo $_GET['controladas'] ?>"

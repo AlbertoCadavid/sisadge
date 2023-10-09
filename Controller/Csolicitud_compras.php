@@ -22,7 +22,7 @@ class Csolicitud_comprasController
 
 
                 header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
-                //$objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad']);
+                $objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad']);
             } else {
                 echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los Items");</script>';
             }

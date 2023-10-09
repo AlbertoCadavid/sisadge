@@ -178,6 +178,7 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
 <link href="css/formato.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/formato.js"></script>
 <script type="text/javascript" src="js/consulta.js"></script>
+<script type="text/javascript" src="AjaxControllers/js/envioListado.js"></script>
 </head>
 <body>
 <div align="center">
@@ -209,163 +210,155 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
               III. ENCUESTA PARA LA CALIFICACION DEL PROVEEDOR ( EDITAR ) </td>
           </tr>
           <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios,los subcontrata o tiene distribuidores ?</td>
+        <td colspan="2" id="fuente1"><strong>1</strong>. Es una empresa que ofrece directamente sus productos y/o servicios?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="directo_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['directo_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="directo_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['directo_p']))) {echo "selected=\"selected\"";} ?>>Directo</option>
             <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['directo_p']))) {echo "selected=\"selected\"";} ?>>Distribuidor</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['directo_p']))) {echo "selected=\"selected\"";} ?>>Subcontrata</option>
+            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['directo_p']))) {echo "selected=\"selected\"";} ?>>internacional</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Puntos de distribuci&oacute;n ? </td>
+        <td colspan="2" id="fuente1">¿Cuenta con otros puntos de distribución nacionales o internacionales ? </td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="punto_dist_p" cols="70" rows="2"><?php echo $row_seleccion_edit['punto_dist_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>2</strong>. Ofrece Formas de Pago ? </td>
+        <td colspan="2" id="fuente1"><strong>2</strong>. Ofrece Formas de Pago y precios competitivos ? </td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="forma_pago_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>30 a 60 dias</option>
-            <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>15 a 29 dias</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>Contado a 14 dias</option>
+        <td colspan="2" id="dato1"><select name="forma_pago_p" onChange="calificacion()"> 
+          <option value="5"<?php if (!(strcmp(5, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>Contado</option> 
+          <option value="3"<?php if (!(strcmp(3, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>30 a 60 dias</option> 
+          <option value="1"<?php if (!(strcmp(1, $row_seleccion_edit['forma_pago_p']))) {echo "selected=\"selected\"";} ?>>50-50</option> 
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Otra, Cual ? </td>
+        <td colspan="2" id="fuente1">Otra forma de pago, Cual ? </td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="otra_p" cols="70" rows="2"><?php echo $row_seleccion_edit['otra_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>3</strong>. Tiene Sistema de Gesti&oacute;n de Calidad certificado ?</td>
+        <td colspan="2" id="fuente1"><strong>3</strong>. ¿Es una empresa con documentos que acrediten la existencia y/o representación legal ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="sist_calidad_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>En proceso</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>No</option>
-                </select></td>
+        <td colspan="2" id="dato1">
+        <select name="sist_calidad_p" onChange="calificacion()">
+          <option value="5"<?php if (!(strcmp(5, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
+          <option value="3"<?php if (!(strcmp(3, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>No</option>
+          <option value="1"<?php if (!(strcmp(1, $row_seleccion_edit['sist_calidad_p']))) {echo "selected=\"selected\"";} ?>>No Aplica</option> 
+        </select>
+         </td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Con cual Norma y que porcentaje de Avance ?</td>
+        <td colspan="2" id="fuente1">¿Cuales?</td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="norma_p" cols="70" rows="2"><?php echo $row_seleccion_edit['norma_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>4</strong>. Entrega certificado de calidad de sus productos con cada despacho (insumos) u ofrece garantia al servicio ?</td>
+        <td colspan="2" id="fuente1"><strong>4</strong>. ¿Es una empresa que cuenta con Sistemas de Gestión de Calidad ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="certificado_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['certificado_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="certificado_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['certificado_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['certificado_p']))) {echo "selected=\"selected\"";} ?>>Algunas veces</option>
+          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['certificado_p']))) {echo "selected=\"selected\"";} ?>>En proceso</option>
           <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['certificado_p']))) {echo "selected=\"selected\"";} ?>>No</option>
                 </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Con que frecuencia ?</td>
+        <td colspan="2" id="fuente1">¿Que avance de Proceso?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="frecuencia_p" cols="70" rows="2"><?php echo $row_seleccion_edit['frecuencia_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>5</strong>. Realiza analisis de control de calidad a cada lote de material ?</td>
+        <td colspan="2" id="fuente1"><strong>5</strong>. ¿Cuenta con Sistema de Gestión Seguridad y Salud en el Trabajo ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="analisis_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="analisis_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>Por muestreo</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>No</option>
+          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>En proceso</option>
+          <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['analisis_p']))) {echo "selected=\"selected\"";} ?>>No</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Si es por muestra, cada cuanto ?</td>
+        <td colspan="2" id="fuente1">¿Que avance de Implementación?</td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="muestra_p" cols="70" rows="2"><?php echo $row_seleccion_edit['muestra_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>6</strong>. Requiere orden de compra con anterioridad ?</td>
+        <td colspan="2" id="fuente1"><strong>6</strong>. ¿Cual es el porcentaje de implementación de su Sistema de Seguridad y Salud en el Trabajo ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="orden_compra_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>1 a 15 d&iacute;as</option>
-            <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>16 a 30 d&iacute;as</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>Mayor a 30 d&iacute;as</option>
+        <td colspan="2" id="dato1"><select name="orden_compra_p" onChange="calificacion()"> 
+          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>>85%</option>
+            <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>>Entre 75% y 84%</option>
+            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['orden_compra_p']))) {echo "selected=\"selected\"";} ?>><75%</option>
         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Si es mayor a 30 en cuanto tiempo?</td>
+        <td colspan="2" id="fuente1">Tiempo?</td>
         </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="mayor_p" cols="70" rows="2"><?php echo $row_seleccion_edit['mayor_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>7</strong>. Tiene establecido un tiempo para la agilidad de respuesta ante un reclamo ?</td>
+        <td colspan="2" id="fuente1"><strong>7</strong>. ¿Cuenta con Sistema de Gestión Ambiental ?</td>
         </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="tiempo_agil_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>El mismo dia</option>
-            <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>1 semana</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>1 mes</option>
-                </select></td>
+        <td colspan="2" id="dato1"><select name="tiempo_agil_p" onChange="calificacion()">
+          <option value="5"<?php if (!(strcmp(5, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
+          <option value="3"<?php if (!(strcmp(3, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>En proceso</option>
+          <option value="1"<?php if (!(strcmp(1, $row_seleccion_edit['tiempo_agil_p']))) {echo "selected=\"selected\"";} ?>>No</option> 
+         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Cuanto tiempo ?</td>
+        <td colspan="2" id="fuente1">¿Lo tiene Implementado ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="tiempo_p" cols="70" rows="2"><?php echo $row_seleccion_edit['tiempo_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>8</strong>. Realiza entrega del producto o servicio en las instalaciones de la empresa ?</td>
+        <td colspan="2" id="fuente1"><strong>8</strong>. ¿Cuenta con procedimientos o politicas relacionados con el tratamiento de SQR y tiempo de respuesta ante reclamaciones ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="entrega_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-          <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>Con intermediario</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>No</option>
-                </select></td>
+        <td colspan="2" id="dato1"><select name="entrega_p" onChange="calificacion()"> 
+          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>Si</option> 
+          <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['entrega_p']))) {echo "selected=\"selected\"";} ?>>No</option>
+        </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">Otros metodos ?</td>
+        <td colspan="2" id="fuente1">¿Cuanto Tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="metodos_p" cols="70" rows="2"><?php echo $row_seleccion_edit['metodos_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>9</strong>. El flete correspondiente a la entrega corre por parte del proveedor ?</td>
+        <td colspan="2" id="fuente1"><strong>9</strong>. ¿Requiere orden de compra u orden de Servicio con anterioridad ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="flete_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-          <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>No</option>
-                </select></td>
+        <td colspan="2" id="dato1"><select name="flete_p" onChange="calificacion()">
+          <option value="5"<?php if (!(strcmp(5, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>1 a 15 días</option>
+          <option value="3"<?php if (!(strcmp(3, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>16 a 30 días</option>
+          <option value="1"<?php if (!(strcmp(1, $row_seleccion_edit['flete_p']))) {echo "selected=\"selected\"";} ?>>>30 días</option> 
+         </select></td>
         </tr>
       <tr>
-        <td colspan="2" id="fuente1">&oacute; cuando se establece ese requisito ?</td>
+        <td colspan="2" id="fuente1">¿Si es mayor a 30 dias en cuanto tiempo ?</td>
       </tr>
       <tr>
         <td colspan="2" id="dato1"><textarea name="requisito_p" cols="70" rows="2"><?php echo $row_seleccion_edit['requisito_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>10</strong>. Tiene establecido un plan de mejora para el producto, servicios y/o sus procesos?</td>
+        <td colspan="2" id="fuente1"><strong>10</strong>. ¿Cuenta con la capacidad instalada para cumplir con los requerimientos realizados a su empresa ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="plan_mejora_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['plan_mejora_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="plan_mejora_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['plan_mejora_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
           <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['plan_mejora_p']))) {echo "selected=\"selected\"";} ?>>No</option>
                 </select></td>
@@ -377,15 +370,14 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
         <td colspan="2" id="dato1"><textarea name="aspecto_p" cols="70" rows="2"><?php echo $row_seleccion_edit['aspecto_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>11</strong>. Maneja listado de precios actualizado ?</td>
+        <td colspan="2" id="fuente1"><strong>11</strong>. ¿Cual es su tiempo de entrega para productos, servicios, productos/servicios o SGST, nuevos o recurrentes ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="precios_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>Anual</option>
-            <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>Semestral</option>
-            <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>Otro (&lt; 6 meses)</option>
-                </select></td>
+        <td colspan="2" id="dato1"><select name="precios_p" onChange="calificacion()">
+          <option value="5"<?php if (!(strcmp(5, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>Inmediata</option>
+          <option value="3"<?php if (!(strcmp(3, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>1 a 5 días</option>
+          <option value="1"<?php if (!(strcmp(1, $row_seleccion_edit['precios_p']))) {echo "selected=\"selected\"";} ?>>6 a 16 días</option> 
+        </select></td>
         </tr>
       <tr>
         <td colspan="2" id="fuente1">En caso de otro, explique.</td>
@@ -394,11 +386,10 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
         <td colspan="2" id="dato1"><textarea name="otro_caso_p" cols="70" rows="2"><?php echo $row_seleccion_edit['otro_caso_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>12</strong>. Asigna asesores comerciales a cada empresa ?</td>
+        <td colspan="2" id="fuente1"><strong>12</strong>. Asigna asesores comerciales a la empresa ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="asesor_com_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['asesor_com_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="asesor_com_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['asesor_com_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
           <option value="3" <?php if (!(strcmp(3, $row_seleccion_edit['asesor_com_p']))) {echo "selected=\"selected\"";} ?>>No</option>
                 </select></td>
@@ -410,30 +401,26 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
         <td colspan="2" id="dato1"><textarea name="nombre_asesor_p" cols="70" rows="2"><?php echo $row_seleccion_edit['nombre_asesor_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>13</strong>. Tiene limites minimos de pedido ?</td>
+        <td colspan="2" id="fuente1"><strong>13</strong>. ¿Cuenta con procedimiento de gestión de energía, agua o recursos naturales ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="limite_min_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['limite_min_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
-          <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['limite_min_p']))) {echo "selected=\"selected\"";} ?>>No</option>
-          <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['limite_min_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
-                                        </select></td>
+        <td colspan="2" id="dato1"><select name="limite_min_p" onChange="calificacion()"> 
+          <option value="5" <?php if (!(strcmp(1, $row_seleccion_edit['limite_min_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
+          <option value="1" <?php if (!(strcmp(5, $row_seleccion_edit['limite_min_p']))) {echo "selected=\"selected\"";} ?>>No</option>
+         </select></td>
         </tr>
-      <tr>
-        <td colspan="2" id="fuente1">Cuanto ?</td>
-      </tr>
+      
       <tr>
         <td colspan="2" id="dato1"><textarea name="cuanto_p" cols="70" rows="2"><?php echo $row_seleccion_edit['cuanto_p']; ?></textarea></td>
         </tr>
       <tr id="tr1">
-        <td colspan="2" id="fuente1"><strong>14</strong>. Cuentan con un proceso definido para preservar y manejar el material o equipo suministrado por el cliente ?</td>
+        <td colspan="2" id="fuente1"><strong>14</strong>. ¿Cuenta con canales de comunicación si se presenta una urgencia ?</td>
       </tr>
       <tr>
-        <td colspan="2" id="dato1"><select name="proceso_p" onBlur="calificacion()">
-          <option value="0" <?php if (!(strcmp(0, $row_seleccion_edit['proceso_p']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
+        <td colspan="2" id="dato1"><select name="proceso_p" onChange="calificacion()"> 
           <option value="5" <?php if (!(strcmp(5, $row_seleccion_edit['proceso_p']))) {echo "selected=\"selected\"";} ?>>Si</option>
           <option value="1" <?php if (!(strcmp(1, $row_seleccion_edit['proceso_p']))) {echo "selected=\"selected\"";} ?>>No</option>
-                </select></td>
+         </select></td>
         </tr>
           <tr id="tr1">
             <td colspan="2" id="fuente1"><strong>Nota</strong>: En algunos casos puede que su empresa no aplique a alguno de los items anteriores. Por ejemplo, si la pregunta hace referencia a un producto (tangible) y su empresa es de servicios, si es el caso por favor se&ntilde;ale la casilla <strong>NO</strong> de la columna <strong> No Aplica</strong></td>
@@ -480,7 +467,9 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
       <td colspan="2" align="center">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2" align="center"><a href="javascript:eliminar1('id_seleccion',<?php echo $row_seleccion_edit['id_seleccion']; ?>,'proveedor_seleccion_edit.php')"><img src="images/por.gif" alt="ELIMINAR" border="0" style="cursor:hand;"></a><a href="proveedor_edit.php?id_p=<?php echo $row_seleccion_edit['id_p_seleccion']; ?>"><img src="images/menos.gif" alt="EDITAR PROVEEDOR" border="0" style="cursor:hand;" /></a><a href="proveedor_vista.php?id_p=<?php echo $row_seleccion_edit['id_p_seleccion']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" border="0" style="cursor:hand;"></a><a href="proveedores.php"><img src="images/cat.gif" border="0" style="cursor:hand;" alt="LISTADO PROVEEDORES" /></a><a href="proveedor_busqueda.php"><img src="images/embudo.gif" alt="FILTRO" border="0" style="cursor:hand;"/></a></td>
+      <td colspan="2" align="center">
+         <input type="image" src="images/excel.png" type="submit" onClick="envioexcell();" style="width:18px; height:18px" >
+         <a href="javascript:eliminar1('id_seleccion',<?php echo $row_seleccion_edit['id_seleccion']; ?>,'proveedor_seleccion_edit.php')"><img src="images/por.gif" alt="ELIMINAR" border="0" style="cursor:hand;"></a><a href="proveedor_edit.php?id_p=<?php echo $row_seleccion_edit['id_p_seleccion']; ?>"><img src="images/menos.gif" alt="EDITAR PROVEEDOR" border="0" style="cursor:hand;" /></a><a href="proveedor_vista.php?id_p=<?php echo $row_seleccion_edit['id_p_seleccion']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" border="0" style="cursor:hand;"></a><a href="proveedores.php"><img src="images/cat.gif" border="0" style="cursor:hand;" alt="LISTADO PROVEEDORES" /></a><a href="proveedor_busqueda.php"><img src="images/embudo.gif" alt="FILTRO" border="0" style="cursor:hand;"/></a></td>
     </tr>
     <td colspan="2" align="center">&nbsp;</td>
   </tr>
@@ -496,6 +485,16 @@ $totalRows_seleccion_edit = mysql_num_rows($seleccion_edit);
 </div>
 </body>
 </html>
+<script>
+  function envioexcell(){
+    var form = "id_p=<?php echo $_GET['id_p']; ?>";
+
+     
+    var vista = 'proveedor_seleccion_excel.php';
+    
+       enviovarListados(form,vista); 
+  }
+</script>
 <?php
 mysql_free_result($usuario);
 

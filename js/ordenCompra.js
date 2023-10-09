@@ -43,7 +43,7 @@
            }
 
    
-           function envio(){
+/*           function envio(){
             if (document.form1.validar_oc.value!="1"){
                  document.form1.submit(); 
              return true;
@@ -54,4 +54,4 @@
              document.form1.str_numero_oc.focus();
              return false;
            }
-         }
+         }*/
