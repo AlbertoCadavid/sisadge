@@ -409,10 +409,15 @@ $totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
           <tr>
 
             <td  colspan="2" id="fuente2">
-              <?php 
-                   $totalkp+=$row_extrusion_vista['int_total_kilos_rp'];
+              <?php  
+
+                   echo $totalkpro=$row_extrusion_vista['int_kilos_prod_rp']; 
+     
+                  $totalkp+=$totalkpro;//para operaciones mas abajo
+              
+                   //$totalkp+=$row_extrusion_vista['int_total_kilos_rp'];
  
-                 echo $row_extrusion_vista['int_total_kilos_rp'];//$row_extrusion_vista['int_kilos_prod_rp'];//con desperdicio
+                 //echo $row_extrusion_vista['int_total_kilos_rp']; 
 
             ?></td>
             <td id="fuente2"><?php echo $row_extrusion_vista['fecha_ini_rp']; ?></td>

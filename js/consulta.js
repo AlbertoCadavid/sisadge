@@ -432,13 +432,13 @@ function consulIndicativo()
 {window.location ='perfil_cliente_add2.php?n_egp='+document.form1.egp.value; }
 /*CAMBIAR EL NUMERO DE EGP*/
 function consultaegp2()
-{ con=confirm("¿En realidad desea cambiar de N° de EGP?");
+{ con=confirm("ï¿½En realidad desea cambiar de Nï¿½ de EGP?");
 if(con){ window.location ='cotizacion_bolsa_nueva_edit.php?n_cn='+document.form1.n_cn.value+'&n_cotiz='+document.form1.n_cotiz.value+'&n_egp='+document.form1.n_egp1.value; }
 else{ window.location ='cotizacion_bolsa_nueva_edit.php?n_cn='+document.form1.n_cn.value+'&n_cotiz='+document.form1.n_cotiz.value+'&n_egp='+document.form1.n_egp.value; }
 }
 function consultaegp3()
 {
-	alert('Debe Seleccionar un N° de EGP para cambiarlo'); 
+	alert('Debe Seleccionar un Nï¿½ de EGP para cambiarlo'); 
 	window.location ='cotizacion_bolsa_nueva_edit.php?n_cn='+document.form1.n_cn.value+'&n_cotiz='+document.form1.n_cotiz.value+'&n_egp='+document.form1.n_egp_cn1.value;
 }
 /*------------PRODUCCION CALCULA BOLSILLO-----------*/
@@ -645,7 +645,7 @@ function calcularHora(){
 
 		for(a=0;a<3;a++){
 			horas[a]=(isNaN(parseInt(horas[a])))?0:parseInt(horas[a])
-			horatotale[a]=(b==0)?horas[a]:horatotale[a]-horas[a]; // Suma o resta según prefieras
+			horatotale[a]=(b==0)?horas[a]:horatotale[a]-horas[a]; // Suma o resta segï¿½n prefieras
 
 		}
 	}
@@ -691,7 +691,7 @@ function restarFechas() {
 var v1 = document.form1.hora_ini_rp.value;
 var v2 = document.form1.hora_fin_rp.value;
 
-horas1=v1.split(":"); /*Mediante la función split separamos el string por ":" y lo convertimos en array. */ 
+horas1=v1.split(":"); /*Mediante la funciï¿½n split separamos el string por ":" y lo convertimos en array. */ 
 horas2=v2.split(":");
 horatotale=new Array();
 if((horas2>horas1)){
@@ -1597,7 +1597,7 @@ function pedido_cliente()
 }
 
 /*---------------------------------------------------------*/
-/*-------------GESTION DISEÑO Y DESARROLLO-----------------*/
+/*-------------GESTION DISEï¿½O Y DESARROLLO-----------------*/
 /*CALCULAR PESO BRUTO*/
 function calcularft(millar,unids)
 {
@@ -2948,7 +2948,7 @@ if(z=='0'){
 	//document.form1.int_hasta_n.value=parseInt (a)+ parseInt (e);  
 }
 
-   //var letras="abcdefghyjklmnñopqrstuvwxyz";
+   //var letras="abcdefghyjklmnï¿½opqrstuvwxyz";
    var letras="ABCDEFGHIJKLMNNOPQRSTUVWXYZ";
    inicio = inicio.toUpperCase();
    for(x=0; x<inicio.length; x++){
@@ -3003,7 +3003,7 @@ if(z=='0'){
 	//document.form1.int_hasta_tn.value=cad+tnum; 
 }
 
-   //var letras="abcdefghyjklmnñopqrstuvwxyz";
+   //var letras="abcdefghyjklmnï¿½opqrstuvwxyz";
    var letras="ABCDEFGHIJKLMNNOPQRSTUVWXYZ";
    inicio = inicio.toUpperCase();
    for(x=0; x<inicio.length; x++){

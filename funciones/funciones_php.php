@@ -542,7 +542,9 @@ $fecha = date("Y-m-d H:i");
 function fechaHora($fechaHora){
 $fecha = date("Y-m-d H:i");
 	//LE RESTO 5 HORAS POR LA CONFIGURACION REGIONAL
-$hora =  date("Y-m-d H:i:s");$fecha = strtotime ( '-5 hour' , strtotime ( $hora ) ) ; $fecha = date ( 'Y-m-d H:i' , $fecha);
+/* $hora =  date("Y-m-d H:i:s");
+$fecha = strtotime ( '-5 hour' , strtotime ( $hora ) ) ; 
+$fecha = date ( 'Y-m-d H:i' , $fecha); */
 return $fecha; 
 }
 

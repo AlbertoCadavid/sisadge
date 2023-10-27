@@ -111,6 +111,7 @@ $solapa = $_GET['solapa'];
 $ancho = $_GET['ancho'];
 $largo = $_GET['largo'];
 $calibre = $_GET['calibre'];
+$estado = $_GET['estado'];
 //operacion rango de ancho y largo
 $min='3'; $max='3';
 $anchomin = $ancho-$min;
@@ -123,20 +124,37 @@ $calibmin = $calibre-$minc;
 $calibmax = $maxc+$calibre;
 
 //Filtra todos vacios
+if($cod_ref=='0'){
+   $BD='';
+}else{
+
 $BD = $conexion->TipoTabla($cod_ref); //la funcion define que tipo de ref es: bolsa, lamina, packing
+}
 $BD = $BD=='' ? "Tbl_cotiza_bolsa" : $BD;
 
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+//todo vacio
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
-$query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' ORDER BY $BD.$orden DESC";
+ 
+$query_cotizacion = "SELECT * FROM $BD, tbl_referencia ref WHERE CONVERT($BD.n_referencia_c, SIGNED INTEGER) = CONVERT(ref.cod_ref, SIGNED INTEGER) and $BD.B_estado = '1' ORDER BY CONVERT(ref.cod_ref, SIGNED INTEGER) DESC";
+}
+//Filtra estado lleno
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado!='')
+{
+$query_cotizacion = "SELECT * FROM $BD, tbl_referencia ref WHERE CONVERT($BD.n_referencia_c, SIGNED INTEGER) = CONVERT(ref.cod_ref, SIGNED INTEGER) and $BD.B_estado='$estado' ORDER BY CONVERT(ref.cod_ref, SIGNED INTEGER) DESC ";
+}
+//Filtra tipo ref,estado lleno
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado!='')
+{
+$query_cotizacion = "SELECT * FROM $BD, tbl_referencia ref WHERE CONVERT($BD.n_referencia_c, SIGNED INTEGER) = CONVERT(ref.cod_ref, SIGNED INTEGER) and $BD.B_estado='$estado' AND $BD.B_generica ='$tipo_ref' ORDER BY CONVERT(ref.cod_ref, SIGNED INTEGER) DESC ";
 }
 //Filtra cod ref lleno
-if($cod_ref != '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref != '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_referencia_c='$cod_ref' ORDER BY $BD.$orden DESC";
 }
 //Filtra Bolsa
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
  
  //$registros =$conexion->buscarListar("$BD","*","ORDER BY $BD.$orden DESC","",$maxRows_cotizacion,$pageNum_cotizacion,"where tipo_bolsa ='$bolsa' AND $BD.B_estado <> '2' " );
@@ -144,14 +162,14 @@ $query_cotizacion = "SELECT * FROM  $BD WHERE tipo_bolsa ='$bolsa' AND $BD.B_est
  
 }
 //Filtra cliente lleno
-if($id_c != '' && $bolsa == '0' && $cod_ref == '0' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($id_c != '' && $bolsa == '0' && $cod_ref == '0' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
  
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND Str_nit='$id_c' ORDER BY $BD.$orden DESC";
 }
 
 //Filtra cod y cliente llenos
-if($cod_ref != '0' && $bolsa == '0' && $id_c != '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref != '0' && $bolsa == '0' && $id_c != '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
  
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_referencia_c='$cod_ref' AND Str_nit='$id_c' ORDER BY $BD.$orden DESC";
@@ -159,39 +177,39 @@ $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_referencia_c=
 
 
 //Filtra Bolsa y ref
-if($cod_ref != '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref != '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE tipo_bolsa='$bolsa' AND N_referencia_c='$cod_ref' AND $BD.B_estado <> '2' ORDER BY $BD.$orden DESC";
  
 }
 //Filtra Bolsa y cliente
-if($cod_ref == '0' && $bolsa != '0' && $id_c != '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c != '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
  
 $query_cotizacion = "SELECT * FROM $BD WHERE tipo_bolsa='$bolsa' AND $BD.Str_nit='$id_c' AND $BD.B_estado <> '2' ORDER BY $BD.$orden DESC";
 }
 //Filtra Bolsa, ancho
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa='$bolsa' AND $BD.N_ancho BETWEEN $anchomin AND $anchomax ORDER BY $BD.$orden DESC";
 }
 //Filtra Bolsa, alto
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa='$bolsa' AND $BD.N_alto BETWEEN $largomin AND $largomax ORDER BY $BD.$orden DESC";
 }
 //Filtra Bolsa, calibre
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa='$bolsa' AND $BD.N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  Bolsa, ancho, largo, calibre
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa='$bolsa' AND $BD.N_ancho BETWEEN $anchomin AND $anchomax AND $BD.N_alto BETWEEN $largomin AND $largomax AND $BD.N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  Bolsa, solapa, ancho, largo, calibre
-if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa != '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa='$bolsa' AND $BD.N_solapa ='$solapa' AND $BD.N_ancho BETWEEN $anchomin AND $anchomax AND $BD.N_alto BETWEEN $largomin AND $largomax AND $BD.N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
@@ -199,78 +217,78 @@ $query_cotizacion = "SELECT * FROM $BD WHERE $BD.B_estado <> '2' AND tipo_bolsa=
 
 
 //Filtra tipo_ref
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND B_generica ='$tipo_ref' ORDER BY $BD.$orden DESC";
 }
 //Filtra solapa
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_solapa ='$solapa' ORDER BY $BD.$orden DESC";
 }
 //Filtra ancho
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_ancho BETWEEN $anchomin AND $anchomax ORDER BY $BD.$orden DESC";
 }
 //Filtra largo
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_alto BETWEEN $largomin AND $largomax ORDER BY $BD.$orden DESC";
 }
 //Filtra calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo == '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_calibre BETWEEN '$calibmin' AND '$calibmax' ORDER BY $BD.$orden DESC";
 }
 //Filtra cliente, tipo ref, tipo bolsa,solapa, ancho, largo, calibre
-if($cod_ref == '0' && $id_c != '' && $tipo_ref != '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $id_c != '' && $tipo_ref != '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
  
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND Str_nit='$id_c' AND B_generica ='$tipo_ref'  AND N_solapa ='$solapa' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax  AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo ref, tipo bolsa, ancho, largo, calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND B_generica ='$tipo_ref'  AND N_solapa ='$solapa' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo ref, ancho, largo, calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND B_generica ='$tipo_ref' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo ref, ancho, largo
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND B_generica ='$tipo_ref' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo bolsa, ancho, largo, calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_solapa ='$solapa' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo bolsa, ancho, largo
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa != '' && $ancho != '0' && $largo != '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_solapa ='$solapa' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax ORDER BY $BD.$orden DESC";
 }
 //Filtra  ancho, largo, calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  ancho, largo
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho != '0' && $largo != '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax ORDER BY $BD.$orden DESC";
 }
 //Filtra largo, calibre
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre != '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref == '' && $solapa == '' && $ancho == '0' && $largo != '0' && $calibre != '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND N_alto BETWEEN $largomin AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
 //Filtra  tipo ref,solapa 
-if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa != '' && $ancho == '0' && $largo == '0' && $calibre == '0')
+if($cod_ref == '0' && $bolsa == '0' && $id_c == '' && $tipo_ref != '' && $solapa != '' && $ancho == '0' && $largo == '0' && $calibre == '0' && $estado=='')
 {
 $query_cotizacion = "SELECT * FROM $BD WHERE B_estado <> '2' AND B_generica ='$tipo_ref' AND N_solapa ='$solapa' AND N_ancho BETWEEN $anchomin AND $anchomax AND N_alto BETWEEN $largomin AND $largomax  AND N_calibre BETWEEN $calibmin AND $calibmax ORDER BY $BD.$orden DESC";
 }
@@ -391,9 +409,17 @@ $queryString_cotizacion = sprintf("&totalRows_cotizacion=%d%s", $totalRows_cotiz
                   </select>
  
                 <select class="busqueda selectsMini" name="tipo_ref" id="tipo_ref">
-                  <option value=""<?php if (!(strcmp("", $_GET['tipo_ref']))) {echo "selected=\"selected\"";} ?>>Todas ref.</option>
+                  <option value=""<?php if (!(strcmp("", $_GET['tipo_ref']))) {echo "selected=\"selected\"";} ?>>Tipo ref.</option>
                   <option value="0"<?php if (!(strcmp("0", $_GET['tipo_ref']))) {echo "selected=\"selected\"";} ?>>Existentes</option>
                   <option value="1"<?php if (!(strcmp("1", $_GET['tipo_ref']))) {echo "selected=\"selected\"";} ?>>Genericas</option>
+                </select>
+
+                 <select class="busqueda selectsMini" name="estado" id="estado">
+                  <option value=""<?php if (!(strcmp("", $_GET['estado']))) {echo "selected=\"selected\"";} ?>>Estado cotiz</option> 
+                  <option value="0"<?php if (!(strcmp("0", $_GET['estado']))) {echo "selected=\"selected\"";} ?>>Pendiente</option>
+                  <option value="1"<?php if (!(strcmp("1", $_GET['estado']))) {echo "selected=\"selected\"";} ?>>Aceptada</option>
+                  <option value="2"<?php if (!(strcmp("2", $_GET['estado']))) {echo "selected=\"selected\"";} ?>>Rechazada</option>
+                  <option value="3"<?php if (!(strcmp("3", $_GET['estado']))) {echo "selected=\"selected\"";} ?>>Obsoleta</option>
                 </select>
 
               </td>
@@ -427,7 +453,8 @@ $queryString_cotizacion = sprintf("&totalRows_cotizacion=%d%s", $totalRows_cotiz
               <td colspan="2"></td>
               <td colspan="3"></td>
               <td colspan="9" id="dato3"><?php if($row_usuario['tipo_usuario'] != '11') { ?>
-                <a href="cotizacion_general_menu.php"><img src="images/mas.gif" alt="ADD COTIZACION" title="ADD COTIZACION" border="0" style="cursor:hand;"/></a><a href="cotizaciones_clientes.php"></a><?php } ?>
+                <a href="cotizacion_general_menu.php"><img src="images/mas.gif" alt="ADD COTIZACION" title="ADD COTIZACION" border="0" style="cursor:hand;"/></a><a href="cotizaciones_clientes.php"></a>
+              <?php } ?>
                 <a href="referencias.php" target="_top"><img src="images/a.gif" alt="REF'S ACTIVAS" title="REF'S ACTIVAS"border="0" style="cursor:hand;"/></a><a href="referencias_inactivas.php" target="_top"><img src="images/i.gif" alt="REF'S INACTIVAS"title="REF'S INACTIVAS" border="0" style="cursor:hand;"/></a><a href="cotizacion_general_menu.php"></a><a href="referencia_precio.php"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;"/></a></td>
               </tr>  
               <tr id="tr1">
@@ -445,7 +472,7 @@ $queryString_cotizacion = sprintf("&totalRows_cotizacion=%d%s", $totalRows_cotiz
                 <td nowrap="nowrap" id="titulo4">Precio sin impuesto $</td>
                 <td nowrap="nowrap" id="titulo4">Precio Con impuesto $</td>
                 <td nowrap="nowrap" id="titulo4"><a href="referencia_precio2.php?orden=<?php echo "fecha_creacion";?>&cod_ref=<?php echo $_GET['cod_ref'] ?>&bolsa=<?php echo $_GET['bolsa'] ?>&id_c=<?php echo $_GET['id_c'] ?>&tipo_ref=<?php echo $_GET['tipo_ref'] ?>&solapa=<?php echo $_GET['solapa'] ?>&ancho=<?php echo $_GET['ancho'] ?>&largo=<?php echo $_GET['largo'] ?>&calibre=<?php echo $_GET['calibre'] ?>">Fecha Creacion</a></td>
-                <td nowrap="nowrap" id="titulo4">ESTADO</td>
+                <td nowrap="nowrap" id="titulo4">ESTADO COTIZ</td>
 
 
               </tr>
@@ -533,7 +560,7 @@ if (!(strcmp("3", $row_cotizacion['B_estado']))) {echo "Obsoleta";} ?></td>
   
   function envioListados(){
  
-     window.location.href = 'referencia_precio_excel.php?id_c='+$("#id_c").val()+'&cod_ref='+$("#cod_ref").val()+'&bolsa='+$("#bolsa").val()+'&id_c='+$("#id_c").val()+'&tipo_ref='+$("#tipo_ref").val()+'&solapa='+$("#solapa").val()+'&ancho='+$("#ancho").val()+'&largo='+$("#largo").val()+'&calibre='+$("#calibre").val();
+     window.location.href = 'referencia_precio_excel.php?id_c='+$("#id_c").val()+'&cod_ref='+$("#cod_ref").val()+'&bolsa='+$("#bolsa").val()+'&id_c='+$("#id_c").val()+'&tipo_ref='+$("#tipo_ref").val()+'&estado='+$("#estado").val()+'&solapa='+$("#solapa").val()+'&ancho='+$("#ancho").val()+'&largo='+$("#largo").val()+'&calibre='+$("#calibre").val();
  
   }
 

@@ -60,13 +60,12 @@ class cextruderController{
  
 
         public function Guardar(){
- 
-           
+
             $this->form =  new oMextruder(); 
             $this->proforma = $_REQUEST;  
             
             //guarda caracteristicas
- 
+            
             $result = $this->form->Registrar("tbl_reg_produccion", "id_rp,id_proceso_rp, id_op_rp,id_ref_rp, int_cod_ref_rp, version_ref_rp,rollo_rp, int_kilos_prod_rp, int_kilos_desp_rp, int_total_kilos_rp, porcentaje_op_rp, int_metro_lineal_rp, int_total_rollos_rp, total_horas_rp, rodamiento_rp, horas_muertas_rp, horas_prep_rp, str_maquina_rp, str_responsable_rp,fecha_ini_rp, fecha_fin_rp, int_kilosxhora_rp, int_cod_empleado_rp, int_cod_liquida_rp, costo, parcial", "id_rp",$_POST['id_rp'],  $this->proforma);
 
             //actualiza form
@@ -79,7 +78,11 @@ class cextruderController{
    
              }else{
                
-            header('Location:'."produccion_registro_extrusion_edit.php?id_op=".$_REQUEST['id_op_rp']."&id_rp=".$_REQUEST['id_rp']."&tipo=1 "); 
+               if($_POST['parcial'] > 1){
+                     header('Location:'."produccion_registro_extrusionp_edit.php?id_op_rp=".$_REQUEST['id_op_rp']."&id_rp=".$_REQUEST['id_rp']."&parcial=".$_REQUEST['parcial']);  
+               }else{
+                     header('Location:'."produccion_registro_extrusion_edit.php?id_op=".$_REQUEST['id_op_rp']."&id_rp=".$_REQUEST['id_rp']."&tipo=1 ");  
+               }
              }
         }
 
@@ -135,7 +138,3 @@ class cextruderController{
  
 
 }
-
-
-
-?>

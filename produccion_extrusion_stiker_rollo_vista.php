@@ -131,7 +131,8 @@ if (isset($_GET['id_r'])) {
   $colname_existe = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_existe = sprintf("SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=%s AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1'",$colname_existe);// AND TblExtruderRollo.rollo_r=Tbl_reg_produccion.rollo_rp 
+$query = "SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=$colname_existe AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1' AND Tbl_reg_produccion.rollo_rp>=$row_rollo_estrusion[rollo_r]"; 
+$query_existe = sprintf($query);// AND TblExtruderRollo.rollo_r=Tbl_reg_produccion.rollo_rp 
 $existe_edit= mysql_query($query_existe, $conexion1) or die(mysql_error());
 $row_existe_edit = mysql_fetch_assoc($existe_edit);
 $totalRows_existe_edit = mysql_num_rows($existe_edit);
@@ -203,7 +204,7 @@ function cerrar(num) {
     <td colspan="3" nowrap="nowrap" id="fuentND" style="border-bottom: 3px solid #000000;">
       <a href="produccion_extrusion_stiker_rollo_edit.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" /></a>
       <a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO"title="ADD ROLLO" border="0" style="cursor:hand;"/></a>
-      <?php if($row_usuario['tipo_usuario']==1){?>
+      <?php if($_SESSION['acceso']==1){?>
       <a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRIME TODOS LOS ROLLOS" title="IMPRIME TODOS LOS ROLLOS" border="0" /></a>
       <?php } ?>
       <?php if($row_existe_edit['id_rp']=='' ):  ?>
@@ -217,7 +218,7 @@ function cerrar(num) {
            <a href="produccion_registro_extrusion_add.php?id_op=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a>
 
          <?php //endif; ?>
-         <?php 
+         <?php  
   
            $op_c=$row_rollo_estrusion['id_op_r'];
            $rollo_c=$row_rollo_estrusion['rollo_r'];

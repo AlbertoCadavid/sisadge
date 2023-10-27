@@ -12,10 +12,9 @@ $autorizado=$_GET['Autorizar'];
 if($autorizado !='' ) {
    
    $hoy = date("Y-m-d H:i:s");  
-   $sqlautorizado="UPDATE Tbl_orden_compra SET autorizado = 'SI', fecha_autoriza='$hoy' WHERE id_pedido = '$autorizado'";
+   $sqlautorizado="UPDATE Tbl_orden_compra SET autorizado = 'SI', fecha_autoriza='$hoy', fecha_ingreso_oc='$hoy' WHERE id_pedido = '$autorizado'";
    $resultautorizado=mysql_query($sqlautorizado);
    
-  
    $usuario = $_SESSION['Usuario'];
    $logs = $conexion->insertar("tbl_logs","codigo_id, descrip, fecha, modificacion, usuario"," '$autorizado','OC','$hoy','autorizado SI','$usuario' ");
  

@@ -250,7 +250,7 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
 mysql_select_db($database_conexion1, $conexion1);
-$query_lista_op = "SELECT Tbl_orden_produccion.id_op FROM Tbl_orden_produccion WHERE b_borrado_op = '0' ORDER BY Tbl_orden_produccion.id_op DESC";
+$query_lista_op = "SELECT Tbl_orden_produccion.id_op FROM Tbl_orden_produccion WHERE b_borrado_op = '0' AND coextrusion='SI' ORDER BY Tbl_orden_produccion.id_op DESC";
 $lista_op = mysql_query($query_lista_op, $conexion1) or die(mysql_error());
 $row_lista_op = mysql_fetch_assoc($lista_op);
 $totalRows_lista_op = mysql_num_rows($lista_op);
@@ -474,158 +474,22 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
         <tr>
           <td colspan="3" id="dato1">
             <img src="images/falta.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Ingresada <br>
-            <img src="images/falta7.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Liquidada
+            <img src="images/falta7.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Liquidada<br>
+            <img src="images/completo.gif" width="20" height="17" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /> Ya tiene rollos
           </td>
           <td colspan="3" id="dato1">
             <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Falta por liquidar <br>
-            <img src="images/falta5.gif" width="16" height="16" alt="KILOS DISTINTOS" title="KILOS DISTINTOS" border="0" style="cursor:hand;" />Kilos de consumo son distintos
+            <img src="images/falta5.gif" width="16" height="16" alt="KILOS DISTINTOS" title="KILOS DISTINTOS" border="0" style="cursor:hand;" /> Kilos de consumo son distintos<br>
+           <img src="images/parcial.gif" width="20" height="17" alt="ROLLOS PARCIALES" title="ROLLOS PARCIALES" border="0" style="cursor:hand;" /> Rollos parciales
           <td colspan="3" id="dato1">
-            <img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" />Tiene las mezclas de extrusion <br>
-            <img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" />No tiene las mezclas de extrusion<br>
+            <img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /> Tiene las mezclas de extrusion <br>
+            <img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /> No tiene las mezclas de extrusion<br>
             R. pend: Hay mas rollos liquidados que registrados en la tabla de rollos <br>
           </td>
         </tr>
       </table>
       <?php if ($row_prioridad['id_op'] != '') { ?>
-        <fieldset>
-          <legend id="dato1">ORDENES DE PRODUCCION CON PRIORIDAD</legend>
-          <table class="table table-bordered table-sm">
-            <tr>
-              <td colspan="2" id="dato1">&nbsp;
-              </td>
-              <td colspan="3">&nbsp;</td>
-              <td colspan="5" id="dato3"><?php if ($row_usuario['tipo_usuario'] == 1) { ?><a href="consumo_tiempos_ext.php"><img src="images/rt.gif" alt="LISTADO DE TIEMPOS" title="LISTADO DE TIEMPOS" border="0" style="cursor:hand;"></a><a href="consumo_materias_primas.php"><img src="images/mp.gif" alt="LISTADO DE MATERIAS PRIMAS" title="LISTADO DE MATERIAS PRIMAS" border="0" style="cursor:hand;"></a><?php } ?><a href="produccion_registro_extrusion_listado_add.php"><img src="images/opciones.gif" alt="LISTADO EXTRUIDAS" title="LISTADO EXTRUIDAS" border="0" style="cursor:hand;"></a><a href="hoja_maestra_listado.php"><img src="images/m.gif" alt="HOJAS MAESTRAS" title="HOJAS MAESTRAS" border="0" style="cursor:hand;"></a><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="REFRESCAR" title="REFRESCAR" border="0" style="cursor:hand;" /></a></td>
-            </tr>
-            <tr id="tr1">
-              <td nowrap="nowrap" id="titulo4">N&deg; O.P </td>
-              <td nowrap="nowrap" id="titulo4">CLIENTE</td>
-              <td nowrap="nowrap" id="titulo4">REF. </td>
-              <td nowrap="nowrap" id="titulo4">VER.</td>
-              <td nowrap="nowrap" id="titulo4">KILOS</td>
-              <td nowrap="nowrap" id="titulo4">FECHA REGISRO O.P</td>
-              <td nowrap="nowrap" id="titulo4">ESTADO O.P</td>
-              <td nowrap="nowrap" id="titulo4">ROLLOS</td>
-              <td nowrap="nowrap" id="titulo4">R. PARCIAL</td>
-              <td nowrap="nowrap" id="titulo4">MEZCLA</td>
-              <td nowrap="nowrap" id="titulo4">PROCESO</td>
-            </tr>
-
-            <?php do { ?>
-              <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><strong><?php echo $row_prioridad['id_op']; ?></strong></a></td>
-                <td nowrap="nowrap" id="dato1"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000">
-                    <?php
-                    $id_cp = $row_prioridad['int_cliente_op'];
-                    $sqlnp = "SELECT * FROM  cliente WHERE cliente.id_c=$id_cp";
-                    $resultnp = mysql_query($sqlnp);
-                    $numnp = mysql_num_rows($resultnp);
-                    if ($numnp >= '1') {
-                      $nombre_cliente_cp = mysql_result($resultnp, 0, 'nombre_c');
-                      echo $nombre_cliente_cp;
-                    } else {
-                      echo "";
-                    } ?></a>
-                </td>
-                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_prioridad['int_cod_ref_op']; ?></a></td>
-                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_prioridad['version_ref_op']; ?></a></td>
-                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_prioridad['int_kilos_op']; ?></a></td>
-                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_prioridad['fecha_registro_op']; ?></a></td>
-                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_prioridad['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_prioridad['b_borrado_op'] == '0') {
-                                                                                                                                                                        echo "ACTIVA";
-                                                                                                                                                                      } else {
-                                                                                                                                                                        echo "INACTIVA";
-                                                                                                                                                                      } ?></a></td>
-                <td id="dato2">
-                  <?php
-                  $op_c = $row_orden_produccion['id_op'];
-                  $sqlno = "SELECT COUNT(rollo_r) as Rollos, SUM(kilos_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$op_c'";
-                  $resultno = mysql_query($sqlno);
-                  $numno = mysql_num_rows($resultno);
-                  if ($numno > '0') {
-                    $kilosE = mysql_result($resultno, 0, 'kilos');
-                    $RollosE = mysql_result($resultno, 0, 'Rollos');
-                  }
-                  if ($kilosE == '' /*<$row_orden_produccion['int_kilos_op']*/) {
-                  ?>
-                    <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
-                  <?php
-                    $tienerollos = 0;
-                  } else {
-                    $tienerollos = 1; ?>
-                    <a class="permitido" href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
-                  <?php } ?>
-                </td>
-                <td id="dato2">
-                  <?php
-
-                  $op_c = $row_orden_produccion['id_op'];
-                  $sqlparcial = "SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC";
-                  $resultparcial = mysql_query($sqlparcial);
-                  $numparcial = mysql_num_rows($resultparcial);
-
-                  $parcial = mysql_result($resultparcial, 0, 'parcial');
-
-                  if ($kilosE != '' && ($parcial > '1')) {   ?>
-                    <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/parcial.gif" alt="PARCIAL" title="PARCIAL" border="0" style="cursor:hand;" /></a>
-                  <?php } ?>
-                </td>
-                <td id="dato2">
-                  <?php
-                  $id_ref_pr = $row_prioridad['int_cod_ref_op'];
-                  $sqlop = "SELECT * FROM tbl_caracteristicas_prod WHERE cod_ref='$id_ref_pr' AND proceso = '1' ORDER BY cod_ref DESC LIMIT 1";
-                  $resultca = mysql_query($sqloca);
-                  $numca = mysql_num_rows($resultca);
-                  if ($numca >= '1') {
-                    $id_codp = mysql_result($resultca, 0, 'int_cod_ref_cp');
-                  ?>
-                    <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_codp; ?>','870','710')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php
-                                                                                                                                                                                                                                                              } else { ?><a href="javascript:popUp('produccion_mezclas_add.php?id_ref=<?php echo $row_prioridad['id_ref_op']; ?>&cod_ref=<?php echo $row_prioridad['int_cod_ref_op']; ?>','870','710')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
-                  <?php } ?>
-                </td>
-                <td nowrap="nowrap" id="dato2">
-                  <?php
-                  $estado_op = $row_orden_produccion['b_estado_op'];
-                  //if ($estado_op > '0'){
-                  $op_c = $row_orden_produccion['id_op'];
-                  $sqlsell = "SELECT SUM(int_kilos_prod_rp) AS int_kilos_prod_rp,id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY rollo_rp DESC";
-                  $resultsell = mysql_query($sqlsell);
-                  $numsell = mysql_num_rows($resultsell);
-
-                  $id_rp = mysql_result($resultsell, 0, 'id_rp');
-                  $id_op_rp = mysql_result($resultsell, 0, 'id_op_rp');
-                  $id_ref_rp = mysql_result($resultsell, 0, 'id_ref_rp');
-                  $rollos = mysql_result($resultsell, 0, 'rollo_rp');
-                  $totalKilosliq = mysql_result($resultsell, 0, 'int_kilos_prod_rp');
-
-
-                  $sqlre = "SELECT SUM(valor_prod_rp) AS totalkilos FROM  Tbl_reg_kilo_producido WHERE op_rp='$op_c' AND id_proceso_rkp='1' ";
-                  $resultre = mysql_query($sqlre);
-                  $numere = mysql_num_rows($resultre);
-                  if ($numere >= '1') {
-                    $cantidad = mysql_result($resultre, 0, 'totalkilos');
-                  }
-                  ?>
-                  <?php if ($numsell > '0'  && $tienerollos == 1 && $rollos == $RollosE && $cantidad == $totalKilosliq) : ?>
-                    <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>','870','710')"><img src="images/falta7.gif" width="16" height="16" alt="LIQUIDADO" title="LIQUIDADO" border="0" style="cursor:hand;" /></a>
-                  <?php elseif ($numsell > '0'  && $tienerollos == 1 && $rollos == $RollosE && $cantidad != $totalKilosliq) : ?>
-                    <a href="javascript:verFoto('produccion_registro_extrusion_edit.php?id_op=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS DISTINTOS" title="KILOS DISTINTOS" border="0" style="cursor:hand;" /></a>
-                  <?php elseif ($numsell > '0' && $tienerollos == 1 && $rollos < $RollosE) : ?>
-                    <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" alt="LIQUIDAR" title="LIQUIDAR" width="16" height="16" border="0" style="cursor:hand;" /></a>
-                  <?php elseif ($numsell > '0' && $tienerollos == 1 && $rollos > $RollosE) :
-                    echo "R. pend";
-                  elseif ($numsell == '' && $tienerollos == 0 && $rollos < $RollosE) : ?>
-                    <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a>
-                  <?php elseif ($numca < '1') : ?>
-                    <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
-                  <?php else :  ?>
-                    <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php } while ($row_prioridad = mysql_fetch_assoc($prioridad)); ?>
-            
-          </table>
-        </fieldset>
+        
       <?php } ?>
 
       <fieldset>
@@ -645,9 +509,9 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
             <td nowrap="nowrap" id="titulo4">KILOS</td>
             <td nowrap="nowrap" id="titulo4">FECHA REGISRO O.P</td>
             <td nowrap="nowrap" id="titulo4">ESTADO O.P</td>
-            <td nowrap="nowrap" id="titulo4">ROLLOS</td>
-            <td nowrap="nowrap" id="titulo4">R. PARCIAL</td>
+            <td nowrap="nowrap" id="titulo4">ROLLOS</td> 
             <td nowrap="nowrap" id="titulo4">MEZCLA</td>
+            <td nowrap="nowrap" id="titulo1"><?php if($_SESSION['MM_Username']=='auxauditor' || $_SESSION['MM_Username']=='sistemas'){echo "CONSUMOS";}?></td>
             <td nowrap="nowrap" id="titulo4">PROCESO</td>
           </tr>
           <?php do { ?>
@@ -671,45 +535,47 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
               <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
               <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_kilos_op']; ?></a></td>
               <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
-              <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {
-                                                                                                                                                                              echo "ACTIVA";
-                                                                                                                                                                            } else {
-                                                                                                                                                                              echo "INACTIVA";
-                                                                                                                                                                            } ?></a></td>
-              <td id="dato2"> <?php
-                              $op_c = $row_orden_produccion['id_op'];
-                              $sqlno = "SELECT COUNT(rollo_r) as Rollos, SUM(kilos_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$op_c'";
-                              $resultno = mysql_query($sqlno);
-                              $numno = mysql_num_rows($resultno);
-                              if ($numno > '0') {
-                                $kilosE = mysql_result($resultno, 0, 'kilos');
-                                $RollosE = mysql_result($resultno, 0, 'Rollos');
-                              }
-                              if ($kilosE == ''/*< $row_orden_produccion['int_kilos_op']*/) {
-                              ?>
-                  <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
-                <?php
-                                $tienerollos = 0;
-                              } else {
-                                $tienerollos = 1; ?>
-                  <a class="permitido" href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETO" title="COMPLETO" border="0" style="cursor:hand;" /></a>
-
-                <?php } ?>
+              <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') { echo "ACTIVA";} else { echo "INACTIVA";} ?></a>
               </td>
-              <td id="dato2">
-                <?php
+              <td id="dato2"> 
+             <?php
+               $op_c = $row_orden_produccion['id_op'];
+               $sqlno = "SELECT id_r,COUNT(rollo_r) as Rollos, SUM(kilos_r) AS kilos,fechaI_r FROM TblExtruderRollo WHERE id_op_r='$op_c'";
+               $resultno = mysql_query($sqlno);
+               $numno = mysql_num_rows($resultno);
+               
+               if ($numno > '0') {
+                 $kilosE = mysql_result($resultno, 0, 'kilos');
+                 $RollosE = mysql_result($resultno, 0, 'Rollos');
+                 $idrollo = mysql_result($resultno, 0, 'id_r');
+                 $fechaI = mysql_result($resultno, 0, 'fechaI_r');
+               }
+               $sqlno = "SELECT SUM(valor_desp_rd) AS kilos FROM tbl_reg_desperdicio WHERE op_rd = '$op_c' AND id_proceso_rd='1' ";//id_rollo='$idrollo' 
+               $resultdesp = mysql_query($sqlno);
+               $numdesp = mysql_num_rows($resultdesp);
+               $DespRollo = '';
+               if ($numdesp > '0') { 
+                 $DespRollo = mysql_result($resultdesp, 0, 'kilos'); 
+               }
 
-                $op_c = $row_orden_produccion['id_op'];
-                $sqlparcial = "SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC";
-                $resultparcial = mysql_query($sqlparcial);
-                $numparcial = mysql_num_rows($resultparcial);
+               $op_c = $row_orden_produccion['id_op'];
+               $sqlparcial = "SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC";
+               $resultparcial = mysql_query($sqlparcial);
+               $numparcial = mysql_num_rows($resultparcial);
 
-                $parcial = mysql_result($resultparcial, 0, 'parcial');
-
-                if ($kilosE != '' && ($parcial > '1')) {   ?>
-                  <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/parcial.gif" alt="PARCIAL" title="PARCIAL" border="0" style="cursor:hand;" /></a>
-                <?php } ?>
-              </td>
+               $parcial = mysql_result($resultparcial, 0, 'parcial');
+               /*< $row_orden_produccion['int_kilos_op']*/
+               ?>
+               <?php if($kilosE == '') { ?>
+                    <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
+                  
+                  <?php } else if($kilosE != '' && ($parcial > '1')) { $tienerollos = 1; ?>
+                    <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/parcial.gif" alt="PARCIAL" title="PARCIAL" border="0" style="cursor:hand;" /></a> 
+                  <?php } else { $tienerollos = 1; ?>
+                    <a class="permitido" href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /></a> 
+                  <?php } ?>
+                </td>
+               
               <td id="dato2">
                 <?php
                 $id_ref_pr = $row_orden_produccion['int_cod_ref_op'];
@@ -717,23 +583,21 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                 $resultca = mysql_query($sqloca);
                 $numca = mysql_num_rows($resultca);
                 $id_codp = mysql_result($resultca, 0, 'cod_ref');
-                if ($numca >= '1') {
-                ?><a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_codp; ?>','870','710')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php
-                                                                                                                                                                                                                                                  } else { ?><a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','870','710')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
-                <?php } ?></td>
-              <td nowrap="nowrap" id="dato2">
+                if ($numca >= '1') { 
+                ?><a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_codp; ?>','870','710')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php  } else { ?><a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','870','710')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
+                <?php } ?>
                 <?php
                 $estado_op = $row_orden_produccion['b_estado_op'];
                 //if ($estado_op > '0'){
                 $op_c = $row_orden_produccion['id_op'];
-                $sqlsell = "SELECT SUM(int_kilos_prod_rp) AS int_kilos_prod_rp,id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY rollo_rp DESC";
+                $sqlsell = "SELECT SUM(int_kilos_prod_rp) AS int_kilos_prod_rp, id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY rollo_rp DESC";
                 $resultsell = mysql_query($sqlsell);
-                $numsell = mysql_num_rows($resultsell);
+                $numliquid = mysql_num_rows($resultsell);
 
                 $id_rp = mysql_result($resultsell, 0, 'id_rp');
                 $id_op_rp = mysql_result($resultsell, 0, 'id_op_rp');
                 $id_ref_rp = mysql_result($resultsell, 0, 'id_ref_rp');
-                $rollos = mysql_result($resultsell, 0, 'rollo_rp');
+                $rollosreg_prod = mysql_result($resultsell, 0, 'rollo_rp');
                 $totalKilosliq = mysql_result($resultsell, 0, 'int_kilos_prod_rp');
 
 
@@ -741,26 +605,71 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                 $resultre = mysql_query($sqlre);
                 $numere = mysql_num_rows($resultre);
                 if ($numere >= '1') {
-                  $cantidad = mysql_result($resultre, 0, 'totalkilos');
+                  $cantidadKilosprod = mysql_result($resultre, 0, 'totalkilos');
                 }
-                ?>
-                <?php if ($numsell > '0'  && $tienerollos == 1 && $rollos == $RollosE && $cantidad == $totalKilosliq) : ?>
-                  <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>','870','710')"><img src="images/falta7.gif" width="16" height="16" alt="LIQUIDADO" title="LIQUIDADO" border="0" style="cursor:hand;" /></a>
-                <?php elseif ($numsell > '0'  && $tienerollos == 1 && $rollos == $RollosE && $cantidad != $totalKilosliq) : ?>
-                  <a href="javascript:verFoto('produccion_registro_extrusion_edit.php?id_op=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS DISTINTOS" title="KILOS DISTINTOS" border="0" style="cursor:hand;" /></a>
-                <?php elseif ($numsell > '0' && $tienerollos == 1 && $rollos < $RollosE) : ?>
-                  <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" alt="LIQUIDAR" title="LIQUIDAR" width="16" height="16" border="0" style="cursor:hand;" /></a>
-                <?php elseif ($numsell > '0' && $tienerollos == 1 && $rollos > $RollosE) :
-                  echo "R. pend";
-                elseif ($numsell == '' && $tienerollos == 0 && $rollos < $RollosE) : ?>
-                  <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a>
-                <?php elseif ($numca < '1') : ?>
-                  <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
-                <?php else :  ?>
-                  <a href="javascript:popUp('produccion_registro_extrusion_add.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a>
-                <?php endif; ?>
-
+                
+                //KILOS DE LOS ROLLO A ROLLO 
+                $totalKilosRollodesp=($kilosE+$DespRollo);//KILOS DEL ROLLO MAS DESPERDICIO 
+                
+                ?> 
               </td>
+              <td nowrap="nowrap" id="dato1" title="K.Extruidos + k.Desp / kilos producidos / Kilos Liquidados">
+                <?php if ($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == 'sistemas') {
+                  echo '(' . $kilosE;
+                  echo ' + ' . $DespRollo;
+                  echo ')  / ' . $cantidadKilosprod;
+                  echo ' / ' . $totalKilosliq;
+                } ?>
+              </td>
+                <td nowrap="nowrap" id="dato2">
+
+                         <?php if($numca < '1') : ?>
+                               <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
+                           <?php else : ?>           
+                               <?php if($rollosreg_prod=='' && $RollosE == 0 ) : ?>
+                                       
+                                       <a href="javascript:popUp('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a> 
+                               <?php elseif($rollosreg_prod=='' && $RollosE > 0 ) : ?>
+                                       
+                                       <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="16" height="16" alt="FALTA LIQUIDAR" title="FALTA LIQUIDAR" border="0" style="cursor:hand;" /></a>
+                                
+                               <?php else : ?>   
+
+                                      <?php if($totalKilosliq == $totalKilosRollodesp && ($totalKilosliq==$cantidadKilosprod)) :?>
+                                            <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $row_orden_produccion['id_op']; ?>&id_rp=<?php echo $id_rp; ?>','870','710')"><img src="images/falta7.gif" width="16" height="16" alt="LIQUIDADO" title="LIQUIDADO" border="0" style="cursor:hand;" /></a> 
+
+                                        <?php elseif($totalKilosliq < $totalKilosRollodesp || ($totalKilosliq < $cantidadKilosprod) && $parcial == '1' && $rollosreg_prod < $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta6.gif" width="16" height="16" alt="FALTA POR LIQUIDAR" title="FALTA POR LIQUIDAR" border="0" style="cursor:hand;" /></a>
+                                        <?php elseif($totalKilosliq < $totalKilosRollodesp || ($totalKilosliq < $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod < $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta6.gif" width="16" height="16" alt="FALTA POR LIQUIDAR" title="FALTA POR LIQUIDAR" border="0" style="cursor:hand;" /></a>
+
+                                        <?php elseif($totalKilosliq < $totalKilosRollodesp || ($totalKilosliq < $cantidadKilosprod) && $parcial == '1' && $rollosreg_prod == $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS MENORES EN LIQUIDACION" title="KILOS MENORES EN LIQUIDACION" border="0" style="cursor:hand;" /></a>
+                                        <?php elseif($totalKilosliq < $totalKilosRollodesp || ($totalKilosliq < $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod == $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vistap.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS MENORES EN LIQUIDACION P" title="KILOS MENORES EN LIQUIDACION P" border="0" style="cursor:hand;" /></a>
+
+                                        <?php elseif($totalKilosliq < $totalKilosRollodesp || ($totalKilosliq < $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod == $RollosE) :?>
+
+                                        <?php elseif(($totalKilosliq > $totalKilosRollodesp) || ($totalKilosliq > $cantidadKilosprod) && $parcial == '1' && $rollosreg_prod == $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS MAYORES EN LIQUIDACION" title="KILOS MAYORES EN LIQUIDACION" border="0" style="cursor:hand;" /></a>
+                                        <?php elseif(($totalKilosliq > $totalKilosRollodesp) || ($totalKilosliq > $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod == $RollosE) :?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vistap.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>,&tipo=1','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="KILOS MAYORES EN LIQUIDACION P" title="KILOS MAYORES EN LIQUIDACION P" border="0" style="cursor:hand;" /></a>
+
+                                       <?php elseif($totalKilosliq == $totalKilosRollodesp && ($totalKilosliq == $cantidadKilosprod) && $parcial == '1' && $rollosreg_prod < $RollosE) : ?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>','870','710')"><img src="images/falta5.gif" alt="MENOS ROLLOS EN LIQUIDACION" title="MENOS ROLLOS EN LIQUIDACION" width="16" height="16" border="0" style="cursor:hand;" /></a>
+                                          <?php elseif($totalKilosliq == $totalKilosRollodesp && ($totalKilosliq == $totalKilosRollodesp) && ($totalKilosliq == $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod < $RollosE) : ?>
+                                             <a href="javascript:verFoto('produccion_registro_extrusion_vistap.php?id_op_rp=<?php echo $id_op_rp; ?>&id_rp=<?php echo $id_rp; ?>','870','710')"><img src="images/falta5.gif" width="16" height="16" alt="MENOS ROLLOS EN LIQUIDACION" title="MENOS ROLLOS EN LIQUIDACION" border="0" style="cursor:hand;" /></a> 
+                                               
+                                       <?php elseif ($totalKilosliq == $totalKilosRollodesp && ($totalKilosliq == $cantidadKilosprod) && $parcial == '1' && $rollosreg_prod > $RollosE) : ?>
+                                              <a href="javascript:popUp('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE + ROLLOS " title="INGRESE + ROLLOS " width="16" height="16" border="0" style="cursor:hand;" />  
+                                        <?php elseif ($totalKilosliq == $totalKilosRollodesp && ($totalKilosliq == $cantidadKilosprod) && $parcial > '1' && $rollosreg_prod > $RollosE) : ?>
+                                               <a href="javascript:popUp('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE + ROLLOS P" title="INGRESE + ROLLOS P" width="16" height="16" border="0" style="cursor:hand;" /> 
+                                         <?php endif; ?>
+                             <?php endif; ?>
+ 
+
+                  <?php endif; ?>
+                 </td>
             </tr>
           <?php } while ($row_orden_produccion = mysql_fetch_assoc($orden_produccion)); ?>
         </table>
@@ -898,8 +807,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
     var usuario_especifico = "<?php echo $_SESSION['id_usuario']; ?>"; //es una excepcion$_SESSION['Usuario']
     //excepcion para el de planchas
-    console.log(usuario_especifico+" "+editar);
-    if (usuario_especifico != 31 && usuario_especifico != 23 && usuario_especifico != 26 ) { //es una excepcion 23 sistemas, 26 produccion, extruder 31
+    //console.log(usuario_especifico+" "+editar);
+    if (usuario_especifico == 10 ){  
    
       $("href").attr('disabled', 'disabled');
       $(".permitido").removeAttr('disabled');

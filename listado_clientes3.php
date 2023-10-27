@@ -319,13 +319,13 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
 </script>
 <script type="text/javascript">
 $(document).ready(function () {
-    //Disable cut copy paste
-    $('body').bind('cut copy paste', function (e) {
+   
+    $('#tabla3').bind('cut copy paste', function (e) {
         e.preventDefault();
     });
    
-    //Disable mouse right click
-    $("body").on("contextmenu",function(e){
+     
+    $("#tabla3").on("contextmenu",function(e){
         return false;
     });
 });

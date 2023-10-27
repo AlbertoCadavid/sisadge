@@ -8,8 +8,33 @@ require(ROOT_BBDD);
 //header('Location:manteni.php');
 // *** Validate request to login to this site.
 
-session_start();
+//initialize the session
+if (!isset($_SESSION)) {
+  session_start();
+}
 
+// ** Logout the current user. **
+$logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
+if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")){
+  $logoutAction .="&". htmlentities($_SERVER['QUERY_STRING']);
+}
+
+if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
+  //to fully log out a visitor we need to clear the session varialbles
+  $_SESSION['MM_Username'] = NULL;
+  $_SESSION['MM_UserGroup'] = NULL;
+  $_SESSION['PrevUrl'] = NULL;
+  unset($_SESSION['MM_Username']);
+  unset($_SESSION['MM_UserGroup']);
+  unset($_SESSION['PrevUrl']);
+	
+  $logoutGoTo = "usuario.php";
+  if ($logoutGoTo) {
+    header("Location: $logoutGoTo");
+    exit;
+  }
+}
+/*  */
 
 $loginFormAction = $_SERVER['PHP_SELF'];
 if (isset($_GET['accesscheck'])) {
@@ -18,7 +43,6 @@ if (isset($_GET['accesscheck'])) {
 
 if (isset($_POST['usuario'])) {
   $loginUsername = $_POST['usuario'];
-  //$password = password_verify($_POST['clave_usuario'], PASSWORD_DEFAULT );
   $password = $_POST['clave_usuario'];
   $MM_fldUserAuthorization = "";
   $MM_redirectLoginSuccess = "menu.php";
@@ -29,17 +53,10 @@ if (isset($_POST['usuario'])) {
 
 
   $loginFoundUser = $conexion->buscar('usuario', 'usuario', $loginUsername);
-  //$loginFoundUser = $conexion->buscar('usuario', 'usuario', $loginUsername, $password, 'clave_usuario');
 
   $userTrue = password_verify($password, $loginFoundUser['clave_usuario']);
 
-  /*  mysql_select_db($database_conexion1, $conexion1);
-  $LoginRS__query=sprintf("SELECT id_usuario, usuario, clave_usuario FROM usuario WHERE usuario='%s' AND clave_usuario='%s'",
-    get_magic_quotes_gpc() ? $loginUsername : addslashes($loginUsername), get_magic_quotes_gpc() ? $password : addslashes($password)); 
-   
-  $LoginRS = mysql_query($LoginRS__query, $conexion1) ;
-  $loginFoundUser = mysql_num_rows($LoginRS);*/
-
+  
   if ($userTrue) {
     $loginStrGroup = "";
 

@@ -384,6 +384,7 @@ $totalRows_insumos = mysql_num_rows($insumos);
               <option value="PRODUCTOS"<?php if (!(strcmp("PRODUCTOS", $row_proveedor['tipo_servicio_p']))) {echo "selected=\"selected\"";} ?>>PRODUCTO</option>
               <option value="SERVICIOS"<?php if (!(strcmp("SERVICIOS", $row_proveedor['tipo_servicio_p']))) {echo "selected=\"selected\"";} ?>>SERVICIOS</option>
               <option value="PRODUCTO-SERVICIOS"<?php if (!(strcmp("PRODUCTO-SERVICIOS", $row_proveedor['tipo_servicio_p']))) {echo "selected=\"selected\"";} ?>>PRODUCTO-SERVICIOS</option>
+              <option value="SST"<?php if (!(strcmp("SST", $row_proveedor['tipo_servicio_p']))) {echo "selected=\"selected\"";} ?>>SST</option>
             </select></td>
             <td id="dato1"><p>
               <!--<select name="id_in" id="insumo" style="width:110px">

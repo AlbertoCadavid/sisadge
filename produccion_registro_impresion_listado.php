@@ -328,7 +328,8 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                   <tr>
                     <td colspan="3" id="dato1" nowrap="nowrap">
                       <img src="images/extruir.gif" width="20" height="17" alt="O.P EXTRUIDA"title="O.P EXTRUIDA" border="0" style="cursor:hand;"/>O.P en Extrusion <br>
-                      <img src="images/imprimir.gif" width="20" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/>O.P en Impresion
+                      <img src="images/imprimir.gif" width="20" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/>O.P en Impresion<br>
+                      ROLLOS S.EX: Rollos sin Extrusion
                     </td>
                     <td colspan="3" id="dato1" nowrap="nowrap">
                       <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA"title="O.P INGRESADA" border="0" style="cursor:hand;"/>O.P Falta por liquidar<br>
@@ -420,8 +421,22 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
 
                   <?php if($rolloE > 0 && $rolloI < $rolloE): ?>           
                     <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS"title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
-                    <?php  elseif($rolloE == 0 ) :?> 
-                      <span alt="Sin Rollos en Extruder"title="Sin Rollos en Extruder"> N.R.E </span><!-- Falta R. Extruder -->     
+                    <?php elseif($rolloE == 0 ) :?> 
+
+                       <?php if($row_orden_produccion['coextrusion'] == 'NO' ) :?> 
+
+                                   <?php if($rolloI > '0'):?> 
+                                      <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="CON ROLLOS Y SIN EXTRUDER"title="CON ROLLOS Y SIN EXTRUDER" border="0" style="cursor:hand;" /></a>
+                                    <?php else: ?> 
+                                      <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')">ROLLOS S.EX</a>
+                                    <?php endif; ?>
+                        
+                          <?php else: ?> 
+
+                                  <span alt="Sin Rollos en Extruder"title="Sin Rollos en Extruder"> N.R.E </span><!-- Falta R. Extruder -->     
+
+                        <?php endif; ?>
+                       
 
                       <?php  else: ?>      
                         <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="COMPLETOS"title="COMPLETOS" border="0" style="cursor:hand;" /></a> 

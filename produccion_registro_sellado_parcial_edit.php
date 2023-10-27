@@ -573,11 +573,24 @@ if (isset($_GET['id_r'])) {
   $colname_rollo_sellado_edit = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
   
-mysql_select_db($database_conexion1, $conexion1);
+/*mysql_select_db($database_conexion1, $conexion1);
 $query_rollo_sellado_edit =  ("SELECT * FROM tblselladorollo,tbl_reg_produccion WHERE tbl_reg_produccion.id_proceso_rp='4' AND tblselladorollo.id_r='$colname_rollo_sellado_edit' AND tblselladorollo.id_op_r = tbl_reg_produccion.id_op_rp AND  tblselladorollo.rollo_r=tbl_reg_produccion.rollo_rp" );
 $rollo_sellado_edit = mysql_query($query_rollo_sellado_edit, $conexion1) or die(mysql_error());
 $row_rollo_sellado_edit = mysql_fetch_assoc($rollo_sellado_edit);
+$totalRows_rollo_sellado_edit = mysql_num_rows($rollo_sellado_edit);*/
+
+//si existe en Tbl_reg_produccion, es decir si no habido error al eliminar la liquidacion
+$rew_existe = $conexion->llenarCampos("Tbl_reg_produccion,TblSelladoRollo", "WHERE TblSelladoRollo.id_r='$colname_rollo_sellado_edit' AND TblSelladoRollo.id_op_r = Tbl_reg_produccion.id_op_rp", "ORDER BY TblSelladoRollo.rollo_r DESC ", " Tbl_reg_produccion.id_op_rp ");
+ 
+if($rew_existe['id_op_rp']!=''){
+	 $sihayerror="Tbl_reg_produccion.id_proceso_rp='4' AND";
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_rollo_sellado_edit =  ("SELECT * FROM TblSelladoRollo LEFT join Tbl_reg_produccion ON TblSelladoRollo.rollo_r=Tbl_reg_produccion.rollo_rp WHERE $sihayerror TblSelladoRollo.id_r='$colname_rollo_sellado_edit' AND TblSelladoRollo.id_op_r = Tbl_reg_produccion.id_op_rp ORDER BY TblSelladoRollo.rollo_r DESC " ); 
+$rollo_sellado_edit = mysql_query($query_rollo_sellado_edit, $conexion1) or die(mysql_error());
+$row_rollo_sellado_edit = mysql_fetch_assoc($rollo_sellado_edit);
 $totalRows_rollo_sellado_edit = mysql_num_rows($rollo_sellado_edit);
+ 
  
 //PARA METROS Y KILOS INICIALES DESDE IMPRESION O EXTRUDER
  $colname_metrosImp = "-1";

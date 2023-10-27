@@ -13,9 +13,9 @@ function MM_validateForm() { //v4.0
 	for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=MM_findObj(args[i]);
 		if (val) { nm=val.name; if ((val=val.value)!="") {
 			if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
-			if (p<1 || p==(val.length-1)) errors+='- '+nm+' debe contener una dirección de correo electrónico correcta.\n';
+			if (p<1 || p==(val.length-1)) errors+='- '+nm+' debe contener una direcciï¿½n de correo electrï¿½nico correcta.\n';
 		} else if (test!='R') { num = parseFloat(val);
-			if (isNaN(val)) errors+='- '+nm+' debe contener números.\n';
+			if (isNaN(val)) errors+='- '+nm+' debe contener nï¿½meros.\n';
 			if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
 			min=test.substring(8,p); max=test.substring(p+1);
 			if (num<min || max<num) errors+='- '+nm+' debe contener un numero entre '+min+' y '+max+'.\n';
@@ -65,7 +65,7 @@ function eliminar(campo,id,pagina)
 
 	if(campo=='n_cn')
 	{
-		elim=confirm("¿Quieres Eliminar?");
+		elim=confirm("ï¿½Quieres Eliminar?");
 		if(elim)
 		{
 			window.location ="delete.php?"+ campo+"="+ id;
@@ -73,7 +73,7 @@ function eliminar(campo,id,pagina)
 		//generadores
 		if(campo=='id_genera')
 		{
-			elim=confirm("¿Quieres Eliminar el generador?");
+			elim=confirm("ï¿½Quieres Eliminar el generador?");
 			if(elim)
 			{
 				window.location ="delete.php?"+ campo+"="+ id;
@@ -92,7 +92,7 @@ function eliminar(campo,id,pagina)
 	 }
 	 else
 	 {
-	 	elim=confirm("¿Quieres Eliminar?");
+	 	elim=confirm("ï¿½Quieres Eliminar?");
 	 }
 	 /*SI ACEPTA, IRA A LA PAGINA OCULTA DE BORRADO*/
 	 if(elim)
@@ -208,7 +208,7 @@ function update1(id,campo,pagina){
 //DELETE REGISTROS COMPLEJOS
 function eliminar2(campo,id,pagina,foranea1,foranea2) 
 { 
-	elim=confirm("¿Quieres Eliminar?"); 
+	elim=confirm("ï¿½Quieres Eliminar?"); 
 	if(elim){ window.location ="delete.php?"+foranea1+"="+foranea2+"&"+campo+"="+id;
 	  //window.location ="delete.php?"+ campo+"="+ id+"&"+ foranea1+"="+ foranea2;
 	}
@@ -233,7 +233,7 @@ function elimina_complejos(n,v,n2,v2,n3,v3,pagina) {
 	//generadores valor
 	if(n=='id_genera_gv')
 	{
-		elim=confirm("¿Quieres Eliminar el Registro?");
+		elim=confirm("ï¿½Quieres Eliminar el Registro?");
 		if(elim)
 		{
 			window.location ="delete.php?"+ n+"="+ v;
@@ -243,7 +243,7 @@ function elimina_complejos(n,v,n2,v2,n3,v3,pagina) {
 	     <!--update o.c reasignacion-->
 	     function update(campo,id,pagina) 
 	     {
-	     	elim=confirm("¿Seguro Quiere Reasignar el numero de O.C ?");
+	     	elim=confirm("ï¿½Seguro Quiere Reasignar el numero de O.C ?");
 	     	if(elim) { window.location ="orden_compra_cl_reasig_oc.php?"+ campo+"="+ id; }
 	     	else { window.history.go(); } 
 	     }
@@ -251,7 +251,7 @@ function elimina_complejos(n,v,n2,v2,n3,v3,pagina) {
 //DELETE archivos adjuntos
 function eliminar3(campo,id,pagina,archivo) 
 { 
-	elim=confirm("¿Quieres Eliminar definitivamente el archivo?"); 
+	elim=confirm("ï¿½Quieres Eliminar definitivamente el archivo?"); 
 	if(elim) 
 	{
 		window.location ="delete.php?"+campo+"="+ id+"&archivo="+ archivo;
@@ -311,41 +311,41 @@ function evalGroup(id)
 	}
 	function consult_ficha(campo,id_mp_vta) 
 	{
-		elim=confirm("¿Quiere Consultar?");
+		elim=confirm("ï¿½Quiere Consultar?");
 		if(elim) { window.location ="consultar_ficha.php?"+ campo+"="+ id_mp_vta; }
 		else { window.history.go(); } 
 	}
 	function eliminar4(campo,id_mp_vta)
 	{
-		ventana=confirm("¿Quiere Eliminar?");
+		ventana=confirm("ï¿½Quiere Eliminar?");
 		if (ventana){ window.location ="delete2.php?"+campo+"="+ id_mp_vta; }
 		else {window.history.go(); } 
 	}
 	function eliminar_b(id1,delete_bolsa,id2,delete_bolsa_ref,id3,id_refcliente,id4,tipo)
 	{
 		var id1="delete_bolsa";
-		ventana=confirm("¿Quiere Eliminar de la Cotizacion bolsa?");
+		ventana=confirm("ï¿½Quiere Eliminar de la Cotizacion bolsa?");
 		if (ventana){ window.location ="delete2.php?delete_bolsa="+ delete_bolsa+"&delete_bolsa_ref="+ delete_bolsa_ref+"&id_refcliente="+ id_refcliente+"&tipo="+ tipo; }
 		else {window.history.go(); } 
 	}
 	function eliminar_l(id1,delete_lamina,id2,delete_lamina_ref,id4,id_refcliente,id5,tipo)
 	{
 		var id1="delete_lamina";
-		ventana=confirm("¿Quiere Eliminar de la Cotizacion lamina?");
+		ventana=confirm("ï¿½Quiere Eliminar de la Cotizacion lamina?");
 		if (ventana){ window.location ="delete2.php?delete_lamina="+ delete_lamina+"&delete_lamina_ref="+ delete_lamina_ref+"&id_refcliente="+ id_refcliente+"&tipo="+ tipo; }
 		else {window.history.go(); } 
 	} 
 	function eliminar_m(id1,delete_mp,id2,delete_mp_ref,id4,id_refcliente,id5,tipo)
 	{
 		var id1="delete_mp";
-		ventana=confirm("¿Quiere Eliminar de la Cotizacion materia prima?");
+		ventana=confirm("ï¿½Quiere Eliminar de la Cotizacion materia prima?");
 		if (ventana){ window.location ="delete2.php?delete_mp="+ delete_mp+"&delete_mp_ref="+ delete_mp_ref+"&id_refcliente="+ id_refcliente+"&tipo="+ tipo; }
 		else {window.history.go(); } 
 	}
 	function eliminar_p(id1,delete_pl,id2,delete_pl_ref,id4,id_refcliente,id5,tipo)
 	{
 		var id1="delete_pl";
-		ventana=confirm("¿Quiere Eliminar de la Cotizacion packing list?");
+		ventana=confirm("ï¿½Quiere Eliminar de la Cotizacion packing list?");
 		if (ventana){ window.location ="delete2.php?delete_pl="+ delete_pl+"&delete_pl_ref="+ delete_pl_ref+"&id_refcliente="+ id_refcliente+"&tipo="+ tipo; }
 		else {window.history.go(); } 
 	}
@@ -353,28 +353,28 @@ function evalGroup(id)
 	{
 		if(campo=='id_ref_b')
 		{
-			ventana=confirm("¿Quiere Eliminar la Referencia?");
+			ventana=confirm("ï¿½Quiere Eliminar la Referencia?");
 			if (ventana){ window.location ="delete2.php?"+ campo+"="+ id; }
 			else {window.history.go(); } 
 		}
 		else 
 			if(campo=='id_ref_l')
 			{
-				ventana=confirm("¿Quiere Eliminar la Referencia?");
+				ventana=confirm("ï¿½Quiere Eliminar la Referencia?");
 				if (ventana){ window.location ="delete2.php?"+ campo+"="+ id; }
 				else {window.history.go(); } 
 			}
 			else 
 				if(campo=='id_ref_m')
 				{
-					ventana=confirm("¿Quiere Eliminar la Referencia?");
+					ventana=confirm("ï¿½Quiere Eliminar la Referencia?");
 					if (ventana){ window.location ="delete2.php?"+ campo+"="+ id; }
 					else {window.history.go(); } 
 				}
 				else 
 					if(campo=='id_ref_p')
 					{
-						ventana=confirm("¿Quiere Eliminar la Referencia?");
+						ventana=confirm("ï¿½Quiere Eliminar la Referencia?");
 						if (ventana){ window.location ="delete2.php?"+ campo+"="+ id; }
 						else {window.history.go(); } 
 					}		
@@ -492,6 +492,28 @@ swal({
 }, 
 function(){
 	window.location ="delete2.php?"+id1+"="+valor  
+	swal("Eliminado!", "Sus registros fueron eliminados.", "success"); 
+}); 
+
+}
+
+function eliminar_rte_parcial(id1,valor, parcial, id_rp)
+{
+/* ventana=confirm("Quiere Eliminar?");
+ if (ventana == true){ window.location ="delete2.php?"+id1+"="+valor}
+ else if (ventana == false){window.history.go(); } 
+*/
+swal({   
+	title: "Esta seguro?",   
+	text: "Quiere Eliminar el Registro?",   
+	type: "warning",   
+	showCancelButton: true,   
+	confirmButtonColor: "#DD6B55",   
+	confirmButtonText: "Si, eliminarlo!",   
+	closeOnConfirm: false 
+}, 
+function(){
+	window.location ="delete2.php?"+id1+"="+valor+"&parcial="+parcial+"&id_rp_parcial="+id_rp 
 	swal("Eliminado!", "Sus registros fueron eliminados.", "success"); 
 }); 
 

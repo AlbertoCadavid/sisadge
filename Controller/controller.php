@@ -14,6 +14,14 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
     $this->conexion->set_charset("utf8");
   }
 
+  
+  public function insertarQuery($query){
+    
+    $this->conexion->query($query);
+    return $tabla_principal_id = $this->conexion->insert_id;
+    
+  }
+
    //BUSCAR UNO
   public function buscar($tabla, $columna, $condicion){
     //echo "SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC";die;
@@ -66,7 +74,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
 
      //LLENAR CAMPOS
     public function llenarCampos($tabla, $condicion, $orden='', $distinct='' ){  
-      //echo "SELECT $distinct FROM $tabla $condicion $orden  ";die;
+      //echo "SELECT $distinct FROM $tabla $condicion $orden  "; die;
       $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden ") or die($this->conexion->error);
       if($resultado)
         $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
@@ -119,7 +127,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
       $sql = "SELECT $asterisco FROM $tabla $condicion $group $orden ";  
       //echo $sql;die;
       $query_limit_registros = sprintf("%s LIMIT %d, %d", $sql, $startRow_registros, $maxRows_registros);
-      
+      echo $query_limit_registros;
       $resultado = $this->conexion->query($query_limit_registros) or die($this->conexion->error);
       if($resultado) 
         //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 

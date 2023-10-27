@@ -343,6 +343,7 @@ $row_insumos = $conexion->llenaSelect('insumo',"","ORDER BY id_insumo ASC");
         <option value="PRODUCTOS">PRODUCTO</option>
         <option value="SERVICIOS">SERVICIOS</option>
         <option value="PRODUCTO-SERVICIOS">PRODUCTO-SERVICIOS</option>
+        <option value="SST">SST</option>
       </select></td>
       <td id="dato1">
           <select name="id_in" id="insumo"  class="busqueda selectsMedio">

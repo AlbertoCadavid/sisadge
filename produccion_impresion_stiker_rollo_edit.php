@@ -848,12 +848,12 @@ function checkSubmit() {
                     <td id="fuente1">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td id="fuente1"><strong>METROS INICIAL:</strong></td>
-                    <td id="fuente1"><input name="metro_r" type="number" id="metro_r" min="1" style="width:100px" value="<?php echo $metroExt; ?>" required onChange="restakilosT();" readonly/>
-              <input name="metro_r3" type="hidden" id="metro_r3" min="1" style="width:100px" value="<?php //echo $row_rollo_impresion_edit['metro_r'];//
-              if($row_liquidado_edit['int_metro_lineal_rp']==''){echo $row_rollo_impresion_edit['metro_r'];}else{echo $row_liquidado_edit['int_metro_lineal_rp'];} ?>" required onChange="restakilosT()" readonly/></td>
-            <td id="fuente1"><input name="metro_r2" type="number" id="metro_r2" min="1" style="width:100px" value="<?php //echo $row_rollo_impresion_edit['metro_r'];//
-            if($row_liquidado_edit['int_metro_lineal_rp']==''){echo $row_rollo_impresion_edit['metro_r'];}else{echo $row_liquidado_edit['int_metro_lineal_rp'];} ?>" required onChange="restakilosT();" readonly/></td>
+                  <td id="fuente1"><strong>METROS INICIAL:</strong></td>
+               <td id="fuente1">
+                <input name="metro_r" type="number" id="metro_r" min="1" style="width:100px" required="required" value="<?php echo $metroExt=='' ? $row_rollo_impresion_edit['metro_r'] : $metroExt; ?>" onChange="restakilosT();" />
+                <input name="metro_r3" type="hidden" id="metro_r3" min="1" style="width:100px" value="<?php echo $row_liquidado_edit['int_metro_lineal_rp']=='' ? $row_rollo_impresion_edit['metro_r'] : $row_liquidado_edit['int_metro_lineal_rp']; ?>" required onChange="restakilosT()" readonly/>
+              </td>
+            <td id="fuente1"><input name="metro_r2" type="number" id="metro_r2" min="1" style="width:100px" value="<?php echo $row_liquidado_edit['int_metro_lineal_rp']=='' ? $row_rollo_impresion_edit['metro_r'] : $row_liquidado_edit['int_metro_lineal_rp']; ?>" required onChange="restakilosT();" readonly /></td>
             <td id="fuente1"><input name="total_horas_rp" type="text" id="total_horas_rp" style="width:100px" value="<?php echo $row_liquidado_edit['total_horas_rp']; ?>" readonly/></td>
             <td id="fuente3"><!-- <input type="submit" name="button" id="button_imp_rollo" value="EDITAR" > -->
               <input class="botonGeneral" type="submit" name="ENVIAR" id="ENVIAR" value="EDITAR" />
@@ -1145,6 +1145,16 @@ function checkSubmit() {
 
                         verFoto('view_index.php?c=cmezclasIm&a=Tintas&cod_ref='+document.getElementById('ref_r').value+'&rollo='+document.getElementById('rollo_r').value+'&id_op='+document.getElementById('id_op_r').value+'&fecha='+document.getElementById('fecha_ini_rp').value+' ','1250','1050')
                     }
+
+
+
+                    $('#metro_r').on('change', function() {
+                        
+                          $('#metro_r2').val($('#metro_r').val());
+                          $('#metro_r3').val($('#metro_r').val());
+
+                   })
+
 
   </script>
   <?php

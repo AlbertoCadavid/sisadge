@@ -138,8 +138,7 @@
 
    //INSERTAR
     public function insertar($tabla,$columna, $datos){
-      $query = "INSERT INTO $tabla ($columna) VALUES ($datos) ";
-      $resultado =    $this->conexion->query($query) or die($this->conexion->error);
+      $resultado =    $this->conexion->query("INSERT INTO $tabla ($columna) VALUES ($datos) ") or die($this->conexion->error);
       if($resultado)
         return true;
       return false;

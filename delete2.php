@@ -25,6 +25,7 @@ $id_rp=$_GET['id_rp'];
 $id_rd=$_GET['id_rd'];
 $id_ip=$_GET['id_ip'];*/
 //edit
+
 $id_rte=$_GET['id_rte'];
 $id_rpe=$_GET['id_rpe'];
 $id_rde=$_GET['id_rde'];
@@ -378,7 +379,13 @@ if($numert >='1') {
 	
 $sqlrt="DELETE FROM Tbl_reg_tiempo WHERE id_rt='$id_rtdel'";
 $resulrt=mysql_query($sqlrt);
-header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+
+if (isset($_GET['parcial'])) {
+	header("location:produccion_registro_extrusionp_edit.php?id_op_rp=$id_op&id_rp=$_GET[id_rp_parcial]&parcial=$_GET[parcial]");
+} else {
+	header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+}
+
   }
 }
 if($id_rpe!='') {
@@ -403,7 +410,11 @@ $sqlresta="UPDATE Tbl_reg_produccion SET horas_prep_rp = horas_prep_rp - $cantid
 	
 $sqlrp="DELETE FROM Tbl_reg_tiempo_preparacion WHERE id_rt='$id_rpdel'";
 $resulrp=mysql_query($sqlrp);
-header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+if (isset($_GET['parcial'])) {
+	header("location:produccion_registro_extrusionp_edit.php?id_op_rp=$id_op&id_rp=$_GET[id_rp_parcial]&parcial=$_GET[parcial]");
+} else {
+	header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+}
   }
 }
 
@@ -425,7 +436,11 @@ if($numerd >='1') {
 
 $sqlrd="DELETE FROM Tbl_reg_desperdicio WHERE id_rd='$id_rddel'";
 $resulrd=mysql_query($sqlrd);
-header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+if (isset($_GET['parcial'])) {
+	header("location:produccion_registro_extrusionp_edit.php?id_op_rp=$id_op&id_rp=$_GET[id_rp_parcial]&parcial=$_GET[parcial]");
+} else {
+	header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+}
   }
 }
 
@@ -454,7 +469,11 @@ $resultinv=mysql_query($sqlinv);
 	}
 $sqlrip="DELETE FROM Tbl_reg_kilo_producido WHERE id_rkp='$id_ipe'";
 $resulrip=mysql_query($sqlrip);
-header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+if (isset($_GET['parcial'])) {
+	header("location:produccion_registro_extrusionp_edit.php?id_op_rp=$id_op&id_rp=$_GET[id_rp_parcial]&parcial=$_GET[parcial]");
+} else {
+	header("location:produccion_registro_extrusion_edit.php?id_op=$id_op&id_rp=$id_rp");
+}
   }
 }
 

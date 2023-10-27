@@ -6,7 +6,7 @@ require (ROOT_BBDD);
 <?php
 include('funciones/adjuntar.php'); 
 
-//include_once("Models/Mconnection.php");//require_once("db/db.php");
+require_once("db/db.php");
 require_once 'Models/Occomercial.php';
 
 //initialize the session
@@ -216,9 +216,9 @@ if(isset($_POST['str_numero_oc']) && $historico){
 
 /*           $headers = "MIME-Version: 1.0\r\n"; 
            $headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
-           //direcciï¿½n del remitente 
+           //dirección del remitente 
            $headers .= "From: ACYCIA\r\n"; 
-           //direcciï¿½n de respuesta, si queremos que sea distinta que la del remitente 
+           //dirección de respuesta, si queremos que sea distinta que la del remitente 
            $headers .= "ACYCIA\r\n";         
            $to = 'jcarvajal@acycia.com';  //enviar al correo su carnet
            $mensaje = "<p>Orden de Compra Ingresada: $oc, Fecha Ingreso: $fec,  Cantidad: $cant,</p></b>";           
@@ -331,7 +331,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
               height: 100%;
               z-index: 3200;
               background: url('images/loadingcircle4.gif') 50% 50% no-repeat rgb(250,250,250);
-              background-size: 5% 10%;/*tamaï¿½o del gif*/
+              background-size: 5% 10%;/*tamaño del gif*/
               -moz-opacity:65;
               opacity:0.65;
 
@@ -762,7 +762,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                        }
                          function validaTodo(){
                            if (document.form1.validar_oc.value > "0"){ 
-                             swal("EXISTE!", "EL NUMERO DE ORDEN YA EXISTE O EXISTEN CARACTERES EXTRAï¿½OS, FAVOR HACER REVISION ", "warning", {
+                             swal("EXISTE!", "EL NUMERO DE ORDEN YA EXISTE O EXISTEN CARACTERES EXTRAÑOS, FAVOR HACER REVISION ", "warning", {
                                button: " OK!",
                              });
                              document.form1.str_numero_oc.focus();
@@ -789,40 +789,39 @@ if(isset($_POST['str_numero_oc']) && $historico){
                         
 
                        } 
-                        
+                         
     //FILTROS
-  
-        $('.elcliente').select2(
-            $.ajax({
-                url: "select3/proceso.php",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        palabraClave: params.term, // search term
-                        var1:"id_c,nombre_c",
-                        var2:"cliente",
-                        var3:"",
-                        var4:"ORDER BY nombre_c ASC",
-                        var5:"id_c",
-                        var6:"nombre_c"
-                    };
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
-            })
-        )
+   $(document).ready(function(){  
+         $('.elcliente').select2({ 
+             ajax: {
+                 url: "select3/proceso.php",
+                 type: "post",
+                 dataType: 'json',
+                 delay: 250,
+                 data: function (params) {
+                     return {
+                         palabraClave: params.term, // search term
+                         var1:"id_c,nombre_c",
+                         var2:"cliente",
+                         var3:"",
+                         var4:"ORDER BY nombre_c ASC",
+                         var5:"id_c",
+                         var6:"nombre_c"
+                     };
+                 },
+                 processResults: function (response) {
+                     return {
+                         results: response
+                     };
+                 },
+                 cache: true
+             }
+         });
     
-    
+    });
   
-  
-        $('.elnit').select2( {
-          
+  $(document).ready(function(){  
+        $('.elnit').select2({ 
             ajax: {
                 url: "select3/proceso.php",
                 type: "post",
@@ -840,14 +839,14 @@ if(isset($_POST['str_numero_oc']) && $historico){
                     };
                 },
                 processResults: function (response) {
-                  return {
+                    return {
                         results: response
                     };
                 },
                 cache: true
             }
-        } );
-  
-            
+        });
+   
+   });               
 
   </script>

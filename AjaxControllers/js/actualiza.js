@@ -28,7 +28,7 @@ function actualizar(id,valor,colum,proceso,url){
 function actualizacion(id,valor,colum,proceso,url){ 
   var valor = $(valor).val();
   var columna = $(colum).attr("id");
-  alert(valor);
+  
   $.ajax({
     dataType: "json",
     data: { 

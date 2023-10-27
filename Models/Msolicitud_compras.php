@@ -151,8 +151,9 @@ class Msolicitud_compras
         $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
     }
 
-    public function mostrarListado($condicion = "", $condicion2 = "")
+    public function mostrarListado($condicion = "", $condicion2 = "", $maxRows_registros,$pageNum_registros)
     {
+        $startRow_registros = $pageNum_registros * $maxRows_registros;
         $this->db = Conectar::conexion();
 
         try {
@@ -179,8 +180,8 @@ class Msolicitud_compras
                 )
             ) AS subconsulta
             $condicion2
-            ORDER BY id_solicitud DESC; ";
-
+            ORDER BY id_solicitud DESC  LIMIT $startRow_registros, $maxRows_registros; ";
+            
             $listado = $this->db->query($query);
             $rows = [];
             while ($row = $listado->fetch_assoc()) {

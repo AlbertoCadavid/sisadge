@@ -192,22 +192,31 @@ if (isset($_GET['id_op'])) {
   $colname_rp = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_rp = sprintf("SELECT rollo_rp FROM Tbl_reg_produccion WHERE id_op_rp=%s AND id_proceso_rp='1' ORDER BY rollo_rp DESC",$colname_rp);
+//$query_rp = sprintf("SELECT rollo_rp FROM Tbl_reg_produccion WHERE id_op_rp=%s AND id_proceso_rp='1' ORDER BY rollo_rp DESC",$colname_rp);
+$query_rp = "SELECT MIN(rollo_r)-1 as rollo_rp FROM `tblextruderrollo` WHERE `id_op_r`= $colname_rp and id_rp=0";
+
 $rp_edit= mysql_query($query_rp, $conexion1) or die(mysql_error());
 $row_rp_edit = mysql_fetch_assoc($rp_edit);
 $totalRows_rp_edit = mysql_num_rows($rp_edit);
 
+
 //VARIABLE IMPORTANTE PARA LA IMRPESION DE ROLLOS
 $rollo_liqu = empty($row_rp_edit['rollo_rp']) ? '0' : $row_rp_edit['rollo_rp'];
 
+
 //SUMA TOTAL DE KILOS EXTRUIDOS POR O.P
+
+//Para mostrar solamente los parciales sin liquidar // 02-10-2023
+$row_parcial=$conexion->llenarCampos("tbl_reg_produccion", "WHERE id_op_rp='".$_GET['id_op']."' and rollo_rp='".$rollo_liqu."' and parcial <>'' AND id_proceso_rp='1' ", "order by rollo_rp desc", "rollo_rp ") ;
+$row_parcial = $row_parcial['rollo_rp'];
+
 $colname_totalKilos= "-1";
 if (isset($_GET['id_op'])) {
   $colname_totalKilos = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' ORDER BY fechaI_r ASC LIMIT 210",$colname_totalKilos);
-$totalKilos = mysql_query($query_totalKilos, $conexion1) or die(mysql_error());// AND rollo_r > $rollo_liqu
+$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' ORDER BY fechaI_r ASC LIMIT 900",$colname_totalKilos);
+$totalKilos = mysql_query($query_totalKilos, $conexion1) or die(mysql_error());//  AND rollo_r > $row_parcial
 $row_totalKilos = mysql_fetch_assoc($totalKilos);
 $totalRows_totalKilos = mysql_num_rows($totalKilos);
 
@@ -514,7 +523,7 @@ Total Rollos</td>
     <td nowrap="nowrap"id="titulo1">KILOS</td>
     <td nowrap="nowrap"id="titulo1">ROLLO</td>
     <td nowrap="nowrap"id="titulo1">FECHA INICIAL</td>
-    <td colspan="2" nowrap="nowrap"id="titulo1">FECHA FINAL</td>
+    <td colspan="3" nowrap="nowrap"id="titulo1">FECHA FINAL</td>
     </tr>   
   <tr>
     <td colspan="12" id="fuente1">
@@ -523,13 +532,23 @@ Total Rollos</td>
   <td id="fuente1"><?php $metrosT+=$row_totalKilos['metro_r']; echo $row_totalKilos['metro_r']; ?></td>
   <td id="fuente1"><?php $kilosT+=$row_totalKilos['kilos_r'];echo $row_totalKilos['kilos_r']; ?></td>
   <td id="fuente2"><?php echo $row_totalKilos['rollo_r']; ?></td>
+  
   <td nowrap="nowrap" id="fuente1"><?php echo $row_totalKilos['fechaI_r']; ?></td>
+  
+ <?php if($row_totalKilos['id_rp'] == 0 ):?>
+  <td><input type="hidden" name="id_rollo[]" id="id_rollo[]" value="<?php echo $row_totalKilos['id_r']; ?>"></td>
   <td nowrap="nowrap" id="fuente2">
-    <a href="javascript:getClientData('clientId','<?php echo $row_totalKilos['id_op_r']; ?>','rollo','<?php echo $rollo_liqu; ?>','fechaF','<?php echo $row_totalKilos['fechaF_r']; ?>','parcial','<?php echo $ult_parcial; ?>')" style="text-decoration:none;"><?php echo $row_totalKilos['fechaF_r']; ?> 
+    <a href="javascript:getClientData('clientId','<?php echo $row_totalKilos['id_op_r']; ?>','rollo','<?php echo $rollo_liqu; ?>','fechaF','<?php echo $row_totalKilos['fechaF_r']; ?>','parcial','<?php echo $ult_parcial; ?>')" style="text-decoration:none;"><?php echo $row_totalKilos['fechaF_r']; ?>
     </a> 
   </td>
   <td nowrap="nowrap" id="fuente1">
-  <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a></td>
+         <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a> 
+    </td>
+       <?php else: ?>
+      <td colspan="3" nowrap="nowrap" id="fuente1">
+        <?php echo $row_totalKilos['fechaF_r']; $liquidado='Liquidado'; ?> <em><?php echo  $liquidado; ?></em> 
+       <?php endif;?>
+       </td>
     <td colspan="10" id="fuente1"></td>
   </tr>
   <?php } while ($row_totalKilos = mysql_fetch_assoc($totalKilos)); ?>
@@ -546,29 +565,34 @@ Total Rollos</td>
     <td colspan="12" id="titulo4"><strong>RPM - % </strong></td>
   </tr>
   <tr>
+    <!-- <td colspan="1" id="fuente2">&nbsp;</td> -->
     <td colspan="2" id="fuente2">TORNILLO A</td>
-    <td colspan="5" id="fuente2">TORNILLO B</td>
-    <td id="fuente2">TORNILLO C</td>
-    <td colspan="4" id="fuente2">&nbsp;</td>
+    <td colspan="2" id="fuente3">TORNILLO B</td>
+    <td id="fuente2">&nbsp;</td>
+    <td  colspan="2" id="fuente3">TORNILLO C</td>
     </tr>
   <tr>
-    <td id="fuente1">RPM</td>
-    <td id="fuente1">%</td>
-    <td colspan="4" id="fuente1">RPM</td>
-    <td id="fuente1">%</td>
-    <td id="fuente1">RPM</td>
-    <td id="fuente1">%</td>
-    <td colspan="3" id="fuente1">&nbsp;</td>
+    <!-- <td colspan="1" id="fuente1">&nbsp;</td> -->
+    <td colspan="1" id="fuente1">RPM</td>
+    <td colspan="1" id="fuente1">%</td>
+    <td id="fuente1">&nbsp;</td>
+    <td colspan="1" id="fuente1">RPM</td>
+    <td colspan="1" id="fuente1">%</td>
+    <td id="fuente1">&nbsp;</td>
+    <td colspan="1" id="fuente1">RPM</td>
+    <td colspan="1" id="fuente2">%</td>
     </tr>
   <tr>
-    <td id="fuente1"><input type="text" name="int_ref1_rpm_pm"  id="int_ref1_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref1_rpm_pm']; ?>" /></td>
-    <td id="fuente1"><input name="int_ref1_tol5_porc1_pm"  type="text"  id="int_ref1_tol5_porc1_pm" placeholder="%" size="2" required="required" value="<?php echo $row_mezcla['int_ref1_tol5_porc1_pm'] ?>"/></td>
-    <td colspan="4" id="fuente1"><input type="text" name="int_ref2_rpm_pm" id="int_ref2_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref2_rpm_pm']; ?>" /></td>
+    <!-- <td colspan="1" id="fuente1">&nbsp;</td> -->
+    <td colspan="1" id="fuente1"><input type="text" name="int_ref1_rpm_pm"  id="int_ref1_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref1_rpm_pm']; ?>" /></td>
+    <td colspan="2" id="fuente1"><input name="int_ref1_tol5_porc1_pm"  type="text"  id="int_ref1_tol5_porc1_pm" placeholder="%" size="2" required="required" value="<?php echo $row_mezcla['int_ref1_tol5_porc1_pm'] ?>"/></td>
+    <td colspan="1" id="fuente1"><input type="text" name="int_ref2_rpm_pm" id="int_ref2_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref2_rpm_pm']; ?>" /></td>
     <td id="fuente1"><input name="int_ref2_tol5_porc2_pm"  type="text"  id="int_ref2_tol5_porc2_pm" placeholder="%" size="2" required="required" value="<?php echo $row_mezcla['int_ref2_tol5_porc2_pm'] ?>"/></td>
-    <td id="fuente1"><input type="text" name="int_ref3_rpm_pm" id="int_ref3_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref3_rpm_pm']; ?>"/>
+    <td id="fuente1">&nbsp;</td>
+    <td  id="fuente1"><input type="text" name="int_ref3_rpm_pm" id="int_ref3_rpm_pm" min="0"step="any"size="7" required="required" value="<?php echo $row_mezcla['int_ref3_rpm_pm']; ?>"/>
       <input name="id_pm" type="hidden" id="id_pm" value="<?php echo $row_mezcla['id_pm']; ?>" /></td>
-    <td id="fuente1"><input name="int_ref3_tol5_porc3_pm"  type="text"  id="int_ref3_tol5_porc3_pm" placeholder="%" size="2" required="required" value="<?php echo $row_mezcla['int_ref3_tol5_porc3_pm'] ?>"/></td>
-    <td colspan="3" id="fuente1">&nbsp;</td>
+    <td id="fuente2"><input name="int_ref3_tol5_porc3_pm"  type="text"  id="int_ref3_tol5_porc3_pm" placeholder="%" size="2" required="required" value="<?php echo $row_mezcla['int_ref3_tol5_porc3_pm'] ?>"/></td>
+    <!-- <td colspan="2" id="fuente1">&nbsp;</td> -->
     </tr>
   <tr>
     <td colspan="12" id="fuente4">&nbsp;</td>
@@ -594,13 +618,18 @@ Total Rollos</td>
       <input name="int_cod_ref_rp" type="hidden" id="int_cod_ref_rp" value="<?php echo $row_orden_produccion['int_cod_ref_op']; ?>" />
       <input name="version_ref_rp" type="hidden" id="version_ref_rp" value="<?php echo $row_orden_produccion['version_ref_op']; ?>" />
       <input name="kilos_op" type="hidden" id="kilos_op" value="<?php echo $row_orden_produccion['int_kilos_op']; ?>" />
-      <input name="materiaPrima" id="materiaPrima" type="hidden" value=""/>  
+      <input name="materiaPrima" id="materiaPrima" type="hidden" value=""/>   
       <input name="estado" id="estado" type="hidden" value="1" />
       <?php  //PARA VALIDAR QUE NO SEAN MAS KILOS Q LA O.P
 	  for ($TK=0;$TK<=$totalRows_totalKilos-1;$TK++) { ?>
       <input name="kilos_extruido[]" type="hidden" id="kilos_extruido[]" value="<?php $tK=mysql_result($totalKilos,$TK,int_total_kilos_rp); echo $tK; ?>" />
       <?php } ?>
-      <input type="button" class="botonGeneral" name="ENVIAR" id="ENVIAR" value="SIGUIENTE" onclick="enviodeFormulario()" value="GUARDAR"/><!--onClick="envio_form(this);"--></td> 
+      <?php if($ult_parcial > 1): ?>
+        <input type="button" class="botonDel" name="ENVIAR" id="ENVIAR" value="SIGUIENTE" onclick="enviodeFormulario()" value="GUARDAR"/>
+      <?php else: ?>   
+      <input type="button" class="botonGeneral" name="ENVIAR" id="ENVIAR" value="SIGUIENTE" onclick="enviodeFormulario()" value="GUARDAR"/><!--onClick="envio_form(this);"-->
+      <?php endif; ?>
+      </td> 
   </tr>
 </table>
  

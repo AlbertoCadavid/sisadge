@@ -377,6 +377,18 @@ height:20px;
   overflow-y: scroll;
 }
 
+
+.divScrollVistas {
+ 
+  
+    display: flex;/*amplia las celdas cuando son pocas*/ 
+    /*overflow: hidden;*/ /*oculta ambas barras*/
+    overflow-x: hidden; /*oculta barra orizontal */
+    height: 130px; 
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+}
+
 .divScrollGrande {
   height: 600px;
   width: 100%;

@@ -220,9 +220,17 @@ $queryString_cotizacion = sprintf("&totalRows_cotizacion=%d%s", $totalRows_cotiz
 
 
                  <select class="busqueda selectsMini" name="tipo_ref" id="tipo_ref">
-                  <option value="" selected="selected">Todas ref.</option>
+                  <option value="" selected="selected">Tipo ref.</option>
                   <option value="0">Existentes</option>
                   <option value="1">Genericas</option>
+                </select>
+
+                 <select class="busqueda selectsMini" name="estado" id="estado">
+                  <option value="" selected="selected">Estado cotiz</option> 
+                  <option value="0">Pendiente</option>
+                  <option value="1">Aceptada</option>
+                  <option value="2">Rechazada</option>
+                  <option value="3">Obsoleta</option>
                 </select>
 
               </td>
@@ -273,7 +281,7 @@ $queryString_cotizacion = sprintf("&totalRows_cotizacion=%d%s", $totalRows_cotiz
               <td nowrap="nowrap" id="titulo4">Precio sin impuesto $</td>
               <td nowrap="nowrap" id="titulo4">Precio Con impuesto $</td>
               <td nowrap="nowrap" id="titulo4"><a href="referencia_precio.php?orden=<?php echo "fecha_creacion";?>">Fecha Creacion</a></td>
-              <td nowrap="nowrap" id="titulo4">ESTADO</td>
+              <td nowrap="nowrap" id="titulo4">ESTADO COTIZ</td>
             </tr>
             <?php do { ?>
               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
@@ -360,7 +368,7 @@ if (!(strcmp("3", $row_cotizacion['B_estado']))) {echo "Obsoleta";} ?></a></td>
   
   function envioListados(){
  
-     window.location.href = 'referencia_precio_excel.php?id_c='+$("#id_c").val()+'&cod_ref='+$("#cod_ref").val()+'&bolsa='+$("#bolsa").val()+'&id_c='+$("#id_c").val()+'&tipo_ref='+$("#tipo_ref").val()+'&solapa='+$("#solapa").val()+'&ancho='+$("#ancho").val()+'&largo='+$("#largo").val()+'&calibre='+$("#calibre").val();
+     window.location.href = 'referencia_precio_excel.php?id_c='+$("#id_c").val()+'&cod_ref='+$("#cod_ref").val()+'&bolsa='+$("#bolsa").val()+'&id_c='+$("#id_c").val()+'&tipo_ref='+$("#tipo_ref").val()+'&estado='+$("#estado").val()+'&solapa='+$("#solapa").val()+'&ancho='+$("#ancho").val()+'&largo='+$("#largo").val()+'&calibre='+$("#calibre").val();
  
   }
 

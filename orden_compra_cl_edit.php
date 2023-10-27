@@ -311,7 +311,7 @@ if( $_SESSION['superacceso']==1 )  //$row_orden_compra['b_estado_oc'] != 1
 
  if( $_SESSION['id_usuario']==64  && $row_orden_compra['b_estado_oc'] < 1){
          echo 'Test-2'; //aqui puede editar si esta recien ingresada
-       } else if( ($_SESSION['id_usuario']==26 || $_SESSION['id_usuario']==23) && $row_orden_compra['b_estado_oc'] >= 0){
+       } else if( ($_SESSION['id_usuario']==26 || $_SESSION['id_usuario']==23 || $_SESSION['id_usuario']==76) && $row_orden_compra['b_estado_oc'] >= 0){
            echo 'Test-3'; //aqui puede editar independientemente del estado
          }else{
           echo 'Test-4';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido

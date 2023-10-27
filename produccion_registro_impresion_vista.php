@@ -156,6 +156,7 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   <script type="text/javascript" src="AjaxControllers/eliminaFantasma.js"></script> 
+  <link rel="stylesheet" type="text/css" href="css/general.css"/>
 
   <link href="css/vista.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="js/vista.js"></script>
@@ -164,6 +165,10 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
 </head>
 <body>
   <div align="center">
+<table id="tablainterna">
+  <tr>
+   <td colspan="13" id="fuente2">
+ 
     <table id="tablainterna">
       <tr>    
        <td colspan="13" id="principal">REGISTRO DE PRODUCCION IMPRESION</td>
@@ -171,17 +176,17 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
      <tr>
       <td rowspan="6" id="fondo">&nbsp;</td>
       <td rowspan="6" id="fondo"><img src="images/logoacyc.jpg"/></td>
-      <td colspan="9" id="fuente3"><a href="produccion_impresion_listado_rollos.php?id_op_r=<?php echo  $_GET['id_op'] ?>"><img src="images/completo.gif" style="cursor:hand;" alt="ESTIQUER" title="ESTIQUER" border="0"/></a><a href="menu.php"><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" /></a></td>
+      <td colspan="11" id="fuente3"><a href="produccion_impresion_listado_rollos.php?id_op_r=<?php echo  $_GET['id_op'] ?>"><img src="images/completo.gif" style="cursor:hand;" alt="ESTIQUER" title="ESTIQUER" border="0"/></a><a href="menu.php"><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" /></a></td>
     </tr>
     <tr>
-      <td colspan="4" id="subppal2">FECHA DE INGRESO </td>
+      <td colspan="6" id="subppal2">FECHA DE INGRESO </td>
       <td id="subppal2">RESPONSABLE</td>
-      <td colspan="4" id="subppal2">OPERARIO</td>
+      <td colspan="6" id="subppal2">OPERARIO</td>
     </tr>
     <tr>
-      <td colspan="4" id="fuente2"><?php echo $row_impresion_vista['fecha_ini_rp']; ?></td>
+      <td colspan="6" id="fuente2"><?php echo $row_impresion_vista['fecha_ini_rp']; ?></td>
       <td nowrap id="fuente2"><?php echo $row_impresion_vista['str_responsable_rp']; ?></td>
-      <td colspan="4" nowrap id="fuente2"><?php  
+      <td colspan="6" nowrap id="fuente2"><?php  
       $id_emp=$row_impresion_vista['int_cod_empleado_rp'];
       $sqlemp="SELECT nombre_empleado FROM empleado WHERE codigo_empleado='$id_emp' ";
       $resultemp= mysql_query($sqlemp);
@@ -191,26 +196,30 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
        $nombre = mysql_result($resultemp, 0, 'nombre_empleado');echo $nombre; }else{echo "N.A";}?></td>
      </tr>
      <tr>
-      <td colspan="2" id="subppal2">Orden de Produccion</td>
-      <td colspan="2" id="subppal2">Referencia - version</td>
+      <td colspan="3" id="subppal2">Orden de Produccion</td>
+      <td colspan="3" id="subppal2">Referencia - version</td>
       <td id="subppal2">Tintas</td>
-      <td colspan="3" id="subppal2">&nbsp;</td>
+      <td colspan="6" id="subppal2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2" nowrap id="fuente2"><strong><?php echo $row_impresion_vista['id_op_rp'] ?></strong></td>
-      <td colspan="2" id="fuente2"><strong><?php echo $row_impresion_vista['int_cod_ref_rp'] ?>-<?php echo $row_impresion_vista['version_ref_rp'] ?></strong></td>
+      <td colspan="3" nowrap id="fuente2"><strong><?php echo $row_impresion_vista['id_op_rp'] ?></strong></td>
+      <td colspan="3" id="fuente2"><strong><?php echo $row_impresion_vista['int_cod_ref_rp'] ?>-<?php echo $row_impresion_vista['version_ref_rp'] ?></strong></td>
       <td id="fuente2"><?php if($row_ref_op['impresion_ref'] > 0){echo "SI";}else{echo "NO";}; ?></td>
-      <td colspan="3" id="fuente2">&nbsp;</td>
+      <td colspan="6" id="fuente2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="8" id="fondo">Alguna Inquietud o Comentario : sistemas@acycia.com </td>
+      <td colspan="13" id="fondo">Alguna Inquietud o Comentario : sistemas@acycia.com </td>
+    </tr>
+  
+   
+
+    <tr>
+      <td colspan="13" id="subppal2"><strong>IMPRESION / TIEMPOS</strong></td>
     </tr>
     <tr>
-      <td colspan="10" id="subppal2"><strong>IMPRESION / TIEMPOS</strong></td>
+      <td colspan="13" id="fuente1"><strong>Nota:</strong> Informacion suministrada segun el ingreso rollo a rollo del operario.</td>
     </tr>
-    <tr>
-      <td colspan="10" id="fuente1"><strong>Nota:</strong> Informacion suministrada segun el ingreso rollo a rollo del operario.</td>
-    </tr>
+
     <tr>
       <td nowrap id="fuente1">Rollo</td>
       <td nowrap id="fuente1">OPERARIOS</td>
@@ -218,15 +227,24 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
       <td nowrap id="fuente1">AUXILIAR</td>
       <td nowrap id="fuente1">CODIGO</td>
       <td nowrap id="fuente1">TURNO</td>
-      <td nowrap id="fuente1">RANGO INICIAL</td>
-      <td nowrap id="fuente1">RANGO FINAL</td>
-      <td colspan="2" nowrap id="fuente1">TIEMPO TOTAL</td>
+      <td colspan="2" nowrap id="fuente1">RANGO INICIAL</td>
+      <td colspan="2" nowrap id="fuente1">RANGO FINAL</td>
+      <td colspan="3" nowrap id="fuente1">TIEMPO TOTAL</td>
 <!--      <td id="fuente1">KILOS</td>
--->    </tr>
-<?php 	 
+-->
+     </tr>
+  </table>
+  
+  
+    
+  <div class="divScrollVistas" role="alert"> 
+   <table id="tablainterna"> 
+    <?php 	 
  		while ($row=mysql_fetch_array($resultOpmes)) { //Bucle para ver todos los registros
       ?>
-      <tr>
+
+
+   <tr>
        <td id="fuente1"><?php 
 	  $Nrollo=$row['rollo_r']; //numero de rollo
 	  echo $Nrollo; ?></td>
@@ -277,10 +295,10 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
 			  echo $tiempofin; //visualizar datos
         ?>
       </strong></td>
-      <td colspan="2" id="fuente1"><strong>
+      <td colspan="5" id="fuente1"><strong>
         <?php
 		$tiempototal=$row['TIEMPODIFE']; //datos del campo email
-		     $totaltiempo = horadecimalUna($tiempototal);echo $totaltiempo;             $totaltiem += $totaltiempo;//visualizar datos
+		     $totaltiempo = horadecimalUna($tiempototal);echo $totaltiempo; $totaltiem += $totaltiempo;//visualizar datos
          ?>
        </strong></td>
 <!--      <td id="fuente1"><?php
@@ -290,28 +308,34 @@ $kilos=$row['KILOS']; //datos del campo email
         ?></td>-->
       </tr>
       <?php  } ?>    
+   
+     </table>
+  </div>
+  
+ 
+    <table  id="tablainterna">
       <tr>
-       <td colspan="8" id="detalle3" >Totales:</td>
-       <td colspan="2" id="fuente3" ><?php echo $totaltiem;?></td>
+       <td colspan="10" id="detalle3"><strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Totales Tiempo:</strong></td>
+       <td colspan="3" id="detalle3"><strong><?php echo $totaltiem;?></strong></td>
        <!-- <td id="fuente3" ><?php echo redondear_decimal($totalkilos);?></td>-->
      </tr>
-     <tr>
-      <td colspan="10" id="fuente2">
-        <table width="100%" border="0" id="tablainterna">
+    </table>
+   
+        <table id="tablainterna">
           <?php if($row_tiempoMuerto['id_rpt_rt']!='') {?>
           <tr>
-            <td colspan="10" id="subppal2"><strong>TIEMPOS DESPERDICIOS DE TODOS LOS ROLLOS</strong></td>
+            <td colspan="13" id="subppal2"><strong>TIEMPOS DESPERDICIOS DE TODOS LOS ROLLOS</strong></td>
           </tr> 
           <tr>
             <!--<td nowrap id="subppal2"><strong>Rollo N&deg;</strong></td>-->
-            <td nowrap id="subppal2"><strong>Tiempos Muertos- Tipo</strong></td>
-            <td nowrap id="subppal2"><strong>Tiempos Muertos- Minutos</strong></td>
+            <td colspan="7" nowrap id="subppal2"><strong>Tiempos Muertos- Tipo</strong></td>
+            <td colspan="6" nowrap id="subppal2"><strong>Tiempos Muertos- Minutos</strong></td>
 
           </tr>
           <?php  do{ ?>
           <tr>
             <!--<td id="detalle2"><?php echo $row_tiempoMuerto['int_rollo_rt']; ?></td>-->
-            <td id="detalle1">
+            <td colspan="7" id="detalle1">
               <?php 
               $varM=$row_tiempoMuerto['id_rpt_rt']; 
               $id_tm=$varM;
@@ -322,24 +346,24 @@ $kilos=$row['KILOS']; //datos del campo email
               { 
                $nombreM = mysql_result($resulttm, 0, 'nombre_rtp');echo $nombreM; }?>
              </td>
-             <td id="detalle2"><?php $var1=$row_tiempoMuerto['tiempom']; echo $var1;$totalM=$totalM+$var1; ?></td>
+             <td colspan="6" id="detalle2"><?php $var1=$row_tiempoMuerto['tiempom']; echo $var1;$totalM=$totalM+$var1; ?></td>
            </tr> <?php } while ($row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto)); ?>
            <tr>
              <!-- <td id="detalle3">&nbsp;</td>-->
-             <td id="detalle3"><strong>TOTAL</strong></td>
-             <td id="fuente2"><strong><?php echo $totalM; ?></strong></td>
+             <td colspan="7" id="detalle3"><strong>TOTAL</strong></td>
+             <td colspan="6" id="fuente2"><strong><?php echo $totalM; ?></strong></td>
            </tr>
            <?php } ?>
            <?php if($row_tiempoPreparacion['id_rpt_rtp']!='') {?>
            <tr>
              <!-- <td nowrap id="subppal2"><strong>Rollo N&deg;</strong></td>-->
-             <td nowrap id="subppal2"><strong>Tiempos Preparacion- Tipo</strong></td>
-             <td nowrap id="subppal2"><strong>Tiempos Preparacion - Minutos</strong>       </td>
+             <td colspan="7" nowrap id="subppal2"><strong>Tiempos Preparacion- Tipo</strong></td>
+             <td colspan="6" nowrap id="subppal2"><strong>Tiempos Preparacion - Minutos</strong>       </td>
            </tr>
            <?php  do { ?>
            <tr>
             <!--<td id="detalle2"><?php echo $row_tiempoPreparacion['int_rollo_rtp']; ?></td>-->
-            <td id="detalle1">
+            <td colspan="7" id="detalle1">
               <?php 
               $varP=$row_tiempoPreparacion['id_rpt_rtp']; 
               $id_rtp=$varP;
@@ -350,24 +374,24 @@ $kilos=$row['KILOS']; //datos del campo email
               { 
                $nombreP = mysql_result($resultrtp, 0, 'nombre_rtp');echo $nombreP; }?>
              </td>
-             <td id="detalle2"><?php $var2=$row_tiempoPreparacion['preparacion']; echo $var2; $totalP=$totalP+$var2;  ?></td>
+             <td colspan="6" id="detalle2"><?php $var2=$row_tiempoPreparacion['preparacion']; echo $var2; $totalP=$totalP+$var2;  ?></td>
            </tr><?php } while ($row_tiempoPreparacion = mysql_fetch_assoc($tiempoPreparacion)); ?>
            <tr>
             <!--<td id="detalle3">&nbsp;</td>-->
-            <td id="detalle3"><strong>TOTAL</strong></td>
-            <td id="fuente2"><strong><?php echo $totalP; ?></strong></td>
+            <td colspan="7" id="detalle3"><strong>TOTAL</strong></td>
+            <td colspan="6" id="fuente2"><strong><?php echo $totalP; ?></strong></td>
           </tr>
           <?php } ?> 
           <?php if($row_desperdicio['id_rpd_rd']!='') {?>  
           <tr>
             <!--<td nowrap id="subppal2"><strong>Rollo N&deg;</strong></td> -->
-            <td nowrap id="subppal2"><strong>Desperdicios - Tipo</strong></td>
-            <td nowrap id="subppal2"><strong>Desperdicios - Kilos</strong></td>      
+            <td colspan="7" nowrap id="subppal2"><strong>Desperdicios - Tipo</strong></td>
+            <td colspan="6" nowrap id="subppal2"><strong>Desperdicios - Kilos</strong></td>      
           </tr>
           <?php do{ ?>
           <tr>
             <!--<td id="detalle2"><?php echo $row_desperdicio['int_rollo_rd']; ?></td>-->
-            <td id="detalle1">
+            <td colspan="7" id="detalle1">
               <?php 
               $varD=$row_desperdicio['id_rpd_rd']; 
               $id_rpd=$varD;
@@ -378,32 +402,32 @@ $kilos=$row['KILOS']; //datos del campo email
               { 
                $nombreD = mysql_result($resultrtd, 0, 'nombre_rtp'); echo $nombreD; }?>
              </td>
-             <td id="detalle2"><?php $var3=$row_desperdicio['desperdicio']; echo $var3;$totalD=$totalD+$var3; ?></td>
+             <td colspan="6" id="detalle2"><?php $var3=$row_desperdicio['desperdicio']; echo $var3;$totalD=$totalD+$var3; ?></td>
            </tr><?php } while ($row_desperdicio = mysql_fetch_assoc($desperdicio)); ?>
            <tr>
-            <td id="detalle3"><strong>TOTAL</strong></td>
-            <td id="fuente2" above><strong><?php echo numeros_format($totalD); ?></strong></td>
+            <td colspan="7" id="detalle3"><strong>TOTAL</strong></td>
+            <td colspan="6" id="fuente2" above><strong><?php echo numeros_format($totalD); ?></strong></td>
           </tr>
           <?php } ?> 
-        </table>
-      </td>
-    </tr> 
-    <tr>
-      <td colspan="10" id="fuente2">&nbsp;
+        </table> 
+     
+
+ 
        <?php if($row_kilo_editar['id_rpp_rp']!='') {?> 
-       <table width="100%" border="0" id="tablainterna">
+       <table  border="0" id="tablainterna">
          <tr id="tr1">
            <td colspan="13" id="subppal2"><strong>CONSUMO DE TINTAS</strong></td>
          </tr>
          <tr id="tr1">
-          <td nowrap="nowrap" id="subppal2"><strong>Nombre Insumo</strong></td>
-          <td nowrap="nowrap" id="subppal2"><strong>Kilos Ingresados</strong></td>
-          <td nowrap="nowrap" id="subppal2"><strong>Costo MP/kg</strong></td>
-          <td nowrap="nowrap" id="subppal2"><strong>Sub Total</strong></td>
+          <td colspan="3" nowrap="nowrap" id="subppal2"><strong>Nombre Insumo</strong></td>
+          <td colspan="3" nowrap="nowrap" id="subppal2"><strong>Kilos Ingresados</strong></td>
+          <td colspan="3" nowrap="nowrap" id="subppal2"><strong>Costo MP/kg</strong></td>
+          <td colspan="4" nowrap="nowrap" id="subppal2"><strong>Sub Total</strong></td>
         </tr>
         <?php  for ($x=0;$x<=$totalRows_kilo_editar-1 ;$x++) { ?> 
         <tr>         
-         <td id="detalle1"><?php $id_rkp=mysql_result($kilo_editar,$x,id_rpp_rp);
+         <td colspan="3" id="detalle1">
+          <?php $id_rkp=mysql_result($kilo_editar,$x,id_rpp_rp);
          $sqlinsum="SELECT * FROM insumo WHERE id_insumo='$id_rkp'";
          $resultinsum= mysql_query($sqlinsum);
          $numinsum= mysql_num_rows($resultinsum);
@@ -412,49 +436,55 @@ $kilos=$row['KILOS']; //datos del campo email
            $nombre_insumo = mysql_result($resultinsum, 0, 'descripcion_insumo');
            echo $nombre_insumo; 
          }?>
-         <td id="detalle2"><?php $valort=mysql_result($kilo_editar,$x,valor_prod_rp); echo $valort;
-         $totalTintas+=$valort; ?>              
-         <td id="detalle2"><?php echo $costomp=mysql_result($kilo_editar,$x,costo_mp); 
+         </td>
+         <td colspan="3" id="detalle2"><?php $valort=mysql_result($kilo_editar,$x,valor_prod_rp); echo $valort;
+         $totalTintas+=$valort; ?> 
+         </td>             
+         <td colspan="3" id="detalle2"><?php echo $costomp=mysql_result($kilo_editar,$x,costo_mp); 
          $costo_mp+=$costomp; ?></td>
-         <td id="detalle2"><?php 
+         <td colspan="4" id="detalle2"><?php 
          echo $valorcosto=$valort*$costomp; 
-         $costoTotal+=$valorcosto;?></td>  
+         $costoTotal+=$valorcosto;?>
+         </td>  
        </tr>
        <?php  } ?> 
        <tr>
-        <td id="detalle3"><strong>TOTAL</strong></td>
-        <td id="detalle2"><strong><?php echo numeros_format($totalTintas);?></strong></td>
-        <td id="fuente2">&nbsp;</td>
-        <td id="fuente2"><strong><?php echo numeros_format($costoTotal);?></strong></td>
+        <td colspan="3" id="detalle3"><strong>TOTAL</strong></td>
+        <td colspan="3" id="detalle2"><strong><?php echo numeros_format($totalTintas);?></strong></td>
+        <td colspan="3" id="fuente2">&nbsp;</td>
+        <td colspan="4" id="fuente2"><strong><?php echo numeros_format($costoTotal);?></strong></td>
       </tr> 
     </table>
-    <?php  } ?>   
-  </td> 
-</tr>
-<tr>
-  <td colspan="13" id="fuente2">
-    <table border="0"  > 
+    <?php } ?>   
+  
+ 
+<table id="tablainterna"> 
       <tr>
-        <td colspan="13" id="subppal2"><strong>LIQUIDACION POR ROLLO</strong></td>
+        <td colspan="13" id="subppal2"><strong>LIQUIDACION POR ROLLO</strong></td> 
       </tr>
       <tr>
-        <td colspan="13" id="fuente1"><strong>Nota:</strong> Informacion suministrada segun la liquidacion de la o.p hecha por el operario..</td>    
+        <td colspan="13" id="fuente1"><strong>Nota:</strong> Informacion suministrada segun la liquidacion de la o.p hecha por el operario..</td> 
       </tr>
-      <tr>
-        <td id="subppal2">Rollo N</td>
-        <td id="subppal2">Kilos Producidos </td>
-        <td id="subppal2">Kilos Desperdiciados</td>
-        <td nowrap id="subppal2">Total Kilos</td>
-        <td id="subppal2">Horas Trabajadas</td>
-        <td id="subppal2">Rodamiento Horas</td>
-        <td id="subppal2">Tiempo Muertos - Minutos</td>
-        <td id="subppal2">Tiempos Preparacion - Minutos</td>
-        <td id="subppal2">Promedio Kilos Producidos x Hora</td>
-        <td id="subppal2">Promedio Metros Producidos x Minuto</td>
-        <td nowrap id="subppal2">Metro Lineal</td>
-        <td nowrap id="subppal2">Editar</td>
-        <?php if($_SESSION['acceso']): ?><td nowrap id="subppal2">Elimina</td><?php endif; ?>
-      </tr>
+ 
+   <tr>
+     <td nowrap id="subppal2">Rollo</td>
+     <td id="subppal2">Kilos Producidos </td>
+     <td id="subppal2">Kilos Desperdiciados</td>
+     <td nowrap id="subppal2">Total Kilos</td>
+     <td id="subppal2">Horas Trabajadas</td>
+     <td id="subppal2">Rodamiento Horas</td>
+     <td id="subppal2">Tiempo Muertos - Minutos</td>
+     <td id="subppal2">Tiempos Preparacion - Minutos</td>
+     <td id="subppal2">Promedio Kilos Producidos x Hora</td>
+     <td id="subppal2">Promedio Metros Producidos x Minuto</td>
+     <td nowrap id="subppal2">MetroLineal</td>
+     <td nowrap id="subppal2">Edit</td>
+     <?php if($_SESSION['acceso']): ?><td nowrap id="subppal2">Del</td><?php endif; ?>
+   </tr>
+</table>
+ 
+  <div class="divScrollVistas" role="alert"> 
+  <table id="tablainterna">   
       <?php $rollos=1; do{?>
       <tr>
         <td id="fuente2"><?php echo $rollos=$row_impresion_vista['rollo_rp'];
@@ -473,7 +503,8 @@ $kilos=$row['KILOS']; //datos del campo email
        $tHoras_hr=mysql_result($resultimp,0,'horashr');
      }else {echo "00:00:00";}	
      echo $row_impresion_vista['total_horas_rp']; 
-     $totalh=$tHoras_imp;$totalhr=$tHoras_hr; ?></td>
+     $totalh=$tHoras_imp;$totalhr=$tHoras_hr; ?>
+     </td>
      <td id="fuente2"><?php echo $row_impresion_vista['rodamiento_rp'];?></td>
      <td id="fuente2"><?php echo $row_impresion_vista['horas_muertas_rp']; $totalhm=$totalhm+$row_impresion_vista['horas_muertas_rp'];?></td>
      <td id="fuente2"><?php echo $row_impresion_vista['horas_prep_rp']; $totalhp=$totalhp+$row_impresion_vista['horas_prep_rp'];?></td>
@@ -495,6 +526,7 @@ $kilos=$row['KILOS']; //datos del campo email
       ?>
       <a href="produccion_impresion_stiker_rollo_edit.php?id_r=<?php echo $id_r; ?>">Editar</a>
     </td>
+    <td>&nbsp;</td>
     <?php if($_SESSION['acceso']): ?>
       <td id="fuente2">
         <a href="javascript:eliminar_fantasma('id_fantasma',<?php echo $row_impresion_vista['id_rp']; ?>,'produccion_registro_impresion_vista.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a> 
@@ -503,26 +535,29 @@ $kilos=$row['KILOS']; //datos del campo email
     <?php endif; ?>
   </tr>
   <?php } while ($row_impresion_vista = mysql_fetch_assoc($impresion_vista)); ?>
+
+</table> 
+  <br> 
+</div>
+ 
+ <table  id="tablainterna">
   <tr>
-    <td id="detalle1"><strong>TOTALES</strong></td>
-    <td id="fuente2"><strong><?php echo $totalkp; ?></strong></td>
-    <td id="fuente2"><strong><?php echo $totalkd; ?></strong></td>
-    <td id="fuente2"><strong><?php echo $totalTk; ?></strong> </td>
-    <td id="fuente2"><strong><?php echo $totalh; ?></strong></td>
-    <td id="fuente2"><strong><?php echo $totalhr; ?></strong></td>
-    <td id="fuente2"><strong><?php echo $totalhm; ?></strong></td>
-    <td id="fuente2"><strong><?php echo $totalhp; ?></strong></td>
-    <td id="fuente2"><strong><?php echo numeros_format($totalkh/$trollos); 
-    ?></strong></td>
-    <td id="fuente2"><strong><?php echo numeros_format($totalmm/$trollos); 
-    ?></strong></td>
-    <!-- <td id="fuente2">&nbsp;</td>-->
-    <td id="fuente2"><strong><?php echo $totalml; 
-    ?></strong></td>
-    <td id="fuente2">&nbsp;</td>
-  </tr>
-</table></td>
-</tr>
+    <td style="width: 30px;"> </td> 
+    <td style="width: 60px;" id="subppal2"><strong><?php echo $totalkp; ?></strong></td>
+    <td id="subppal2" style="width: 60px;"><strong><?php echo $totalkd; ?></strong></td>
+    <td id="subppal2" style="width: 60px;"><strong><?php echo $totalTk; ?></strong> </td>
+    <td id="subppal2" style="width: 80px;"><strong><?php echo $totalh; ?></strong></td>
+    <td id="subppal2" style="width: 80px;"><strong><?php echo $totalhr; ?></strong></td>
+    <td id="subppal2" style="width: 40px;"><strong><?php echo $totalhm; ?></strong></td>
+    <td id="subppal2" style="width: 30px;"><strong><?php echo $totalhp; ?></strong></td>
+    <td id="subppal2" style="width: 60px;"><strong><?php echo numeros_format($totalkh/$trollos); ?></strong></td>
+    <td id="subppal2" style="width: 60px;"><strong><?php echo numeros_format($totalmm/$trollos); ?></strong></td> 
+    <td id="subppal2" style="width: 60px;"><strong><?php echo $totalml; ?></strong></td>
+    <td id="subppal2" style="width: 60px;"><strong>Totales</strong></td>
+    <td >&nbsp;&nbsp;&nbsp;&nbsp;</td> 
+  </tr> 
+
+
 <tr>
   <td colspan="13" >
   <!--      <table>
@@ -538,11 +573,17 @@ $kilos=$row['KILOS']; //datos del campo email
           </tr> 
         </table>-->  
       </td>
-    </tr>                                                   
-  </table>   
+    </tr>   
 </table>
-</div>
+
+ 
+       </td>
+     </tr>
+   </table>
+</div> 
+   
 </body>
+<br> 
 </html>
 <?php
 mysql_free_result($usuario);

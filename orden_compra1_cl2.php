@@ -780,7 +780,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                           <?php endif; ?>
                           <td>
                             <?php if( $_SESSION['restriUsuarios'] ): ?>
-                             <a class="botonUpdateMini" id="btnDelItems" onclick='uPDATE("id_pedido","1","1", "<?php echo $row_ordenes_deudoras['id_pedido']; ?>", "view_index.php?c=comercialList&a=Actualizar")' type="button" >PAGO?</a>
+                             <a class="botonUpdateMini" id="btnDelItems" onclick="uPDATE('id_pedido','1','1', '<?php echo $row_ordenes_deudoras['id_pedido']; ?>', 'view_index.php?c=comercialList&a=Actualizar')" type="button" >PAGO?</a>
                              <?php endif; ?>
                           </td>
                           </tr>

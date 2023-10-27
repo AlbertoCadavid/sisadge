@@ -8,6 +8,27 @@ include_once("./Controller/Csolicitud_compras.php");
 if (!isset($_SESSION)) {
   session_start();
 }
+// ** Logout the current user. **
+$logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
+if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")){
+  $logoutAction .="&". htmlentities($_SERVER['QUERY_STRING']);
+}
+
+if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
+  //to fully log out a visitor we need to clear the session varialbles
+  $_SESSION['MM_Username'] = NULL;
+  $_SESSION['MM_UserGroup'] = NULL;
+  $_SESSION['PrevUrl'] = NULL;
+  unset($_SESSION['MM_Username']);
+  unset($_SESSION['MM_UserGroup']);
+  unset($_SESSION['PrevUrl']);
+
+  $logoutGoTo = "usuario.php";
+  if ($logoutGoTo) {
+    header("Location: $logoutGoTo");
+    exit;
+  }
+}
 
 ?>
 <?php
@@ -36,15 +57,17 @@ $row_usuario = $conexion->buscar('usuario', 'usuario', $colname_usuario);
 $colname_cliente = "-1";
 $colname_entrada = "-1";
 
-$rowsLlenarListado = $llenarListado->mostrarListado("");
+$rowsLlenarListado = $llenarListado->mostrarListado($maxRows_registros, $pageNum_registros);
 
 
 if (isset($_GET['totalRows_registros'])) {
   $totalRows_registros = $_GET['totalRows_registros'];
 } else {
-  $totalRows_registros = $conexion->conteo('tbl_remision_interna');
+  $totalRows_registros = $conexion->conteo('tbl_info_solicitud_compras');
 }
-$totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
+
+$totalPages_registros = ceil($totalRows_registros / $maxRows_registros)-1;
+
 
 
 

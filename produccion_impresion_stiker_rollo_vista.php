@@ -218,7 +218,7 @@ function cerrar(num) {
     <td nowrap="nowrap" id="stikersC_fuentN">ORDEN P:</td>
     <td nowrap="nowrap" id="stikers_fuentN">
     <input type="hidden" name="id_r" value="<?php echo $_GET['id_r']; ?>">
-    <input type="hidden" name="fechaV_r" value="<?php echo fechaHora(); ?>">
+    <input type="hidden" name="fechaV_r" value="<?php echo fechaHora(''); ?>">
 	<?php echo $row_rollo_impresion['id_op_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN">REF:</td>
     <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['ref_r']; ?></td>
@@ -261,7 +261,7 @@ function cerrar(num) {
   </tr>
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">FECHA V:</td>
-    <td nowrap="nowrap" id="stikers_fuent2"><?php echo fechaHora(); ?></td>
+    <td nowrap="nowrap" id="stikers_fuent2"><?php echo fechaHora(''); ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN">TURNO:</td>
     <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['turno_r']; ?></td>
   </tr>

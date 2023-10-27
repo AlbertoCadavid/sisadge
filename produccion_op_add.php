@@ -139,8 +139,8 @@ if (isset($_SERVER['QUERY_STRING'])) {
 //INSERT
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
   $insertSQL = sprintf("INSERT INTO Tbl_orden_produccion (id_op, fecha_registro_op,fecha_entrega_op, str_responsable_op, str_numero_oc_op, int_cod_ref_op, id_ref_op, version_ref_op, int_cotiz_op, str_entrega_op, str_nit_op, int_cliente_op, int_desperdicio_op, int_cantidad_op, str_tipo_bolsa_op, int_pesom_op, str_matrial_op, str_presentacion_op, metroLineal_op, int_kilos_op, int_calibre_op, int_ancho_rollo_op, int_micras_op, str_interno_op, str_externo_op, str_tratamiento_op, int_undxcaja_op, int_undxpaq_op,undxpaqreal, numInicio_op, observ_extru_op,maquina_imp_op, 
-  kls_req_imp_op, mts_req_imp_op, margen_izq_imp_op, margen_anc_imp_op, margen_anc_mm_imp_op, margen_der_imp_op, margen_peri_imp_op, margen_per_mm_imp_op, margen_z_imp_op, observ_impre_op, mts_cinta_sellado_op, kls_sellado_op, kls_sellado_bol_op, und_prod_sellado_op, observ_sellado_op, b_estado_op, b_borrado_op, b_visual_op,id_termica_op,cinta_termica_op,numeracion_inicial,imprimiop,lote,charfin) 
-  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  kls_req_imp_op, mts_req_imp_op, margen_izq_imp_op, margen_anc_imp_op, margen_anc_mm_imp_op, margen_der_imp_op, margen_peri_imp_op, margen_per_mm_imp_op, margen_z_imp_op, observ_impre_op, mts_cinta_sellado_op, kls_sellado_op, kls_sellado_bol_op, und_prod_sellado_op, observ_sellado_op, b_estado_op, b_borrado_op, b_visual_op,id_termica_op,cinta_termica_op,numeracion_inicial,imprimiop,lote,charfin, coextrusion) 
+  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,  %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
       GetSQLValueString($_POST['id_op'], "int"),
       GetSQLValueString($_POST['fecha_registro_op'], "date"),
       GetSQLValueString($_POST['fecha_entrega_op'], "date"),
@@ -196,7 +196,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       GetSQLValueString($_POST['numInicio_op'], "text"),
       GetSQLValueString($_POST['imprimiop'], "text"),
       GetSQLValueString($_POST['lote'], "text"),
-      GetSQLValueString($_POST['charfin'], "text"));
+      GetSQLValueString($_POST['charfin'], "text"),
+      GetSQLValueString($_POST['coextrusion'], "text"));  
                                      
   $insertSQL2 = sprintf("INSERT INTO Tbl_op_proceso (id_op,id_proceso) VALUES (%s, %s)",
             GetSQLValueString($_POST['id_op'], "int"),
@@ -2596,6 +2597,7 @@ function alerta(){
                                <input name="b_borrado_op" type="hidden" id="b_borrado_op" value="0" />
                                <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_referencia['id_ref'] ?>" />
                                <input type="hidden" name="MM_insert" value="form1" /> 
+                               <input name="coextrusion" id="coextrusion" type="hidden" value="SI" />
                                <input type="submit" class="botonGeneral" name="GUARDAR" id="GUARDAR" value="GUARDAR" /></td>
                            </tr>
                          </table>

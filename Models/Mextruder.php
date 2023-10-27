@@ -77,16 +77,22 @@ class oMextruder{
                 $arrayPHP =  ($array_deco) ;
  
                 $consulta=$this->db->query("SELECT * FROM $tabla WHERE $filtro = $id " );
+                
                 if($consulta){
                  while($filas=$consulta->fetch_assoc()){
                     $this->existe[]=$filas;
                  }
 
                 }
-
+             
+                
                 if(is_null($this->existe)){ 
                   $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( ". $arrayPHP['id_rp'] .", '". $arrayPHP['id_proceso_rp'] ."','". $arrayPHP['id_op_rp'] ."','". $arrayPHP['id_ref_rp'] ."','". $arrayPHP['int_cod_ref_rp'] ."','". $arrayPHP['version_ref_rp'] ."','". $arrayPHP['rollo_rp'] ."','". $arrayPHP['int_kilos_prod_rp'] ."','". $arrayPHP['int_kilos_desp_rp'] ."', '". $arrayPHP['int_total_kilos_rp'] ."', '". $arrayPHP['porcentaje'] ."','". $arrayPHP['int_metro_lineal_rp'] ."','". $arrayPHP['int_total_rollos_rp'] ."','". $arrayPHP['total_horas_rp'] ."','". $arrayPHP['tiempoOptimo_rp'] ."','','','". $arrayPHP['str_maquina_rp'] ."','". $arrayPHP['str_responsable_rp'] ."','". $arrayPHP['fecha_ini_rp'] ."', '". $arrayPHP['fecha_fin_rp'] ."','". $arrayPHP['int_kilosxhora_rp'] ."','". $arrayPHP['int_cod_empleado_rp'] ."','". $arrayPHP['int_cod_liquida_rp'] ."','". $arrayPHP['costo'] ."','". $arrayPHP['parcial'] ."' );");
-      
+                    if($stmt){
+                        foreach ($arrayPHP['id_rollo'] as $value) {
+                        $this->db->query("UPDATE `tblextruderrollo` SET `id_rp`= $arrayPHP[id_rp] WHERE id_r = $value ");
+                        }
+                    }
                   return $stmt;
                 }else{  
   

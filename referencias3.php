@@ -161,7 +161,8 @@ $row_referencianueva3=$conexion->llenarCampos("tbl_cotiza_laminas","WHERE Tbl_co
 	<div align="center">
 		<table >
 			<tr>
-				<td><form action="referencias3.php" method="get" name="consulta">
+				<td>
+					<form action="referencias3.php" method="get" name="consulta">
 					<select name="cod_ref" id="cod_ref"  class="busqueda selectsMedio ">
 						<option value="0"<?php if (!(strcmp(0, $_GET['cod_ref']))) {echo "selected=\"selected\"";} ?>>REF.</option>
 						<?php foreach ($row_ref as $row_ref) { ?>

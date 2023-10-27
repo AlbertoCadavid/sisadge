@@ -17,7 +17,21 @@ if(isset($_GET['getClientId'])&& $_GET['getClientId'] !=''){
 }else{
     echo '';
 }
+
+
+//CUANTO NO TIENE EXTRUDER
+if(isset($_GET['getClientIdNoexT'])&& $_GET['getClientIdNoexT'] !=''){
  
+  if($resultado=$conexion->llenaListas("TblImpresionRollo","WHERE id_op_r=".$_GET['getClientIdNoexT']," order by rollo_r desc","*")){
+ 
+    echo json_encode( $resultado); 
+
+  } 
+  exit();  
+}else{
+    echo '';
+}
+
 /*if(isset($_GET['getClientId'])){
 	
 	mysql_select_db($database_conexion1, $conexion1);

@@ -1,46 +1,93 @@
 // JavaScript Document
-     function getClientData(){
-      
-      var clientId=document.getElementById("idrollo").value;
-       $.ajax({ 
-         type:  'get',
-         url: 'consulta_registro_impresion.php',
-         data:{
-          "getClientId": clientId
-         },
-        dataType: 'json',//define las variables a mostrar 
-      }).done(function( data, textStatus, jqXHR ) {
-
-        if(data) {
-         var html = '';
-           var i;
-           for (i = 0; i < data.length; i++) {
-         
-              $("#rollo_r").val(data[i].rollo_r);
-              $("#metro_r").val(data[i].metro_r);
-              $("#metro_r2").val(data[i].metro_r);
-              $("#kilos_r").val(data[i].kilos_r);
-              $("#int_kilos_prod_rp").val(data[i].kilos_r); 
-              $("#int_total_kilos_rp").val(data[i].kilos_r);  
-              
-           }
-           $('#busqueda').fadeIn();  
-           setTimeout(function() { $("#busqueda").fadeOut();},2000); 
-        } 
-      }).fail(function( jqXHR, textStatus, errorThrown ) {
-      	$("#rollo_r").val('');
-      	$("#metro_r").val('');
-      	$("#metro_r2").val('');
-      	$("#kilos_r").val('');
-      	$("#int_kilos_prod_rp").val(''); 
-      	$("#int_total_kilos_rp").val(''); 
-
-        if ( console && console.log ) {
-          console.log( "La solicitud a fallado: " +  textStatus);
+function getClientData() {
+  var clientId = document.getElementById("idrollo").value;
+  $.ajax({
+    type: "get",
+    url: "consulta_registro_impresion.php",
+    data: {
+      getClientId: clientId,
+    },
+    dataType: "json", //define las variables a mostrar
+  })
+    .done(function (data, textStatus, jqXHR) {
+      if (data) {
+        var html = "";
+        var i;
+        for (i = 0; i < data.length; i++) {
+          $("#rollo_r").val(data[i].rollo_r);
+          $("#metro_r").val(data[i].metro_r);
+          $("#metro_r2").val(data[i].metro_r);
+          $("#kilos_r").val(data[i].kilos_r);
+          $("#int_kilos_prod_rp").val(data[i].kilos_r);
+          $("#int_total_kilos_rp").val(data[i].kilos_r);
         }
-      });  
-     
-     }
+        $("#busqueda").fadeIn();
+        setTimeout(function () {
+          $("#busqueda").fadeOut();
+        }, 2000);
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      $("#rollo_r").val("");
+      $("#metro_r").val("");
+      $("#metro_r2").val("");
+      $("#kilos_r").val("");
+      $("#int_kilos_prod_rp").val("");
+      $("#int_total_kilos_rp").val("");
+
+      if (console && console.log) {
+        console.log("La solicitud a fallado: " + textStatus);
+      }
+    });
+}
+
+function getClientIdNoexT() {
+  var clientId = document.getElementById("id_op_r").value;
+  $.ajax({
+    type: "get",
+    url: "consulta_registro_impresion.php",
+    data: {
+      getClientIdNoexT: clientId,
+    },
+    dataType: "json", //define las variables a mostrar
+  })
+    .done(function (data, textStatus, jqXHR) {
+      if (data) {
+        var html = "";
+        var i;
+        for (i = 0; i < data.length; i++) {
+          
+          $("#rollo_r").val($("#idrollo").val());
+          $("#operario").val(data[i].cod_empleado_r);
+          $("#auxiliar").val(data[i].cod_auxiliar_r);
+          
+          $("#turno_r").val(data[i].turno_r);
+
+          /* $("#metro_r").val(data[i].metro_r);
+          $("#metro_r2").val(data[i].metro_r);
+          $("#kilos_r").val(data[i].kilos_r);
+          $("#int_kilos_prod_rp").val(data[i].kilos_r);
+          $("#int_total_kilos_rp").val(data[i].kilos_r); */
+        }
+        $("#busqueda").fadeIn();
+        setTimeout(function () {
+          $("#busqueda").fadeOut();
+        }, 2000);
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      /*$("#rollo_r").val('');*/
+      $("#metro_r").val("");
+      $("#metro_r2").val("");
+      $("#kilos_r").val("");
+      $("#int_kilos_prod_rp").val("");
+      $("#int_total_kilos_rp").val("");
+
+      if (console && console.log) {
+        console.log("La solicitud a fallado: " + textStatus);
+      }
+    });
+}
 
 /*
 	var ajax = new sack();

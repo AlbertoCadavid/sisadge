@@ -74,7 +74,7 @@ class Csolicitud_comprasController
         ];
     }
 
-    public function mostrarListado()
+    public function mostrarListado($maxRows_registros,$pageNum_registros)
     {
 
         $objMmostrarListado = new Msolicitud_compras($_POST['id'], $_POST['id_solicitud'], $_POST['area'], $_POST['nombre'], $_POST['fecha'], $_POST['maquina'], $_POST['observaciones'], strtoupper($_POST['responsable']), strtoupper($_POST['autorizado']), strtolower($_POST['correo']));
@@ -84,20 +84,20 @@ class Csolicitud_comprasController
 
         if (isset($_GET["valor"]) || isset($_GET["estado"])) {
             if (isset($_GET["estado"]) && !isset($_GET["valor"])) {
-                return $objMmostrarListado->mostrarListado("", "WHERE estado2 = '$busquedaEstado'");
+                return $objMmostrarListado->mostrarListado("", "WHERE estado2 = '$busquedaEstado'", $maxRows_registros,$pageNum_registros);
             } else 
             if (isset($_GET["estado"]) && isset($_GET["valor"])){
                 $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
-                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "WHERE estado2 = '$busquedaEstado'");
+                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "WHERE estado2 = '$busquedaEstado'", $maxRows_registros,$pageNum_registros);
             } else 
             if (!isset($_GET["estado"]) && isset($_GET["valor"])){
                 $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
-                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "");
+                return $objMmostrarListado->mostrarListado("and $busqueda LIKE'$colname_busqueda%'", "", $maxRows_registros,$pageNum_registros);
             }
         } else {
-            return $objMmostrarListado->mostrarListado("","");
+            return $objMmostrarListado->mostrarListado("","", $maxRows_registros,$pageNum_registros);
         }
-        //return $objMmostrarListado->mostrarListado();
+        
         
     }
 

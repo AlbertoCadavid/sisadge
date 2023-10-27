@@ -63,9 +63,32 @@ if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
 $row_usuario = $conexion->buscar('usuario','usuario',$colname_usuario); 
+
+
+$colname_busqueda= "-1";
  
-$row_registros = $conexion->buscarListar("proveedor","*","ORDER BY proveedor_p ASC","",$maxRows_registros,$pageNum_registros,"" );
+if ( $_GET['tipo_pro']!='' && $_GET['proveedor']=='') {
+  $tipos = $_GET['tipo_pro'];
+  $busqueda = "WHERE tipo_servicio_p = '$tipos'"; 
+}else if( $_GET['proveedor']!=''&& $_GET['tipo_pro']==''){
+  $proveedor = $_GET['proveedor'];
+  $busqueda = "WHERE proveedor_p like '%$proveedor%' "; 
+}else if( $_GET['proveedor']!=''&& $_GET['tipo_pro']!=''){
+  $tipos = $_GET['tipo_pro'];
+  $proveedor = $_GET['proveedor'];
+  $busqueda = "WHERE tipo_servicio_p = '$tipos' and proveedor_p like '%$proveedor%' "; 
+}else{
+  $busqueda =""; 
+} 
+//$row_registros=$conexion->buscarListar("tbl_referencia ref","*","ORDER BY CONVERT(cod_ref, SIGNED INTEGER) DESC","GROUP BY cn_referencia",$maxRows_registros,$pageNum_registros,"JOIN  tbl_cliente_referencia cref ON cod_ref=cn_referencia WHERE estado_ref = '1' AND tipo_bolsa_ref <> 'LAMINA' AND tipo_bolsa_ref <> 'PACKING LIST' ".$busqueda );
  
+
+$row_registros = $conexion->buscarListar("proveedor","*"," ORDER BY proveedor_p ASC ","",$maxRows_registros,$pageNum_registros,"  " .$busqueda ." " );
+
+$row_cliente = $conexion->llenaListas('proveedor',"",'ORDER BY proveedor_p ASC','proveedor_p'); 
+
+$row_tipo = $conexion->llenaListas('proveedor',"","WHERE tipo_servicio_p<>'' GROUP BY tipo_servicio_p ASC",'tipo_servicio_p'); 
+
 
 if (isset($_GET['totalRows_registros'])) {
   $totalRows_registros = $_GET['totalRows_registros'];
@@ -122,6 +145,38 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
   <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 <body>
+  <script>
+      $(document).ready(function() { $(".busqueda").select2(); });
+  </script>
+    <div align="center">
+      <table >
+        <tr>
+          <td>
+            <form action="proveedores3.php" method="get" name="consulta">
+
+            <select name="proveedor" id="proveedor" class="busqueda selectsGrande">
+              <option value=""<?php if (!(strcmp("", $_GET['proveedor']))) {echo "selected=\"selected\"";} ?>>PROVEEDORES</option>
+              <?php foreach ($row_cliente as $row_cliente) { ?>
+                <option value="<?php echo $row_cliente['proveedor_p'];?>"<?php if (!(strcmp($row_cliente['proveedor_p'], $_GET['proveedor']))) {echo "selected=\"selected\"";} ?>>
+                  <?php echo $row_cliente['proveedor_p'];?>
+                </option>
+              <?php } ?>
+            </select> &nbsp;&nbsp;
+            <select name="tipo_pro" id="tipo_pro" class="  selectsMedio">
+              <option value=""<?php if (!(strcmp("", $_GET['tipo_pro']))) {echo "selected=\"selected\"";} ?>>ESTADO</option>
+              <?php foreach ($row_tipo as $row_tipo) { ?>
+                <option value="<?php echo $row_tipo['tipo_servicio_p'];?>"<?php if (!(strcmp($row_tipo['tipo_servicio_p'], $_GET['tipo_pro']))) {echo "selected=\"selected\"";} ?>>
+                  <?php echo $row_tipo['tipo_servicio_p'];?>
+                </option>
+              <?php } ?>
+            </select> &nbsp;&nbsp;
+             <input type="submit" class="botonGMini" style='width:90px; height:25px' name="Submit" value="FILTRO" />
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <br>
 
   <div id="linea1" align="center">
     <table id="tabla3" align="center">

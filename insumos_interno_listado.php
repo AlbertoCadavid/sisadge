@@ -104,7 +104,6 @@ $busqueda = $_GET["busqueda"];
  
 $colname_busqueda= "-1";
 if ( isset($_GET["valor"]) ) {
-
   $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
   $registros=$conexion->buscarListar("tbl_remision_interna","*","ORDER BY id_remision DESC","",$maxRows_registros,$pageNum_registros,"where $busqueda ='$colname_busqueda'" );
 }else{ 
@@ -112,6 +111,7 @@ if ( isset($_GET["valor"]) ) {
 }
 
 if (isset($_GET['totalRows_registros'])) {
+
   $totalRows_registros = $_GET['totalRows_registros'];
 } else {
   $totalRows_registros = $conexion->conteo('tbl_remision_interna'); 

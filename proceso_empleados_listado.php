@@ -254,11 +254,13 @@ $totalRows_factor = mysql_num_rows($factor);
                       <td id="titulo4">CODIGO</td>
                       <td id="titulo4">NOMBRE APELLIDO</td>
                       <td id="titulo4">CARGO</td>
+                      <?php if($_SESSION['tipo_usuario']=='15'):?>
                       <td id="titulo4">SUELDO</td>
                       <td id="titulo4">RECARGOS</td>
                       <td id="titulo4">APORTES</td>
                       <td id="titulo4">COSTO MES</td>
                       <td id="titulo4">VALOR HORA</td>
+                      <?php endif;?>
                       <td id="titulo4">DIAS NOVEDAD</td>
                       <td id="titulo4">DIAS LABORADOS</td>
                       <td id="titulo4">FECHA INICIAL</td>
@@ -277,7 +279,8 @@ $totalRows_factor = mysql_num_rows($factor);
                           if ($numemp>='1') { 
                            $nombre_empleado=mysql_result($resultemp,0,'nombre_empleado');$apellido_empleado=mysql_result($resultemp,0,'apellido_empleado');  
                            echo $nombre_empleado." ".$apellido_empleado; }?>
-                         </a></td>
+                         </a>
+                         </td>
                          <td nowrap id="dato1">
                           <a href="empleado_edit.php?id_empleado=<?php echo $rows_empleado['id_empleado']; ?>" target="_top" style="text-decoration:none; color:#000000">
                           <?php 
@@ -292,7 +295,11 @@ $totalRows_factor = mysql_num_rows($factor);
                          }
                          ?>
                        </a></td>
-                       <td id="dato3"><a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo numeros_format($rows_empleado['sueldo_empleado']);$totalsueldo+=$rows_empleado['sueldo_empleado'];?></a></td>
+                       <?php if($_SESSION['tipo_usuario']=='15'):?>
+                       <td id="dato3">
+                        <a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo numeros_format($rows_empleado['sueldo_empleado']);$totalsueldo+=$rows_empleado['sueldo_empleado'];?></a>
+                       </td>
+                     
                        <td id="dato3"><a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000">
                         <?php $novedades=$rows_empleado['codigo_empleado']; 	
                         $sqlrecargos="SELECT SUM(pago_acycia) AS valoracycia, SUM(pago_eps) AS valoreps, SUM(dias_incapacidad) as dias, SUM(dias_faltantes) as diasf, SUM(horas_extras) as horas,SUM(recargos) as recargos,SUM(festivos) as festivos
@@ -342,10 +349,11 @@ $totalRows_factor = mysql_num_rows($factor);
                       </a><a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000"></a></td>
                       <td id="dato2"><a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000">
                         <?php 
-	$costo_hora = $costoMesNeto/$row_factor['hora_lab_fp']; //para saber costo por hora
-	echo redondear_entero_puntos($costo_hora);
-  ?>
-</a></td>
+                            	$costo_hora = $costoMesNeto/$row_factor['hora_lab_fp']; //para saber costo por hora
+                            	echo redondear_entero_puntos($costo_hora);
+                              ?></a>                      
+                         </td>
+              <?php endif;?>
 <td id="dato2"><?php if($dias_falto!=''){echo ($dias_falto+$dias_incapacidad);} else {echo 0;}?></td>
 <td id="dato2"><a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000">
   <?php  echo $diasmes;?>

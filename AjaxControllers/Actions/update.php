@@ -102,5 +102,13 @@ if($_GET['UpdateSiTick']!='') {
    exit();
  } */
 
+ $id_rollo=$_GET['id_r'];
+$actualizar=$_GET['act_rollos'];
+if($id_rollo !='' && $actualizar !='') {
+ 
+   $query="UPDATE `tblextruderrollo` SET `id_rp`= 0 WHERE `id_r`= $id_rollo";
+   $resultorden=mysql_query($query);
+ 
+}
 
 ?>

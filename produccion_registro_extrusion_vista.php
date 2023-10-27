@@ -142,7 +142,8 @@ $resultOpmes = mysql_query("SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollo
 $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
 ?>
 <?php if($row_extrusion_vista['parcial'] >'1') { 
-  header("Location: produccion_extrusion_listado_rollos.php?id_op_r=".$_GET['id_op_rp']); 
+  //header("Location: produccion_extrusion_listado_rollos.php?id_op_r=".$_GET['id_op_rp']);
+  header("Location: produccion_registro_extrusion_vistap.php?id_op_rp=".$_GET['id_op_rp']); 
  
  } ?>
 <html>
@@ -399,10 +400,12 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
     <?php do{?>
       <tr>
         
-        <td colspan="2" id="fuente2"><?php  echo $totalkpro=$row_extrusion_vista['int_kilos_prod_rp']; 
+        <td colspan="2" id="fuente2">
+         <?php  echo $totalkpro=$row_extrusion_vista['int_kilos_prod_rp']; 
      
-	      $totalkp+=$totalkpro;//para operaciones mas abajo
- 		?></td>
+	            $totalkp+=$totalkpro;//para operaciones mas abajo
+ 		     ?> 
+         </td>
         <td id="fuente2"><?php echo $row_extrusion_vista['fecha_ini_rp']; ?></td>
         <td nowrap id="fuente2"><?php echo $row_extrusion_vista['fecha_fin_rp']; ?></td>
         <td id="fuente2"><?php echo $row_extrusion_vista['total_horas_rp'];

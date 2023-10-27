@@ -492,9 +492,16 @@ $colname_rollo_sellado_edit = "-1";
 if (isset($_GET['id_r'])) {
   $colname_rollo_sellado_edit = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
-//SELECT * FROM TblSelladoRollo WHERE TblSelladoRollo.id_r='%s'
+ 
+
+//si existe en Tbl_reg_produccion, es decir si no habido error al eliminar la liquidacion
+$rew_existe = $conexion->llenarCampos("Tbl_reg_produccion,TblSelladoRollo", "WHERE TblSelladoRollo.id_r='$colname_rollo_sellado_edit' AND TblSelladoRollo.id_op_r = Tbl_reg_produccion.id_op_rp", "ORDER BY TblSelladoRollo.rollo_r DESC ", " Tbl_reg_produccion.id_op_rp ");
+ 
+if($rew_existe['id_op_rp']!=''){
+	 $sihayerror="Tbl_reg_produccion.id_proceso_rp='4' AND";
+}
 mysql_select_db($database_conexion1, $conexion1);
-$query_rollo_sellado_edit =  ("SELECT * FROM TblSelladoRollo,Tbl_reg_produccion WHERE Tbl_reg_produccion.id_proceso_rp='4' AND TblSelladoRollo.id_r='$colname_rollo_sellado_edit' AND TblSelladoRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND  TblSelladoRollo.rollo_r=Tbl_reg_produccion.rollo_rp" );
+$query_rollo_sellado_edit =  ("SELECT * FROM TblSelladoRollo LEFT join Tbl_reg_produccion ON TblSelladoRollo.rollo_r=Tbl_reg_produccion.rollo_rp WHERE $sihayerror TblSelladoRollo.id_r='$colname_rollo_sellado_edit' AND TblSelladoRollo.id_op_r = Tbl_reg_produccion.id_op_rp ORDER BY TblSelladoRollo.rollo_r DESC " ); 
 $rollo_sellado_edit = mysql_query($query_rollo_sellado_edit, $conexion1) or die(mysql_error());
 $row_rollo_sellado_edit = mysql_fetch_assoc($rollo_sellado_edit);
 $totalRows_rollo_sellado_edit = mysql_num_rows($rollo_sellado_edit);
@@ -528,7 +535,7 @@ $totalRows_codigo_empleado = mysql_num_rows($codigo_empleado);*/
 
 //CARGA LOS STANDBY 
   mysql_select_db($database_conexion1, $conexion1);
-$query_standBy = sprintf("SELECT *, SUM(`valor_tiem_rt`) AS standby  FROM Tbl_reg_tiempo WHERE Tbl_reg_tiempo.op_rt='$id_op' AND Tbl_reg_tiempo.id_proceso_rt='4' AND int_rollo_rt='$rolloNum' AND id_rpt_rt='141' GROUP BY id_rpt_rt ASC",$colname_standBy);
+$query_standBy = sprintf("SELECT *, SUM(`valor_tiem_rt`) AS standby  FROM Tbl_reg_tiempo WHERE Tbl_reg_tiempo.op_rt='$id_op' AND Tbl_reg_tiempo.id_proceso_rt='4' AND int_rollo_rt='$rolloNum' AND id_rpt_rt='141' GROUP BY id_rpt_rt ASC",$colname_standBy);//141 CODIGO STANDBY
 $standBy = mysql_query($query_standBy, $conexion1) or die(mysql_error());
 $row_standBy = mysql_fetch_assoc($standBy);
 $totalRows_standBy = mysql_num_rows($standBy);
@@ -562,11 +569,14 @@ $total_desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_er
 $row_total_desperdicio = mysql_fetch_assoc($total_desperdicio);
 
 //CARGA LOS TIEMPOS KILOS PRODUCIDOS
-mysql_select_db($database_conexion1, $conexion1);
-$query_producido = sprintf("SELECT *, SUM(`valor_prod_rp`) AS producido FROM  Tbl_reg_kilo_producido WHERE op_rp=%s AND id_proceso_rkp='4' AND int_rollo_rkp = $rolloNum  ORDER BY id_rpp_rp ASC",$colname_tiempoMuerto);//AND id_rpp_rp NOT IN (1406,1407,1655,1656,1657)
-$producido = mysql_query($query_producido, $conexion1) or die(mysql_error());
-$row_producido = mysql_fetch_assoc($producido);
-$totalRows_producido = mysql_num_rows($producido);
+ 
+    mysql_select_db($database_conexion1, $conexion1);
+    $query_producido =  "SELECT *, SUM(`valor_prod_rp`) AS producido FROM  Tbl_reg_kilo_producido WHERE op_rp= '$colname_tiempoMuerto' AND id_proceso_rkp='4' AND int_rollo_rkp = $rolloNum  ORDER BY id_rpp_rp ASC";//AND id_rpp_rp NOT IN (1406,1407,1655,1656,1657)
+    $producido = mysql_query($query_producido, $conexion1) or die(mysql_error());
+    $row_producido = mysql_fetch_assoc($producido);
+    $totalRows_producido = mysql_num_rows($producido);
+
+ 
 //CARGA LOS DINAMICOS
  mysql_select_db($database_conexion1, $conexion1);
 $query_tiempo_muertos = "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE Tbl_reg_tipo_desperdicio.id_proceso_rtd='4' AND Tbl_reg_tipo_desperdicio.codigo_rtp='1' AND estado_rtp='0' ORDER BY Tbl_reg_tipo_desperdicio.nombre_rtp ASC";
@@ -902,7 +912,7 @@ title="ELIMINAR ROLLO LIQUIDADO" border="0" /></a><a href="javascript:location.r
    <td id="fuente1"><p>Bolsas x Rollo
      </p>
      <p>
-       <input type="number" name="bolsa_rp" min="1" id="bolsa_rp" style="width:80px" required="required" onchange="kiloComparativoSell();restakilosT();kiloDisponible();" value="<?php echo $row_rollo_sellado_edit['bolsa_rp'];?>"/>
+       <input type="number" name="bolsa_rp" min="1" id="bolsa_rp" style="width:80px" required="required" onchange="kiloComparativoSell();restakilosT();kiloDisponible();" value="<?php echo $row_rollo_sellado_edit['bolsa_rp']=='' ? $row_rollo_sellado_edit['bolsas_r'] : $row_rollo_sellado_edit['bolsa_rp'];?>"/>
      </p></td>
    <td id="fuente1"><p>Reproceso</p>
      <p>
