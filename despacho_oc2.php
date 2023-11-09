@@ -109,12 +109,12 @@ $vende=$_GET['vende'];
 //TODOS VACIOS
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0' && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //ESTADO LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 
 
@@ -126,17 +126,17 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual =
 //ORDEN COMPRA LLENO
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //CLIENTE LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //ORDEN COMPRA Y CLIENTE LLENO
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //REF Y CLIENTE LLENO
 if($estado == '0' && $ref != '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -146,7 +146,7 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente != '0' && $anual =
 //ESTADO Y CLIENTE LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //FECHA LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -156,7 +156,7 @@ if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual !
 //ORDEN COMPRA, CLIENTE LLENO Y FECHA
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente != '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //REF Y FECHA LLENO
 if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -172,7 +172,7 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual !
 //FECHA  Y ESTADO LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //ESTADO, REF Y FECHA LLENO
 if($estado != '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -192,29 +192,29 @@ if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual =
 //vendedor o responsable
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND b_borrado_oc='0' AND pago_pendiente='NO'  GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND b_borrado_oc='0' AND pago_pendiente='NO'  GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 
 //vendedor o responsable y FECHA
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 
 //AUTORIZADO LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado!='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //AUTORIZADO Y VENDEDOR
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado!='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND autorizado = '$autorizado' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND autorizado = '$autorizado' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //FECHA Y AUTORIZADO LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado!='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY id_pedido DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 
 $query_limit_ordenes_compra = sprintf("%s LIMIT %d, %d", $query_ordenes_compra, $startRow_ordenes_compra, $maxRows_ordenes_compra);

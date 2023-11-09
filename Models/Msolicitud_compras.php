@@ -131,7 +131,7 @@ class Msolicitud_compras
         return $count;
     }
 
-    public function enviarEmail($insumos, $cantidad)
+    public function enviarEmail($insumos, $cantidad, $id_solicitud)
     {
         $num = self::elementosArray($insumos);
         $envioCorreo = new EnvioEmails();
@@ -141,7 +141,7 @@ class Msolicitud_compras
         //$to2 = 'compras@acycia.com';
         //$from = ;
         $asunto = 'Solicitud para aprobacion de compras';
-        $body = "Hola se requiere autorizar a " . $this->nombre . ", los siguientes materiales: " . "<br>";
+        $body = "Solicitud de Compras: ".$id_solicitud."<br>"."Hola se requiere autorizar a " . $this->nombre . ", los siguientes materiales: " . "<br>";
         for ($i = 0; $i < $num; $i++) {
             $body = $body . "- " . ucfirst($insumos[$i]) . ", Cantidad: " . $cantidad[$i] . "<br>";
         };

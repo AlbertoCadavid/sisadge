@@ -446,6 +446,7 @@ if (isset($_GET['parcial'])) {
 
 if($id_ipe!='') {
 $sqlre="SELECT * FROM  Tbl_reg_kilo_producido WHERE id_rkp='$id_ipe'";
+
 $resultre= mysql_query($sqlre);
 $numere= mysql_num_rows($resultre);
 if($numere >='1') {
@@ -455,7 +456,7 @@ if($numere >='1') {
 	$cantidad=mysql_result($resultre,0,'valor_prod_rp');
 	
 	
-$sqlupdate="UPDATE Tbl_reg_produccion SET int_kilos_prod_rp = int_kilos_prod_rp-'$cantidad', int_total_kilos_rp = int_total_kilos_rp - '$cantidad' WHERE id_op_rp='$id_op' AND id_proceso_rp='1'";
+$sqlupdate="UPDATE Tbl_reg_produccion SET int_kilos_prod_rp = int_kilos_prod_rp-'$cantidad', int_total_kilos_rp = int_total_kilos_rp - '$cantidad' WHERE id_op_rp='$id_op' AND id_proceso_rp='1' AND id_rp = $_GET[id_rp_parcial]";
 $resultup= mysql_query($sqlupdate);
 
 $sqlinv="UPDATE TblInventarioListado SET Salida = Salida - '$cantidad' WHERE Codigo = '$id_insumo'";

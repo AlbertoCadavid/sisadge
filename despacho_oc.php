@@ -101,7 +101,7 @@ $colname_busqueda= "-1";
 
 //$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY id_pedido DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );
 
-$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY fecha_autoriza DESC, id_pedido  DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );
+$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY fecha_autoriza DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//  , id_pedido  DESC
  
 
 if (isset($_GET['totalRows_registros'])) {

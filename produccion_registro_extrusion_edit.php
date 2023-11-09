@@ -123,7 +123,6 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
-  //echo 'ingreso';die;
   $updateSQL = sprintf(
     "UPDATE Tbl_reg_produccion SET id_proceso_rp=%s, id_op_rp=%s, int_cod_ref_rp=%s, version_ref_rp=%s, int_kilos_prod_rp=%s, int_kilos_desp_rp=%s, int_total_kilos_rp=%s, porcentaje_op_rp=%s, int_metro_lineal_rp=%s, int_total_rollos_rp=%s, total_horas_rp=%s, rodamiento_rp=%s, horas_muertas_rp=%s, horas_prep_rp=%s, str_maquina_rp=%s, str_responsable_rp=%s, fecha_fin_rp=%s, int_kilosxhora_rp=%s, int_cod_empleado_rp=%s, int_cod_liquida_rp=%s, costo=%s WHERE id_rp=%s",
     GetSQLValueString($_POST['id_proceso_rp'], "int"),
@@ -507,8 +506,8 @@ foreach ($rollos_en_liquidacion as $value) {
                               <td colspan="14" id="titulo4">CONSUMOS</td>
                             </tr>
                             <tr>
-                              <td colspan="14" id="fuente1"><a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>','820','270')">
-                                </a><a href="javascript:verFoto('produccion_regist_extru_kilos_prod.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>','1100','740')">
+                              <td colspan="14" id="fuente1"><a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_rp=<?php echo $_GET['id_rp']?> &id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>','820','270')">
+                                </a><a href="javascript:verFoto('produccion_regist_extru_kilos_prod.php?id_rp=<?php echo $_GET['id_rp']?> &id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>','1100','740')">
                                   <input type="button" name="check_sh2" id="check_sh3" class="botonGeneral" value="Detalle Kilos Producidos" />
                                 </a>
                                 <a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>','820','270')"></a>

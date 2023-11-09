@@ -238,26 +238,27 @@ if (isset($_GET['id_op_rp'])) {
   $colname_tiempoMuerto = (get_magic_quotes_gpc()) ? $_GET['id_op_rp'] : addslashes($_GET['id_op_rp']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' AND fecha_rt BETWEEN '$fechaR' AND '$fechaF' ORDER BY id_rpt_rt ASC",$colname_tiempoMuerto);
+//$query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' AND fecha_rt BETWEEN '$fechaR' AND '$fechaF' ORDER BY id_rpt_rt ASC",$colname_tiempoMuerto);
+$query_tiempoMuerto = sprintf("SELECT tbl_reg_tiempo.* FROM tbl_reg_produccion INNER JOIN tblextruderrollo ON tbl_reg_produccion.id_rp = tblextruderrollo.id_rp INNER JOIN tbl_reg_tiempo ON tblextruderrollo.id_r = tbl_reg_tiempo.id_rollo WHERE tbl_reg_produccion.id_rp = %s AND id_proceso_rt = 1 ", $_GET['id_rp']);
 $tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
 $row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
 $totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
 //CARGA LOS TIEMPOS PREPARACION 
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoPreparacion = sprintf("SELECT * FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' AND fecha_rtp BETWEEN '$fechaR' AND '$fechaF' ORDER BY id_rpt_rtp ASC",$colname_tiempoMuerto);
+$query_tiempoPreparacion = sprintf("SELECT Tbl_reg_tiempo_preparacion.* FROM tbl_reg_produccion INNER JOIN tblextruderrollo ON tbl_reg_produccion.id_rp = tblextruderrollo.id_rp INNER JOIN Tbl_reg_tiempo_preparacion ON tblextruderrollo.id_r = Tbl_reg_tiempo_preparacion.id_rollo WHERE tbl_reg_produccion.id_rp = %s AND id_proceso_rtp = 1 ", $_GET['id_rp']);
 $tiempoPreparacion  = mysql_query($query_tiempoPreparacion , $conexion1) or die(mysql_error());
 $row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion );
 $totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion );
 //CARGA LOS TIEMPOS  DESPERDICIOS
 mysql_select_db($database_conexion1, $conexion1); 
-$query_desperdicio = sprintf("SELECT * FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' AND fecha_rd BETWEEN '$fechaR' AND '$fechaF' ORDER BY id_rpd_rd ASC",$colname_tiempoMuerto);
+$query_desperdicio = sprintf("SELECT tbl_reg_desperdicio.* FROM tbl_reg_produccion INNER JOIN tblextruderrollo ON tbl_reg_produccion.id_rp = tblextruderrollo.id_rp INNER JOIN tbl_reg_desperdicio ON tblextruderrollo.id_r = tbl_reg_desperdicio.id_rollo WHERE tbl_reg_produccion.id_rp = %s AND id_proceso_rd = 1 ", $_GET['id_rp']);
 $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
 //CARGA LOS KILOS PRODUCIDOS
 // AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF'
 mysql_select_db($database_conexion1, $conexion1); 
-$query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF'  ORDER BY id_rpp_rp ASC",$colname_tiempoMuerto);
+$query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF' AND id_rp= $_GET[id_rp] ORDER BY id_rpp_rp ASC",$colname_tiempoMuerto);
 $producido = mysql_query($query_producido, $conexion1) or die(mysql_error());
 $row_producido = mysql_fetch_assoc($producido);
 $totalRows_producido = mysql_num_rows($producido);
@@ -512,8 +513,8 @@ foreach ($rollos_en_liquidacion as $value) {
       <td colspan="14" id="titulo4">CONSUMOS</td>
       </tr>
     <tr>
-      <td colspan="14" id="fuente1"><a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp']?>','820','270')">
-        </a><a href="javascript:verFoto('produccion_regist_extru_kilos_prod.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp']?>','1100','740')">
+      <td colspan="14" id="fuente1"><a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_rp=<?php echo $_GET['id_rp']?> &id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp']?>','820','270')">
+        </a><a href="javascript:verFoto('produccion_regist_extru_kilos_prod.php?id_rp=<?php echo $_GET['id_rp']?> &id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp']?>','1100','740')">
         <input type="button" name="check_sh2" id="check_sh3" class="botonGeneral" value="Detalle Kilos Producidos"/>
         </a>
         <a href="javascript:verFoto('produccion_registro_extrusion_detalle_add.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp']?>','820','270')">

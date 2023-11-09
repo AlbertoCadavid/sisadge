@@ -7,7 +7,7 @@ require (ROOT_BBDD);
 
 require_once("db/db.php");
 require_once 'Models/Mremision.php';
-
+include('funciones/funciones_php.php');
 //initialize the session
 if (!isset($_SESSION)) {
   session_start();
@@ -213,17 +213,17 @@ foreach($_POST['int_cant_rd'] as $precio){
 //FIN
 
 
-//SUMAR EL 10% A CANTIDAD
-//suma 10% a cantidad items
-$cantr=$_POST["int_cantidad_io"];//cantidad del item para sumar 10%
+//SUMAR EL PORCENTALE A CANTIDAD
+//suma PORCENTALE a cantidad items
+$cantr=$_POST["int_cantidad_io"];//cantidad del item para sumar PORCENTALE
 $porcr=$_POST["int_tolerancia_rd"];//Porcentaje
 $tcpr=$cantr+(($cantr*$porcr)/100);//total sumado
-$cnr=(($cantr*$porcr)/100);//el 10% q se suma
-//suma 10% a cantidad_rest items
-$cant=(float)$_POST["int_cantidad_rest_io"];//cantidad del item para sumar 10%
+$cnr=(($cantr*$porcr)/100);//el PORCENTALE q se suma
+//suma PORCENTALE a cantidad_rest items
+$cant=(float)$_POST["int_cantidad_rest_io"];//cantidad del item para sumar PORCENTALE
 $porc=$_POST["int_tolerancia_rd"];//Porcentaje
 $tcp=$cant+(($cant*$porc)/100);//total sumado
-$cn=(($cant*$porc)/100);//el 10% q se suma
+$cn=(($cant*$porc)/100);//el PORCENTALE q se suma
 //FIN SUMA
 //de cantidad_item y $cant de cantidad_rest controlo total % y suma de restante
 $total_rest=$cnr+$cant;
@@ -356,6 +356,12 @@ $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
+
+ 
+$codref=$row_items['int_cod_ref_io'];
+$row_valor = $conexion->llenarCampos("tbl_referencia", "WHERE cod_ref='".$codref."' ", " ", "peso_paquete ");
+$pesoPaqx100=porcentaje($row_valor['peso_paquete'],$row_items['int_cantidad_io']);
+  
 ?>
 <html>
 <head>
@@ -393,7 +399,11 @@ if (isset($_SESSION['MM_Username'])) {
 var num=0;
 num++;
 var posicionCampo=1;
-
+var peso_paq= <?php echo $pesoPaqx100;?>;
+ 
+ $("#int_peso_rd").val('hola')
+ 
+/*
 function addremi(){
 
   nuevaFila = document.getElementById("tablaremision").insertRow(-1);
@@ -411,10 +421,10 @@ function addremi(){
   nuevaCelda.innerHTML="<td id='tdhasta'> <input type='text' required='required' minlength='5' onChange='totalizar(this)' id='hasta-"+posicionCampo+"' name='int_numh_rd["+posicionCampo+"]'style='width:150px;' ></td>";
   nuevaCelda=nuevaFila.insertCell(-1);
 
-  nuevaCelda.innerHTML="<td> <input type='number' step='0.001' required='required' name='int_cant_rd["+posicionCampo+"]' style='width:80px;'></td>";
+  nuevaCelda.innerHTML="<td> <input type='number' step='0.001' required='required' name='int_cant_rd["+posicionCampo+"]' style='width:80px;' ></td>";
   nuevaCelda=nuevaFila.insertCell(-1);
 
-  nuevaCelda.innerHTML="<td> <input type='number' required='required' name='int_peso_rd["+posicionCampo+"]' style='width:80px;'></td>";
+  nuevaCelda.innerHTML="<td> <input type='number' required='required' name='int_peso_rd["+posicionCampo+"]' style='width:80px;' ></td>";
   nuevaCelda=nuevaFila.insertCell(-1);
 
   nuevaCelda.innerHTML="<td> <input type='number' value='' id='total-"+posicionCampo+"'  required='required' name='total["+posicionCampo+"]' style='width:80px;'></td>";
@@ -446,7 +456,7 @@ function eliminarremision(obj){
 
   root.removeChild(oTr);
 
-}
+}*/
 
 function totalizar(elemento){
  var element =elemento;
@@ -495,6 +505,7 @@ var idhasta =numeroh[1];
             <input name="int_mp_io_rd" type="hidden" value="<?php echo $row_items['id_mp_vta_io']; ?>">
             <input name="int_ref_io_rd" type="hidden" value="<?php echo $row_items['int_cod_ref_io']; ?>">
             <input name="str_ref_cl_io_rd" type="hidden" value="<?php echo $row_items['int_cod_cliente_io']; ?>">
+            <input id="valorKilo" name="valorKilo" type="hidden" value="<?php echo $pesoPaqx100; ?>">
             <input type="hidden" name="ref_inven" id="ref_inven" value="<?php echo $row_referencia['cod_ref'];?>"/></td>
             <td colspan="2" id="fuente1"><strong>Fecha:</strong><input name="fecha_rd" type="text" id="fecha_rd" value="<?php echo date("Y-m-d"); ?>" size="10" readonly /></td>
           </tr>
@@ -504,7 +515,8 @@ var idhasta =numeroh[1];
           </tr>
 
           <tr id="tr2">
-            <td colspan="5" id="dato2"><table id="tabla1">
+            <td colspan="5" id="dato2">
+              <table id="tabla1" border="1" >
               <tr>
                 <td nowrap="nowrap" id="nivel2">ITEM </td>
                 <td nowrap="nowrap" id="nivel2">REF. AC</td>
@@ -518,6 +530,7 @@ var idhasta =numeroh[1];
                 <td nowrap="nowrap" id="nivel2">PRECIO/VENTA</td>
                 <td nowrap="nowrap" id="nivel2">TOTAL ITEM</td>
                 <td nowrap="nowrap" id="nivel2">MONEDA</td>
+                <td nowrap="nowrap" id="nivel2">PESO T.</td>
                 <td id="nivel2">DIRECCION DESPACHO</td>
                 <td nowrap="nowrap" id="nivel2">FACTURADO</td>
               </tr>
@@ -538,7 +551,7 @@ var idhasta =numeroh[1];
                   echo $nombre_mp;
                 } }else {echo "N.A";} ?></td>
                 <td nowrap="nowrap" id="talla2"><input name="int_cod_cliente_io" type="text" size="15" maxlength="20"  value="<?php echo $row_items['int_cod_cliente_io']; ?>"></td>
-                <td nowrap="nowrap" id="talla2"><input name="int_cantidad_io" type="hidden" value="<?php echo $row_items['int_cantidad_io']; ?>"><?php echo $row_items['int_cantidad_io']; ?></td>
+                <td nowrap="nowrap" id="talla2"><input name="int_cantidad_io" id="int_cantidad_io" type="hidden" value="<?php echo $row_items['int_cantidad_io']; ?>"><?php echo $row_items['int_cantidad_io']; ?></td>
                 <td nowrap="nowrap" id="talla2"> 
                   <input name="int_cantidad_rest_io" type="hidden" value="<?php echo $row_items['int_cantidad_rest_io']; ?>">
                   <?php echo $row_items['int_cantidad_rest_io']; ?></td>
@@ -549,7 +562,9 @@ var idhasta =numeroh[1];
                   <td nowrap="nowrap" id="talla2"><?php echo $subtotal=($row_items['int_cantidad_io']*$row_items['N_precio_old']);?>
                   <?php //echo $row_items['int_total_item_io'];$subtotal=$subtotal+$row_items['int_total_item_io'];?></td>
                   <td nowrap="nowrap" id="talla2"><?php echo $row_items['str_moneda_io']; ?></td>
-                  <td id="talla2"><input type="hidden" name="dir" id="dir" value="<?php echo $row_items['str_direccion_desp_io']; ?>">
+                  <td nowrap="nowrap" id="talla2"><?php echo $pesoPaqx100; ?> kilos</td>
+                  <td id="talla2">
+                    <input type="hidden" name="dir" id="dir" value="<?php echo $row_items['str_direccion_desp_io']; ?>">
                     <?php echo $row_items['str_direccion_desp_io']; ?></td>
                     <td nowrap="nowrap"id="talla2">
                       <?php if($row_items['b_estado_io']=='5'){echo "Facturado Total";}else if($row_items['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_items['b_estado_io']=='1'){echo "Ingresado";}else if($row_items['b_estado_io']=='2'){echo "Programado";}else if($row_items['b_estado_io']=='3'){echo "Remisionado";}else if($row_items['b_estado_io']=='6'){echo "Muestras reposicion";}   ?>

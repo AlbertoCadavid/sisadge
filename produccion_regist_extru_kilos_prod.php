@@ -142,14 +142,16 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
         $valorMP = $row_valoresMP['valorkilo'];
 
         $insertSQLd = sprintf(
-          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp,valor_prod_rp,op_rp,id_proceso_rkp,fecha_rkp,costo_mp) VALUES (%s, %s, %s, %s, %s, %s)",
+          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp,valor_prod_rp,op_rp,id_proceso_rkp,fecha_rkp,costo_mp,id_rp) VALUES (%s, %s, %s, %s, %s, %s, %s)",
           GetSQLValueString($f[$s], "int"),
           GetSQLValueString($g[$s], "double"),
           GetSQLValueString($c, "int"),
           GetSQLValueString($_POST['id_proceso_rkp'], "int"),
           GetSQLValueString($_POST['fecha_ini_rp'], "date"),
-          GetSQLValueString($valorMP, "double")
+          GetSQLValueString($valorMP, "double"),
+          GetSQLValueString($_GET['id_rp'], "int")
         );
+
         mysql_select_db($database_conexion1, $conexion1);
         $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
 
@@ -163,14 +165,17 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
         $Result = mysql_query($updateSQL, $conexion1) or die(mysql_error());
 
         $sqlupdate = sprintf(
-          "UPDATE Tbl_reg_produccion SET int_kilos_prod_rp =  int_kilos_prod_rp + %s, int_total_kilos_rp = int_total_kilos_rp + %s WHERE id_op_rp=%s AND id_proceso_rp='1'",
-
+          "UPDATE Tbl_reg_produccion SET int_kilos_prod_rp =  int_kilos_prod_rp + %s, int_total_kilos_rp = int_total_kilos_rp + %s WHERE id_op_rp=%s AND id_proceso_rp='1' AND id_rp = %s",
           GetSQLValueString($g[$s], "text"),
           GetSQLValueString($g[$s], "text"),
-          GetSQLValueString($c, "int")
+          GetSQLValueString($c, "int"),
+          GetSQLValueString($_GET['id_rp'], "int")
         );
+        
         mysql_select_db($database_conexion1, $conexion1);
         $Result2 = mysql_query($sqlupdate, $conexion1) or die(mysql_error());
+
+       
       }
     }
   }
@@ -674,10 +679,10 @@ $totalRows_totalKilos = mysql_num_rows($totalKilos);
     <input name="id_op_rp" type="hidden" id="id_op_rp" value="<?php echo $_GET['id_op']; ?>" />
     <input name="id_proceso_rkp" type="hidden" id="id_proceso_rkp" value="1" />
     <input name="kilos_op" type="hidden" id="kilos_op" value="<?php echo $row_orden_produccion['int_kilos_op']; ?>" />
-    <?php for ($x = 0; $x <= $totalRows_totalKilos - 1; $x++) { ?>
-      <input name="kilos_extruido[]" type="hidden" id="kilos_extruido[]" value="<?php $tK = mysql_result($totalKilos, $x, int_total_kilos_rp);
+    <!-- <?php for ($x = 0; $x <= $totalRows_totalKilos - 1; $x++) { ?>
+      <input name="kilos_extruido[]" type="text" id="kilos_extruido[]" value="<?php $tK = mysql_result($totalKilos, $x, int_total_kilos_rp);
                                                                                 echo $tK; ?>" />
-    <?php } ?>
+    <?php } ?> -->
     <input type="hidden" name="MM_insert" value="form1">
   </form>
   <?php echo $conexion->header('footer'); ?>
