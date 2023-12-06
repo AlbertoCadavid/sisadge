@@ -7,7 +7,7 @@ require (ROOT_BBDD);
 
 require_once("db/db.php");
 require_once 'Models/Mremision.php';
-
+include('funciones/funciones_php.php');
 //initialize the session
 if (!isset($_SESSION)) {
   session_start();
@@ -226,11 +226,11 @@ if (isset($_SESSION['MM_Username'])) {
 
              <input type="hidden" name="ref_inven" id="ref_inven" value="<?php echo $row_remision_detalle['int_cod_ref_io'];?>"/></td>
             <td colspan="2" id="fuente1"><strong>Fecha:</strong>
-              <input name="fecha_rd" type="date" id="fecha_rd" value="<?php echo $row_remision_detalle['fecha_rd']; ?>" size="10" readonly/></td>            
+              <input name="fecha_rd" type="date" id="fecha_rd" value="<?php echo $row_remision_detalle['fecha_rd']; ?>" size="10" readonly/><input name="hora_rd" type="text" id="hora_rd" value="<?php echo $row_remision_detalle['hora_rd']; ?>" size="10" readonly /></td>            
             </tr>
           <tr>
             <td colspan="4" id="dato1">            
-            </td>
+            </td> 
           </tr>
           <tr>
             <td colspan="4" id="dato1"></td>

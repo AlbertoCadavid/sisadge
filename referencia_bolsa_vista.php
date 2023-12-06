@@ -394,52 +394,84 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
   <tr>
     <td id="fuente2"><?php echo $row_referencia_egp['tipo_sello_egp']; ?></td>
     <td id="fuente3">COLOR 1 : <?php echo $row_referencia_egp['color1_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone1_egp']){  $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone1_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone1_egp']){  
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                      $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone1_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                        }
+                                                    } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion1_egp']; ?></td>
   </tr>
   <tr>
     <td id="fuente3"><input <?php if (!(strcmp($row_referencia_egp['fecha_cad_egp'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="fecha_cad_egp" value="1">
       Fecha de Caducidad</td>
     <td id="fuente3">COLOR 2 : <?php echo $row_referencia_egp['color2_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone2_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone2_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone2_egp']) {
+                                                    if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                          $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone2_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                    }  
+                                                  } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion2_egp']; ?></td>
   </tr>
   <tr>
     <td id="fuente3"><input <?php if (!(strcmp($row_referencia_egp['arte_sum_egp'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="arte_sum_egp" value="1">
       Arte Suministrado</td>
     <td id="fuente3">COLOR 3 : <?php echo $row_referencia_egp['color3_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone3_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone3_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?>  </td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone3_egp']) {
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                      $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone3_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                      } 
+                                                   } ?>  </td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion3_egp']; ?></td>
   </tr>
   <tr>
     <td id="fuente3"><input <?php if (!(strcmp($row_referencia_egp['orient_arte_egp'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="orient_arte_egp" value="1">
       Solicita Orientacion</td>
     <td id="fuente3">COLOR 4 : <?php echo $row_referencia_egp['color4_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone4_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone4_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone4_egp']) {
+                                                    if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                      $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone4_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                    } 
+                                                   } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion4_egp']; ?></td>
   </tr>
   <tr>
     <td id="fuente3"><input <?php if (!(strcmp($row_referencia_egp['ent_logo_egp'],1))) {echo "checked=\"checked\"";} ?> type="checkbox" name="ent_logo_egp" value="1">
       Logos de la Entidad</td>
     <td id="fuente3">COLOR 5 : <?php echo $row_referencia_egp['color5_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone5_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone5_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone5_egp']) {
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                       $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone5_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                      } 
+                                                   } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion5_egp']; ?></td>
   </tr>
   <tr>
     <td id="subppal2">ARTE</td>
     <td id="fuente3">COLOR 6 : <?php echo $row_referencia_egp['color6_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone6_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone6_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone6_egp']) {
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                        $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone6_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                      }
+                                                    } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion6_egp']; ?></td>
   </tr>
     <tr>
     <td rowspan="3" id="fuente2"><a class="editar" href="javascript:verFoto('archivo/<?php echo $row_ref_verif['userfile'];?>','610','490')"> <?php echo $row_ref_verif['userfile']; ?> </a></td>
     <td id="fuente3">COLOR 7 : <?php echo $row_referencia_egp['color7_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone7_egp']){$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone7_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo']; } ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone7_egp']){
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                      $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone7_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo']; 
+                                                    } 
+                                                   } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion7_egp']; ?></td>
   </tr>
     <tr>
     <td id="fuente3">COLOR 8 : <?php echo $row_referencia_egp['color8_egp']; ?></td>
-    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone8_egp']) {$insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone8_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];} ?></td>
+    <td colspan="4" id="fuente3">PANTONE : <?php if($row_referencia_egp['pantone8_egp']) {
+                                                      if(is_numeric($row_referencia_egp['pantone1_egp'])){
+                                                      $insumo1=$conexion->llenarCampos('insumo', "WHERE id_insumo=".$row_referencia_egp['pantone8_egp'], "ORDER BY id_insumo DESC LIMIT 1"," descripcion_insumo" ); echo $insumo1['descripcion_insumo'];
+                                                      } 
+                                                   } ?></td>
     <td colspan="4" id="fuente3">UBICACION : <?php echo $row_referencia_egp['ubicacion8_egp']; ?></td>
   </tr>
   <tr>

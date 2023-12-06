@@ -1,5 +1,6 @@
-<?php
-require_once 'Models/McomercialList.php';
+<?php 
+require_once('funciones/funciones_php.php');  
+//require_once 'Models/McomercialList.php';
 
 class mComercialList{
     private $db;
@@ -27,8 +28,49 @@ class mComercialList{
             die($e->getMessage());
         }
     }
+  
+  public function UpdateProforma($id,$valor,$colum,$proceso='',$url='',$tabla='')
+    { 
+        try 
+        { 
+            $fecha = date("Y-m-d");  
 
+          
+            $hora_actual = fechahoraActual();
+            $hoy = $hora_actual; 
 
+            $fechas_entrega = sumarMesyDias($fecha,3); //se agrega un mes mas 3 dias
+             
+            $update = $this->db->query("UPDATE $tabla SET $colum = 'NO', autorizado = 'SI',  fecha_ingreso_oc='$fecha', fecha_entrega_oc='$fechas_entrega', fecha_autoriza='$hoy' WHERE $id = $valor");
+           
+            
+            $logs = $this->db->query("INSERT INTO tbl_logs ( codigo_id, descrip, fecha, modificacion, usuario) values ('$valor','OC','$hoy','autorizado SI','".$_SESSION['Usuario']."' ) " ); 
+ 
+
+            if($update)
+                echo 'ok';
+          
+          die;//dejarlo para q no bote error
+        } catch (Exception $e) 
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Updateweb($id,$valor,$colum,$proceso='',$url='',$tabla='')
+    { 
+        try 
+        { 
+             
+            // id,valor,colum,proceso,url, tabla,
+          
+            $update = $this->db->query("UPDATE $tabla SET $colum = '0' WHERE $id = $valor "); 
+          die;//dejarlo para q no bote error
+        } catch (Exception $e) 
+        {
+            die($e->getMessage());
+        }
+    }
 
       public function getResultados($arreglo)
       {

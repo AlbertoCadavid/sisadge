@@ -916,17 +916,17 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
       </tr>
       <tr>
         <td id="fuente1"><strong>METROS INICIAL:</strong></td>
-        <td id="fuente1"><input name="metro_r" type="number" id="metro_r" min="1" style="width:100px" value="" required="required" <?php echo ($row_orden_produccion['coextrusion'] != 'NO') ? 'readonly' : ''; ?> onChange="restakilosT()" /></td>
+        <td id="fuente1"><input name="metro_r" type="number" id="metro_r" min="1" style="width:100px" value="" required="required" <?php echo ($id_co != 501) ? 'readonly'  : ''; ?> onChange="restakilosT()" /></td>
         <td id="fuente1" width='60px'><strong>METROS FINAL:</strong></td>
-        <td id="fuente1" width='105px'><input name="metro_r2" type="number" id="metro_r2" min="1" style="width:100px" value="" required <?php echo ($row_orden_produccion['coextrusion'] != 'NO') ? 'readonly' : ''; ?> onChange="restakilosT()" /></td>
+        <td id="fuente1" width='105px'><input name="metro_r2" type="number" id="metro_r2" min="1" style="width:100px" value="" required <?php echo ($id_co != 501) ? 'readonly' : ''; ?> onChange="restakilosT()" /></td>
         <td id="fuente1">TIEMPO TOTAL</td>
         <td id="fuente1">&nbsp;</td>
       </tr>
       <tr>
         <td id="fuente1"><strong>PESO INICIAL:</strong></td>
-        <td id="fuente7"><input name="kilos_r" type="number" id="int_kilos_prod_rp" min="1.00" step="0.01" style="width:100px" value="" <?php echo ($row_orden_produccion['coextrusion'] != 'NO') ? 'readonly' : ''; ?> onChange="restakilosT();restakilosD()" /></td>
+        <td id="fuente7"><input name="kilos_r" type="number" id="int_kilos_prod_rp" min="1.00" step="0.01" style="width:100px" value="" <?php echo ($id_co != 501) ? 'readonly' : ''; ?> onChange="restakilosT();restakilosD()" /></td>
         <td id="fuente1"><strong>PESO FINAL:</strong></td>
-        <td id="fuente7"><input name="int_total_kilos_rp" type="number" id="int_total_kilos_rp" min="1.00" step="0.01" style="width:100px" value="" required <?php echo ($row_orden_produccion['coextrusion'] != 'NO') ? 'readonly' : ''; ?> onChange="restakilosT()" /></td>
+        <td id="fuente7"><input name="int_total_kilos_rp" type="number" id="int_total_kilos_rp" min="1.00" step="0.01" style="width:100px" value="" required <?php echo ($id_co != 501) ? 'readonly' : ''; ?> onChange="restakilosT()" /></td>
         <td id="fuente1"><input name="total_horas_rp" type="text" id="total_horas_rp" style="width:100px" value="<?php echo $row_liquidado_edit['total_horas_rp']; ?>" readonly /></td>
 
       </tr>

@@ -30,7 +30,7 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
     header("Location: $logoutGoTo");
     exit;
   }
-}
+}  
 ?>
 <?php
 if (!isset($_SESSION)) {
@@ -123,12 +123,12 @@ if($str_numero_oc != '0' && $elaborador == '0' && $vendedor =='0' && $id_c == '0
 //Filtra elaborador lleno
 if($str_numero_oc == '0' && $elaborador != '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC,  Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc LIKE '%$elaborador%'  AND pago_pendiente <> 'SI' AND especialweb <> '1' GROUP BY str_numero_oc ORDER BY fecha_ingreso_oc DESC,  str_numero_oc DESC";
 }
 //Filtra vendedor lleno
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor'  AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_ingreso_oc DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor'  AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND tbl_orden_compra.especialweb <> '1' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_ingreso_oc DESC,  tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra vendedor, fecha lleno
 if($str_numero_oc == '0' && $vendedor !='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 != '' && $fecha2 != '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
@@ -344,6 +344,7 @@ if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0
 $query_limit_ordenes_compra = sprintf("%s LIMIT %d, %d", $query_ordenes_compra, $startRow_ordenes_compra, $maxRows_ordenes_compra);
 $ordenes_compra = mysql_query($query_limit_ordenes_compra, $conexion1) or die(mysql_error());
 $row_ordenes_compra = mysql_fetch_assoc($ordenes_compra);
+ 
 
 if (isset($_GET['totalRows_ordenes_compra'])) {
   $totalRows_ordenes_compra = $_GET['totalRows_ordenes_compra'];
@@ -389,6 +390,11 @@ $query_factura = "SELECT factura_oc FROM Tbl_orden_compra WHERE factura_oc <>'' 
 $factura = mysql_query($query_factura, $conexion1)  or die(mysql_error());
 $row_factura = mysql_fetch_assoc($factura);
 $totalRows_factura = mysql_num_rows($factura);*/
+
+$query_ordenes_notas = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario  b_borrado_oc='0' AND  especialweb = '1' ORDER BY str_numero_oc DESC"; 
+$ordenes_notas = mysql_query($query_ordenes_notas, $conexion1)  or die(mysql_error());
+$row_ordenes_notas = mysql_fetch_assoc($ordenes_notas); 
+
 
 
  $query_ordenes_deudoras = "SELECT * FROM Tbl_orden_compra WHERE  Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente = 'SI' ORDER BY tbl_orden_compra.pago_pendiente,  tbl_orden_compra.str_numero_oc DESC"; 
@@ -694,7 +700,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                    $nit_cliente_c=mysql_result($resultn,0,'nombre_c'); echo  ($nit_cliente_c); 
                                  }
                                  ?>
-                               </a></td>
+                               </a></td> 
                                <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_deudoras['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_deudoras['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_ordenes_deudoras['str_elaboro_oc']; ?></a>
                                </td>
                                <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_deudoras['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_deudoras['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
@@ -776,7 +782,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                   </a> 
                            </td> 
                               <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando... Numero de Proforma!</b>
-                              </div>
+                              </div><div style="display: none;  align-items: center; justify-content: center; " id="resp2"><b style="color: red;" >Actualizando... Nota a Leido!</b></div>
                           <?php endif; ?>
                           <td>
                             <?php if( $_SESSION['restriUsuarios'] ): ?>
@@ -789,6 +795,68 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                        </table>
                     </fieldset>
                   <?php endif; ?>
+          
+           <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])): ?> 
+            <?php if($row_ordenes_notas['id_pedido'] ): ?>
+                                <fieldset> <legend id="dato1">ORDENES DE COMPRA NOTAS WEB</legend>
+                                  <table class="table table-bordered table-sm">
+                                     <thead>
+                                       <tr class="table-success"> 
+                                         <td nowrap="nowrap" id="titulo4"># O.C</td>
+                                         <td nowrap="nowrap" id="titulo4">INGRESO</td>
+                                         <td nowrap="nowrap" id="titulo4">CLIENTE</td>
+                                         <td nowrap="nowrap" id="titulo4">CANTIDAD</td> 
+                                         <td colspan="5" nowrap="nowrap" id="titulo4">NOTA</td>
+                                         <td nowrap="nowrap" id="titulo4">LEIDO</td> 
+                                     </tr>
+                                     </thead>
+                                     <tbody>
+                                     <?php do { ?>
+                                       <tr onMouseOver="uno(this,'8C8C9F');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF"> 
+                                       <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_notas['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_notas['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000"><strong><?php echo $row_ordenes_notas['str_numero_oc']; ?></strong></a></td>
+                                       <td id="dato2" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_notas['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_notas['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000"><strong><?php echo $row_ordenes_notas['fecha_ingreso_oc']; ?> </strong></a>
+                                      </td>
+                                      <td id="dato1" nowrap>
+                                        <a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_notas['str_numero_oc']; ?>&id_oc=<?php echo $row_ordenes_notas['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
+                                        <?php 
+                                        $id_c_oc=$row_ordenes_notas['id_c_oc'];
+                                        $sqln="SELECT nombre_c FROM cliente WHERE id_c='$id_c_oc'"; 
+                                        $resultn=mysql_query($sqln); 
+                                        $numn=mysql_num_rows($resultn); 
+                                        if($numn >= '1') 
+                                        { 
+                                         $nit_cliente_c=mysql_result($resultn,0,'nombre_c'); echo  ($nit_cliente_c); 
+                                       }
+                                       ?>
+                                     </a></td>
+                                   <td id="dato1" nowrap>
+                                    <?php 
+                                    $id_pedido=$row_ordenes_notas['id_pedido'];
+                                    $sqlCAN="SELECT SUM(int_cantidad_io) AS int_cantidad_io FROM Tbl_items_ordenc WHERE id_pedido_io='$id_pedido'"; 
+                                    $resultCAN=mysql_query($sqlCAN); 
+                                    $numCAN=mysql_num_rows($resultCAN); 
+                                    if($numCAN >= '1') 
+                                    { 
+                                      $int_cantidad_io=mysql_result($resultCAN,0,'int_cantidad_io'); echo round($int_cantidad_io); 
+                                    }
+                                    ?>
+
+                                  </td>  
+                                  <td id="dato2" nowrap="nowrap" colspan="5">
+                                      <a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_notas['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_notas['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo utf8_encode($row_ordenes_notas['notaweb']);?></a>
+                                  </td>  
+                                <td id="dato2">
+                                 
+                                  <a class="botonUpdateMini" id="btnDelItems" onclick="uPDATEweb('id_pedido','<?php echo $row_ordenes_notas['id_pedido']; ?>','especialweb', '1', 'view_index.php?c=comercialList&a=Actualizarweb','tbl_orden_compra')" type="button" >LEIDO</a>
+                                  
+                                </td>
+                                </tr>
+                                   <?php } while ($row_ordenes_notas = mysql_fetch_assoc($ordenes_notas)); ?>
+                                </tbody>
+                             </table>
+                          </fieldset>
+                        <?php endif; ?>
+                <?php endif; ?>
                 
                 <fieldset>
                   <form action="delete_listado.php" method="get" name="seleccion">
@@ -1021,8 +1089,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
     });*/
 
      function uPDATE(id,valor,colum,proceso,url){
-     
-      
+ 
         swal({   
          title: "Actualizar?",   
          text: "Esta seguro que Quiere Actualizar a Pagado!",   
@@ -1045,6 +1112,29 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
 
    }
 
+ function uPDATEweb(id,valor,colum,proceso,url,tabla){
+ 
+    swal({   
+     title: "Actualizar?",   
+     text: "Esta seguro que Quiere Actualizar a Leido!",   
+     type: "warning",   
+     showCancelButton: true,   
+     confirmButtonColor: "#DD6B55",   
+     confirmButtonText: "Si, Actualizar!",   
+     cancelButtonText: "No, Actualizar!",   
+     closeOnConfirm: false,   
+     closeOnCancel: false }, 
+     function(isConfirm){   
+       if (isConfirm) {  
+         swal("Actualizado!", "El registro se ha Actualizado.", "success");  
+         actualizacionBoton(id,valor,colum,proceso,url,tabla);
+         //location.reload(); 
+       } else {     
+         swal("Cancelado", "has cancelado :)", "error"); 
+       } 
+     });  
+
+ }
  </script>
 
  <script>

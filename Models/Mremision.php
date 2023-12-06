@@ -104,13 +104,13 @@ class oRemision{
     { 
 
         try 
-        {
+        { 
             foreach ($data as $data) {
                 $array_codificado = UtilHelper::arrayEncode($data);
                 $array_deco = UtilHelper::arrayDecode($array_codificado); 
                 $arrayPHP =  ($array_deco) ;
                 $Date = date("Y-m-d H:i:s"); 
-                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '" . $arrayPHP['int_remision_r_rd'] . "', '" . $arrayPHP['str_numero_oc_rd'] . "', '" . $arrayPHP['fecha_rd'] . "', '" . $arrayPHP['int_item_io_rd'] . "', '" . $arrayPHP['int_caja_rd'] . "', '" . $arrayPHP['int_mp_io_rd'] . "', '" . $arrayPHP['int_ref_io_rd'] . "', '" . $arrayPHP['str_ref_cl_io_rd'] . "', '" . $arrayPHP['int_numd_rd'] . "', '" . $arrayPHP['int_numh_rd'] . "', '" . $arrayPHP['int_cant_rd'] . "', '" . $arrayPHP['int_peso_rd'] . "', '" . $arrayPHP['int_pesoneto_rd'] . "', '" . $arrayPHP['int_total_cajas_rd'] . "', '" . $arrayPHP['int_tolerancia_rd'] . "',  '" . $arrayPHP['str_direccion_desp_rd'] . "', '" . $arrayPHP['estado_rd'] . "','". $_SESSION['Usuario'] . '-' . $Date ."'  );"); 
+                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '" . $arrayPHP['int_remision_r_rd'] . "', '" . $arrayPHP['str_numero_oc_rd'] . "', '" . $arrayPHP['fecha_rd'] . "', '" . $arrayPHP['hora_rd'] . "', '" . $arrayPHP['int_item_io_rd'] . "', '" . $arrayPHP['int_caja_rd'] . "', '" . $arrayPHP['int_mp_io_rd'] . "', '" . $arrayPHP['int_ref_io_rd'] . "', '" . $arrayPHP['str_ref_cl_io_rd'] . "', '" . $arrayPHP['int_numd_rd'] . "', '" . $arrayPHP['int_numh_rd'] . "', '" . $arrayPHP['int_cant_rd'] . "', '" . $arrayPHP['int_peso_rd'] . "', '" . $arrayPHP['int_pesoneto_rd'] . "', '" . $arrayPHP['int_total_cajas_rd'] . "', '" . $arrayPHP['int_tolerancia_rd'] . "',  '" . $arrayPHP['str_direccion_desp_rd'] . "', '" . $arrayPHP['estado_rd'] . "','". $_SESSION['Usuario'] . '-' . $Date ."'  );"); 
 
             }
         } catch (Exception $e) 

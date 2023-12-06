@@ -105,20 +105,38 @@ $mes = $_GET['mensual'];
 $estado = $_GET['estado_empleado'];
 $dia1 = '01';
 $dia2 = '30';
-$fechaInicio=$anual."-".$mensual."-".$dia1;
-$fechaFin=$anual."-".$mensual."-".$dia2;
+if($anual!=0){
+
+   $mensual = $_GET['mensual']=='0' ? '01' :$_GET['mensual'];
+   $mensual2 = $_GET['mensual']=='0' ? '12' :$_GET['mensual']; 
+   $mes = $_GET['mensual']=='0' ? '01' : $_GET['mensual'];
+   
+   $fechaInicio=$anual."-".$mensual."-".$dia1;
+   $fechaFin=$anual."-".$mensual2."-".$dia2;
+
+}else{
+  $anual=0;
+}
+
+ 
+ 
 if($anual =='0' && $mensual=='0' && $estado=='0')
 {
-   $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado,"" );
+   $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.estado_empleado='0'" );
 } 
 if($anual =='0' && $mensual=='0' && $estado=='2')
 {
 
- $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.estado_empleado='$estado'" ); 
+ $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado,"" ); 
 }
-if($anual =='0' && $mensual=='0' && $estado!='2')
+if($anual =='0' && $mensual=='0' && $estado=='1')
 {
-  $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.estado_empleado='$estado' " ); 
+  $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.estado_empleado='1' " ); 
+}
+if($anual !='0' && $mensual=='0' && $estado=='2')
+{
+  $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.fechainicial_empleado BETWEEN '$fechaInicio' and '$fechaFin' " ); 
+
 }
 if($anual !='0' && $mensual!='0' && $estado!='2')
 {
@@ -128,8 +146,9 @@ if($anual !='0' && $mensual!='0' && $estado!='2')
 if($anual !='0' && $mensual!='0' && $estado=='2')
 {
   $rows_empleado = $conexion->buscarListar("empleado a INNER JOIN TblProcesoEmpleado b on a.codigo_empleado=b.codigo_empleado","*","ORDER BY a.codigo_empleado DESC","",$maxRows_proceso_empleado,$pageNum_proceso_empleado," WHERE b.fechainicial_empleado BETWEEN '$fechaInicio' and '$fechaFin' " );
-}
+} 
 
+ 
 
 /*$query_limit_proceso_empleado = sprintf("%s LIMIT %d, %d", $query_proceso_empleado, $startRow_proceso_empleado, $maxRows_proceso_empleado);
 $proceso_empleado = mysql_query($query_limit_proceso_empleado, $conexion1) or die(mysql_error());
@@ -178,11 +197,16 @@ $totalRows_ano = mysql_num_rows($ano);
 mysql_select_db($database_conexion1, $conexion1);
 if($anual !='0')
 {
-  $query_factor = "SELECT * FROM TblFactorP WHERE YEAR(fecha_fp) = '$anual' ORDER BY fecha_fp DESC";
+  $anual=$anual;
+}else{
+  $anual= date('Y');
 }
-$factor = mysql_query($query_factor, $conexion1) or die(mysql_error());
-$row_factor = mysql_fetch_assoc($factor);
-$totalRows_factor = mysql_num_rows($factor);
+  $query_factor = "SELECT * FROM TblFactorP WHERE YEAR(fecha_fp) = '$anual' ORDER BY fecha_fp DESC";
+   $factor = mysql_query($query_factor, $conexion1) or die(mysql_error());
+   $row_factor = mysql_fetch_assoc($factor);
+   $totalRows_factor = mysql_num_rows($factor);
+
+
 ?>
 <html>
 <head>
@@ -296,7 +320,7 @@ $totalRows_factor = mysql_num_rows($factor);
                   <td id="titulo4">CODIGO</td>
                   <td id="titulo4">NOMBRE APELLIDO</td>
                   <td id="titulo4">CARGO</td>
-                  <?php if($_SESSION['tipo_usuario']=='15'):?>
+                  <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayrRHH'])):?>
                   <td id="titulo4">SUELDO</td>
                   <td id="titulo4">RECARGOS</td>
                   <td id="titulo4">APORTES</td>
@@ -334,7 +358,7 @@ $totalRows_factor = mysql_num_rows($factor);
                      }
                      ?>
                    </a></td>
-                   <?php if($_SESSION['tipo_usuario']=='15'):?>
+                   <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayrRHH'])):?>
                    <td id="dato3">
                     <a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo numeros_format($rows_empleado['sueldo_empleado']);$totalsueldo+=$rows_empleado['sueldo_empleado'];?></a>
                   </td>

@@ -245,6 +245,7 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
 // AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF'
 
 mysql_select_db($database_conexion1, $conexion1);
+/* $query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' AND id_rp = '%s' ORDER BY id_rpp_rp ASC", $colname_tiempoMuerto, $colname_rp); */
 $query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' ORDER BY id_rpp_rp ASC", $colname_tiempoMuerto);
 $producido = mysql_query($query_producido, $conexion1) or die(mysql_error());
 $row_producido = mysql_fetch_assoc($producido);
@@ -604,6 +605,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                         <td nowrap id="detalle2"><strong>Desperdicios - Kilos</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
                                       </tr>
+                                      <!-- ++++++++++++ -->
                                       <?php for ($m = 0; $m <= $totalRows_desperdicio - 1; $m++) { ?>
                                         <tr>
                                           <td id="fuente1">
@@ -626,6 +628,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                                                                                       echo $delrd; ?>,'produccion_registro_extrusion_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                                         </tr>
                                       <?php } ?>
+                                      <!-- +++++++++++++++++ -->
                                       <tr>
                                         <td id="fuente3">TOTAL</td>
                                         <td id="fuente1"><strong><?php echo $TD; ?></strong></td>
@@ -705,7 +708,7 @@ foreach ($rollos_en_liquidacion as $value) {
                               <td colspan="4" id="dato1"></td>
                             </tr>
                             <tr>
-                              <td colspan="10" id="detalle2"><a href="javascript:verFoto('produccion_regist_extru_kilos_prod_edit.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&rollo=<?php echo $row_rp_edit['rollo_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>&amp;id_ref=<?php echo $row_rp_edit['id_ref_rp'] ?>','1100','640')"> Editar los valores de las unidades ingresadas</a></td>
+                              <td colspan="10" id="detalle2"><a href="javascript:verFoto('produccion_regist_extru_kilos_prod_edit.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&rollo=<?php echo $row_rp_edit['rollo_rp'] ?>&id_rp=<?php echo $_GET['id_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>&amp;id_ref=<?php echo $row_rp_edit['id_ref_rp'] ?>','1100','640')"> Editar los valores de las unidades ingresadas</a></td>
                             </tr>
                             <tr id="tr1">
                               <td colspan="2" id="fuente1">Maquina</td>

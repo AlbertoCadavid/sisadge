@@ -73,6 +73,55 @@ function actualizacion(id,valor,colum,proceso,url){
   }); 
 }
 
+
+function actualizacionBoton(id,valor,colum,proceso,url,tabla){ 
+  
+  $.ajax({
+    dataType: "json",
+    data: { 
+      "id": id, 
+      "valor": valor, 
+      "colum":colum,
+      "proceso":proceso,
+      "url":url,
+      "tabla":tabla
+    },
+    url: url, // '../view_index.php?c=comprasEM&a=Actualizar&columna=',
+    type:  'post',
+    beforeSend: function(){
+      //Lo que se hace antes de enviar el formulario
+    },
+    success: function(respuesta){
+      //lo que se si el destino devuelve algo
+       $('#resp2').show(); 
+       $('#resp2').fadeIn(); 
+
+       setTimeout(function() {
+        $("#resp2").fadeOut();           
+      },2000);
+
+       setTimeout(function() 
+            {
+             //location.reload(); 
+            },2000);
+       
+    },
+    error:  function(xhr,err){ 
+       $('#resp2').show(); 
+       $('#resp2').fadeIn();     
+       setTimeout(function() {
+        $("#resp2").fadeOut();           
+      },2000);
+       
+       setTimeout(function() 
+            {
+             // location.reload(); 
+            },2000);
+      //alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status+"\n \n responseText: "+xhr.responseText);
+    }
+  }); 
+}
+
 function actualizapaso(ids,valorid,valores,tabla,url){ 
   var name = $(valores).attr("name");
   var valorc = $(valores).val();

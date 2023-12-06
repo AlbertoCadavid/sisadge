@@ -56,6 +56,35 @@ class ComercialListController{
              header("Location:orden_compra_cl2.php");  
     }
 
+    public function ActualizarProforma(){
+       
+           
+             //$data = json_decode($_POST['datos']); 
+
+             $this->proformas =  new mComercialList(); 
+             $this->proforma = $data; 
+          
+             $this->proformas->UpdateProforma( $_REQUEST['id'],$_REQUEST['valor'],$_REQUEST['colum'],$_REQUEST['proceso'],$_REQUEST['url'],$_REQUEST['tabla']);  
+             
+             header("Location:orden_compra_cl2.php");  
+    }
+
+
+    public function Actualizarweb(){
+       
+           
+             //$data = json_decode($_POST['datos']); 
+
+             $this->proformas =  new mComercialList(); 
+             $this->proforma = $data; 
+             // id,valor,colum,proceso,url
+
+             $this->proformas->Updateweb( $_REQUEST['id'],$_REQUEST['valor'],$_REQUEST['colum'],$_REQUEST['proceso'],$_REQUEST['url'],$_REQUEST['tabla']);  
+             
+             header("Location:orden_compra_cl2.php");  
+    }
+
+
     public function ComercialList($vista=''){ 
         if($vista){ 
           require_once("views/".$vista);  //header('Location:'.$vista);  

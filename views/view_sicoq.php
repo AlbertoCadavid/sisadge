@@ -144,7 +144,7 @@ $conexion = new ApptivaDB();
                         <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
                         <li><a href="menu.php">MENU PRINCIPAL</a></li>
                         <li><a target="_self" href="view_index.php?c=csicoq&a=Inicio&controladas=<?php echo $_GET['controladas'] == 'SI' ? 'NO' : 'SI'; ?> "><?php echo $_GET['controladas'] == 'SI' ? 'NO CONTROLADAS' : 'SI CONTROLADAS'; ?> </a></li>
-                        <?php if ($_SESSION['superacceso']) : ?>
+                        <?php if ($_SESSION['acceso'] && in_array($_SESSION['id_usuario'], $_SESSION['usuariosarraySicoq'])) : ?>
                           <li>
                             <!-- <a class="botonDel" href="?c=csicoqFA&a=Eliminar&columna=<?php echo $_GET['columna']; ?>&master=<?php echo $_GET['id']; ?>">DELETE</a> -->
                             <a class="botonDel" id="btnDelMaster" onclick='eliminar("<?php echo $_GET['id']; ?>","<?php echo $_GET['columna']; ?>","autorizacion", "?c=csicoq&a=Eliminar","1"  )' type="button">DELETE</a>
@@ -173,7 +173,7 @@ $conexion = new ApptivaDB();
                         <!-- grids -->
                         <div class="row">
                           <div class="span12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <?php if ($_SESSION['superacceso']) : ?>
+                            <?php if ($_SESSION['acceso'] && in_array($_SESSION['id_usuario'], $_SESSION['usuariosarraySicoq'])) : ?>
                               <button id='botondeenvio' type="submit" onclick="validarTodos(); return false;"><img type="image" style="width: 30px; height: 40px;" name="botondeenvio" id="botondeenvio" src="images/save3.PNG" alt="GUARDAR" title="GUARDAR"></button>&nbsp;&nbsp;&nbsp;&nbsp;
                               <button id='botondeeditar' type="button" onclick="editarform(); return false;"><img type="image" style="width: 30px; height: 40px;" name="botondeeditar" id="botondeeditar" src="images/editar.PNG" alt="EDITAR" title="EDITAR"></button>
                             <?php endif; ?>
@@ -256,17 +256,17 @@ $conexion = new ApptivaDB();
                           <tr>
                             <td colspan="6">
                               CANTIDAD DE KILOS PERMITIDOS
-                              <input name="kilospermitidosmes" id="kilospermitidosmes" class="kilospermitidosmes" step="0.1" value="<?php echo $general['kilospermitidosmes'] == '' ? $kilosmes['id'] : $general['kilospermitidosmes']; ?>" type="number" placeholder="kilos por mes" size="20" required="required" <?php if (!$_SESSION['superacceso']) : ?> readonly <?php endif; ?>> KILOS POR MES
+                              <input name="kilospermitidosmes" id="kilospermitidosmes" class="kilospermitidosmes" step="0.1" value="<?php echo $general['kilospermitidosmes'] == '' ? $kilosmes['id'] : $general['kilospermitidosmes']; ?>" type="number" placeholder="kilos por mes" size="20" required="required" <?php if (!$_SESSION['acceso']) : ?> readonly <?php endif; ?>> KILOS POR MES
                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                               TOTAL KILOS DISPONIBLE PARA COMPRA
                               <input name="kilosdisponiblescompra" id="kilosdisponiblescompra" class="kilosdisponiblescompra" step="0.1" value="<?php echo $general['kilosdisponiblescompra']; ?>" type="number" placeholder="kilos disponibles" size="20" required='required' readonly>
                               FECHA INICIO
-                              <input name="fecha_inicio" id="fecha_inicio" <?php if (!$_SESSION['superacceso']) : ?> readonly type="text" <?php else : ?>type="date" <?php endif; ?> step="1" min="2020-01-01" placeholder="fecha_inicio" value="<?php echo $general['fecha_inicio'] == '' ? date('Y-m-d') : $general['fecha_inicio']; ?>" required="required" class="campostextMedio" style="width: 100px;">
+                              <input name="fecha_inicio" id="fecha_inicio" <?php if (!$_SESSION['acceso']) : ?> readonly type="text" <?php else : ?>type="date" <?php endif; ?> step="1" min="2020-01-01" placeholder="fecha_inicio" value="<?php echo $general['fecha_inicio'] == '' ? date('Y-m-d') : $general['fecha_inicio']; ?>" required="required" class="campostextMedio" style="width: 100px;">
 
                               FECHA VENCIMIENTO DIAS
 
-                              <input name="fecha_vence" id="fecha_vence" <?php if (!$_SESSION['superacceso']) : ?> readonly type="text" <?php else : ?>type="date" <?php endif; ?> step="1" min="2020-01-01" placeholder="fecha_vence" value="<?php echo $general['fecha_vence'] == '' ? date('Y-m-d') : $general['fecha_vence']; ?>" required="required" class="campostextMedio" style="width: 100px;">
+                              <input name="fecha_vence" id="fecha_vence" <?php if (!$_SESSION['acceso']) : ?> readonly type="text" <?php else : ?>type="date" <?php endif; ?> step="1" min="2020-01-01" placeholder="fecha_vence" value="<?php echo $general['fecha_vence'] == '' ? date('Y-m-d') : $general['fecha_vence']; ?>" required="required" class="campostextMedio" style="width: 100px;">
                               <?php
                               $fechaVencimiento = $general['fecha_vence'] == '' ? date('Y-m-d') : $general['fecha_vence'];
                               $diasaVencer =  RestarFechasNew($fechaActual, $fechaVencimiento); //en horas 
@@ -413,7 +413,7 @@ $conexion = new ApptivaDB();
     <div style="width: 110px;"><strong>CODIFICADORA </strong></div>
     <div style="width: 40px;"><strong>O.P </strong></div>
     <div style="width: 140px;"><strong>MODIFICO</strong></div>
-    <?php if ($_SESSION['superacceso']) : ?>
+    <?php if ($_SESSION['acceso'] && in_array($_SESSION['id_usuario'], $_SESSION['usuariosarraySicoq'])) : ?>
       <div style="width: 60px;"><strong>ELIMINAR</strong></div>
     <?php endif; ?>
     <!--  <div class="col-lg-1" ><strong>VER</strong></div>     -->
@@ -500,7 +500,7 @@ $conexion = new ApptivaDB();
 
         </div>
 
-        <?php if ($items['autorizacion']  && $_SESSION['superacceso']) {  ?>
+        <?php if ($items['autorizacion']  && $_SESSION['acceso'] && in_array($_SESSION['id_usuario'], $_SESSION['usuariosarraySicoq']) ) {  ?>
           <div class="col-lg-1" id="fondo_2">
             <a class="botonDel" id="btnDelItems" onclick='eliminar("<?php echo $items['id_i']; ?>","<?php echo $_GET['columna']; ?>","autorizacion","?c=csicoq&a=Eliminar","0" )' type="button">DELETE</a>
           </div>

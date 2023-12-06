@@ -510,12 +510,13 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                   }
 
                                   //KILOS DE LOS ROLLO A ROLLO 
+                                  $kilosE = round($kilosE,2);
                                   $totalKilosRollodesp = ($kilosE + $DespRollo); //KILOS DEL ROLLO MAS DESPERDICIO 
 
                                   ?>
                                 </td>
                                 <td nowrap="nowrap" id="dato1" title="K.Extruidos + k.Desp / kilos producidos / Kilos Liquidados">
-                                  <?php if ($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == 'sistemas') {
+                                  <?php if ($_SESSION['id_usuario'] == 72 || $_SESSION['id_usuario'] == 23 || $_SESSION['id_usuario'] == 76) { //usuaios auxauditor-sistemas-lidersistemas
                                     echo '(' . $kilosE;
                                     echo ' + ' . $DespRollo;
                                     echo ')  / ' . $cantidadKilosprod;

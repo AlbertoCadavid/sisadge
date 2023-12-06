@@ -205,6 +205,7 @@ $query_usuario = sprintf("SELECT * FROM usuario WHERE usuario = %s", GetSQLValue
 $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
+
 //numero id_rp
 $colname_rp= "-1";
 if (isset($_GET['id_rp'])) {
@@ -217,7 +218,7 @@ $row_rp_edit = mysql_fetch_assoc($rp_edit);
 $totalRows_rp_edit = mysql_num_rows($rp_edit);
  
 $fechaR=$row_rp_edit['fecha_ini_rp'];
-$fechaF=$row_rp_edit['fecha_fin_rp'];
+$fechaF=$row_rp_edit['fecha_fin_rp']; 
 $Rollo=$row_rp_edit['rollo_rp'];
 
 //LLENA CAMPOS DE MEZCLAS
@@ -258,7 +259,7 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
 //CARGA LOS KILOS PRODUCIDOS
 // AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF'
 mysql_select_db($database_conexion1, $conexion1); 
-$query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF' AND id_rp= $_GET[id_rp] ORDER BY id_rpp_rp ASC",$colname_tiempoMuerto);
+$query_producido = sprintf("SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='%s' AND id_proceso_rkp='1' AND fecha_rkp BETWEEN '$fechaR' AND '$fechaF'  ORDER BY id_rpp_rp ASC",$colname_tiempoMuerto);
 $producido = mysql_query($query_producido, $conexion1) or die(mysql_error());
 $row_producido = mysql_fetch_assoc($producido);
 $totalRows_producido = mysql_num_rows($producido);

@@ -184,11 +184,21 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
       <div>
         <tr>
           <td id="fuente2" style="display:flex"><a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/atras.gif" alt="ATRAS" title="ATRAS" border="0" style="cursor:hand;" /></a></td>
+          <td>
+            <label for="undEstiba">Rollos x Estiba</label>
+            <input style="width:35px; margin-right:30px" type="number" name="undEstiba" id="undEstiba">
+          </td>
           <td id="fuente2">
-            <a type="submit" onClick="envioexcel();">
-              <img src="./Fichero_excel/export_to_excel.gif" alt="EXCEL" title="EXCEL" border="0" style="cursor:hand" />
+            <a type="submit" onClick="envioexcel();" style="margin-right:30px">
+              <img src="./Fichero_excel/xls-export-green.png" alt="EXPORTAR ROLLOS" title="EXPORTAR ROLLOS A EXCEL" border="0" style="cursor:hand" />
             </a>
           </td>
+          <td id="fuente2">
+            <a type="submit" onClick="envioexcelMalos();">
+              <img src="./Fichero_excel/xls-export-red.png" alt="EXPORTAR ROLLOS DEFECTUOSOS A EXCEL" title="EXPORTAR ROLLOS DEFECTUOSOS A EXCEL" border="0" style="cursor:hand" />
+            </a>
+          </td>
+
         </tr>
       </div>
 
@@ -213,6 +223,7 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
     </table>
 
     <table id="tabla1">
+
       <tr id="tr1">
         <td nowrap="nowrap" id="titulo4">ROLLO N&deg;</td>
         <td nowrap="nowrap" id="titulo4">KILOS</td>
@@ -221,16 +232,29 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
         <td nowrap="nowrap" id="titulo4">ELIMINAR ROLLO</td>
       </tr>
       <?php do { ?>
-        <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-          <input type="hidden" class="id<?php echo $count ?>" name="id[]" value="<?php echo $row_rollo_estrusion['id_r'] ?>">
-          <td id="dato2" class="item<?php echo $count ?>"><?php echo $row_rollo_estrusion['rollo_r']; ?></td>
-          <td id="dato2" class="kilos<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['kilos_r'];
-                                                                                    $TKILOS += $row_rollo_estrusion['kilos_r']; ?></td>
-          <td id="dato2" class="metros<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['metro_r'];
-                                                                                      $TMETROS += $row_rollo_estrusion['metro_r']; ?></td>
-          <td id="dato2" class="operario<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?></td>
-          <td id="dato2" class="item<?php echo $count ?>"><input type="checkbox" name="sel<?php echo $count ?>" id="sel<?php echo $count ?>"></td>
-        </tr>
+        <?php if ($row_rollo_estrusion['bandera_r'] > 0) { ?>
+          <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
+            <input type="hidden" class="id<?php echo $count ?>" name="id[]" value="<?php echo $row_rollo_estrusion['id_r'] ?>">
+            <td style="background: rgb(188, 179, 177)" id="dato2" class="item<?php echo $count ?>"><?php echo $row_rollo_estrusion['rollo_r']; ?></td>
+            <td style="background: rgb(188, 179, 177)" id="dato2" class="kilos<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['kilos_r'];
+                                                                                                                              $TKILOS += $row_rollo_estrusion['kilos_r']; ?></td>
+            <td style="background: rgb(188, 179, 177)" id="dato2" class="metros<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['metro_r'];
+                                                                                                                              $TMETROS += $row_rollo_estrusion['metro_r']; ?></td>
+            <td style="background: rgb(188, 179, 177)" id="dato2" class="operario<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?></td>
+            <td style="background: rgb(188, 179, 177)" id="dato2" class="item<?php echo $count ?>"><input type="checkbox" name="sel<?php echo $count ?>" id="sel<?php echo $count ?>"></td>
+          </tr>
+        <?php } else { ?>
+          <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
+            <input type="hidden" class="id<?php echo $count ?>" name="id[]" value="<?php echo $row_rollo_estrusion['id_r'] ?>">
+            <td id="dato2" class="item<?php echo $count ?>"><?php echo $row_rollo_estrusion['rollo_r']; ?></td>
+            <td id="dato2" class="kilos<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['kilos_r'];
+                                                                                      $TKILOS += $row_rollo_estrusion['kilos_r']; ?></td>
+            <td id="dato2" class="metros<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['metro_r'];
+                                                                                        $TMETROS += $row_rollo_estrusion['metro_r']; ?></td>
+            <td id="dato2" class="operario<?php echo $count ?> item<?php echo $count ?>"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?></td>
+            <td id="dato2" class="item<?php echo $count ?>"><input type="checkbox" name="sel<?php echo $count ?>" id="sel<?php echo $count ?>"></td>
+          </tr>
+        <?php } ?>
         <?php $count = $count + 1 ?>
       <?php } while ($row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion)); ?>
       <tr bgcolor="#FFFFFF">
@@ -291,11 +315,10 @@ mysql_free_result($rollo_estrusion);
   let rollos = document.querySelector(".rollos");
   let metros = document.querySelectorAll(".metros");
   let kilos = document.querySelectorAll(".kilos");
-  let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  let checkboxes = document.querySelectorAll('input[type="checkbox"]:not(#todo');
   let cantidad = checkboxes.length;
   let buscar = document.querySelector(".buscar");
   let reset = document.querySelector(".reset");
-
 
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].addEventListener('change', function() {
@@ -369,7 +392,7 @@ mysql_free_result($rollo_estrusion);
 
   })
 
-  function objRollos() {
+  function objRollos(condicion) {
 
     let infoRollos = [];
     let pos = 0;
@@ -377,16 +400,30 @@ mysql_free_result($rollo_estrusion);
     for (let i = 0; i < checkboxes.length; i++) {
       let info = document.querySelectorAll(".item" + i)
 
-      if (info[0].getAttribute("disabled") != "true") {
+      if (condicion === "buenos") {
+        if (info[0].getAttribute("disabled") != "true") {
 
-        infoRollos[pos] = {
-          rollo: info[0].innerText,
-          kilos: info[1].innerText,
-          metros: info[2].innerText,
-          operario: info[3].innerText
+          infoRollos[pos] = {
+            rollo: info[0].innerText,
+            kilos: info[1].innerText,
+            metros: info[2].innerText,
+            operario: info[3].innerText
+          }
+          pos++
         }
-        pos++
+      } else if (condicion === "malos") {
+        if (info[0].getAttribute("disabled") == "true") {
+
+          infoRollos[pos] = {
+            rollo: info[0].innerText,
+            kilos: info[1].innerText,
+            metros: info[2].innerText,
+            operario: info[3].innerText
+          }
+          pos++
+        }
       }
+
     }
 
     return infoRollos;
@@ -394,11 +431,15 @@ mysql_free_result($rollo_estrusion);
 
 
   function envioexcel() {
+    let undxestiba = cantidad;
+    if (document.querySelector('#undEstiba').value != '') {
+      undxestiba = document.querySelector('#undEstiba').value;
+    }
 
-    var objetoSerializado = JSON.stringify(objRollos());
-    var objetoCodificado = encodeURIComponent(objetoSerializado);
+    var objetoSerializado = JSON.stringify(objRollos('buenos'));
+    localStorage.setItem('dataObjetoJSON', objetoSerializado);
 
-    var form = "id_op_r=<?php echo $_GET['id_op_r']; ?>" + '&rollos=' + cantidad + '&metros=' + metros[0].value + '&kilos=' + kilos[0].value + '&info=' + objetoCodificado;
+    var form = "id_op_r=<?php echo $_GET['id_op_r']; ?>" + '&rollos=' + cantidad + '&metros=' + metros[0].value + '&kilos=' + kilos[0].value + '&undxestiba=' + undxestiba;
     var vista = 'produccion_extrusion_listado_rollos_informe_excel.php';
     enviovarListados(form, vista);
   }
@@ -415,6 +456,28 @@ mysql_free_result($rollo_estrusion);
       window.location.assign(url + "?id_op_r=" + id)
     }
   })
+
+  function envioexcelMalos() {
+    let undxestiba = cantidad;
+    if (document.querySelector('#undEstiba').value != '') {
+      undxestiba = document.querySelector('#undEstiba').value;
+    }
+
+    if (objRollos('malos').length > 0) {
+      var objetoSerializado = JSON.stringify(objRollos('malos'));
+      localStorage.setItem('dataObjetoJSON', objetoSerializado);
+
+      var form = "id_op_r=<?php echo $_GET['id_op_r']; ?>" + '&rollos=' + cantidad + '&metros=' + metros[0].value + '&kilos=' + kilos[0].value + '&undxestiba=' + undxestiba;
+      var vista = 'produccion_extrusion_listado_rollos_informe_excel.php';
+      enviovarListados(form, vista);
+    } else {
+      swal({
+        icon: "warning",
+        title: "Oops...",
+        text: "No has seleccionado ningun rollo malo"
+      });
+    }
+  }
 
   reset.addEventListener("click", function() {
     let id = '<?php echo $_GET['id_op_r'] ?>'

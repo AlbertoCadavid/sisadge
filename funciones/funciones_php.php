@@ -861,8 +861,30 @@ function eliminar_tildes($cadena){
         $cadena
     );
 
-    return $cadena;
+    return $cadena; 
 }
 
+
+function horaActual(){
+	// Establecer la zona horaria para America/Bogota
+	date_default_timezone_set('America/Bogota');
+
+	// Obtener la hora actual
+	$hora_actual = date('H:i:s');
+
+	// Mostrar la hora actual en Bogotá, Colombia
+	return $hora_actual;
+}
+
+function fechahoraActual(){
+	// Establecer la zona horaria para America/Bogota
+	date_default_timezone_set('America/Bogota');
+
+	// Obtener la hora actual
+	$hora_actual = date('Y-m-d H:i:s');
+
+	// Mostrar la hora actual en Bogotá, Colombia
+	return $hora_actual;
+}
 
 ?>

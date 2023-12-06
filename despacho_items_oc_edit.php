@@ -5,6 +5,7 @@ require (ROOT_BBDD);
 <?php require_once('Connections/conexion1.php'); ?>
 <?php
 include('funciones/adjuntar.php');
+include('funciones/funciones_php.php');
 require_once('envio_correo/envio_correos.php'); 
 
 require_once("db/db.php");
@@ -552,6 +553,7 @@ if (statusConfirm == true)
                           <td id="nivel2">PRECIO / VENTA</td>
                           <td id="nivel2">TOTAL ITEM</td>
                           <td id="nivel2">MONEDA</td>
+                          <td nowrap="nowrap" id="nivel2">PESO T.</td>
                           <td id="nivel2">DIRECCION ENTREGA</td>
                           <td nowrap="nowrap" id="nivel2">FACTURADO</td>
                         </tr>
@@ -583,6 +585,13 @@ if (statusConfirm == true)
 
 
                               <td id="talla2"><a href="javascript:verFoto('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['str_moneda_io']; ?></a></td>
+                              <td id="talla2"><a href="javascript:verFoto('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php 
+                                   $codref=$row_items['int_cod_ref_io'];
+                                   $row_valor = $conexion->llenarCampos("tbl_referencia", "WHERE cod_ref='".$codref."' ", " ", "peso_paquete ");
+                                   $pesoPaqx100=porcentaje($row_valor['peso_paquete'],$row_items['int_cantidad_io']);
+                                   echo $pesoPaqx100; 
+                               ?> kilos</a>
+                            </td>
                               <td id="talla2"><a href="javascript:verFoto('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php $ca = htmlentities($row_items['str_direccion_desp_io']); echo $ca; ?></a></td>
                               <td nowrap="nowrap"id="talla2"><a href="javascript:verFoto('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000">
                                 <?php if($row_items['b_estado_io']=='5'){echo "Facturado Total";}else if($row_items['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_items['b_estado_io']=='1'){echo "Ingresado";}else if($row_items['b_estado_io']=='2'){echo "Programado";}else if($row_items['b_estado_io']=='3'){echo "Remisionado";}else if($row_items['b_estado_io']=='6'){echo "Muestras reposicion";}  ?>
@@ -605,7 +614,8 @@ if (statusConfirm == true)
                        </tr>
                        <?php if (($row_remision_detalle['id_rd']!='')) { ?>
                          <tr id="tr2">
-                          <td colspan="4" id="dato2"><table id="tabla1">
+                          <td colspan="4" id="dato2">
+                            <table id="tabla1">
                             <tr>
                               <td id="nivel2"></td>
                               <td id="nivel2">REF. AC</td>
@@ -619,6 +629,7 @@ if (statusConfirm == true)
                               <td id="nivel2">PESO</td>
                               <td id="nivel2">IPUU</td>  
                               <td id="nivel2">PESO/NETO</td>
+                              <td id="nivel2">FECHA/HORA</td>
                               <td nowrap="nowrap"id="nivel2">FACTURADO</td>                
                             </tr>
                             <?php do { ?>
@@ -640,7 +651,7 @@ if (statusConfirm == true)
                                     $resultmp= mysql_query($sqlmp);
                                     $nump= mysql_num_rows($resultmp);
                                     if($nump >='1')
-                                    { 
+                                    {  
                                       $nombre_mp = mysql_result($resultmp,0,'str_nombre');
                                     } } ?><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $nombre_mp;?></a><input type="hidden" name="rcl" id="rcl" value="<?php  $rc=$nombre_mp;echo $rc; ?>"></td>
                                     <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['int_cod_cliente_io']; ?></a></td>                  
@@ -653,6 +664,7 @@ if (statusConfirm == true)
                                       <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['int_peso_rd']; $peso=$peso+$row_remision_detalle['int_peso_rd']; ?></a></td>
                                       <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['impuesto']==1 ? 'SI': 'NO'; ?></a></td>
                                       <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['int_pesoneto_rd'];$peson= $peson+$row_remision_detalle['int_pesoneto_rd']; ?></a></td>
+                                      <td nowrap="nowrap"id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['fecha_rd'].' '.$row_remision_detalle['hora_rd']; ?></a></td>
                                       <td nowrap="nowrap" id="talla2"><a href="javascript:verFoto('despacho_oc_add_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000">
                                         <?php if( $row_remision_detalle['b_estado_io']=='5'){echo "Facturado Total";}else if( $row_remision_detalle['b_estado_io']=='4'){echo "Facturado Parcial";}else if( $row_remision_detalle['b_estado_io']=='1'){echo "Ingresado";}else if($row_remision_detalle['b_estado_io']=='2'){echo "Programado";}else if($row_remision_detalle['b_estado_io']=='3'){echo "Remisionado";}else if($row_items['b_estado_io']=='6'){echo "Muestras reposicion";}  ?>
                                       </a></td>

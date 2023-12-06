@@ -51,6 +51,11 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -113,14 +118,14 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
                <table id="tabla1"> 
                   <tr>
                    <td ><input id="id_remision" name="id_remision" type="hidden" value="<?php echo $num; ?>" >
-                        <strong >CLIENTE:</strong>
+                        <strong >PROVEEDOR:</strong>
                         <input type="text" required="required" id="cliente" name="cliente" value="<?php echo $row_existe['cliente']; ?>" class="form-control negro_inteso">
                             <!-- <select name="cliente" id="cliente" class="selectsMedio" >
                             <option value=""<?php if (!(strcmp("", $row_existe['cliente']))) {echo "selected=\"selected\"";} ?>>Seleccione Cliente</option>
                             <?php  foreach($proveedores as $row_proveedores ) { ?>
                             <option value="<?php echo $row_proveedores['id_p']; ?>"<?php if (!(strcmp($row_proveedores['id_p'], $row_existe['cliente']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_proveedores['proveedor_p']); ?> </option>
                             <?php } ?>
-                            </select>  --> 
+                            </select> -->  
                       </td >
                       <td>  
                         <strong >ENTRADA - SALIDA&nbsp;&nbsp;</strong>
@@ -133,7 +138,7 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
                 </tr> 
                  <tr>
                    <td >
-                      <strong >NIT / C.C:</strong >&nbsp;&nbsp;<input type="text" required="required" id="documento" name="documento" value="<?php echo $row_existe['documento']; ?>" class="form-control negro_inteso" > 
+                      <strong >NIT / C.C:</strong >&nbsp;&nbsp;<input readonly type="text" required="required" id="documento" name="documento" value="<?php echo $row_existe['documento']; ?>" class="form-control negro_inteso" > 
                    </td >
                    <td >
                       <strong >PAIS/CIUDAD:</strong >&nbsp;&nbsp;<input type="text" id="pais" name="pais" value="<?php echo $row_existe['pais']; ?>" class="form-control negro_inteso" >
@@ -162,11 +167,11 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
                   </tr>
                    <tr>
                     <td> 
-                      <strong >FECHAS ENTRADA: </strong>
+                      <strong >FECHA ENTRADA: </strong>
                       <input type="date" required="required"  id="fecha" name="fecha" value="<?php echo $row_existe['fecha']; ?>" class='form-control' style="width:200">
                      </td>
                      <td> 
-                       <strong >FECHAS SALIDA: </strong>
+                       <strong >FECHA SALIDA: </strong>
                        <input type="date" required="required"  id="fecha_salida" name="fecha_salida" value="<?php echo $row_existe['fecha_salida']; ?>" class='form-control' style="width:200">
                       </td>
                     </tr>
@@ -252,7 +257,7 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
                   <div class="panel-footer" id="continuar" align="center">
                     <?php 
                     if($_GET["id_remision"]==''): ?>
-                    <button id="btnEnviarG" name="btnEnviarG" type="button" class="botonGeneral" autofocus="" >GUARDAR Y CONTINUAR</button> 
+                    <button id="btnEnviarG" name="btnEnviarG" type="button" class="botonGeneral" >GUARDAR Y CONTINUAR</button> 
                     <?php endif; ?>
                   </div>
                     </td>
@@ -263,7 +268,7 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
               </form> 
           <tr>
             <td> <div class="panel-footer" id="continuar" style="align-items: left;"> 
-            <button   id="btnFinalizar" name="btnFinalizar" type="button" class="botonFinalizar" autofocus="" onclick="window.location='insumos_interno_listado.php'" onclick="finalizar();">FINALIZAR</button> 
+            <button   id="btnFinalizar" name="btnFinalizar" type="button" class="botonFinalizar"  onclick="window.location='insumos_interno_listado.php'" onclick="finalizar();">FINALIZAR</button> 
           </div></td>
           </tr> 
 
@@ -381,7 +386,7 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
      swal("Error", "Debe agregar un valor al campo cantidad! :)", "error"); 
      return false;
    }else{ 
-     guardarConAlertItems();
+     //guardarConAlertItems();
    }
 
  });
@@ -415,6 +420,13 @@ $insumos = $conexion->llenaSelect('insumo','','ORDER BY descripcion_insumo DESC'
        $("#totales").text(suma)
 
  }
+
+ 
+  $('#cliente').change(function(){
+    cliente = $("#cliente").val();
+    let resp = consultaProveedor('comprobarProveedor',cliente)
+  })
+ 
  
 </script>
 <?php
@@ -422,6 +434,5 @@ mysql_free_result($usuario);
 mysql_free_result($ver_nuevo);
 mysql_free_result($proveedores);
 mysql_free_result($insumos);
-
 
 ?>

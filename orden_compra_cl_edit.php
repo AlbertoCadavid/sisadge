@@ -304,34 +304,60 @@ $totalRows_remision = mysql_num_rows($remision);
 /* echo  $_SESSION['id_usuario']=37; echo ' ';
  echo  $_SESSION['superacceso']=0; echo ' ';
  echo  $row_orden_compra['b_estado_oc']=1; echo ' ';*/
+ 
 
-if( $_SESSION['superacceso']==1 )  //$row_orden_compra['b_estado_oc'] != 1
-{
- echo 'Test-1'; 
 
- if( $_SESSION['id_usuario']==64  && $row_orden_compra['b_estado_oc'] < 1){
-         echo 'Test-2'; //aqui puede editar si esta recien ingresada
-       } else if( ($_SESSION['id_usuario']==26 || $_SESSION['id_usuario']==23 || $_SESSION['id_usuario']==76) && $row_orden_compra['b_estado_oc'] >= 0){
-           echo 'Test-3'; //aqui puede editar independientemente del estado
-         }else{
-          echo 'Test-4';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido
-          header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
-        }
+if( $_SESSION['superacceso']==1 ) { 
+  //superacceso
+        echo 'Test-1'; 
+ 
+          if($row_orden_compra['b_estado_oc'] < 2){
+
+              echo 'Test-2'; //aqui puede editar si esta recien ingresada 1 es ingresada
+
+          }else if( $row_orden_compra['b_estado_oc'] > 1){
+             
+             if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])){   
+
+              echo 'Test-3'; //aqui puede editar independientemente del estado   
+
+             }else{
+               echo 'Test-4';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido   
+
+               header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
+             }
+
+         } else{
+             echo 'Test-5'; 
+         }
 
 
       }else{
-       echo 'Test2-1';
-       if( $row_orden_compra['b_estado_oc'] > 1){
-         echo 'Test2-2'; //aqui no puede editar ya esta en proceso
+ // sin superacceso
+                echo 'Test2-1';
+ 
+       if( $row_orden_compra['b_estado_oc'] < 2){
 
-         header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
-       }else{
-         echo 'Test2-3'; //aqui puede editar si esta recien ingresada
+                echo 'Test2-2'; //aqui no puede editar ya esta en proceso
 
-       }
+          } else if($row_orden_compra['b_estado_oc'] > 1 ){
+               
+               if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])){   
 
+                echo 'Test-3'; //aqui puede editar independientemente del estado   
+
+               }else{
+                 echo 'Test2-3';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido
+
+                 header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
+               }
+
+              
+
+         } 
+         
      } 
-
+ 
 
      ?>
      <html><head>
@@ -884,14 +910,14 @@ if( $_SESSION['superacceso']==1 )  //$row_orden_compra['b_estado_oc'] != 1
                       </tr>
                       <tr>
                         <td id="fuente1">&nbsp;</td>
-                        <td id="fuente1">&nbsp;</td>
+                        <td id="fuente1">&nbsp;</td> 
                         <td id="fuente1">&nbsp;</td>
                       </tr>
                       
                       <tr>
                         <td colspan="2" id="detalle2"><strong>ADJUNTAR ARCHIVO 1</strong>
                           <input name="str_archivo_oc" type="file" size="100" maxlength="100" class="botones_file">
-                          <input type="hidden" name="adjunto1" value="<?php echo $row_orden_compra['str_archivo_oc'];?>"/>
+                          <input type="text" name="adjunto1" value="<?php echo $row_orden_compra['str_archivo_oc'];?>"/>
                         </td>
                         <td id="detalle2">
                           <a href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['str_archivo_oc'];?>','610','490')"> 
@@ -901,7 +927,7 @@ if( $_SESSION['superacceso']==1 )  //$row_orden_compra['b_estado_oc'] != 1
                         <tr>
                           <td colspan="2" id="detalle2"><strong>ADJUNTAR ARCHIVO 2</strong>
                             <input name="adjunto2" type="file" size="100" maxlength="100" class="botones_file">
-                            <input type="hidden" name="adjunto22" value="<?php echo $row_orden_compra['adjunto2'];?>"/>
+                            <input type="text" name="adjunto22" value="<?php echo $row_orden_compra['adjunto2'];?>"/>
                           </td>
                           <td id="detalle2">
                             <a href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto2'];?>','610','490')"> 
@@ -912,7 +938,7 @@ if( $_SESSION['superacceso']==1 )  //$row_orden_compra['b_estado_oc'] != 1
                         <tr>
                           <td colspan="2" id="detalle2"><strong>ADJUNTAR ARCHIVO 3</strong>
                             <input name="adjunto3" type="file" size="100" maxlength="100" class="botones_file">
-                            <input type="hidden" name="adjunto33" value="<?php echo $row_orden_compra['adjunto3'];?>"/>
+                            <input type="text" name="adjunto33" value="<?php echo $row_orden_compra['adjunto3'];?>"/>
                           </td>
                           <td id="detalle2">
                             <a href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto3'];?>','610','490')"> 

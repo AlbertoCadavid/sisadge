@@ -553,13 +553,15 @@ if (isset($_GET['id_oc'])){
                   <td id="fuente5">
                     <input name="int_consecutivo_io" type="text" id="int_consecutivo_io" value="<?php echo $row_items['int_consecutivo_io']; ?>" size="1" readonly />
                   </td>
-                  <td id="fuente5"><?php $id_items = $row_items['id_items'];         
+                  <td id="fuente5"> 
+                  <?php 
+                  $id_items = $row_items['id_items'];         
                   $sqlmp="SELECT Tbl_orden_produccion.int_cod_ref_op AS existe_op  
-                  FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_items=$id_items AND   Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+                  FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_items=$id_items AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
                   AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
                   $resultmp= mysql_query($sqlmp);
                   $nump = mysql_num_rows($resultmp);
-//SI EL ITEM TIENE REMISIONES         
+                  //SI EL ITEM TIENE REMISIONES         
                   $sql2="SELECT * FROM Tbl_remisiones WHERE str_numero_oc_r='$str_numero_oc'";
                   $result2= mysql_query($sql2);
                   $numRem = mysql_num_rows($result2);
@@ -570,17 +572,16 @@ if (isset($_GET['id_oc'])){
                  }else {
                    $existe_op="0";
                  }
-          //CONTROL DE MENU ELIMINACION
-                 
-                 
-                 
+                //CONTROL DE MENU ELIMINACION
+           
                  
           /*if($nump >='1')
           { 
           $existe_op = mysql_result($resultmp,0,'existe_op');
         }else {$existe_op="0";} */
+     
         ?> 
-        <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso']){?> onChange="javascript:refacvsrefcl_edit();" <?php }?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();  }" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled onClick="existeop();"<?php }?> >
+        <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled onClick="existeop();"<?php }?> >
           <option value="" <?php if (!(strcmp(0, $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
           <?php
           do {  

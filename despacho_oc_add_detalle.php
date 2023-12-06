@@ -229,15 +229,16 @@ $cn=(($cant*$porc)/100);//el PORCENTALE q se suma
 $total_rest=$cnr+$cant;
 if ($total_rest >= $acumulador) {
 	if($a[$i]!=''&&$b[$i]!=''&&$c[$i]!=''&&$d[$i]!=''&&$e[$i]!=''){
-    $insertSQL = sprintf("INSERT INTO Tbl_remision_detalle (int_remision_r_rd,str_numero_oc_rd, fecha_rd, int_item_io_rd,int_caja_rd,int_mp_io_rd,int_ref_io_rd,str_ref_cl_io_rd,int_numd_rd,int_numh_rd,int_cant_rd,int_peso_rd,int_pesoneto_rd,int_total_cajas_rd,int_tolerancia_rd,str_direccion_desp_rd,estado_rd) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",                     
+    $insertSQL = sprintf("INSERT INTO Tbl_remision_detalle (int_remision_r_rd,str_numero_oc_rd, fecha_rd, hora_rd, int_item_io_rd,int_caja_rd,int_mp_io_rd,int_ref_io_rd,str_ref_cl_io_rd,int_numd_rd,int_numh_rd,int_cant_rd,int_peso_rd,int_pesoneto_rd,int_total_cajas_rd,int_tolerancia_rd,str_direccion_desp_rd,estado_rd) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",                     
      GetSQLValueString($int_remision_r_rd, "int"),
      GetSQLValueString($str_numero_oc_rd, "text"),
      GetSQLValueString($fecha_rd, "text"),
+     GetSQLValueString($_POST["hora_rd"], "text"),
      GetSQLValueString($int_item_io_rd, "int"),
      GetSQLValueString($a[$i], "int"),
      GetSQLValueString($int_mp_io_rd, "text"),
      GetSQLValueString($int_ref_io_rd, "text"),
-     GetSQLValueString($str_ref_cl_io_rd, "text"),
+     GetSQLValueString($str_ref_cl_io_rd, "text"), 
      GetSQLValueString($b[$i], "text"),
      GetSQLValueString($c[$i], "text"),
      GetSQLValueString($d[$i], "double"),
@@ -261,7 +262,7 @@ if ($total_rest >= $acumulador) {
     }  
 
     if(isset($_POST['int_remision_r_rd']) && $historico){
-      $myObject->RegistrarItems("tbl_remision_detalle_historico", "int_remision_r_rd,str_numero_oc_rd, fecha_rd, int_item_io_rd,int_caja_rd,int_mp_io_rd,int_ref_io_rd,str_ref_cl_io_rd,int_numd_rd,int_numh_rd,int_cant_rd,int_peso_rd,int_pesoneto_rd,int_total_cajas_rd,int_tolerancia_rd,str_direccion_desp_rd,estado_rd,modifico", $historico);
+      $myObject->RegistrarItems("tbl_remision_detalle_historico", "int_remision_r_rd,str_numero_oc_rd, fecha_rd,hora_rd, int_item_io_rd,int_caja_rd,int_mp_io_rd,int_ref_io_rd,str_ref_cl_io_rd,int_numd_rd,int_numh_rd,int_cant_rd,int_peso_rd,int_pesoneto_rd,int_total_cajas_rd,int_tolerancia_rd,str_direccion_desp_rd,estado_rd,modifico", $historico);
     }//FIN HISTORICO
     
     //UPDATE A LA CANTIDAD RESTANTE DEL ITEMS  
@@ -401,7 +402,7 @@ num++;
 var posicionCampo=1;
 var peso_paq= <?php echo $pesoPaqx100;?>;
  
- $("#int_peso_rd").val('hola')
+ //$("#int_peso_rd").val('hola')
  
 /*
 function addremi(){
@@ -492,7 +493,7 @@ var idhasta =numeroh[1];
   <body>
 <?php echo $conexion->header('vistas'); ?>
 
-    <form action="<?php echo $editFormAction; ?>" method="post" name="form1" id="form1">
+    <form action="<?php echo $editFormAction; ?>" method="post" name="form1" id="form1" onSubmit="ValidaCampositem();"><!-- onSubmit="ValidaCampositem(true);" -->
       <table id="tabla2">
         <tr>
           <td colspan="4" id="subtitulo">AGREGAR REFERENCIA X CAJAS</td>
@@ -507,7 +508,7 @@ var idhasta =numeroh[1];
             <input name="str_ref_cl_io_rd" type="hidden" value="<?php echo $row_items['int_cod_cliente_io']; ?>">
             <input id="valorKilo" name="valorKilo" type="hidden" value="<?php echo $pesoPaqx100; ?>">
             <input type="hidden" name="ref_inven" id="ref_inven" value="<?php echo $row_referencia['cod_ref'];?>"/></td>
-            <td colspan="2" id="fuente1"><strong>Fecha:</strong><input name="fecha_rd" type="text" id="fecha_rd" value="<?php echo date("Y-m-d"); ?>" size="10" readonly /></td>
+            <td colspan="2" id="fuente1"><strong>Fecha:</strong><input name="fecha_rd" type="text" id="fecha_rd" value="<?php echo date("Y-m-d"); ?>" size="10" readonly /><input name="hora_rd" type="text" id="hora_rd" value="<?php echo horaActual(); ?>" size="10" readonly /> </td>
           </tr>
           
           <tr>
@@ -553,7 +554,7 @@ var idhasta =numeroh[1];
                 <td nowrap="nowrap" id="talla2"><input name="int_cod_cliente_io" type="text" size="15" maxlength="20"  value="<?php echo $row_items['int_cod_cliente_io']; ?>"></td>
                 <td nowrap="nowrap" id="talla2"><input name="int_cantidad_io" id="int_cantidad_io" type="hidden" value="<?php echo $row_items['int_cantidad_io']; ?>"><?php echo $row_items['int_cantidad_io']; ?></td>
                 <td nowrap="nowrap" id="talla2"> 
-                  <input name="int_cantidad_rest_io" type="hidden" value="<?php echo $row_items['int_cantidad_rest_io']; ?>">
+                  <input name="int_cantidad_rest_io" id="int_cantidad_rest_io"  type="hidden" value="<?php echo $row_items['int_cantidad_rest_io']; ?>">
                   <?php echo $row_items['int_cantidad_rest_io']; ?></td>
                   <td nowrap="nowrap" id="talla2"><?php echo $row_items['str_unidad_io']; ?></td>
                   <td nowrap="nowrap" id="talla2"><?php echo $row_items['fecha_entrega_io']; ?></td>
@@ -587,17 +588,18 @@ var idhasta =numeroh[1];
                 </tr>
                 <tr>
                   <td id="dato1"><strong>Total Cajas</strong>:
-                    <input name="int_total_cajas_rd" type="number" id="int_total_cajas_rd" required title="Ingrese cajas"  style="width:60px"></td>
+                    <input name="int_total_cajas_rd" type="number" id="int_total_cajas_rd" required title="Ingrese cajas"  style="width:60px" tabindex="1" ></td>
                     <td id="dato1"><strong>Tolerancia % </strong>
-                      <input name="int_tolerancia_rd" type="number" id="int_tolerancia_rd" required title="Ingrese tolerancia" max="50"  value="50" style="width:40px"></td>
+                      <input name="int_tolerancia_rd" type="number" id="int_tolerancia_rd" required title="Ingrese tolerancia" max="50"  value="50" style="width:40px" tabindex="2"></td>
                       <td id="dato1"><strong>Facturar:</strong>
-                        <select name="b_estado_io" id="opciones">
+                        <select name="b_estado_io" id="opciones" tabindex="3">
                           <option value="3">REMISIONADA</option>
                           <option value="4">FACTURADA PARCIAL </option>
                           <option value="5">FACTURADA TOTAL</option>
                           <option value="6">MUESTRAS REPOSICION</option>
                         </select>
-                        <strong>ESTADO:</strong><select name="estado_rd" id="estado_rd">
+                        <strong>ESTADO:</strong>
+                        <select name="estado_rd" id="estado_rd" tabindex="4">
                           <option value="0" selected>Despachado</option>
                           <option value="1">Pendiente</option>
                         </select></td>
@@ -672,8 +674,10 @@ var idhasta =numeroh[1];
                       <td colspan="4" id="dato2">&nbsp;</td>
                     </tr>
                     <tr>
-                      <td colspan="4" id="dato2"><input class="botonGMini" type="submit" value="FINALIZAR REMISION" onClick="if(form1.b_despacho_io.value=='0' && form1.b_estado_io.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }">
-                        <!--<img src="images/rf.gif" width="31" height="18" onClick="javascript:submit();window.opener.location.reload();window.close();">--></td>
+                      <td colspan="4" id="dato2">
+                        <!-- <input class="botonGMini" type="button" value="FINALIZAR REMISION" onClick="if(form1.b_despacho_io.value=='0' && form1.b_estado_io.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }"> -->
+                        <input class="botonGMini" type="submit" value="FINALIZAR REMISION" onClick=" if(form1.b_despacho_io.value=='0' && form1.b_estado_io.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }"> 
+                        </td>
                       </tr>
                     </table>
                     <input type="hidden" name="MM_insert" value="form1">
@@ -688,6 +692,54 @@ var idhasta =numeroh[1];
           
       </body>
       </html>
+      <script>
+
+
+        
+          function  ValidaCampositem(){
+              
+            event.preventDefault();
+            var numini = document.getElementsByName('int_numd_rd[]');
+            var numfin = document.getElementsByName('int_numh_rd[]');
+            var cantidad = document.getElementsByName('int_cant_rd[]');
+            var peso = document.getElementsByName('int_peso_rd[]');
+           
+                var  rest_old = "<?php echo $row_items['int_cantidad_rest_io'];?>";
+                var  total_rest = "<?php echo $row_items['int_cantidad_rest_io'];?>"; 
+                var  porc="50";//Porcentaje
+                var  disponible= parseFloat(rest_old)+(parseFloat(total_rest)*parseFloat(porc))/100;//total sumado 
+            
+                var sumaingreso = 0; 
+
+                for (var i = 0; i < cantidad.length; i++) {
+                    var cantidadValue = parseFloat(cantidad[i].value);
+                    var numiniValue = numini[i].value;
+                    var numfinValue = numfin[i].value;
+                    var pesoValue = peso[i].value;
+
+                    sumaingreso += cantidadValue;
+
+                    if (numiniValue !== '' && numfinValue !== '' && cantidadValue >= 0 && (pesoValue === '0.00' || pesoValue == 0 || pesoValue === '')) {
+                        swal('Peso no puede ser cero: ' + pesoValue);
+                        return false;
+                    } 
+                }
+
+                    if (sumaingreso > disponible ) {
+                    swal('Cantidad ingresada: ' + sumaingreso + ' es mayor al restante más el porcentaje permitido: ' + disponible);
+                    return false;
+                   } 
+                   
+                   form1.submit();
+ 
+                  
+                            
+               
+          }
+
+ 
+
+      </script>
       <?php
       mysql_free_result($usuario);mysql_close($conexion1);
       mysql_free_result($items);

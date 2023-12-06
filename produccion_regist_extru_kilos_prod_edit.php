@@ -160,7 +160,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
 	  $contValor=0;
       $valorMP = $row_valoresMP['valorkilo']; 
 	  				 
- $insertSQLkp = sprintf("UPDATE Tbl_reg_kilo_producido SET id_rpp_rp=%s, valor_prod_rp=%s, op_rp=%s, int_rollo_rkp=%s, id_proceso_rkp=%s, fecha_rkp=%s, costo_mp=%s WHERE id_rkp=%s",                                            
+ $insertSQLkp = sprintf("UPDATE Tbl_reg_kilo_producido SET id_rpp_rp=%s, valor_prod_rp=%s, op_rp=%s, int_rollo_rkp=%s, id_proceso_rkp=%s, fecha_rkp=%s, costo_mp=%s, id_rp=%s WHERE id_rkp=%s",                                            
                        GetSQLValueString($c[$x], "int"),
 					   GetSQLValueString($b[$x], "double"), 
 					   GetSQLValueString($_POST['id_op'], "int"),
@@ -168,8 +168,10 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
 					   GetSQLValueString($_POST['id_proceso_rkp'], "int"),
 					   GetSQLValueString($_POST['fecha_ini_rp'], "date"),
 					   GetSQLValueString($valorMP, "double"),
+             GetSQLValueString($_GET['id_rp'], "int"),
 					   GetSQLValueString($a[$x], "int"));
   mysql_select_db($database_conexion1, $conexion1);
+  
   $Resultkp = mysql_query($insertSQLkp, $conexion1) or die(mysql_error());
   //ACTUALIZO LOS NUEVOS VALORES
   $sqlinv2="UPDATE TblInventarioListado SET Salida = Salida + $b[$x] WHERE Codigo = $c[$x]";

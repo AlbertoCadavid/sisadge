@@ -120,6 +120,8 @@ if (isset($_GET['totalRows_proceso_rollos'])) {
 }
 $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos/$maxRows_proceso_rollos)-1;
 
+
+
 ?><html>
 <head>
 <title>SISADGE AC &amp; CIA</title>

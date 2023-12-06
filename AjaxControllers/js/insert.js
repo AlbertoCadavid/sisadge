@@ -28,14 +28,16 @@
       }*/
 
       function guardarConAlert(id){
-      
         $.ajax({ 
           type: $("#form1").attr("method"),
           url: 'AjaxControllers/Actions/'+$("#form1").attr("action")+'?'+$("#form1").serialize(),
           data: $("#form1").serialize(), 
-          success: function(data){   
+          success: function(data){ 
             $('#alertG').show(); 
-            if(data==1) {
+            let result = parseInt(data)
+            
+            if(result == 1) {
+              showAlert("guardado");
               $("#alertG").text('Guardando correctamente... !');
                //$("#btnEnviarG").text('Guardado ... !'); 
                $("#btnEnviarG").hide(); 
@@ -43,7 +45,8 @@
                $('#items').show(); 
              }
              else {
-               $("#alertG").text('Se Guardo');  
+               $("#alertG").text('Se Guardo'); 
+               showAlert("No guardado"); 
              } 
              $('#alertG').fadeIn(); 
 
@@ -75,7 +78,7 @@
 
 
       function guardarConAlertItems(){
- 
+        
         $.ajax({ 
           type: $("#formItems").attr("method"),
           url: 'AjaxControllers/Actions/'+$("#formItems").attr("action")+'?'+$("#formItems").serialize(),

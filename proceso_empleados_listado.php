@@ -254,7 +254,7 @@ $totalRows_factor = mysql_num_rows($factor);
                       <td id="titulo4">CODIGO</td>
                       <td id="titulo4">NOMBRE APELLIDO</td>
                       <td id="titulo4">CARGO</td>
-                      <?php if($_SESSION['tipo_usuario']=='15'):?>
+                      <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayrRHH'])): ?>
                       <td id="titulo4">SUELDO</td>
                       <td id="titulo4">RECARGOS</td>
                       <td id="titulo4">APORTES</td>
@@ -295,7 +295,7 @@ $totalRows_factor = mysql_num_rows($factor);
                          }
                          ?>
                        </a></td>
-                       <?php if($_SESSION['tipo_usuario']=='15'):?>
+                       <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayrRHH'])):?>
                        <td id="dato3">
                         <a href="proceso_empleado_edit.php?id_pem=<?php echo $rows_empleado['id_pem']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo numeros_format($rows_empleado['sueldo_empleado']);$totalsueldo+=$rows_empleado['sueldo_empleado'];?></a>
                        </td>

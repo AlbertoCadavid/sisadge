@@ -38,29 +38,29 @@
       closeOnCancel: false }, 
       function(isConfirm){   
         if (isConfirm) {  
-          swal("Eliminado!", "El registro se ha eliminado.", "success");
+          
           funcionn1(id,campo,pagina,id_add,msn='');
-          array.forEach(element => {
-            funcionn2(element, "id_r");
-          });
+          funcionn2(array, "id_r");
+          swal("Eliminado!", "El registro se ha eliminado.", "success");
         } else {     
           swal("Cancelado", "has cancelado :)", "error");
           /*window.history.go();*/
         } 
       });
   }
-  function actualizacion(id,campo,pagina=''){ 
+  function actualizacion(array,campo,pagina=''){ 
+    
     $.ajax({
-      dataType: "json",
-      data: { 
+      data: { array_ids : array
       },
-      url: 'AjaxControllers/Actions/update.php?'+"act_rollos=true&"+campo+"="+id,
-      type:  'post',
+      url: 'AjaxControllers/Actions/update.php?'+"act_rollos=true",
+      type:  'POST',
       beforeSend: function(){
         //Lo que se hace antes de enviar el formulario
       },
       success: function(respuesta){
         //lo que se si el destino devuelve algo
+        
          $('#resp').show(); 
          $('#resp').fadeIn(); 
   

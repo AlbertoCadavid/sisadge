@@ -173,22 +173,26 @@ function acceso_usuarios($permitidos=''){
   }
        
  
-    
-
 }
  
 
 }
 
-//usuarios con algunas restrinciones 
+//usuarios con algunos permisos especiales y delicados adicionales al superacceso y acceso como en cambio de la ref en o.c y andres martines en o.c materias primas
 $_SESSION['id_usuario'] = $row_usuario['id_usuario'];//para usarse en alguna pantalla
-$restriUsuarios = array(23, 48);//aqui se agregan los id_usuario que no deben tener ciertos privilegios ubicados en la tabla usuario 
+$restriUsuarios = array(23, 26, 64, 76);// 48 = este es andres aqui se agregan los id_usuario para ciertos permisos cambio de ref en o.c detalle o en o.c materias primas ciertos privilegios ubicados en la tabla usuario
+//Sesiones de permisos especiales 
+$_SESSION['usuariosarray']=$restriUsuarios;//para validar en otras vistas
+$_SESSION['usuariosarrayMenu']=array(4, 23, 26, 76);//4 es alvaro
+$_SESSION['usuariosarrayrRHH']=array(15,23);//15 es recursos humanos
+
 $_SESSION['restriUsuarios'] = 1;
-for ($i=1; $i < count($restriUsuarios); $i++) { 
+for ($i=0; $i < count($restriUsuarios); $i++) {  
+   
    if($restriUsuarios[$i] == $row_usuario['id_usuario']){
-         $_SESSION['restriUsuarios']=0;
+         $_SESSION['restriUsuarios'] = 0; 
    }
-}
+} 
 
 // Nombre Usuarios  no mostrar algunas Div o tablas
 $arrayopciones1 = array("Nombre Usuario Cualquiera" ); //para usarse en alguna pantalla o div
@@ -799,7 +803,7 @@ else if (device.match(/Ipad/i))
      //FIN EL MENU COSTOS
 
 
-         if($_SESSION['acceso']): 
+         if($_SESSION['superacceso'] || (in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayMenu'])) ): 
              //INICIA EL MENU ADMINISTRADOR
          if ($id_menu==$menu && $id_menu==9 )//IMPORTANTE ESTE NUMERO DEFINE LA IMPRESION DE LOS SUB SUBMENU EN EL LINC CORRESPONDIENTE
          { $url6=$row_ver_menu['url']; 

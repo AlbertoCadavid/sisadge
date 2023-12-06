@@ -102,13 +102,18 @@ if($_GET['UpdateSiTick']!='') {
    exit();
  } */
 
- $id_rollo=$_GET['id_r'];
 $actualizar=$_GET['act_rollos'];
-if($id_rollo !='' && $actualizar !='') {
- 
-   $query="UPDATE `tblextruderrollo` SET `id_rp`= 0 WHERE `id_r`= $id_rollo";
-   $resultorden=mysql_query($query);
- 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $actualizar == 'true' ) {
+   // Recibir el array enviado desde JavaScript
+   $array_rollos = $_POST['array_ids'];
+
+   foreach ($array_rollos as $value) {
+      $query="UPDATE `tblextruderrollo` SET `id_rp`= 0 WHERE `id_r`= $value";
+      $resultorden=mysql_query($query);
+   }
+   
+   
 }
 
 ?>
