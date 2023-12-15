@@ -154,35 +154,35 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 
 
 	//------------------FUNCION PARA AGREGAR FALTANTES DINAMICOS----//
-	function AddItem() {
-		var tbody = null;
-		var tablaf = document.getElementById("tablaf");
-		var nodes = tablaf.childNodes;
-		var count = 0;
-        var acumula = 0;
-		        var falt =  document.getElementsByClassName("focusNext"); 
-		    	var numDivs = falt.length; 
-		    	var contadorNaranja = 0; 
-		    	for(var i = 0; i < numDivs; i++){
-		    	  if(falt[i].className == "focusNext") 
-		    	     contadorNaranja++;
-		    	   var acumula = contadorNaranja == 'NaN' ? 0 : contadorNaranja;
-		    	}
+    	function AddItem() {
+    		var tbody = null;
+    		var tablaf = document.getElementById("tablaf");
+    		var nodes = tablaf.childNodes;
+    		var count = 0;
+            var acumula = 0;
+    		        var falt =  document.getElementsByClassName("focusNext"); 
+    		    	var numDivs = falt.length; 
+    		    	var contadorNaranja = 0; 
+    		    	for(var i = 0; i < numDivs; i++){
+    		    	  if(falt[i].className == "focusNext") 
+    		    	     contadorNaranja++;
+    		    	   var acumula = contadorNaranja == 'NaN' ? 0 : contadorNaranja;
+    		    	}
 
-		for (var x = 0; x<nodes.length;x++) {
-			if (nodes[x].nodeName == 'TBODY') {
-				tbody = nodes[x];
-				break;
-			}
-			count=acumula+x;
-	 
-		}
-		if (tbody != null) {
-			var tr = document.createElement('tr');
-			tr.innerHTML = '<td><input type="text" name="int_desde_f[]" tabindex='+ count +'  onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext" /></td><td><input type="text" tabindex='+ (count+1) + '  id="int_hasta_f" name="int_hasta_f[]" onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext"/></td><td><input tabindex="-1" type="text" size="2" name="int_total_f[]" readonly /></td><td><button tabindex="-1" type="button" value="Borrar" onclick="eliminaFaltantes(this);Calcular(this);">Borrar</button></td>';
-			tbody.appendChild(tr);
-		}
-	}
+    		for (var x = 0; x<nodes.length;x++) {
+    			if (nodes[x].nodeName == 'TBODY') {
+    				tbody = nodes[x];
+    				break;
+    			}
+    			count=acumula+x;
+    	 
+    		}
+    		if (tbody != null) {
+    			var tr = document.createElement('tr');
+    			tr.innerHTML = '<td><input type="text" name="int_desde_f[]" tabindex='+ count +'  onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango" /></td><td><input type="text" tabindex='+ (count+1) + '  id="int_hasta_f" name="int_hasta_f[]" onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango"/></td><td><input tabindex="-1" type="text" size="2" name="int_total_f[]" readonly /></td><td><button tabindex="-1" type="button" value="Borrar" onclick="eliminaFaltantes(this);Calcular(this);">Borrar</button></td>';
+    			tbody.appendChild(tr);
+    		}
+    	}
  
     function EnteryTap(evt,obj){
     	// Si el evento NO es una tecla Enter
@@ -233,31 +233,14 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
     	} 
 
 
-	function submit_faltante(){
+/*	function submit_faltante(){
 	 
 	  var int_desde_f= document.getElementsByName('int_desde_f[]');
-	  var int_hasta_f= document.getElementsByName('int_hasta_f[]');
-/*	  var TotalHasta=document.form1.int_desde_tn.value;
-	  var Tbolsa=document.form1.int_undxpaq_tn.value; 
-	  var totalF = document.getElementsByName('int_total_f[]'), contadorf = 0,   i;*/
+	  var int_hasta_f= document.getElementsByName('int_hasta_f[]'); 
 	    for(x = int_desde_f.length; x--;){ 
 	  
 	              if( !(int_desde_f[x].value) || !(int_hasta_f[x].value ) ){ 
-
-	                   /* var codigos = divideCadenas(TotalHasta); 
-	                    var THasta = codigos[0]; 
-	                    var cadena = codigos[1];
-	                     for(i = totalF.length; i--;){
-	                      if(totalF[i].value){
-	                              contadorf += parseInt(totalF[i].value, 10); 
-	                            var Tsum = (parseInt(THasta)+parseInt(Tbolsa) )-parseInt(1);//+parseInt(1)
-	                            document.form1.int_hasta_tn.value =  cadena+(Tsum);
-
-	                      }
-	                            //totalF[i].value = 0;
-
-	                     }*/
-
+ 
 	                  return false;
 	              }    
 	       
@@ -265,10 +248,13 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 
 	     return true;
 
-	}
+	}*/
 
 	//------------------FUNCION PARA RESTAR HASTA MENOS DESDE----//
 	function Calcular(ele) {
+
+		//alertafaltantes();//valida si el faltante esta dentro del rango
+
 		ahasta = '';adesde='';
 		var num="",caden="",l="",b="",c="",d="",e="",g="",h="",desde="", sal="",sal2="",cadena="";
 		var int_desde_f = 0, int_hasta_f = 0, int_total_f = 0;
@@ -308,6 +294,9 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
             	            
 
             	}//FIN IF INPUT TOTAL
+               
+            
+
 	    }//FIN FORDE NODOS
 
 	//ALERT DE VERIFICA QUE CUANDO FALTANTES SUPERAN CANTIDAD X PAQUETE 
@@ -347,27 +336,56 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		    
 	    document.form1.int_hasta_tn.value=(cadena+Tsum);//SUMA EL TOTAL AL HASTA &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
 	 
-	//------------------ALERTAS FUERA DEL FOR------------------// 
-	function alertafaltantes() {
-		var Alfa=document.form1.int_desde_tn.value;
-		var Omega=document.form1.int_hasta_tn.value;
-		var codigos = divideCadenas(Alfa); 
-		var Alfa = codigos[0];
-		var cadena = codigos[1];
-			/*var codigos = divideCadenas(Omega); 
-			var Omega = codigos[0]; */
-			//valida que el desdef no sea menor que el desde ni el hastaf sea menor que el desdef 
-        if(ahasta !='' && adesde!=''){
-    			if(adesde<Alfa || ahasta<Alfa){
-    				swal("La numeracion inicial: "+cadena+adesde+" o final: "+cadena+ahasta+" de uno de los faltantes, no debe ser Menor que la numeracion inicial: "+cadena+Alfa+" del paquete")
-    				return false; 
-    			}
-    				return true;
 
-        }
-    }
-	alertafaltantes()//LLAMA LA FUNCION DE FALTANTES 
+
 	}//FIN FUNCION
+
+
+     	//------------------ALERTAS FUERA DEL FOR------------------// 
+     	function alertafaltantes() {
+     		var desdeGeneral=document.form1.int_desde_tn.value;
+     		var hastaGeneral=document.form1.int_hasta_tn.value;     
+
+     		var desdeGeneral = divideCadenas(desdeGeneral); 
+     		var desdeGeneral = desdeGeneral[0];    
+
+     		var hastaGeneral = divideCadenas(hastaGeneral); 
+     		var hastaGeneral = hastaGeneral[0];      
+            var bandera = 0
+
+     		var elements = document.getElementsByClassName('errorRango'); 
+            // valida todos los faltantes iniciales 
+     		 Array.from(elements).map(
+     		     (element) => {
+                  if(element.value!=''){
+     		     	 var resultF = divideCadenas(element.value); 
+     		     	 var numerosF = resultF[0];      
+                        if(desdeGeneral !='' && hastaGeneral !=''){  
+
+                    		if( numerosF<desdeGeneral || numerosF>hastaGeneral ){
+                                         bandera=1;
+                    					 swal("La numeracion inicial o final: "+numerosF+" de uno de los faltantes, no debe ser Menor al Inicial General: "+desdeGeneral+" ni mayor a Final General: "+hastaGeneral+" del paquete")
+                    				     return false;
+                    		}  
+                         
+                        }
+
+                    } //fin if element.value 
+     		     }
+     		 );   
+     		 
+           	if(bandera==0){
+                 
+                         $('#content').html('<div class="loader"></div>');
+                              setTimeout(function() { $(".loader").fadeOut("slow");},500);
+                               guardarSelladoTiquetes();   
+           	}
+              
+             
+         }
+ 
+
+	//alertafaltantes()//LLAMA LA FUNCION DE FALTANTES 
 	//---FUNCION ELIMINA LINEA DE INPUT DE FALTANTES DINAMICOS-----//
 	function eliminaFaltantes(obj){
 		var oTr = obj;

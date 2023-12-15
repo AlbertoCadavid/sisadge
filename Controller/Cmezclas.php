@@ -56,10 +56,10 @@ class cmezclasController{
                 $row_referencia_copia = new oMmezclas();
                 if($_REQUEST['cod_refcopia']){
                     $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_refcopia']."");
-                    $this->row_mezcla=$row_mezcla->Obtener('tbl_produccion_mezclas',"id_proceso=1 AND int_cod_ref_pm ", "".$_REQUEST['cod_refcopia'].""); 
+                    $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_refcopia']."", " and  id_proceso ORDER BY id_pm DESC=1"); 
                 }else{
                     $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_ref']."");
-                    $this->row_mezcla=$row_mezcla->Obtener('tbl_produccion_mezclas',"id_proceso=1 AND int_cod_ref_pm ", "".$_REQUEST['cod_ref'].""); 
+                    $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
                 }
  
                 $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' AND estado_insumo='0' "," ORDER BY descripcion_insumo ASC" );
@@ -73,12 +73,11 @@ class cmezclasController{
 
                 $this->maquinas = $maquinas->get_Maquina(); 
 
-                 /* echo 
-                  var_dump($this->maquinas);die;*/
+                  
         
             }
-         
-                header('Location:view_index.php?c=cmezclas&a=Carat&cod_ref='.$_REQUEST['cod_ref']); 
+                
+                header('Location:view_index.php?c=cmezclas&a=Carat&cod_ref='.$_REQUEST['cod_ref']."&vistaLiquida=".$_REQUEST['vistaLiquida']); 
                 //self::ViewMezclas("view_index.php?c=cmezclas&a=Carat&cod_ref=".$_REQUEST['cod_ref']);
     }
 
@@ -98,10 +97,10 @@ class cmezclasController{
 
             if($_REQUEST['cod_refcopia']){
                 $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_refcopia']."");
-                $this->row_mezcla=$row_mezcla->Obtener('tbl_produccion_mezclas',"id_proceso=1 AND int_cod_ref_pm ", "".$_REQUEST['cod_refcopia'].""); 
+                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_refcopia']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
             }else{
                 $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_ref']."");
-                $this->row_mezcla=$row_mezcla->Obtener('tbl_produccion_mezclas',"id_proceso=1 AND int_cod_ref_pm ", "".$_REQUEST['cod_ref'].""); 
+                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
             }
 
             $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' AND estado_insumo='0' "," ORDER BY descripcion_insumo ASC" );
@@ -114,13 +113,16 @@ class cmezclasController{
  
             $this->maquinas = $maquinas->get_Maquina(); 
               
-
+            /*echo '<pre>';
+            var_dump($this->row_mezcla);die; */
 
 
         }
-           
+          
+           //header('Location:view_index.php?c=cmezclas&a=Carat&cod_ref='.$_REQUEST['cod_ref']); 
+           //require_once("Location:views/produccion_caract_extruder_add.php?cod_ref=".$_REQUEST['cod_ref']."&vistaLiquida=".$_REQUEST['vistaLiquida'] );
            self::ViewCaract();
-           //self::ViewMezclas('produccion_caract_extruder_mezcla_vista.php?cod_ref='.$_REQUEST['cod_ref']);//le digo que muestre en vista edit
+            
     }
 
 
@@ -140,11 +142,11 @@ class cmezclasController{
             //guarda caracteristicas
             $this->mezclas->Registrar("tbl_caracteristicas_prod", "cod_ref,fecha_registro,usuario,modifico,fecha_modif,extrusora,proceso,campo_1,campo_2,campo_3,campo_4,campo_5,campo_6,campo_7,campo_8,campo_9,campo_10,campo_11,campo_12,campo_13,campo_14,campo_15,campo_16,campo_17,campo_18,campo_19,campo_20,campo_21,campo_22,campo_23,campo_24,campo_25,campo_26,campo_27,campo_28,campo_29,campo_30,campo_31,campo_32,campo_33,campo_34,campo_35,campo_36,campo_37,campo_38,campo_39,campo_40,campo_41,campo_42,campo_43,campo_44,campo_45,campo_46,campo_47,campo_48,campo_49,campo_50,campo_51,campo_52,campo_53,campo_54,campo_55,campo_56,campo_57,campo_58,campo_59,campo_60,campo_61,campo_62,campo_63,campo_64,campo_65,campo_66", "cod_ref",$_POST['cod_ref'],  $this->proforma);
 
-            //actualiza mezclas
+            
+
             self::GuardarMezcla();
   
-
-            header('Location:view_index.php?c=cmezclas&a=Carat&cod_ref='.$_REQUEST['cod_ref']); 
+            header('Location:view_index.php?c=cmezclas&a=Carat&cod_ref='.$_REQUEST['cod_ref']."&vistaLiquida=".$_REQUEST['vistaLiquida']); 
         }
 
         public function GuardarMezcla(){
@@ -160,9 +162,17 @@ class cmezclasController{
             $this->proforma = $_REQUEST;
             $this->proforma['adjunto']= $tieneadjunto1;  
 
-            $this->mezclas->RegistrarMezclas("tbl_produccion_mezclas", "id_proceso,fecha_registro_pm,str_registro_pm,id_ref_pm,int_cod_ref_pm,version_ref_pm,int_ref1_tol1_pm,int_ref1_tol1_porc1_pm,int_ref2_tol1_pm,int_ref2_tol1_porc2_pm,int_ref3_tol1_pm,int_ref3_tol1_porc3_pm,int_ref1_tol2_pm,int_ref1_tol2_porc1_pm,int_ref2_tol2_pm,int_ref2_tol2_porc2_pm,int_ref3_tol2_pm,int_ref3_tol2_porc3_pm,int_ref1_tol3_pm,int_ref1_tol3_porc1_pm,int_ref2_tol3_pm,int_ref2_tol3_porc2_pm,int_ref3_tol3_pm,int_ref3_tol3_porc3_pm,int_ref1_tol4_pm,int_ref1_tol4_porc1_pm,int_ref2_tol4_pm,int_ref2_tol4_porc2_pm,int_ref3_tol4_pm,int_ref3_tol4_porc3_pm,int_ref1_rpm_pm,int_ref1_tol5_porc1_pm,int_ref2_rpm_pm,int_ref2_tol5_porc2_pm,int_ref3_rpm_pm,int_ref3_tol5_porc3_pm,extrusora_mp,observ_pm,b_borrado_pm", "int_cod_ref_pm",$_POST['cod_ref'],  $this->proforma); 
+            $this->mezclas->RegistrarMezclas("tbl_produccion_mezclas", "id_proceso,fecha_registro_pm,str_registro_pm,id_ref_pm,int_cod_ref_pm,version_ref_pm,int_ref1_tol1_pm,int_ref1_tol1_porc1_pm,int_ref2_tol1_pm,int_ref2_tol1_porc2_pm,int_ref3_tol1_pm,int_ref3_tol1_porc3_pm,int_ref1_tol2_pm,int_ref1_tol2_porc1_pm,int_ref2_tol2_pm,int_ref2_tol2_porc2_pm,int_ref3_tol2_pm,int_ref3_tol2_porc3_pm,int_ref1_tol3_pm,int_ref1_tol3_porc1_pm,int_ref2_tol3_pm,int_ref2_tol3_porc2_pm,int_ref3_tol3_pm,int_ref3_tol3_porc3_pm,int_ref1_tol4_pm,int_ref1_tol4_porc1_pm,int_ref2_tol4_pm,int_ref2_tol4_porc2_pm,int_ref3_tol4_pm,int_ref3_tol4_porc3_pm,int_ref1_rpm_pm,int_ref1_tol5_porc1_pm,int_ref2_rpm_pm,int_ref2_tol5_porc2_pm,int_ref3_rpm_pm,int_ref3_tol5_porc3_pm,extrusora_mp,observ_pm,b_borrado_pm", "int_cod_ref_pm",$_POST['cod_ref'],  $this->proforma);
+
+            $this->mezclas->RegistrarMezclasHistorico("tbl_produccion_mezclas_historico", "id_proceso,fecha_registro_pm,str_registro_pm,id_ref_pm,int_cod_ref_pm,version_ref_pm,int_ref1_tol1_pm,int_ref1_tol1_porc1_pm,int_ref2_tol1_pm,int_ref2_tol1_porc2_pm,int_ref3_tol1_pm,int_ref3_tol1_porc3_pm,int_ref1_tol2_pm,int_ref1_tol2_porc1_pm,int_ref2_tol2_pm,int_ref2_tol2_porc2_pm,int_ref3_tol2_pm,int_ref3_tol2_porc3_pm,int_ref1_tol3_pm,int_ref1_tol3_porc1_pm,int_ref2_tol3_pm,int_ref2_tol3_porc2_pm,int_ref3_tol3_pm,int_ref3_tol3_porc3_pm,int_ref1_tol4_pm,int_ref1_tol4_porc1_pm,int_ref2_tol4_pm,int_ref2_tol4_porc2_pm,int_ref3_tol4_pm,int_ref3_tol4_porc3_pm,int_ref1_rpm_pm,int_ref1_tol5_porc1_pm,int_ref2_rpm_pm,int_ref2_tol5_porc2_pm,int_ref3_rpm_pm,int_ref3_tol5_porc3_pm,extrusora_mp,observ_pm,b_borrado_pm", "int_cod_ref_pm",$_POST['cod_ref'],  $this->proforma);  
                    
-            header('Location:view_index.php?c=cmezclas&a=Mezcla&cod_ref='.$_REQUEST['cod_ref']); 
+
+             //si viene de la vista de Liquidar rollo
+             if($_REQUEST['vistaLiquida']!=''){  
+                  header('Location:produccion_registro_extrusion_add.php?id_op='.$_REQUEST['vistaLiquida']); 
+                  die;//se debe dejar para que se redireccione
+               }
+             header('Location:view_index.php?c=cmezclas&a=Mezcla&cod_ref='.$_REQUEST['cod_ref']); 
         }
 
 

@@ -254,14 +254,20 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
 
   $id_op = $_POST['id_op_r'];
   $rollo_rd = $_POST['rollo_r'];
-  $sqlliq = "SELECT SUM(metro_r) AS metros, SUM(kilos_r) AS kilos FROM  TblExtruderRollo WHERE id_op_r='$id_op'";
-  $resultliq = mysql_query($sqlliq);
-  $kilos = mysql_result($resultliq, 0, 'kilos');
-  $metros = mysql_result($resultliq, 0, 'metros');
-
-  $sqlsuma = "UPDATE Tbl_reg_produccion SET int_total_kilos_rp=$kilos, int_metro_lineal_rp=$metros WHERE id_op_rp = $id_op AND id_proceso_rp='1'";
-  mysql_select_db($database_conexion1, $conexion1);
-  $Resultsuma = mysql_query($sqlsuma, $conexion1) or die(mysql_error());
+  $queryExisteLiquidacion = "SELECT id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND rollo_r = $rollo_rd";
+  $existeLiquidacion = mysql_query($queryExisteLiquidacion);
+  $liquidacion = mysql_result($existeLiquidacion, 0, 'id_rp');
+  
+  if($liquidacion != 0 || $liquidacion != null){
+    $sqlliq = "SELECT SUM(metro_r) AS metros, SUM(kilos_r) AS kilos, id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND id_rp = $liquidacion";
+    $resultliq = mysql_query($sqlliq);
+    $kilos = mysql_result($resultliq, 0, 'kilos');
+    $metros = mysql_result($resultliq, 0, 'metros');
+    
+    $sqlsuma = "UPDATE Tbl_reg_produccion SET int_total_kilos_rp=$kilos, int_metro_lineal_rp=$metros WHERE id_op_rp = $id_op AND id_proceso_rp='1' AND id_rp = $liquidacion ";
+    mysql_select_db($database_conexion1, $conexion1);
+    $Resultsuma = mysql_query($sqlsuma, $conexion1) or die(mysql_error());
+  }
 
 
 

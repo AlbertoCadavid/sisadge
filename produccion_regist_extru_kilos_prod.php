@@ -142,10 +142,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
         $valorMP = $row_valoresMP['valorkilo'];
 
         $insertSQLd = sprintf(
-          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp,valor_prod_rp,op_rp,id_proceso_rkp,fecha_rkp,costo_mp,id_rp) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp, valor_prod_rp, op_rp, int_rollo_rkp,id_proceso_rkp,fecha_rkp,costo_mp,id_rp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
           GetSQLValueString($f[$s], "int"),
           GetSQLValueString($g[$s], "double"),
           GetSQLValueString($c, "int"),
+          GetSQLValueString($_POST['rollo_rp'], "int"),
           GetSQLValueString($_POST['id_proceso_rkp'], "int"),
           GetSQLValueString($_POST['fecha_ini_rp'], "date"),
           GetSQLValueString($valorMP, "double"),

@@ -322,10 +322,10 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
           </td>
         </tr>  
         <tr>
-          <td colspan="6" id="dato2">
+          <td colspan="6" id="dato2"> 
             <div id="botonSellado" style="display: none;">
               <input name="validar_paquete" id="validar_paquete" value="0" type="hidden"> 
-              <button id="guardaboton"  class="botonSellado"  type="button" autofocus onClick="submit_faltante(this.formfalta)" >GUARDAR NUMERACION</button>
+              <button id="guardaboton"  class="botonSellado"  type="button" autofocus >GUARDAR NUMERACION</button>
               <!-- <button type="submit" id="guardaboton"  class="botonSellado" autofocus>GUARDAR NUMERACION</button> -->
               </div><!--onClick="return funcion2();"-->
             <div id="botonporCajas" style="display: none;"> 
@@ -562,24 +562,51 @@ $('#imprimirt').on('change',function(){
     //var ref = "<?php echo $select_tiquete_num['ref_tn'] == '' ? $row_control_paquete['int_cod_ref_op'] : $select_tiquete_num['ref_tn']; ?>";
     numeracionDesde($("#int_desde_tn").val(),$("#int_caja_tn").val(),$("#int_paquete_tn").val() ); 
   });
+
+
+   
+
+
+  
+/*prefioFob();
+  function prefioFob(){
+
+  
+
+      var suma = 0;
+     $(".errorRango").each(function(index){ 
+     alert($(this).val());
+   
+       if (isNaN(parseFloat($(this).val()))) {
+              suma += 0; 
+            } else {
+              alert(suma)
+              suma += parseFloat($(this).val());
+            }
+            $('#Totalfob').text(suma);
+      });     
+  
+   }*/
+ 
   
     $("#botonSellado").show();
     $("#paqycajasnormal").show(50);
     $("#paquetexcaja").show(50);
     $("#cajasnormal").show(50); 
     $("#faltantess").show(50);
+ 
 
-
-
-
-   $( "#guardaboton" ).on( "click", function() {
-       validaCampos()
+   $( "#guardaboton" ).on( "click", function() { 
+       validaCampos();
    });
    $( "#guardabotonporCajas" ).on( "click", function() {
        registroDuplicado();
        validaCampos();
    });
+    
 
+
+   
    function validaCampos(){
           
          if($("#validar_paquete").val()=='1'){
@@ -639,20 +666,13 @@ $('#imprimirt').on('change',function(){
  
            swal("Error", "Debe seleccionar un valor al campo tipo desperdicio ! :)", "error"); 
            return false;
-         }  
-         else if(submit_faltante()==false){
-           swal("Error", "Debe llenar algunos de los Faltantes! :)", "error"); 
-         }else{ 
-     
-         $('#content').html('<div class="loader"></div>');
-            setTimeout(function() { $(".loader").fadeOut("slow");},500);
-           guardarSelladoTiquetes();
-           //guardarSelladoFaltantes()
-         }
+         } else{
+          alertafaltantes();
+         } 
    }
 
   
-    $( ".botonMiniSellado" ).on( "click", function() { 
+    $( ".botonMiniSellado" ).on( "click", function() {  
        idanyobusqueda = $( ".botonMiniSellado" ).val(); 
         
          $('#tipodesperdicio_f').show(); 

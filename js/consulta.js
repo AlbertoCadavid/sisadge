@@ -3377,7 +3377,7 @@ function consulta_rollo_E(selec)
 }
 function sumaBanderas()
 {
-	var rev=(parseInt(document.form1.reven_r.value) + parseInt(document.form1.corte_r.value) + parseInt(document.form1.calib_r.value) + parseInt(document.form1.arrug_r.value) + parseInt(document.form1.medid_r.value) + parseInt(document.form1.desca_r.value) + parseInt(document.form1.trata_r.value) + parseInt(document.form1.montaje_r.value) + parseInt(document.form1.apagon_r.value));
+	var rev=( (parseInt(document.form1.reven_r.value) || 0) + (parseInt(document.form1.corte_r.value) || 0) + (parseInt(document.form1.calib_r.value) || 0) + (parseInt(document.form1.arrug_r.value) || 0) + (parseInt(document.form1.medid_r.value) || 0) + (parseInt(document.form1.desca_r.value) || 0) + (parseInt(document.form1.trata_r.value) || 0) + (parseInt(document.form1.montaje_r.value) || 0) + (parseInt(document.form1.apagon_r.value) || 0));
 	document.form1.bandera_r.value=rev;
 }
 //ESTIQUERS DE ROLLOS IMPRESION

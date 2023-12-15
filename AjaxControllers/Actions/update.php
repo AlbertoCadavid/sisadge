@@ -107,12 +107,15 @@ $actualizar=$_GET['act_rollos'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $actualizar == 'true' ) {
    // Recibir el array enviado desde JavaScript
    $array_rollos = $_POST['array_ids'];
+   $id_op = $_POST['idOp'];
+   $id_rp = $_POST['idRp'];
 
    foreach ($array_rollos as $value) {
       $query="UPDATE `tblextruderrollo` SET `id_rp`= 0 WHERE `id_r`= $value";
       $resultorden=mysql_query($query);
    }
-   
+   $query_kilos_produccidos="UPDATE `Tbl_reg_kilo_producido` SET `id_rp`= 0 WHERE op_rp = $id_op AND id_proceso_rkp = 1 AND id_rp = $id_rp";
+   $resultorden=mysql_query($query_kilos_produccidos);
    
 }
 

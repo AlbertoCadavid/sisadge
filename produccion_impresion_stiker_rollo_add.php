@@ -434,6 +434,10 @@ $Rollo_E = mysql_query($query_Rollo_E, $conexion1) or die(mysql_error());
 $row_Rollo_E = mysql_fetch_assoc($Rollo_E);
 $totalRows_Rollo_E = mysql_num_rows($Rollo_E);
 
+//INFORMACION DE LAS BANDERAS
+$rollos_info = $conexion->llenaListas('TblExtruderRollo', "WHERE TblExtruderRollo.id_op_r='$colname_Rollo_E' AND TblExtruderRollo.rollo_r NOT IN (SELECT TblImpresionRollo.rollo_r FROM TblImpresionRollo WHERE  TblImpresionRollo.id_op_r=TblExtruderRollo.id_op_r) GROUP BY TblExtruderRollo.rollo_r ASC","", '*');
+
+
 //ROLLOS IMPRESOS
 $colname_rollo = "-1";
 if (isset($_GET['id_op_r'])) {
@@ -931,6 +935,41 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
 
       </tr>
       <tr>
+        <td colspan="2">
+          <p style="color:red">
+          <?php 
+          foreach ($rollos_info as $value) {
+            if($value['bandera_r'] > 0){
+              if ($value['reven_r'] > 0) {
+                echo "OJO BANDERA de Reviente en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['reven2_r'])." mts".'<br>';
+              }
+              if ($value['medid_r'] > 0) {
+                echo "OJO BANDERA de Medida en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['medid2_r'])." mts".'<br>';
+              }
+              if ($value['corte_r'] > 0) {
+                echo "OJO BANDERA de Corte en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['corte2_r'])." mts".'<br>';
+              }
+              if ($value['desca_r'] > 0) {
+                echo "OJO BANDERA de Descalibre en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['desca2_r'])." mts".'<br>';
+              }
+              if ($value['calib_r'] > 0) {
+                echo "OJO BANDERA de Pigmentacion en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['calib2_r'])." mts".'<br>';
+              }
+              if ($value['trata_r'] > 0) {
+                echo "OJO BANDERA de Tratado en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['trata2_r'])." mts".'<br>';
+              }
+              if ($value['arrug_r'] > 0) {
+                echo "OJO BANDERA de Arruga en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['arrug2_r'])." mts".'<br>';
+              }     
+              if ($value['montaje_r'] > 0) {
+                echo "OJO BANDERA de Montaje en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['montaje2_r'])." mts".'<br>';
+              }     
+            }
+          }
+          
+        ?>
+        </p>
+        </td>
         <td id="fuente3" colspan="5">
           <input class="botonGeneral" type="submit" name="button_name" id="button_imp_rollo2" value="GUARDAR" onclick="validacion_unodelosdos_imp()"><!--onClick="envio_form(this);"-->
         </td>

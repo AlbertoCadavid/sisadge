@@ -216,7 +216,7 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
 //LLAMA LAS MEZCLAS DE IMPRESION UNIDAD 
 $id_op=$_GET['id_op']; 
 mysql_select_db($database_conexion1, $conexion1);
-$query_kilo_editar = "SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='$id_op' AND id_proceso_rkp='1' AND fecha_rkp = '$fecha' ORDER BY id_rkp ASC";
+$query_kilo_editar = "SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='$id_op' AND id_proceso_rkp='1' AND (id_rp = '$_GET[id_rp]' OR id_rp = 0) ORDER BY id_rkp ASC";
 $kilo_editar = mysql_query($query_kilo_editar, $conexion1) or die(mysql_error());
 $row_kilo_editar = mysql_fetch_assoc($kilo_editar);
 $totalRows_kilo_editar = mysql_num_rows($kilo_editar);

@@ -341,7 +341,7 @@ if($row_refac['int_cod_ref_op']=='1363' || $row_refac['int_cod_ref_op']=='1364')
                     </tr>
                 <?php endif;?> 
                 <tr>
-                    <td colspan="3"> 
+                  <td colspan="6"> 
                         <?php  $faltantes = array();
                         if($registros[0]['int_inicial_f']!='') 
                         { 
@@ -358,25 +358,27 @@ if($row_refac['int_cod_ref_op']=='1363' || $row_refac['int_cod_ref_op']=='1364')
                   ?>
                  <!--  <?php //if($faltantes !="SIN FALTANTES"):?>
                     <div class="qrcode" id="qr"></div> 
-                <?php //endif;?> -->
+                <?php //endif;?> --> 
 
-                &nbsp;<b style="font-size:25px;" class="text">COD EMP:&nbsp; <?php echo $row_cantidad['int_cod_empleado_tn'];?></b><br>
-                &nbsp;<b style="font-size:25px;" class="text">COD AUX:&nbsp;<?php echo $row_cantidad['int_cod_rev_tn'];?></b>
-           
+                </td> 
+            
+        </tr> 
 
-            </td> 
-            <td colspan="3">
-                &nbsp;<b style="font-size:20px;" class="text">CARTON:</b> 
-                &nbsp;<samp style="font-size:70px; text-align:center; " class="text" ><?php echo $row_vista_paquete['int_caja_tn'];?></samp>
+    </table>
+    <table style="width:100%" border="4">
+        <tr>
+            <td style="width:30%">
+             &nbsp;<b style="font-size:25px;" class="text">COD EMP:&nbsp; <?php echo $row_cantidad['int_cod_empleado_tn'];?></b><br>
+             &nbsp;<b style="font-size:25px;" class="text">COD AUX:&nbsp;<?php echo $row_cantidad['int_cod_rev_tn'];?></b>  
+            </td>
+            <td style="width:70%; text-align: right; ">
+                &nbsp;<b style="font-size:20px;" class="text">CARTON:&nbsp;&nbsp;</b><br>
+                &nbsp;<samp style="font-size:70px; text-align:center; " class="text" ><?php echo $row_vista_paquete['int_caja_tn'];?></samp>&nbsp;&nbsp;&nbsp;
                 <!--<div style="font-size:60px">2999</div>-->
             </td>
         </tr>
-        <!-- <tr>    
-            <td><b style="font-size:8px;">Cod Emp:&nbsp;&nbsp;&nbsp;<?php echo $row_vista_paquete['int_cod_empleado_tn'];?></b></td>
-            <td><b style="font-size:8px;">Cod Aux:&nbsp;&nbsp;&nbsp;<?php echo $row_vista_paquete['int_cod_rev_tn'];?></b></td>
-        </tr> -->
+    </table>
 
-    </table> 
     <br> 
     <?php if($faltantes !="SIN FALTANTES"):?>
         <table style="width:100%" border="4">

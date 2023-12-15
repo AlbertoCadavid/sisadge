@@ -351,10 +351,10 @@ if (isset($_SERVER['QUERY_STRING'])) {
    </td>
  </tr>  
  <tr>
-   <td colspan="6" id="dato2">
+   <td colspan="6" id="dato2"> 
      <div id="botonSellado" style="display: none;">
       <input name="validar_paquete" id="validar_paquete" value="0" type="hidden"> 
-       <button id="guardaboton"  class="botonSellado"  type="button" autofocus onClick="submit_faltante(this.formfalta)" >GUARDAR NUMERACION</button>
+       <button id="guardaboton"  class="botonSellado"  type="button" autofocus >GUARDAR NUMERACION</button>
        <!-- <button type="submit" id="guardaboton"  class="botonSellado" autofocus>GUARDAR NUMERACION</button> -->
        </div><!--onClick="return funcion2();"-->
      <div id="botonporCajas" style="display: none;">
@@ -682,17 +682,18 @@ if (isset($_SERVER['QUERY_STRING'])) {
          else if($("#int_cod_rev_tn").val()==''){
            swal("Error", "Debe agregar un valor al campo cod_rev! :)", "error"); 
            return false;
-         }else if($("#validar").val() > 0 && $("#tipodesperdicio_f").val()==''){
+         }
+         else if($("#validar").val() > 0 && $("#tipodesperdicio_f").val()==''){
  
            swal("Error", "Debe seleccionar un valor al campo tipo desperdicio ! :)", "error"); 
            return false;
-         }else if(submit_faltante()==false){
-           swal("Error", "Debe llenar algunos de los Faltantes! :)", "error"); 
-         }else{ 
-          $('#content').html('<div class="loader"></div>');
+         } 
+         else{ 
+          /*$('#content').html('<div class="loader"></div>');
              setTimeout(function() { $(".loader").fadeOut("slow");},10000);
 
-             guardarSelladoTiquetes(); 
+             guardarSelladoTiquetes(); */
+             alertafaltantes();
              envioEdit($("#int_op_tn").val(),$("#int_caja_tn").val());
  
            

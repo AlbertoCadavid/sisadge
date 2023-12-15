@@ -127,7 +127,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
       $sql = "SELECT $asterisco FROM $tabla $condicion $group $orden ";  
       //echo $sql;die;
       $query_limit_registros = sprintf("%s LIMIT %d, %d", $sql, $startRow_registros, $maxRows_registros);
-      
+      //echo $query_limit_registros;die;
       $resultado = $this->conexion->query($query_limit_registros) or die($this->conexion->error);
       if($resultado) 
         //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 

@@ -71,6 +71,7 @@ class cextruderController{
             //actualiza form
              self::GuardarMezcla();
              self::ActualizaOp($_REQUEST['id_op_rp']);
+             self::actualizaMateriaPrima($_REQUEST['id_prod_rp']);
             
             if($result && $_REQUEST['MM_insert']=="MM_update"){
                  
@@ -133,6 +134,13 @@ class cextruderController{
         }
         else{ 
            require_once("produccion_registro_extrusion_vista.php" ); 
+        }
+    }
+
+    public function actualizaMateriaPrima($ids){
+        $this->form =  new oMextruder();  
+            foreach ($ids as $value) {
+            $this->form->Update("UPDATE tbl_reg_kilo_producido SET id_rp='$_REQUEST[id_rp]' WHERE id_rkp=$value"); 
         }
     }
  

@@ -88,11 +88,30 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 <?php foreach($this->row_referencia as $row_referencia) { $row_referencia; } ?>
 <?php foreach($this->row_caract as $row_caract) { $row_caract; } ?>
 <?php foreach($this->row_caract_m as $row_caract_m) { $row_caract_m; } ?>
-<?php foreach($this->row_mezcla as $row_mezcla) { $row_mezcla; } ?>
+<?php //foreach($this->row_mezcla as $row_mezcla) { $row_mezcla; } ?>
 <?php foreach($this->row_materia_prima as $row_materia_prima) { $row_materia_prima; } ?>
 <?php foreach($this->maquinas as $maquinas) { $maquinas; } ?>
 
+<?php  
+$row_mezcla=$this->row_mezcla;
 
+$conexion2 = new oMmezclas();
+ 
+
+$insumoactual = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref1_tol1_pm'], " ");
+$insumoactual2 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref2_tol1_pm'], " ");
+$insumoactual3 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref3_tol1_pm'], " ");
+$insumoactual4 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref1_tol2_pm'], " ");
+$insumoactual5 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref2_tol2_pm'], " ");
+$insumoactual6 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref3_tol2_pm'], " ");
+$insumoactual7 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref1_tol3_pm'], " ");
+$insumoactual8 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref2_tol3_pm'], " ");
+$insumoactual9 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref3_tol3_pm'], " ");
+$insumoactual10 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref1_tol4_pm'], " ");
+$insumoactual11 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref2_tol4_pm'], " ");
+$insumoactual12 = $conexion2->ObtenerColumn("insumo","id_insumo","descripcion_insumo", $row_mezcla['int_ref3_tol4_pm'], " ");
+
+?>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -176,7 +195,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
             <!-- grid --> 
 
             <div class="container-fluid">  
-              <form action="view_index.php?c=cmezclas&a=Guardar&id=<?php echo $_GET['cod_ref'];?>" method="post" enctype="multipart/form-data" name="form1">
+              <form action="view_index.php?c=cmezclas&a=Guardar&id=<?php echo $_GET['cod_ref'];?>&vistaLiquida=<?php echo $_GET['vistaLiquida'];?>" method="post" enctype="multipart/form-data" name="form1">
                 <table class="table table-bordered table-sm">
                 <tr id="tr1">
                  
@@ -250,17 +269,17 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                       <tr id="tr1">
                         <td rowspan="2" id="fuente1">EXT-1          
                         </td>
-                        <td colspan="4" id="fuente1">TORNILLO A</td>
-                        <td colspan="3" id="fuente1">TORNILLO B</td>
-                        <td colspan="2" id="fuente1">TORNILLO C</td>
+                        <td colspan="3" id="fuente1">TORNILLO A</td>
+                        <td colspan="2" id="fuente1">TORNILLO B</td>
+                        <td colspan="4" id="fuente1">TORNILLO C</td>
                         </tr> 
                       <tr id="tr1">
                         <td colspan="2" id="fuente1">Referencia</td>
-                        <td colspan="2" id="fuente1">%</td>
-                        <td  id="fuente1">Referencia</td>
                         <td id="fuente1">%</td>
                         <td id="fuente1">Referencia</td>
-                        <td colspan="2" id="fuente1">%</td>
+                        <td id="fuente1">%</td>
+                        <td id="fuente1">Referencia</td>
+                        <td colspan="4" id="fuente1">%</td>
                       </tr>
                       
                       <tr id="tr1">
@@ -272,9 +291,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref1_tol1_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                             </option>
                           <?php } ?> 
-                        </select>
+                        </select> <span style="width: 10px" title='<?php echo $insumoactual['descripcion_insumo']; ?>' ><?php echo substr($insumoactual['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td colspan="2" id="fuente1"><input name="int_ref1_tol1_porc1_pm"  type="text" required="required" id="int_ref1_tol1_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol1_porc1_pm']; ?>"/>
+                        <td id="fuente1"><input name="int_ref1_tol1_porc1_pm"  type="text" required="required" id="int_ref1_tol1_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol1_porc1_pm']; ?>"/>
                         </td>
                         <td id="fuente1">
                             <select name="int_ref2_tol1_pm" id="int_ref2_tol1_pm" style="width:120px">
@@ -283,7 +302,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref2_tol1_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select> 
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual2['descripcion_insumo']; ?>' ><?php echo substr($insumoactual2['descripcion_insumo'], 0, 10);?>... </span> 
                       </td>
                         <td id="fuente1">
                           <input name="int_ref2_tol1_porc2_pm"  type="text" required="required" id="int_ref2_tol1_porc2_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref2_tol1_porc2_pm'] ?>"/>
@@ -295,24 +314,24 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref3_tol1_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select> 
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual3['descripcion_insumo']; ?>' ><?php echo substr($insumoactual3['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td  colspan="2" id="fuente1">
+                        <td colspan="4" id="fuente1">
                           <input name="int_ref3_tol1_porc3_pm"  type="text" required="required" id="int_ref3_tol1_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol1_porc3_pm'] ?>"/>
                         </td>
                       </tr>
                       <tr>
                         <td id="fuente1">Tolva B</td>
-                        <td colspan="2"id="fuente1">
+                        <td colspan="2" id="fuente1">
                             <select name="int_ref1_tol2_pm" id="int_ref1_tol2_pm" style="width:120px">
                             <option value=""<?php if (!(strcmp("", $row_mezcla['int_ref1_tol2_pm']))) {echo "selected=\"selected\"";} ?>>Referencia MP</option>
                             <?php  foreach($this->row_materia_prima as $row_materia_prima ) { ?>
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref1_tol2_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual4['descripcion_insumo']; ?>' ><?php echo substr($insumoactual4['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td colspan="2"id="fuente1">
+                        <td id="fuente1">
                           <input name="int_ref1_tol2_porc1_pm"  type="text" required="required" id="int_ref1_tol2_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol2_porc1_pm'] ?>"/>
                         </td>
                         <td id="fuente1">
@@ -322,7 +341,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref2_tol2_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual5['descripcion_insumo']; ?>' ><?php echo substr($insumoactual5['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
                         <td id="fuente1">
                           <input name="int_ref2_tol2_porc2_pm"  type="text" required="required" id="int_ref2_tol2_porc2_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref2_tol2_porc2_pm'] ?>"/>
@@ -334,9 +353,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref3_tol2_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual6['descripcion_insumo']; ?>' ><?php echo substr($insumoactual6['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td  colspan="2" id="fuente1">
+                        <td colspan="4" id="fuente1">
                           <input name="int_ref3_tol2_porc3_pm"  type="text" required="required" id="int_ref3_tol2_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol2_porc3_pm'] ?>"/>
                         </td>
                       </tr>
@@ -349,9 +368,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref1_tol3_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual7['descripcion_insumo']; ?>' ><?php echo substr($insumoactual7['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td colspan="2" id="fuente1">
+                        <td id="fuente1">
                           <input name="int_ref1_tol3_porc1_pm"  type="text" required="required" id="int_ref1_tol3_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol3_porc1_pm'] ?>"/>
                         </td>
                         <td id="fuente1">
@@ -361,7 +380,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref2_tol3_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual8['descripcion_insumo']; ?>' ><?php echo substr($insumoactual8['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
                         <td id="fuente1"><input name="int_ref2_tol3_porc2_pm"  type="text" required="required" id="int_ref2_tol3_porc2_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref2_tol3_porc2_pm'] ?>"/>
                         </td>
@@ -372,9 +391,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref3_tol3_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual9['descripcion_insumo']; ?>' ><?php echo substr($insumoactual9['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td  colspan="2" id="fuente1">
+                        <td colspan="4" id="fuente1">
                           <input name="int_ref3_tol3_porc3_pm"  type="text" required="required" id="int_ref3_tol3_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol3_porc3_pm'] ?>"/>
                         </td>
                       </tr>
@@ -387,9 +406,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref1_tol4_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual10['descripcion_insumo']; ?>' ><?php echo substr($insumoactual10['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td colspan="2" id="fuente1">
+                        <td id="fuente1">
                           <input name="int_ref1_tol4_porc1_pm"  type="text" required="required" id="int_ref1_tol4_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol4_porc1_pm'] ?>"/>
                         </td>
                         <td id="fuente1">
@@ -399,7 +418,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref2_tol4_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual11['descripcion_insumo']; ?>' ><?php echo substr($insumoactual11['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
                         <td id="fuente1">
                           <input name="int_ref2_tol4_porc2_pm"  type="text" required="required" id="int_ref2_tol4_porc2_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref2_tol4_porc2_pm'] ?>"/>
@@ -411,19 +430,19 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref3_tol4_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual12['descripcion_insumo']; ?>' ><?php echo substr($insumoactual12['descripcion_insumo'], 0, 10);?>... </span>
                       </td>
-                        <td  colspan="2" id="fuente1">
+                        <td colspan="4" colspan="2" id="fuente1">
                           <input name="int_ref3_tol4_porc3_pm"  type="text" required="required" id="int_ref3_tol4_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol4_porc3_pm'] ?>"/></td>
                       </tr>
                       <tr id="tr1">
                         <td id="fuente1">RPM - %</td>
                         <td  colspan="2" id="fuente1"><input name="int_ref1_rpm_pm"  type="text" placeholder="Rpm Torn-A" required="required" size="10"value="<?php echo $row_mezcla['int_ref1_rpm_pm'] ?>"/></td>
-                        <td  colspan="2" id="fuente1"><input name="int_ref1_tol5_porc1_pm"  type="text" required="required" id="int_ref1_tol5_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol5_porc1_pm'] ?>"/></td>
+                        <td id="fuente1"><input name="int_ref1_tol5_porc1_pm"  type="text" required="required" id="int_ref1_tol5_porc1_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref1_tol5_porc1_pm'] ?>"/></td>
                         <td id="fuente1"><input name="int_ref2_rpm_pm"  type="text" placeholder="Rpm Torn-B" required="required" size="10"value="<?php echo $row_mezcla['int_ref2_rpm_pm'] ?>"/></td>
                         <td id="fuente1"><input name="int_ref2_tol5_porc2_pm"  type="text" required="required" id="int_ref2_tol5_porc2_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref2_tol5_porc2_pm'] ?>"/></td>
                         <td id="fuente1"><input name="int_ref3_rpm_pm"  type="text" placeholder="Rpm Torn-C" required="required" size="10"value="<?php echo $row_mezcla['int_ref3_rpm_pm'] ?>"/></td>
-                        <td  colspan="2" id="fuente1"><input name="int_ref3_tol5_porc3_pm"  type="text" required="required" id="int_ref3_tol5_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol5_porc3_pm'] ?>"/></td>
+                        <td colspan="3" id="fuente1"><input name="int_ref3_tol5_porc3_pm"  type="text" required="required" id="int_ref3_tol5_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol5_porc3_pm'] ?>"/></td>
                       </tr>
                       <tr>
                         <td colspan="10" id="fuente1">
@@ -728,7 +747,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                       <input type="hidden" name="proceso" id="proceso" value="1"/>
                       <input type="hidden" name="modifico" id="modifico" value="<?php echo $_SESSION['Usuario'] ?>"/>
                       <input type="hidden" name="fecha_modif" id="fecha_modif" value="<?php echo date('Y-m-d H:i:s') ?>"/> 
-                      <input class="botonGeneral" type="submit" name="GUARDAR" id="GUARDAR" value="GUARDAR" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                      <input class="botonGeneral" type="submit" onclick="validaSelectMezclas()" name="GUARDAR" id="GUARDAR" value="GUARDAR" />
+                      <!-- <input class="botonGeneral" type="submit" name="GUARDAR" id="GUARDAR" value="GUARDAR" /> -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <a class="botonFinalizar" style="text-decoration:none; "href="javascript:Salir('view_index.php?c=cmezclas&a=Salir')" >SALIR</a>  
                     </div>
                   </td>
@@ -759,13 +780,13 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
 <script type="text/javascript">
 
   $(document).ready(function() { 
-    refcopia = $( ".refcopia" ).val(); 
+    refcopia = $(".refcopia" ).val(); 
     if(refcopia !='')
       vercopiaMezcla();
 
      extrusoraNumero();
 
-    $( "#extrusora_mp" ).on( "change", function() {
+    $("#extrusora_mp" ).on( "change", function() {
 
          extrusoraNumero();
     });
@@ -779,27 +800,27 @@ function vercopiaMezcla(){
    }
 
   function copiaMezcla(){
-    refcopia = $( "#refcopia" ).val();
-    cod_ref = $( "#cod_ref" ).val();  
+    refcopia = $("#refcopia" ).val();
+    cod_ref = $("#cod_ref" ).val();  
     if(refcopia)
     window.location="view_index.php?c=cmezclas&a=Carat&cod_ref="+cod_ref+"&cod_refcopia="+refcopia;
 
   }
   
   function Extrusora(){
-  $( "#extrusora" ).val($( "#extrusora_mp" ).val());
+  $("#extrusora" ).val($("#extrusora_mp" ).val());
   }
 
 
 
   function extrusoraNumero(){
 
-    if($( "#extrusora_mp" ).val() == "1 Maquina Extrusora") { 
+    if($("#extrusora_mp" ).val() == "1 Maquina Extrusora") { 
        $('.zonaextruder1').show();
        $('.zonaextruder2').hide();
        $('.zonaimpr2').hide(); 
 
-    }else if($( "#extrusora_mp" ).val() == "2 Maquina Extrusora"){  
+    }else if($("#extrusora_mp" ).val() == "2 Maquina Extrusora"){  
        $('.zonaextruder1').hide();
        $('.zonaextruder2').show();
        $('.bloquef').text('Bloque Fijo');
@@ -814,6 +835,205 @@ function vercopiaMezcla(){
 
     }
   }
+
+  function validaSelectMezclas(){
+
+
+    //si son vacios coloco 0.00
+    if($("#int_ref1_tol1_porc1_pm").val()=='' ){ $("#int_ref1_tol1_porc1_pm").val('0.00') } 
+    if($("#int_ref1_tol2_porc1_pm").val()=='' ){ $("#int_ref1_tol2_porc1_pm").val('0.00') } 
+    if($("#int_ref1_tol3_porc1_pm").val()=='' ){ $("#int_ref1_tol3_porc1_pm").val('0.00') } 
+    if($("#int_ref1_tol4_porc1_pm").val()=='' ){ $("#int_ref1_tol4_porc1_pm").val('0.00') } 
+
+    if($("#int_ref2_tol1_porc2_pm").val()=='' ){ $("#int_ref2_tol1_porc2_pm").val('0.00') } 
+    if($("#int_ref2_tol2_porc2_pm").val()=='' ){ $("#int_ref2_tol2_porc2_pm").val('0.00') } 
+    if($("#int_ref2_tol3_porc2_pm").val()=='' ){ $("#int_ref2_tol3_porc2_pm").val('0.00') } 
+    if($("#int_ref2_tol4_porc2_pm").val()=='' ){ $("#int_ref2_tol4_porc2_pm").val('0.00') } 
+
+    if($("#int_ref3_tol1_porc3_pm").val()=='' ){ $("#int_ref3_tol1_porc3_pm").val('0.00') } 
+    if($("#int_ref3_tol2_porc3_pm").val()=='' ){ $("#int_ref3_tol2_porc3_pm").val('0.00') } 
+    if($("#int_ref3_tol3_porc3_pm").val()=='' ){ $("#int_ref3_tol3_porc3_pm").val('0.00') } 
+    if($("#int_ref3_tol4_porc3_pm").val()=='' ){ $("#int_ref3_tol4_porc3_pm").val('0.00') } 
+
+       //valida select
+        if( ($("#int_ref1_tol1_porc1_pm").val() > '0.00')  &&  $("#int_ref1_tol1_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva A TORNILLO A")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol1_porc2_pm").val() > '0.00')  &&  $("#int_ref2_tol1_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva A TORNILLO B")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol1_porc3_pm").val() > '0.00')  &&  $("#int_ref3_tol1_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva A TORNILLO C")
+             event.preventDefault();
+        }
+        if( ($("#int_ref1_tol2_porc1_pm").val() > '0.00')  &&  $("#int_ref1_tol2_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva B TORNILLO A")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol2_porc2_pm").val() > '0.00')  &&  $("#int_ref2_tol2_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva B TORNILLO B")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol2_porc3_pm").val() > '0.00')  &&  $("#int_ref3_tol2_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva B TORNILLO C")
+             event.preventDefault();
+        }
+        if( ($("#int_ref1_tol3_porc1_pm").val() > '0.00')  &&  $("#int_ref1_tol3_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva C TORNILLO A")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol3_porc2_pm").val() > '0.00')  &&  $("#int_ref2_tol3_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva C TORNILLO B")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol3_porc3_pm").val() > '0.00')  &&  $("#int_ref3_tol3_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva C TORNILLO C")
+             event.preventDefault();
+        }
+        if( ( $("#int_ref1_tol4_porc1_pm").val() > '0.00')  &&  $("#int_ref1_tol4_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva D TORNILLO A")
+             event.preventDefault();
+        }
+        if( ( $("#int_ref2_tol4_porc2_pm").val() > '0.00')  &&  $("#int_ref2_tol4_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva D TORNILLO B")
+             event.preventDefault();
+        }
+        if( ( $("#int_ref2_tol4_porc2_pm").val() > '0.00')  &&  $("#int_ref3_tol4_pm").val()==''){
+             swal("Debe ingresar el insumo Tolva D TORNILLO C")
+             event.preventDefault();
+        } 
+
+      //valida campo %
+        if( ($("#int_ref1_tol1_porc1_pm").val() == '0.00' || $("#int_ref1_tol1_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol1_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva A TORNILLO A %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol1_porc2_pm").val() == '0.00' || $("#int_ref2_tol1_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol1_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva A TORNILLO B %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol1_porc3_pm").val() == '0.00' || $("#int_ref3_tol1_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol1_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva A TORNILLO C %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref1_tol2_porc1_pm").val() == '0.00' || $("#int_ref1_tol2_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol2_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva B TORNILLO A %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol2_porc2_pm").val() == '0.00' || $("#int_ref2_tol2_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol2_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva B TORNILLO B %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol2_porc3_pm").val() == '0.00' || $("#int_ref3_tol2_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol2_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva B TORNILLO C %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref1_tol3_porc1_pm").val() == '0.00' || $("#int_ref1_tol3_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol3_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva C TORNILLO A %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol3_porc2_pm").val() == '0.00' || $("#int_ref2_tol3_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol3_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva C TORNILLO B %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol3_porc3_pm").val() == '0.00' || $("#int_ref3_tol3_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol3_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva C TORNILLO C %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref1_tol4_porc1_pm").val() == '0.00' || $("#int_ref1_tol4_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol4_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva D TORNILLO A %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref2_tol4_porc2_pm").val() == '0.00' || $("#int_ref2_tol4_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol4_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva D TORNILLO B %")
+             event.preventDefault();
+        }
+        if( ($("#int_ref3_tol4_porc3_pm").val() == '0.00' || $("#int_ref3_tol4_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol4_pm").val()!='')){
+             swal("Debe ingresar el valor Tolva D TORNILLO C %")
+             event.preventDefault();
+        }
+
+       
+
+ 
+        
+        //valido que no sea inferior o superio a 100 %
+      if($("#int_ref1_tol1_porc1_pm").val() >'0.00' || $("#int_ref1_tol2_porc1_pm").val() >'0.00' || $("#int_ref1_tol3_porc1_pm").val()>'0.00' ||$("#int_ref1_tol4_porc1_pm").val()>'0.00'){
+            if(  (parseFloat($("#int_ref1_tol1_porc1_pm").val() ) + parseFloat($("#int_ref1_tol2_porc1_pm").val() ) + parseFloat($("#int_ref1_tol3_porc1_pm").val() ) + parseFloat($("#int_ref1_tol4_porc1_pm").val()) ) !=100 ){
+                 swal("Los % del Tornillo A no pueden superar o ser inferior a el 100% !")
+                 event.preventDefault();
+            }
+      }
+      if($("#int_ref2_tol1_porc2_pm").val() >'0.00' || $("#int_ref2_tol2_porc2_pm").val() >'0.00' || $("#int_ref2_tol3_porc2_pm").val()>'0.00' ||$("#int_ref2_tol4_porc2_pm").val()>'0.00'){
+            if(  (parseFloat($("#int_ref2_tol1_porc2_pm").val() ) + parseFloat($("#int_ref2_tol2_porc2_pm").val() ) + parseFloat($("#int_ref2_tol3_porc2_pm").val() ) + parseFloat($("#int_ref2_tol4_porc2_pm").val()) ) !=100 ){
+                 swal("Los % del Tornillo B no pueden superar o ser inferior a el 100% !")
+                 event.preventDefault();
+            }
+      }
+      if($("#int_ref3_tol1_porc3_pm").val() >'0.00' || $("#int_ref3_tol2_porc3_pm").val() >'0.00' || $("#int_ref3_tol3_porc3_pm").val()>'0.00' ||$("#int_ref3_tol4_porc3_pm").val()>'0.00'){
+            if(  (parseFloat($("#int_ref3_tol1_porc3_pm").val() ) + parseFloat($("#int_ref3_tol2_porc3_pm").val() ) + parseFloat($("#int_ref3_tol3_porc3_pm").val() ) + parseFloat($("#int_ref3_tol4_porc3_pm").val()) ) !=100 ){
+                 swal("Los % del Tornillo C no pueden superar o ser inferior a el 100% !")
+                 event.preventDefault();
+            }
+      }
+
+        //valida los dos en cero y vacios
+          if( ($("#int_ref1_tol1_porc1_pm").val() == '0.00' || $("#int_ref1_tol1_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol1_pm").val()=='')){
+               
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref2_tol1_porc2_pm").val() == '0.00' || $("#int_ref2_tol1_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol1_pm").val()=='')){
+               
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref3_tol1_porc3_pm").val() == '0.00' || $("#int_ref3_tol1_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol1_pm").val()=='')){
+              
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref1_tol2_porc1_pm").val() == '0.00' || $("#int_ref1_tol2_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol2_pm").val()=='')){
+                
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref2_tol2_porc2_pm").val() == '0.00' || $("#int_ref2_tol2_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol2_pm").val()=='')){
+                
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref3_tol2_porc3_pm").val() == '0.00' || $("#int_ref3_tol2_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol2_pm").val()=='')){
+               
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref1_tol3_porc1_pm").val() == '0.00' || $("#int_ref1_tol3_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol3_pm").val()=='')){
+          
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref2_tol3_porc2_pm").val() == '0.00' || $("#int_ref2_tol3_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol3_pm").val()=='')){
+              
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref3_tol3_porc3_pm").val() == '0.00' || $("#int_ref3_tol3_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol3_pm").val()=='')){
+               
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref1_tol4_porc1_pm").val() == '0.00' || $("#int_ref1_tol4_porc1_pm").val() == '0')  &&  ($("#int_ref1_tol4_pm").val()=='')){
+               
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref2_tol4_porc2_pm").val() == '0.00' || $("#int_ref2_tol4_porc2_pm").val() == '0')  &&  ($("#int_ref2_tol4_pm").val()=='')){
+              
+               event.currentTarget.submit();
+          }
+          if( ($("#int_ref3_tol4_porc3_pm").val() == '0.00' || $("#int_ref3_tol4_porc3_pm").val() == '0')  &&  ($("#int_ref3_tol4_pm").val()=='')){
+             
+               event.currentTarget.submit();
+          } 
+
+        event.currentTarget.submit();
+  }
+        
+
+ 
 
 </script>
 

@@ -72,7 +72,7 @@ function consultasItems(remision_id) {
             "<td>" +
             data[i].precio +
             "</td>" +
-            '<td><button onClick="eliminar(' +
+            '<td><button onClick="eliminarItem(' +
             "'id_items'" +
             "," +
             data[i].id +

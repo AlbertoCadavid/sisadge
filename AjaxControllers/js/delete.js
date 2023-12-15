@@ -23,6 +23,27 @@ function eliminar(id,campo,pagina='',id_add=''){
     });  
 }
 
+function eliminarItem(id,campo,pagina='',id_add=''){
+
+  Swal.fire({   
+   title: "ELIMINAR?",   
+   text: "Esta seguro que Quiere Eliminar! id: "+campo,   
+   icon: "warning",   
+   showCancelButton: true,   
+   confirmButtonColor: "#DD6B55",   
+   confirmButtonText: "Si, eliminar!",   
+   cancelButtonText: "No, eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {  
+      Swal.fire("Eliminado!", "El registro se ha eliminado.", "success"); 
+       eliminacion(id,campo,pagina,id_add);
+     } else {     
+      Swal.fire("Cancelado", "has cancelado :)", "error");
+       window.history.go();
+     } 
+  });     
+}
+
 function eliminarItemProdTerm(id,campo,pagina='',id_add=''){
   
   Swal.fire({

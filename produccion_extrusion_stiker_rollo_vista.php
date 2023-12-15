@@ -1,9 +1,12 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
-require (ROOT_BBDD); 
+     require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+     require (ROOT_BBDD); 
 ?> 
 <?php require_once('Connections/conexion1.php'); ?>
 <?php
+require_once("db/db.php"); 
+require_once("Controller/Cmezclas.php");
+
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -131,11 +134,15 @@ if (isset($_GET['id_r'])) {
   $colname_existe = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query = "SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=$colname_existe AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1' AND Tbl_reg_produccion.rollo_rp>=$row_rollo_estrusion[rollo_r]"; 
+$query = "SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=$colname_existe AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1' AND Tbl_reg_produccion.rollo_rp>=$row_rollo_estrusion[rollo_r]";
 $query_existe = sprintf($query);// AND TblExtruderRollo.rollo_r=Tbl_reg_produccion.rollo_rp 
 $existe_edit= mysql_query($query_existe, $conexion1) or die(mysql_error());
 $row_existe_edit = mysql_fetch_assoc($existe_edit);
 $totalRows_existe_edit = mysql_num_rows($existe_edit);
+ 
+$conexion2 = new oMmezclas();
+ 
+$existemezcla = $conexion2->ObtenerColumn("tbl_caracteristicas_prod","cod_ref","cod_ref", $row_rollo_estrusion['ref_r'], " AND proceso=1 ORDER BY cod_ref DESC LIMIT 1 ");
  
 ?>
 <html>
@@ -212,12 +219,17 @@ function cerrar(num) {
       <?php else: ?>
          <img src="images/por.gif" alt="ELIMINAR" title="no se puede Eliminar debido a que ya esta liquidado" border="0" style="cursor:hand;" onclick="liquidado()" /> 
       <?php endif; ?>
-             
-         <?php  //if($totalRows_existe_edit < '1') :?>
-      
-           <a href="produccion_registro_extrusion_add.php?id_op=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a>
+          
+         <?php if($existemezcla['cod_ref'] =='') :?>
+            
+          <!--  <a href="produccion_registro_extrusion_add.php?id_op=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a> -->
 
-         <?php //endif; ?>
+           <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $row_rollo_estrusion['ref_r']; ?>&vistaLiquida=<?php echo $row_rollo_estrusion['id_op_r']; ?>','1600','700')"><img src="images/adelanter.gif" alt="FALTA MEZCLA"title="FALTA MEZCLA" border="0" style="cursor:hand;"/></a>
+               <?php else: ?>
+           <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $existemezcla['cod_ref']; ?>&vistaLiquida=<?php echo $row_rollo_estrusion['id_op_r']; ?>','1600','700')"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a>
+
+
+         <?php  endif; ?>
          <?php  
   
            $op_c=$row_rollo_estrusion['id_op_r'];

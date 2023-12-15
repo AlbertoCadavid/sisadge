@@ -179,6 +179,7 @@ class oMextruder{
 
 }
 
+
 class UtilHelper {
    /* Crea un string codificado a partir de un array
    * @param Array array: array asociativo clave => valor

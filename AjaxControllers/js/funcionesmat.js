@@ -58,7 +58,9 @@ function humanizeNumber(n) {
 
 function sumaImpuesto( precio='',vimpuesto='' ){    
    
-   
+        if(vimpuesto==''){
+             vimpuesto=0;
+        }
         bolsa = parseFloat(precio)+parseFloat(vimpuesto);
         bolsa = bolsa.toFixed(2);
     if(!this.checked) {
@@ -91,7 +93,10 @@ function sumaImpuesto( precio='',vimpuesto='' ){
 }
 
 function sumaImpuestoPacking( precio='',vimpuesto='' ){    
-  
+    
+    if(vimpuesto==''){
+         vimpuesto=0;
+    } 
 
      bolsa = parseFloat(precio)+parseFloat(vimpuesto);
      bolsa = bolsa.toFixed(2);
@@ -126,7 +131,10 @@ function sumaImpuestoPacking( precio='',vimpuesto='' ){
 
 
 function sumaImpuestoLamina( precio='',vimpuesto='' ){    
- 
+     
+     if(vimpuesto==''){
+          vimpuesto=0;
+     } 
  
      bolsa = parseFloat(precio)+parseFloat(vimpuesto);
      bolsa = bolsa.toFixed(2);

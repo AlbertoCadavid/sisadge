@@ -225,19 +225,22 @@ if (isset($_GET['id_op'])) {
   $colname_tiempoMuerto = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' ORDER BY id_rpt_rt ASC", $colname_tiempoMuerto);
+/* $query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' ORDER BY id_rpt_rt ASC", $colname_tiempoMuerto); */
+$query_tiempoMuerto = sprintf("SELECT * FROM `Tbl_reg_tiempo` join tblextruderrollo on Tbl_reg_tiempo.id_rollo = tblextruderrollo.id_r AND tblextruderrollo.id_rp = %s and tblextruderrollo.id_op_r = %s and Tbl_reg_tiempo.id_proceso_rt = 1", $_GET['id_rp'], $_GET['id_op']); 
 $tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
 $row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
 $totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
 //CARGA LOS TIEMPOS PREPARACION 
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoPreparacion = sprintf("SELECT * FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1'  ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+/* $query_tiempoPreparacion = sprintf("SELECT * FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1'  ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto); */
+$query_tiempoPreparacion = sprintf("SELECT * FROM `Tbl_reg_tiempo_preparacion` join tblextruderrollo on Tbl_reg_tiempo_preparacion.id_rollo = tblextruderrollo.id_r AND tblextruderrollo.id_rp = %s and tblextruderrollo.id_op_r = %s and Tbl_reg_tiempo_preparacion.id_proceso_rtp = 1", $_GET['id_rp'], $_GET['id_op']);
 $tiempoPreparacion  = mysql_query($query_tiempoPreparacion, $conexion1) or die(mysql_error());
 $row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion);
 $totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion);
 //CARGA LOS TIEMPOS  DESPERDICIOS
 mysql_select_db($database_conexion1, $conexion1);
-$query_desperdicio = sprintf("SELECT * FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY id_rpd_rd ASC", $colname_tiempoMuerto); // AND fecha_rd='$fechaR'
+/* $query_desperdicio = sprintf("SELECT * FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY id_rpd_rd ASC", $colname_tiempoMuerto); */ // AND fecha_rd='$fechaR'
+$query_desperdicio = sprintf("SELECT * FROM `tbl_reg_desperdicio` join tblextruderrollo on tbl_reg_desperdicio.id_rollo = tblextruderrollo.id_r AND tblextruderrollo.id_rp = %s and tblextruderrollo.id_op_r = %s and tbl_reg_desperdicio.id_proceso_rd = 1", $_GET['id_rp'], $_GET['id_op']); // AND fecha_rd='$fechaR'
 $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
@@ -334,7 +337,7 @@ if ($inf = mysql_fetch_array($res)) {
 //si es una liquidacion parcial
 
 
-$desperdicio_parcial = $conexion->llenarCampos("Tbl_reg_desperdicio", "WHERE op_rd='" . $_GET['id_op'] . "' AND fecha_rd BETWEEN '$fechaR' AND '$fechaF' AND id_proceso_rd='1' ", " ", "SUM(valor_desp_rd) AS desperdicio ");
+$desperdicio_parcial = $conexion->llenarCampos("Tbl_reg_desperdicio", "JOIN tblextruderrollo ON Tbl_reg_desperdicio.id_rollo = tblextruderrollo.id_r AND tblextruderrollo.id_rp = $_GET[id_rp] AND tblextruderrollo.id_op_r = $_GET[id_op] AND Tbl_reg_desperdicio.id_proceso_rd = 1", " ", "SUM(valor_desp_rd) AS desperdicio ");
 $kilosDesper = dosDecimalesSinMiles($desperdicio_parcial['desperdicio']);
 
 /* mysql_select_db($database_conexion1, $conexion1);
@@ -348,6 +351,8 @@ $rollos_en_liquidacion = $conexion->llenaListas('tblextruderrollo', "where id_rp
 foreach ($rollos_en_liquidacion as $value) {
   $array_rollos[] = (int)$value['id_r']; //forma un array con los valores del id del rollo y los convierte en enteros
 }
+
+
 
 ?>
 
@@ -434,16 +439,16 @@ foreach ($rollos_en_liquidacion as $value) {
                             <tr>
                               <td width="137" colspan="2" rowspan="6" id="dato2"><img src="images/logoacyc.jpg" /></td>
                               <td colspan="8" id="dato3">
-                                <?php if (($tienekilosconsumo['totalconsumo'] != '') && ($tienekilosconsumo['totalconsumo'] == $kilosDRollos + $kilosDesper)) :  ?>
-                                  <a ><img onClick="eliminacionYactualizacion('id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;" /></a>
+                                <?php if (($tienekilosconsumo['totalconsumo'] != '') && ($tienekilosconsumo['totalconsumo'] == $kilosDRollos + $kilosDesper)) {  ?>
+                                  <a><img onClick="eliminacionYactualizacion(<?php echo $_GET['id_op'] ?>,'id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;" /></a>
                                   <a href="produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $row_rp_edit['id_op_rp']; ?>&id_rp=<?php echo $row_rp_edit['id_rp']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" title="VISTA IMPRESION" border="0" /></a><a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0" /></a>
                                   <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a>
-                                <?php else : ?>
-                                  <img onClick="eliminacionYactualizacion('id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/por.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" style="cursor:hand;" />
-                                  <img onClick="eliminacionYactualizacion('id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/hoja.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" />
-                                  <img onClick="eliminacionYactualizacion('id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/identico.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" style="cursor:hand;" border="0" />
-                                  <img onClick="eliminacionYactualizacion('id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/ciclo1.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" style="cursor:hand;" />
-                                <?php endif; ?>
+                                <?php } else { ?>
+                                  <img onClick="eliminacionYactualizacion(<?php echo $_GET['id_op'] ?>,'id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/por.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" style="cursor:hand;" />
+                                  <img onClick="eliminacionYactualizacion(<?php echo $_GET['id_op'] ?>,'id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/hoja.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" />
+                                  <img onClick="eliminacionYactualizacion(<?php echo $_GET['id_op'] ?>,'id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/identico.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" style="cursor:hand;" border="0" />
+                                  <img onClick="eliminacionYactualizacion(<?php echo $_GET['id_op'] ?>,'id_salirExt','<?php echo $row_rp_edit['id_rp']; ?>','produccion_registro_extrusion_listado.php','','Si se sale sin guardar el consumo, se perdera toda la información ! Id: ',eliminacionAlSalirPopUp, actualizacion, <?php echo json_encode($array_rollos) ?>)" src="images/ciclo1.gif" alt="NO HA GUARDADO CONSUMO" title="NO HA GUARDADO CONSUMO" border="0" style="cursor:hand;" />
+                                <?php }; ?>
                               </td>
                             </tr>
                             <tr id="tr1">
@@ -648,6 +653,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                           <td id="fuente1">
                                             <?php
                                             $id4 = mysql_result($producido, $z, id_rpp_rp);
+                                            $id_materia_prima = mysql_result($producido, $z, id_rkp);
                                             $id_mp = $id4;
 
                                             $sqlrmp = "SELECT descripcion_insumo FROM insumo WHERE id_insumo='$id_mp'";
@@ -658,6 +664,9 @@ foreach ($rollos_en_liquidacion as $value) {
                                               echo $nombreMP;
                                             }
                                             ?>
+                                            <strong>
+                                              <input name="id_prod_rp[]" id="id_prod_rp[]" type="hidden" value="<?php echo $id_materia_prima; ?>" />
+                                            </strong>
                                           </td>
                                           <td id="fuente1">
                                             <?php
@@ -1035,7 +1044,6 @@ WHERE a.tipo_empleado IN(4) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_EXT'
     var resul = validaTodo();
 
     enviodeForms(resul);
-
 
   }
 

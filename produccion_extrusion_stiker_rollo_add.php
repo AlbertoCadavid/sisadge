@@ -745,47 +745,55 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
       <tr>
         <td id="fuente1">Reventon</td>
         <td id="fuente1">
-          <input name="reven_r" type="number" id="reven_r" style="width:40px" min="0" max="9" value="0" onchange="sumaBanderas();">
+          <input class="bandera" name="reven_r" type="number" id="reven_r" style="width:40px" min="0" max="9" value="0" onchange="sumaBanderas();">
           <input name="reven2_r" type="number" id="reven2_r" style="width:60px" min="0" value="0">Metros
         </td>
         <td id="fuente1">Medida</td>
-        <td id="fuente1"><input type="number" name="medid_r" min="0" max="9" id="medid_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="medid_r" min="0" max="9" id="medid_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="medid2_r" type="number" id="medid2_r" style="width:60px" min="0" value="0">Metros
         </td>
       </tr>
       <tr>
         <td id="fuente1">Cortes/Huecos</td>
-        <td id="fuente1"><input type="number" name="corte_r" min="0" max="9" id="corte_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="corte_r" min="0" max="9" id="corte_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="corte2_r" type="number" id="corte2_r" style="width:60px" min="0" value="0">Metros
         </td>
         <td id="fuente1">Descalibre</td>
-        <td id="fuente1"><input type="number" name="desca_r" min="0" max="9" id="desca_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="desca_r" min="0" max="9" id="desca_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="desca2_r" type="number" id="desca2_r" style="width:60px" min="0" value="0">Metros
         </td>
       </tr>
       <tr>
         <td id="fuente1">Pigmentación</td>
-        <td id="fuente1"><input type="number" name="calib_r" min="0" max="9" id="calib_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="calib_r" min="0" max="9" id="calib_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="calib2_r" type="number" id="calib2_r" style="width:60px" min="0" value="0">Metros
         </td>
         <td id="fuente1">Tratamiento</td>
-        <td id="fuente1"><input type="number" name="trata_r" min="0" max="9" id="trata_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="trata_r" min="0" max="9" id="trata_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="trata2_r" type="number" id="trata2_r" style="width:60px" min="0" value="0">Metros
         </td>
       </tr>
       <tr>
         <td id="fuente1">Arrugas</td>
-        <td id="fuente1"><input type="number" name="arrug_r" min="0" max="9" id="arrug_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="arrug_r" min="0" max="9" id="arrug_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="arrug2_r" type="number" id="arrug2_r" style="width:60px" min="0" value="0">Metros
         </td>
         <td id="fuente1">Apagón</td>
-        <td id="fuente1"><input type="number" name="apagon_r" min="0" max="9" id="apagon_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="apagon_r" min="0" max="9" id="apagon_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="apagon2_r" type="number" id="apagon2_r" style="width:60px" min="0" value="0">Metros
         </td>
       </tr>
       <tr>
         <td id="fuente1">Montaje</td>
-        <td id="fuente1"><input type="number" name="montaje_r" min="0" max="9" id="montaje_r" style="width:40px" value="0" onchange="sumaBanderas();">
+        <td id="fuente1">
+          <input class="bandera" type="number" name="montaje_r" min="0" max="9" id="montaje_r" style="width:40px" value="0" onchange="sumaBanderas();">
           <input name="montaje2_r" type="number" id="montaje2_r" style="width:60px" min="0" value="0">Metros
         </td>
         <td id="fuente1"><strong>TOTAL BANDERAS</strong></td>
@@ -936,6 +944,8 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
     document.getElementById("moreUploads3").appendChild(f);
     upload_number++;
   }
+
+
 </script>
 
 <?php
@@ -953,10 +963,7 @@ mysql_free_result($op_carga);
 
 <?php
   if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-    echo "si"; die;
-  
-  
-  
+    /* echo "si"; die; */
   echo "<script type=\"text/javascript\">window.opener.location.reload();</script>";
   echo "<script type=\"text/javascript\">window.close();</script>";
 }

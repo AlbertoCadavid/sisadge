@@ -52,6 +52,11 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+
   <!-- jquery -->
   <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -81,7 +86,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                       <li id="nombreusuario"><?php echo $_SESSION['Usuario']; ?></li>
                       <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
                       <li><a href="menu.php">MENU PRINCIPAL</a></li>
-                      <li><a href="insumos.php/">VER INSUMOS</a></li>
+                      <li><a href="javascript:verFoto('listado_insumos.php','870','510')">VER INSUMOS</a></li>
                       <li><a href="insumos_interno_listado.php">LISTADO ENTRADAS</a></li>
                     </ul>
                   </div>
@@ -179,12 +184,8 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                           </tr>
                           <tr>
                             <td>
-                              <strong>FECHAS ENTRADA: </strong>
+                              <strong>FECHA: </strong>
                               <input type="date" required="required" id="fecha" name="fecha" value="<?php echo $row_existe['fecha']; ?>" class='form-control' style="width:200">
-                            </td>
-                            <td>
-                              <strong>FECHAS SALIDA: </strong>
-                              <input type="date" required="required" id="fecha_salida" name="fecha_salida" value="<?php echo $row_existe['fecha_salida']; ?>" class='form-control' style="width:200">
                             </td>
                           </tr>
 
@@ -231,14 +232,14 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                                     <td colspan="12" id="dato1">
                                       <input type="hidden" name="remision_id" id="remision_id" value="<?php echo $num; ?>" style="width:70px">&nbsp;
                                       <input type="text" required="required" placeholder="Descripcion" id="insumo[]" name="insumo[]" value="<?php echo $row_existe['insumo']; ?>" style="width:300px"> &nbsp;
-                                      <select id="medida[]" name="medida[]" required="required" style="width:70px">
+                                      <select class="medida" oninput="unlocks()" id="medida[]" name="medida[]" required="required" style="width:70px">
                                         <option value="">Seleccione</option>
                                         <option value="unidad">Unidad</option>
                                         <option value="kilo">Kilo</option>
                                         <option value="rollo">Rollo</option>
                                       </select> &nbsp;
-                                      <input onChange="multiplicaTotal(<?php echo $i; ?>,this)" type="text" required="required" placeholder="Cantidad" id="cantidad<?php echo $i; ?>" name="cantidad[]" value="" style="width:70px">&nbsp;
-                                      <input onChange="multiplicaTotal(<?php echo $i; ?>,this)" type="text" required="required" placeholder="Peso" id="peso<?php echo $i; ?>" name="peso[]" value="" style="width:80px">&nbsp;
+                                      <input class="cantidades" oninput="subtotales()" type="number" disabled required="required" placeholder="Cantidad" id="cantidad<?php echo $i; ?>" name="cantidad[]" value="" style="width:70px">&nbsp;
+                                      <input class="pesos" oninput="subtotales()" type="number" disabled required="required" placeholder="Peso" id="peso<?php echo $i; ?>" name="peso[]" value="" style="width:80px">&nbsp;
                                       <input type="text" required="required" placeholder="Subtotal" id="precio<?php echo $i; ?>" name="precio[]" value="" style="width:80px">
                                     </td>
                                   </tr>
@@ -360,26 +361,36 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 </html>
 
 <script type="text/javascript">
+  
   $(document).ready(function() {
     consultasItems($("#id_remision").val()); //despliega los items
   });
 
+  function showAlert(){
+  Swal.fire({
+  position: "center",
+  icon: "success",
+  title: "Registro Guardado con Exito",
+  showConfirmButton: false,
+  timer: 1500
+});}
+
   $("#btnEnviarG").on("click", function() {
 
     if ($("#cliente").val() == '') {
-      swal("Error", "Debe agregar un valor al campo cliente! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo cliente! :)", "error");
       return false;
     } else
     if ($("#entrada").val() == '') {
-      swal("Error", "Debe agregar un valor al campo entrada! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo entrada! :)", "error");
       return false;
     } else
     if ($("#documento").val() == '') {
-      swal("Error", "Debe agregar un valor al campo documento! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo documento! :)", "error");
       return false;
     } else
     if ($("#contacto").val() == '') {
-      swal("Error", "Debe agregar un valor al campo contacto! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo contacto! :)", "error");
       return false;
     } else {
       guardarConAlert($("#id_remision").val());
@@ -389,15 +400,14 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
 
   $("#btnEnviarItems").on("click", function() {
-
     if ($("#insumo").val() == '') {
-      swal("Error", "Debe agregar un valor al campo insumo! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo insumo! :)", "error");
       return false;
     } else if ($("#peso").val() == '' && $("#precio").val() == '') {
-      swal("Error", "Debe agregar un valor al campo peso o precio! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo peso o precio! :)", "error");
       return false;
     } else if ($("#cantidad").val() == '') {
-      swal("Error", "Debe agregar un valor al campo cantidad! :)", "error");
+      Swal.fire("Error", "Debe agregar un valor al campo cantidad! :)", "error");
       return false;
     } else {
       guardarConAlertItems();
@@ -405,36 +415,58 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
   });
 
-  $("#insumo").on("change", function() {
+  /* $("#insumo").on("change", function() {
     consultaInsumos();
-  });
+  }); */
 
 
-  var suma = 0;
+  function subtotales() {
+    var total = 0;
+    cant = document.getElementsByClassName('cantidades')
+    peso = document.getElementsByClassName('pesos')
+    for (var i = 0; i < cant.length; i++) {
+      if (cant[i].value != '') {
+        $("#precio" + (i + 1)).val(cant[i].value)
+        var valorCampo = parseFloat(cant[i].value) || 0;
+        total += valorCampo;
 
-  function multiplicaTotal(vid, valores) {
+      } else if (peso[i].value != '') {
+        $("#precio" + (i + 1)).val(peso[i].value)
+        var valorCampo = parseFloat(peso[i].value) || 0;
+        total += valorCampo;
+      } else {
+        $("#precio" + (i + 1)).val('')
+      }
+      document.querySelector("#totales").innerHTML = total;
 
-    cant = $("#cantidad" + vid).val()
-    peso = $("#peso" + vid).val()
-
-    if (cant != '') {
-
-      $("#precio" + vid).val(cant)
     }
-    if (peso != '') {
-
-      $("#precio" + vid).val(peso)
-    }
-
-
-
-    $("#precio" + vid).each(function() {
-      suma += parseFloat($("#precio" + vid).val());
-    });
-
-    $("#totales").text(suma)
 
   }
+
+  $('#cliente').change(function() {
+    cliente = $("#cliente").val();
+    let resp = consultaProveedor('comprobarProveedor', cliente)
+  })
+
+  function unlocks() {
+    var medida = document.getElementsByClassName('medida')
+
+    for (let i = 0; i < medida.length; i++) {
+      if (medida[i].value == "unidad" || medida[i].value == "rollo") {
+        document.querySelector(`#cantidad${i+1}`).disabled = false
+        document.querySelector(`#peso${i+1}`).disabled = true
+
+      } else if (medida[i].value == "kilo") {
+        document.querySelector(`#peso${i+1}`).disabled = false
+        document.querySelector(`#cantidad${i+1}`).disabled = true
+      } else {
+        document.querySelector(`#peso${i+1}`).disabled = true
+        document.querySelector(`#cantidad${i+1}`).disabled = true
+      }
+
+    }
+  }
+
 </script>
 <?php
 mysql_free_result($usuario);

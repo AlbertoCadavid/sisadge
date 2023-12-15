@@ -22,10 +22,9 @@
   }
 
   /* INICIO Eliminar e inmediatamente Actualizar el id de liquidacion en los rollos */
-  function eliminacionYactualizacion(id,campo,pagina='',id_add='',msn='', funcionn1, funcionn2, array){
+  function eliminacionYactualizacion(id_op,id,campo,pagina='',id_add='',msn='', funcionn1, funcionn2, array){
     var funcionn1=funcionn1;
     var funcionn2=funcionn2;
-
      swal({   
       title: "ELIMINAR?",   
       text: msn+campo,   
@@ -40,7 +39,7 @@
         if (isConfirm) {  
           
           funcionn1(id,campo,pagina,id_add,msn='');
-          funcionn2(array, "id_r");
+          funcionn2(array, id_op, campo);
           swal("Eliminado!", "El registro se ha eliminado.", "success");
         } else {     
           swal("Cancelado", "has cancelado :)", "error");
@@ -48,10 +47,10 @@
         } 
       });
   }
-  function actualizacion(array,campo,pagina=''){ 
+  function actualizacion(array, id_op, id_rp, pagina=''){ 
     
     $.ajax({
-      data: { array_ids : array
+      data: { array_ids : array, idOp : id_op , idRp : id_rp
       },
       url: 'AjaxControllers/Actions/update.php?'+"act_rollos=true",
       type:  'POST',
