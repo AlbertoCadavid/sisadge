@@ -88,6 +88,13 @@ $startRow_registros = $pageNum_registros * $maxRows_registros;
 
 $conexion = new ApptivaDB();
 
+if (isset($_GET['totalRows_registros'])) {
+
+  $totalRows_registros = $_GET['totalRows_registros'];
+} else {
+  $totalRows_registros = $conexion->conteo('tbl_remision_interna');
+}
+
 $colname_usuario = "1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
@@ -108,19 +115,16 @@ if (isset($_GET["valor"])) {
   $colname_busqueda = (get_magic_quotes_gpc()) ? $_GET["valor"] : addslashes($_GET["valor"]);
   if($_GET['busqueda'] == "cliente" && isset($_GET['valor'])){
     $registros = $conexion->buscarListar("tbl_remision_interna", "*", "ORDER BY id_remision DESC", "", $maxRows_registros, $pageNum_registros, "where $busqueda LIKE'%$colname_busqueda%'");
+    $totalRows_registros = sizeof($registros);
   } else {
   $registros = $conexion->buscarListar("tbl_remision_interna", "*", "ORDER BY id_remision DESC", "", $maxRows_registros, $pageNum_registros, "where $busqueda ='$colname_busqueda'");
+  $totalRows_registros = sizeof($registros);
   }
 } else {
   $registros = $conexion->buscarListar("tbl_remision_interna", "*", "ORDER BY id_remision DESC", "", $maxRows_registros, $pageNum_registros, "");
 }
 
-if (isset($_GET['totalRows_registros'])) {
 
-  $totalRows_registros = $_GET['totalRows_registros'];
-} else {
-  $totalRows_registros = $conexion->conteo('tbl_remision_interna');
-}
 $totalPages_registros = ceil($totalRows_registros / $maxRows_registros) - 1;
 
 ?>
