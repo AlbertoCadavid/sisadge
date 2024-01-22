@@ -5,15 +5,15 @@
  <?php require_once('Connections/conexion1.php'); ?>
 <?php
 header('Pragma: public'); 
-header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past    
+header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');  
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); 
-header('Cache-Control: no-store, no-cache, must-revalidate'); // HTTP/1.1 
-header('Cache-Control: pre-check=0, post-check=0, max-age=0'); // HTTP/1.1 
+header('Cache-Control: no-store, no-cache, must-revalidate'); 
+header('Cache-Control: pre-check=0, post-check=0, max-age=0'); 
 header('Pragma: no-cache'); 
 header('Expires: 0'); 
 header('Content-Transfer-Encoding: none'); 
-header('Content-Type: application/vnd.ms-excel'); // This should work for IE & Opera 
-header('Content-type: application/x-msexcel'); // This should work for the rest 
+header('Content-Type: application/vnd.ms-excel'); 
+header('Content-type: application/x-msexcel'); 
 header('Content-Disposition: attachment; filename="Produccion.xls"');
 ?>
 <?php
@@ -108,7 +108,7 @@ $query_usuario = sprintf("SELECT * FROM usuario WHERE usuario = '%s'", $colname_
 $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
-
+ 
 $tipoListado = $_GET['tipoListado'];//variable de control del case
 $var1 = $_GET['op'];
 $var2 = $_GET['id_ref'];
@@ -224,17 +224,41 @@ $date = date("Y");
       $totalPages_orden_produccion = mysql_num_rows($orden_produccion);
     break;
     case "4":
+
       mysql_select_db($database_conexion1, $conexion1);
+      // AÑO Y MES LLENOS
      if($_GET['anyo']!='0' && $_GET['mes']!='0'){
+        
       $query_orden_produccion = "SELECT * FROM tbl_reg_produccion WHERE YEAR(fecha_ini_rp)=".$_GET['anyo']." AND MONTH(fecha_ini_rp)=".$_GET['mes']." AND id_proceso_rp='4' ORDER BY id_op_rp DESC";
-    }else{
-}
-      $query_orden_produccion = "SELECT * FROM Tbl_reg_produccion WHERE id_proceso_rp ='4' ORDER BY Tbl_reg_produccion.id_op_rp DESC";
       $orden_produccion = mysql_query($query_orden_produccion, $conexion1) or die(mysql_error());
       $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
       $totalPages_orden_produccion = mysql_num_rows($orden_produccion);
+     }else
+     // AÑO LLENOS
+     if($_GET['anyo']!='0' && $_GET['mes']=='0'){
+      
+      $query_orden_produccion = "SELECT * FROM tbl_reg_produccion WHERE YEAR(fecha_ini_rp)=".$_GET['anyo']." AND id_proceso_rp='4' ORDER BY id_op_rp DESC";
+      $orden_produccion = mysql_query($query_orden_produccion, $conexion1) or die(mysql_error());
+      $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
+      $totalPages_orden_produccion = mysql_num_rows($orden_produccion);
+     } else
+     // AÑO LLENOS
+     if($_GET['anyo']=='0' && $_GET['mes']!='0'){
+      
+      echo "Debe seleccionar un Año ya que esto sobrecarga la base de datos !";die;
+
+     }else{
+      
+      echo "Debe seleccionar un Año o mes o ambos para no sobrecargar la base de datos !";die;
+
+     }
+      /*$query_orden_produccion = "SELECT * FROM Tbl_reg_produccion WHERE id_proceso_rp ='4' ORDER BY Tbl_reg_produccion.id_op_rp DESC";
+      $orden_produccion = mysql_query($query_orden_produccion, $conexion1) or die(mysql_error());
+      $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
+      $totalPages_orden_produccion = mysql_num_rows($orden_produccion);*/
     break;			
   }
+
 ?>
 <html>
 <head>

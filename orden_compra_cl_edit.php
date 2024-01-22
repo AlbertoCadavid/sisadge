@@ -135,8 +135,17 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")&&($_POST['i
 
 
 $fechas_entrega = sumarMesyDias($_POST['fecha_ingreso_oc'],3); 
+if ($_POST['pago_pendiente']=='NO'){
 
-  $updateSQL = sprintf("UPDATE Tbl_orden_compra SET id_pedido=%s, str_numero_oc=%s, id_c_oc=%s, str_nit_oc=%s, fecha_ingreso_oc=%s,fecha_entrega_oc=%s, str_condicion_pago_oc=%s, str_observacion_oc=%s, int_total_oc=%s, b_facturas_oc=%s, b_num_remision_oc=%s, b_factura_cirel_oc=%s, str_dir_entrega_oc=%s, str_archivo_oc=%s, adjunto2=%s, adjunto3=%s, str_elaboro_oc=%s, str_aprobo_oc=%s, b_estado_oc=%s, str_responsable_oc=%s, b_borrado_oc=%s, salida_oc=%s,vta_web_oc=%s,expo_oc=%s, autorizado=%s, entrega_fac=%s, fecha_cierre_fac=%s, comprobante_ent=%s, pago_pendiente=%s, cobra_flete=%s, precio_flete=%s, tipo_despacho=%s,fecha_autoriza=%s WHERE id_pedido=%s",
+    $fecha_autoriza = fechahoraActual(); 
+    //$autorizado = 'SI'; 
+    $proforma_oc=''; 
+}else{
+    $fecha_autoriza = $_POST['fecha_ingreso_oc'];
+    //$autorizado = $_POST['autorizado'];
+    $proforma_oc = $_POST['proforma_oc'];
+}
+  $updateSQL = sprintf("UPDATE Tbl_orden_compra SET id_pedido=%s, str_numero_oc=%s, id_c_oc=%s, str_nit_oc=%s, fecha_ingreso_oc=%s,fecha_entrega_oc=%s, str_condicion_pago_oc=%s, str_observacion_oc=%s, int_total_oc=%s, b_facturas_oc=%s, b_num_remision_oc=%s, b_factura_cirel_oc=%s, str_dir_entrega_oc=%s, str_archivo_oc=%s, adjunto2=%s, adjunto3=%s, str_elaboro_oc=%s, str_aprobo_oc=%s, b_estado_oc=%s, str_responsable_oc=%s, b_borrado_oc=%s, salida_oc=%s,vta_web_oc=%s,expo_oc=%s, autorizado=%s, entrega_fac=%s, fecha_cierre_fac=%s, comprobante_ent=%s, pago_pendiente=%s, proforma_oc=%s, cobra_flete=%s, precio_flete=%s, tipo_despacho=%s,fecha_autoriza=%s WHERE id_pedido=%s",
 
    GetSQLValueString($_POST['id_pedido'], "text"),
    GetSQLValueString($_POST['str_numero_oc'], "text"),
@@ -167,10 +176,11 @@ $fechas_entrega = sumarMesyDias($_POST['fecha_ingreso_oc'],3);
    GetSQLValueString($_POST['fecha_cierre_fac'], "text"),
    GetSQLValueString($_POST['comprobante_ent'], "text"),
    GetSQLValueString($_POST['pago_pendiente'], "text"),
+   GetSQLValueString($proforma_oc, "text"), 
    GetSQLValueString(isset($_POST['cobra_flete']) ? "true" : "", "defined","1","0"),
    GetSQLValueString($_POST['precio_flete'], "text"),
    GetSQLValueString($_POST['tipo_despacho'], "text"),
-   GetSQLValueString($_POST['fecha_ingreso_oc'], "text"),
+   GetSQLValueString($fecha_autoriza, "text"),
    GetSQLValueString($_POST['id_pedido'], "int"));
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($updateSQL, $conexion1) ;
@@ -950,7 +960,7 @@ if( $_SESSION['superacceso']==1 ) {
                           <td colspan="3" id="detalle">&nbsp;</td>
                         </tr>
                         <tr>
-                          <td id="dato1"><strong>VENDEDOR </strong></td>
+                          <td id="dato1"><strong>ELABORA/VENDE </strong></td>
                           <td id="dato1"><strong>ELABORÓ </strong></td>
                           <!-- <td id="dato1"><strong>APROBADO POR</strong></td> -->
                           <td id="dato1"><strong>ESTADO DE LA ORDEN DE COMPRA</strong></td>
@@ -961,7 +971,7 @@ if( $_SESSION['superacceso']==1 ) {
                             $idoc = $row_orden_compra['id_pedido']; 
                             $row_vendio = $conexion->llenarCampos("vendedor ver", "LEFT JOIN tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io='$idoc'","","distinct ver.nombre_vendedor");  
                             ?> 
-                            <input name="vendedor" type="text" id="vendedor" value="<?php echo $row_vendio['nombre_vendedor'];?>" size="30"required="required" readonly>
+                            <input name="vendedor" type="text" id="vendedor" value="<?php echo $row_vendio['nombre_vendedor'];?>" size="30"required="required" >
                           </strong></td>
                           <td id="dato1"><strong>
                             <input name="str_elaboro_oc" type="text" id="str_elaboro_oc" value="<?php echo $row_orden_compra['str_elaboro_oc'];?>" size="30"required="required" readonly>
@@ -979,7 +989,9 @@ if( $_SESSION['superacceso']==1 ) {
                           <td colspan="3" id="fuente5">&nbsp;</td>
                         </tr>
                         <tr>
-                          <td colspan="3" id="dato1">Responsable Modifica:<input name="str_responsable_oc" readonly="readonly"  type="text" value="<?php echo $_SESSION['Usuario']; ?>"></td>
+                          <td colspan="3" id="dato1">Responsable Modifica:<input name="str_responsable_oc" readonly="readonly"  type="text" value="<?php echo $_SESSION['Usuario']; ?>">
+                          <input name="proforma_oc" id="proforma_oc" type="hidden" value="<?php echo $row_orden_compra['proforma_oc']; ?>">
+                        </td>
                         </tr>
                         <tr>
                          <td colspan="3" id="dato3"><p><br><br><br>

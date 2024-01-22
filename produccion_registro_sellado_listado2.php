@@ -179,6 +179,12 @@ if($var1 != '0' && $var2 == '0' && $var3 == '0' &&  $anyo!='0' && $estado =='0')
 
   $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE id_op='$var1' AND YEAR(fecha_registro_op)='$anyo' AND b_borrado_op='0' ORDER BY id_op DESC";
 }
+//FILTRA OP AÑO MES LLENO
+if($var1 != '0' && $var2 == '0' && $var3 != '0' &&  $anyo!='0' && $estado =='0')
+{
+
+  $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE id_op='$var1' AND YEAR(fecha_registro_op)='$anyo' AND MONTH(fecha_registro_op)='$var3' AND b_borrado_op='0' ORDER BY id_op DESC";
+}
 //FILTRA REF LLENOS
 if($var1 == '0' && $var2 != '0' && $var3 == '0' &&  $anyo=='0' && $estado =='0')
 {
@@ -400,6 +406,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                  
                 <!--<td id="titulo2"><input type="text" name="id_op_r" required onBlur="if (form1.id_op_r.value) { DatosGestiones('16','id_op_r',form1.id_op_r.value); } else { alert('Debe digitar el O.P para validar su existencia en la BD'); };"><div id="resultado"><input name="retorno_mensaje" type="hidden" ></div>--></td>
                 <td id="fuente2" colspan="9">
+                  <input type="hidden" name="tipoListado" id="tipoListado" value="4">
                   <select name="op" id="op" class="busqueda selectsMini" >
                     <option value="0">O.P.</option>
                     <?php
@@ -508,14 +515,14 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                     <table class="table table-bordered table-sm">
 
                       <tr> 
-                        <td colspan="4" id="dato3"><?php $id=$_GET['id']; 
+                        <td colspan="6" id="dato3"><?php $id=$_GET['id']; 
                         if($id == '1') { ?><div id="acceso1"> <?php echo "CAMBIO DE ESTADO A INACTIVA COMPLETA"; ?> </div> <?php }
                         if($id == '2') { ?><div id="numero1"> <?php echo "SE ACTIVO CORRECTAMENTE"; ?> </div> <?php }
                         if($id == '0') { ?><div id="numero1"> <?php echo "NO HA SELECCIONADO"; ?> </div> <?php }?></td>
                         <td colspan="5" id="dato3"><?php  if ($row_usuario['tipo_usuario']==1) {?><a href="consumo_tiempos_sell.php"><img src="images/rt.gif" alt="LISTADO DE TIEMPOS"title="LISTADO DE TIEMPOS" border="0" style="cursor:hand;"></a><a href="consumo_materias_primas_sell.php"><img src="images/mp.gif" alt="LISTADO DE MATERIAS PRIMAS"title="LISTADO DE MATERIAS PRIMAS" border="0" style="cursor:hand;"></a><a href="despacho_direccion.php"><img src="images/d.gif" alt="DESPACHO"title="DESPACHO" border="0" style="cursor:hand;"></a>
                           <?php } ?><a href="produccion_registro_sellado_listado_add.php"><img src="images/opciones.gif" alt="LISTADO SELLADAS"title="LISTADO SELLADAS" border="0" style="cursor:hand;"></a><a href="hoja_maestra_listado.php"><img src="images/m.gif" alt="HOJAS MAESTRAS"title="HOJAS MAESTRAS" border="0" style="cursor:hand;"></a>
                           <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="REFRESCAR"title="REFRESCAR" border="0" style="cursor:hand;"/></a>
-                          <input type="button" value="Exporta Excel" onClick="window.location = 'produccion_exportar_excel.php?tipoListado=4'" />
+                          <input type="button" value="Excel Rollos" onClick="ListadoProduccionExcel('produccion_exportar_excel.php')" /><input type="button" value="Excel liquidacion" onClick="ListadoProduccionExcel('produccion_exportar_excel_liquidacion.php')" />
                         </td>
                       </tr>  
                       <tr id="tr1">
@@ -724,6 +731,14 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
       
           enviovarListados(form,vista);  
        
+  }
+  
+  function ListadoProduccionExcel(vista) {
+    window.location = '';
+    var form = $("#form1").serialize();
+ 
+    enviovarListados(form, vista);
+
   }
 
  $(document).ready(function(){

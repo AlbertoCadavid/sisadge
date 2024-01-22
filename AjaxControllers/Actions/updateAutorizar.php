@@ -19,7 +19,7 @@ if($autorizado !='' ) {
    $usuario = $_SESSION['Usuario'];
    
    
-   $sqlautorizado="UPDATE tbl_orden_compra SET autorizado = 'SI', fecha_autoriza='$hoy', fecha_ingreso_oc='$fecha' WHERE id_pedido = '$autorizado'";
+   $sqlautorizado="UPDATE tbl_orden_compra SET autorizado = 'SI', proforma_oc='', fecha_autoriza='$hoy' WHERE id_pedido = '$autorizado'";//, fecha_ingreso_oc='$fecha'
    $resultautorizado=mysql_query($sqlautorizado);
    
    $logs = $conexion->insertar("tbl_logs","codigo_id, descrip, fecha, modificacion, usuario"," '$autorizado','OC','$hoy','autorizado SI','$usuario' ");
@@ -29,7 +29,7 @@ if($autorizado !='' ) {
 $desautorizado=$_GET['Desautorizar'];
 if($desautorizado !='' ) {
 
-   $sqlautorizado="UPDATE tbl_orden_compra SET autorizado = 'NO' WHERE id_pedido = '$desautorizado'";
+   $sqlautorizado="UPDATE tbl_orden_compra SET autorizado = 'NO', proforma_oc='1' WHERE id_pedido = '$desautorizado'";
    $resultautorizado=mysql_query($sqlautorizado);
 
    $hoy = date("Y-m-d H:i:s");  

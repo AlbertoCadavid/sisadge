@@ -126,10 +126,12 @@ if($row_refac['int_cod_ref_op']=='1363' || $row_refac['int_cod_ref_op']=='1364')
         <script type="text/javascript" src="js/jquery-barcode-last.min.js"></script> -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> 
         <!--Librerias de codigo barras QR  -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="jQuery_QR/js/jquery_qr.js"></script>
         <script type="text/javascript" src="jQuery_QR/js/jquery.classyqr.js"></script>
         <script type="text/javascript" src="jQuery_QR/js/jquery-barcode.js"></script>
+        <!-- *************************** Library of QR generator about missing number -->
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+        <!-- *************************** -->
         <!--MejoraAdo Barras-->
         <!-- <script src="JsBarcode-masters/src/barcodes/CODE128/CODE128.js"></script> -->
         <!-- Si requieres todos y con medida--> 
@@ -435,56 +437,20 @@ $("#ref").JsBarcode(ref,
 $("#dir").JsBarcode(dir,
 {width:1,height:40});*/
 
-  //codigo QR
-  //el tamaño del codigo lo define en jQuery_QR - > jquery.classyqr.js linea 15
-  //El tamaño máximo y la corrección de error más baja dan los siguientes valores:
-  //Sólo numérico Máx. 7.089 caracteres
-  //Alfanumérico Máx. 4296 caracteres
-  //Binario / byte Máx. 2953 caracteres (bytes de 8 bits)
-/*size -  tamaño del código QR. Puede omitirse, el valor predeterminado es 230 .
-
-encoding -  codificación del QR. Se puede omitir, podría ser uno de: UTF-8 / Shift_JIS / ISO-8859-1, el valor predeterminado es UTF-8
-
-type -  tipo QR. Puede ser: texto / url / sms / correo electrónico / llamada / ubicación / wifi / contacto, el valor predeterminado es TEXTO
-
-create -  si el complemento creará una etiqueta de imagen dentro del contenedor o simplemente reemplazará el src de una etiqueta de imagen ya existente. Puede ser verdadero o falso, el valor predeterminado es FALSO .
-
-text -  el texto a codificar en el QR. Solo es necesario para códigos QR de texto, correo electrónico o sms.
-
-number -  el número de teléfono si desea crear un sms o un código QR de llamada.
-
-email -  la dirección de correo electrónico en caso de que desee crear un código QR de correo electrónico.
-
-subject -  el asunto en caso de que desee crear un código QR de correo electrónico.
-
-latitude -  la latitud geográfica para el código QR de geolocalización.
-
-longitude -  la longitud geográfica del código QR de geolocalización.
-
-address -  la dirección de casa en caso de que desee crear un código QR de contacto.
-
-name -  el nombre de la persona en caso de que desee crear un código QR de contacto.
-
-url -  la dirección URL en caso de que desee crear una URL o un código QR de contacto.
-
-alt -  el código alt para la imagen creada / reemplazada. Puede ser omitido.
-
-note -  una nota en caso de que desee crear un código QR de contacto.*/
-
 
 var codigo =  <?php echo json_encode($faltantes); ?>;
-  //var myArray = [codigo]; //codigo
-   //alert(codigo);
-   /*for(var i=0;i<codigo.length;i++){
-     alert(codigo[i]);
- } */ 
- $(document).ready(function() {
-   $('#qr').ClassyQR({
-     create: true,  
-       //type: 'subject',
-       //subject: codigo,  
-       type: 'text',  
-       text: codigo  
-   });
-});   
+
+var txt = "";
+codigo.forEach(element => {
+    txt = txt+element
+});
+
+var opcionesQR = {
+            text: txt,
+            width: 510,
+            height: 510
+        };
+
+var qrcode = new QRCode(document.querySelector("#qr"), opcionesQR);
+
 </script>

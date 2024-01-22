@@ -24,7 +24,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
 
    //BUSCAR UNO
   public function buscar($tabla, $columna, $condicion){
-    //echo "SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC";die;
+    //echo "SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC"; die;
     $resultado = $this->conexion->query("SELECT * FROM $tabla WHERE  $columna = '{$condicion}' ORDER BY $columna DESC") or die($this->conexion->error);
     if($resultado)
       $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
@@ -405,6 +405,28 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
      
     }
 
+    public function buscarSencillo($campos, $tabla, $condicion){
+        //echo "SELECT $campos FROM $tabla $condicion"; die;
+        $resultado = $this->conexion->query("SELECT $campos FROM $tabla $condicion") or die($this->conexion->error);
+        if($resultado){
+            return $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
+        }
+        return false;
+        $resultado->free();
+        $resultado->close();
+    }
+
+    //CONTADOR PARA LISTAS
+    public function conteoConsulta($tabla, $condicion){
+      $resultado = $this->conexion->query("SELECT COUNT(*) FROM $tabla WHERE $condicion") or die($this->conexion->error);
+      
+      if($resultado)
+        $resultfin = $resultado->fetch_row(); 
+      return $resultfin[0];
+      return false;
+      $resultado->free();
+      $resultado->close();
+    } 
 
 }
 ?>

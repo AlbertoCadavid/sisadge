@@ -3462,7 +3462,7 @@ function hastaordenP() {
 	var cadena = codigos[1];		
 	var desdemasuno=parseInt(desde) + parseInt(1);
 	var hasta=cadena+desdemasuno;
-	    var cerosizq = cerosIzquierda(conletras,desdemasuno); //codigos especiales 
+	    var cerosizq = cerosIzquierda(conletras,desdemasuno,desde); //codigos especiales 
 		  if(cerosizq!=undefined){
 		    var hasta = cadena+cerosizq; 
 		  } 
@@ -3476,7 +3476,7 @@ function hastaordenTiq() {
 	var cadena = codigos[1];		
 	var desdemasuno=parseInt(desde) + parseInt(1);
 	var hasta=cadena+desdemasuno;
-	var cerosizq = cerosIzquierda(conletras,desdemasuno); //codigos especiales 
+	var cerosizq = cerosIzquierda(conletras,desdemasuno,desde); //codigos especiales 
 		  if(cerosizq!=undefined){
 		    var hasta = cadena+cerosizq; 
 		  } 
@@ -3659,7 +3659,7 @@ function divideCadenas(carac){
 		cadena=l; 
 		solonumeros=caract.match(/\d+/g); //d acepta solo numeros
 
-		    var cerosizq = cerosIzquierda(caract,solonumeros); //codigos especiales 
+		    var cerosizq = cerosIzquierda(caract,solonumeros,solonumeros); //codigos especiales 
 			  if(cerosizq!=undefined){
 			    var solonumeros = cerosizq; 
 			  }  
@@ -3667,17 +3667,19 @@ function divideCadenas(carac){
 		}//fin if
 	}
 
-  function cerosIzquierda(conletras,solonumero){
-  	var ceros=(conletras.search(/EM|MQ/i));//codigos especiales 
-  	 if(ceros== 0 ){
-  	  var cuantos = 8;
-  	   codigo = solonumero.toString().padStart(cuantos, "0");
-  
-          return codigo;	//si es cero es porq lo encuentra
-  
-      }
-  
-  } 
+ function cerosIzquierda(conletras,solonumero,cuantos ){
+ 	var ceros=(conletras.search(/EM|MQ|AB|AC|BP|BM|C|BB|OA|BC/i));//codigos especiales 
+     
+ 	 var cuantos = cuantos.length ;
+ 	 //if(ceros== 0 ){
+ 	  //var cuantos = 8;
+ 	   codigo = solonumero.toString().padStart(cuantos, "0");
+ 
+         return codigo;	//si es cero es porq lo encuentra
+ 
+     //}
+ 
+ } 
 
     function buscaDigitos(caract){
      

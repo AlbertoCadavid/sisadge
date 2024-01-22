@@ -635,7 +635,7 @@ if($vi!='' || $vr!='' || $vb!='') { ?>
         <td colspan="22" id="fondo1">&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="22" id="fondo1">Se evaluan cuatro clases de evaluacion   sobre un 25% cada uno, para completar 100% del porcentaje final.</td>
+        <td colspan="22" id="fondo1">Se evaluan cuatro clases de evaluacion oportuno 20%, cumplimiento 25%, calida 40% y servicio 15% para completar 100% del porcentaje final.</td>
         </tr>
       <tr>
         <td colspan="2" id="fondo4">ORDEN COMPRA  </td>

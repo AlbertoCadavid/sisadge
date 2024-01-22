@@ -16,14 +16,14 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
         var tnum=(parseInt(numeros)+parseInt(bolsas))-parseInt(1);//  resto uno ya que iene de la op
 	}
     //mirar como dejar los ceros a la izquierda
-	    var cerosizq = cerosIzquierda(desde,sumoUno); //codigos especiales 
+	    var cerosizq = cerosIzquierda(desde,sumoUno,numeros); //codigos especiales 
 		  if(cerosizq!=undefined){
 		    var sumoUno = cerosizq; 
 		  } 
 	document.form1.int_desde_tn.value=cadena+sumoUno;		
 	
 
-	    var cerosizq2 = cerosIzquierda(desde,tnum); //codigos especiales 
+	    var cerosizq2 = cerosIzquierda(desde,tnum,numeros); //codigos especiales 
 		  if(cerosizq2!=undefined){
 		    var tnum = cerosizq2; 
 		  }
@@ -34,7 +34,6 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 }
  
  function numeracionDesde(numDesde,caja,paquete,ref ) { 
- 
 	var imprimirt = document.form1.imprimirt.value;
   
     var bolsas = imprimirt==1 ? document.form1.int_undxcaja_tn.value : document.form1.int_undxpaq_tn.value;
@@ -43,15 +42,16 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 	var dividida = numeracionChar(desde); 
 	var numeros = dividida[0];
 	var cadena = dividida[1];
-	var sumoUno = parseInt(numeros)+parseInt(1);
-	    var cerosizq = cerosIzquierda(desde,sumoUno); //codigos especiales 
+	var sumoUno = parseFloat(numeros)+parseFloat(1);
+		 
+	
+	    var cerosizq = cerosIzquierda(desde,sumoUno,numeros); //codigos especiales 
 		  if(cerosizq!=undefined){
 		    var sumoUno = cerosizq; 
 		  } 
-		  
 	document.form1.int_desde_tn.value=cadena+sumoUno;		
 	var tnum= parseInt(numeros)+parseInt(bolsas);
-	    var cerosizq2 = cerosIzquierda(desde,tnum); //codigos especiales  
+	    var cerosizq2 = cerosIzquierda(desde,tnum,numeros); //codigos especiales  
 		  if(cerosizq2!=undefined){
 		    var tnum = cerosizq2; 
 		  } 
@@ -103,10 +103,11 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
     		cadena=l;
     		solonumeros=caract.match(/\d+/g); //d acepta solo numeros
 
-    		    var cerosizq = cerosIzquierda(caract,solonumeros); //codigos especiales 
+    			 
+    		     var cerosizq = cerosIzquierda(caract,solonumeros,solonumeros); //codigos especiales 
     			  if(cerosizq!=undefined){
     			    var solonumeros = cerosizq; 
-    			  }  
+    			  } 
     		return [ solonumeros, cadena ];		 		
     		}//fin if
 
@@ -154,11 +155,11 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 
 
 	//------------------FUNCION PARA AGREGAR FALTANTES DINAMICOS----//
+        var count = 0;
     	function AddItem() {
     		var tbody = null;
     		var tablaf = document.getElementById("tablaf");
     		var nodes = tablaf.childNodes;
-    		var count = 0;
             var acumula = 0;
     		        var falt =  document.getElementsByClassName("focusNext"); 
     		    	var numDivs = falt.length; 
@@ -167,6 +168,7 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
     		    	  if(falt[i].className == "focusNext") 
     		    	     contadorNaranja++;
     		    	   var acumula = contadorNaranja == 'NaN' ? 0 : contadorNaranja;
+    			       count++;
     		    	}
 
     		for (var x = 0; x<nodes.length;x++) {
@@ -174,8 +176,7 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
     				tbody = nodes[x];
     				break;
     			}
-    			count=acumula+x;
-    	 
+    	  
     		}
     		if (tbody != null) {
     			var tr = document.createElement('tr');
@@ -330,10 +331,14 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		var codigos = divideCadenas(TotalHasta); 
 		var THasta = codigos[0]; 
 		var cadena = codigos[1];
-            
             //var total_f = document.form1.totalFaltantes.value=='' ? 0 : document.form1.totalFaltantes.value;//agregado 24-05-2022
 			var Tsum = parseInt(THasta)+parseInt(Tbolsa)+parseInt(contadorf)-parseInt(1);//sumo desde + contadorf y resto 1  
-		    
+		      var cerosizq3 = cerosIzquierda(TotalHasta,Tsum,THasta); //codigos especiales  
+		       	  if(cerosizq3!=undefined){
+		       	    var Tsum = cerosizq3; 
+		       	  } 
+			   
+           
 	    document.form1.int_hasta_tn.value=(cadena+Tsum);//SUMA EL TOTAL AL HASTA &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
 	 
 
@@ -362,7 +367,7 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
      		     	 var numerosF = resultF[0];      
                         if(desdeGeneral !='' && hastaGeneral !=''){  
 
-                    		if( numerosF<desdeGeneral || numerosF>hastaGeneral ){
+                    		if( parseInt(numerosF)<parseInt(desdeGeneral) || parseInt(numerosF)>parseInt(hastaGeneral) ){
                                          bandera=1;
                     					 swal("La numeracion inicial o final: "+numerosF+" de uno de los faltantes, no debe ser Menor al Inicial General: "+desdeGeneral+" ni mayor a Final General: "+hastaGeneral+" del paquete")
                     				     return false;
@@ -370,7 +375,11 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
                          
                         }
 
-                    } //fin if element.value 
+                    }//fin if element.value 
+                    if(element.value==''){
+                    	swal("No debe haber campos faltantes vacios !")
+                    	bandera=1;
+                    } 
      		     }
      		 );   
      		 
@@ -436,8 +445,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 			l=caract.match(/\D+/g); //D acepta diferente de numeros
 			cadena=l; 
 			solonumeros=caract.match(/\d+/g); //d acepta solo numeros
- 
-		    var cerosizq = cerosIzquierda(caract,solonumeros); //codigos especiales 
+  
+		    var cerosizq = cerosIzquierda(caract,solonumeros,solonumeros); //codigos especiales 
 			  if(cerosizq!=undefined){
 			    var solonumeros = cerosizq; 
 			  } 
@@ -459,15 +468,18 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
  
  }
  
- function cerosIzquierda(conletras,solonumero){
- 	var ceros=(conletras.search(/EM|MQ/i));//codigos especiales 
- 	 if(ceros== 0 ){
- 	  var cuantos = 8;
+ //funcion para agregar un cero a la izquierda dependiendo de las dos letras
+ function cerosIzquierda(conletras,solonumero,cuantos ){
+ 	var ceros=(conletras.search(/EM|MQ|AB|AC|BP|BM|C|BB|OA|BC/i));//codigos especiales 
+     
+ 	 var cuantos = cuantos.length ;
+ 	 //if(ceros== 0 ){
+ 	  //var cuantos = 8;
  	   codigo = solonumero.toString().padStart(cuantos, "0");
  
          return codigo;	//si es cero es porq lo encuentra
  
-     }
+     //}
  
  }  
 
@@ -878,7 +890,7 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 
 
 	 	 function consultaMaestroAlCargar(columna,id,ref=''){ 
-		     
+		            
 	  
 		     var getUrl = window.location.pathname;
 

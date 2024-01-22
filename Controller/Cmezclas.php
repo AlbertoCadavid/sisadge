@@ -54,15 +54,15 @@ class cmezclasController{
                 $row_editar_m = new oMmezclas();
                 $row_referencia = new oMmezclas();
                 $row_referencia_copia = new oMmezclas();
-                if($_REQUEST['cod_refcopia']){
+                if((isset($_REQUEST['cod_refcopia']) && $_REQUEST['cod_refcopia'])){
                     $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_refcopia']."");
                     $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_refcopia']."", " and  id_proceso ORDER BY id_pm DESC=1"); 
+                    $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4'  "," ORDER BY descripcion_insumo ASC" );//AND estado_insumo='0'
                 }else{
                     $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_ref']."");
-                    $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
-                }
- 
-                $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' AND estado_insumo='0' "," ORDER BY descripcion_insumo ASC" );
+                    $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC");
+                    $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4'  AND estado_insumo='0' "," ORDER BY descripcion_insumo ASC" );
+                } 
 
                 $this->row_referencia_copia=$row_referencia_copia->get_CopiaRef('tbl_produccion_mezclas pm '," WHERE id_proceso=1 "," ORDER BY CONVERT(int_cod_ref_pm, SIGNED INTEGER) DESC" );
         
@@ -94,17 +94,19 @@ class cmezclasController{
             $row_editar_m = new oMmezclas();
             $row_referencia = new oMmezclas();
             $row_referencia_copia = new oMmezclas(); 
-
-            if($_REQUEST['cod_refcopia']){
+            if((isset($_REQUEST['cod_refcopia']) && $_REQUEST['cod_refcopia'])){
                 $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_refcopia']."");
-                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_refcopia']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
+                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_refcopia']."", " and  id_proceso=1 ORDER BY id_pm DESC");
+                $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' "," ORDER BY descripcion_insumo ASC" );
+             // AND estado_insumo='0' 
             }else{
                 $this->row_caract = $row_caract->Obtener('tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref'," proceso=1 AND cp.cod_ref ", "".$_REQUEST['cod_ref']."");
-                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC"); 
+                $this->row_mezcla=$row_mezcla->ObtenerColumn('tbl_produccion_mezclas',"int_cod_ref_pm","*","".$_REQUEST['cod_ref']."", " and  id_proceso=1 ORDER BY id_pm DESC");
+                $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' AND estado_insumo='0'"," ORDER BY descripcion_insumo ASC" ); 
+              
             }
 
-            $this->row_materia_prima=$row_materia_prima->get_materiaPrima('insumo'," WHERE clase_insumo='4' AND estado_insumo='0' "," ORDER BY descripcion_insumo ASC" );
-
+            
             $this->row_referencia_copia=$row_referencia_copia->get_CopiaRef('tbl_produccion_mezclas pm '," WHERE id_proceso=1 "," ORDER BY CONVERT(int_cod_ref_pm, SIGNED INTEGER) DESC" );
  
             $this->row_referencia=$row_referencia->Obtener("tbl_referencia,tbl_egp", "tbl_referencia.estado_ref=1 AND tbl_referencia.n_egp_ref=tbl_egp.n_egp AND tbl_referencia.cod_ref ",  "".$_REQUEST['cod_ref']."");

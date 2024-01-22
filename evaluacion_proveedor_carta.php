@@ -226,7 +226,7 @@ $totalRows_evaluacion_proveedor = mysql_num_rows($evaluacion_proveedor);
       			<td><strong>OPORTUNIDAD</strong> <br>
       				(Tiempo de entrega) (<=0 días)
       			</td>
-      			<td id="dato2">25%</td>
+      			<td id="dato2">20%</td>
       			<td id="dato2"><?php echo $row_evaluacion_proveedor['porcentaje_oportunos_ev']; ?> % </td>
       		</tr>
       		<tr> 
@@ -240,7 +240,7 @@ $totalRows_evaluacion_proveedor = mysql_num_rows($evaluacion_proveedor);
       			<td><strong>CALIDAD</strong> <br>
       				(Total entregado) (>=95%)
       			</td>
-      			<td id="dato2">25%</td>
+      			<td id="dato2">40%</td>
       			<td id="dato2"><?php echo $row_evaluacion_proveedor['porcentaje_conforme_ev']; ?> % </td>
       		</tr>
 
@@ -249,7 +249,7 @@ $totalRows_evaluacion_proveedor = mysql_num_rows($evaluacion_proveedor);
       				(Calificación de 1 a 10)
               Atención a quejas, reclamos, solicitudes,<br> sugerencias y amabilidad en el servicio.
       			</td>
-      			<td id="dato2">25%</td>
+      			<td id="dato2">15%</td>
       			<td id="dato2"><?php echo $row_evaluacion_proveedor['porcentaje_atencion_ev']; ?> % </td>
       		</tr>
 

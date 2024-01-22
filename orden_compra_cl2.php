@@ -92,7 +92,7 @@
  
 
   if($_GET['listar']==''){
-    $listar="fecha_ingreso_oc DESC";
+    $listar=" fecha_autoriza DESC";
   }else{
     $listar=$_GET['listar'];
   }
@@ -217,6 +217,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
   <!-- desde aqui para listados nuevos -->
 
     <link rel="stylesheet" type="text/css" href="css/desplegable.css" /> 
+    <link rel="stylesheet" type="text/css" href="css/general.css" /> 
 
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
@@ -423,7 +424,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                           
                           <tr>
                             <td colspan="25" id="dato1">Nota: es importante que el usuario este registrado como vendedor para poder hacer el filtro de vendedor correctamente <br>
-                              <?php if( $_SESSION['restriUsuarios'] ): ?>
+                              <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayOrdenes'] ) ): ?>
 
                                  <button type="button" class="botonGMini" target="_top" onclick="envioListadosPrecio();" >Excel ref Precio</button> 
                               <?php endif; ?>
@@ -447,6 +448,10 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                              <td nowrap="nowrap" id="titulo4">VENDEDOR</td>
                              <td nowrap="nowrap" id="titulo4">CANTIDAD</td> 
                              <td nowrap="nowrap" id="titulo4">$ CARTERA</td>
+                             <?php if($_SESSION['acceso']): ?>
+                               <td id="titulo4" nowrap>ADDFACT</td> 
+                             <?php endif; ?> 
+                             <td nowrap="nowrap" id="titulo4">FACTURA</td>
                              <td nowrap="nowrap" id="titulo4">PROFORMA</td>
                              <td nowrap="nowrap" id="titulo4">ADDPROF</td>
                              <td nowrap="nowrap" id="titulo4">PAGO?</td> 
@@ -499,7 +504,59 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                       <td id="dato2">
                           <?php echo redondear_decimal_operar($row_ordenes_deudoras['valor_cartera']) ;?> 
                       </td>
- 
+                    <?php if($_SESSION['acceso']): ?>
+                    <td id="fuente2"> 
+                       <a href="javascript:updateList('id_pedido',<?php echo $row_ordenes_deudoras['id_pedido']; ?>,'orden_compra_cl2.php')" >
+                         <?php 
+                         $id_oc=$row_ordenes_deudoras['str_numero_oc']; 
+                         $sqldato="SELECT factura_r FROM Tbl_remisiones WHERE str_numero_oc_r='$id_oc'";
+                         $resultdato=mysql_query($sqldato);
+                         $factura_r=mysql_result($resultdato,0,'factura_r');
+
+                         if(($factura_r=='' || $factura_r=='0') && ($row_ordenes_deudoras['factura_oc']=='' || $row_ordenes_deudoras['factura_oc']=='0')): ?>
+                             <img src="images/falta8.gif" alt="SIN FACTURA" title="SIN FACTURA" border="0" style="cursor:hand;" width="20" height="18" /> 
+                               <?php else: ?>
+                             <img src="images/facturado.png" alt="YA TIENE FACTURA" title="YA TIENE FACTURA" border="0" style="cursor:hand;" width="20" height="18" />
+                           <?php endif; ?>
+                           </a> 
+                    </td> 
+                       <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando... Numero de Factura!</b>
+                       </div>
+                       <?php endif; ?>
+                    <td id="dato1" nowrap>
+                      <?php  
+                      if($row_ordenes_deudoras['factura_oc']!='0' && $row_ordenes_deudoras['factura_oc']!=''){
+                          $datosFE = substr($row_ordenes_deudoras['factura_oc'], 0, 2);  
+                         
+                         $variasFacArray = array();
+                        if($datosFE=="FE"){ 
+                          //$variasFacArray[] = $row_ordenes_deudoras['factura_oc'];
+                           $variasFacArray=( explode(',', $row_ordenes_deudoras['factura_oc']) );
+                           foreach ($variasFacArray as $key => $value) {
+                             $conceros = $value ;
+                            ?>  
+                            <a href="javascript:verFoto('PDF_FE/<?php echo $conceros ;?>.pdf','610','490')">  <?php echo $conceros.'<br>'; ?> </a> 
+                            <?php
+                           }  
+
+                          }if($datosFE!="FE"){
+                          
+                             $digito = "FE";
+                             $facturaCompleto = $row_ordenes_deudoras['factura_oc'];
+                             if($facturaCompleto!='' || $facturaCompleto!= null){ 
+                             $conceros = $digito.(str_pad($facturaCompleto, 7, "0", STR_PAD_LEFT)); 
+                             ?>  
+                             <a href="javascript:verFoto('PDF_FE/<?php echo $conceros ;?>.pdf','610','490')">  <?php echo $conceros.'<br>'; ?> </a> 
+                             <?php  
+                             }else{
+                               $conceros = '';   
+                             } 
+                           }  
+
+                         }
+
+                     ?> 
+                    </td>
                     <td id="dato1" nowrap>
                       <?php  
                       if($row_ordenes_deudoras['proforma_oc']!='0' && $row_ordenes_deudoras['proforma_oc']!=''){
@@ -536,8 +593,8 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
 
                      ?> 
                     </td>
-                    <?php if($_SESSION['restriUsuarios']): ?>
                     <td id="fuente2"> 
+                    <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayOrdenes'] )): ?>
                        <a href="javascript:updateListProf('id_proforma',<?php echo $row_ordenes_deudoras['id_pedido']; ?>,'orden_compra_cl2.php')" >
                          <?php
                          /*$id_oc=$row_ordenes_deudoras['str_numero_oc'];  
@@ -551,17 +608,22 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                              <img src="images/facturado.png" alt="YA TIENE PROFORMA" title="YA TIENE PROFORMA" border="0" style="cursor:hand;" width="20" height="18" />
                            <?php endif; ?>
                            </a> 
-                    </td> 
-                       <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando... Numero de Proforma!</b>
-                       </div><div style="display: none;  align-items: center; justify-content: center; " id="resp2"><b style="color: red;" >Actualizando... Nota a Leido!</b></div>
                    <?php endif; ?>
+                    </td> 
                     <td id="dato2">
-                     <?php if( $_SESSION['restriUsuarios'] ): ?>
-                      <a class="botonUpdateMini" id="btnDelItems" onclick="uPDATE('id_pedido','1','1', '<?php echo $row_ordenes_deudoras['id_pedido']; ?>', 'view_index.php?c=comercialList&a=Actualizar')" type="button" >PAGO?</a>
+                     <?php  if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarrayOrdenes'] ) ): ?>
+                      <a class="botonUpdateMini" id="btnDelItems" onclick="uPDATE('id_pedido','<?php echo $row_ordenes_deudoras['id_pedido']; ?>','pago_pendiente', '1', 'view_index.php?c=comercialList&a=ActualizarProforma','tbl_orden_compra')" type="button" >PAGO?</a>
+
                       <?php endif; ?>
                     </td>
                     </tr>
                        <?php } while ($row_ordenes_deudoras = mysql_fetch_assoc($ordenes_deudoras)); ?>
+                    <tr>
+                      <td> 
+                          <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando... Numero de Proforma!</b>
+                          </div><div style="display: none;  align-items: center; justify-content: center; " id="resp2"><b style="color: red;" >Actualizando... Nota a Leido!</b></div>
+                       </td>
+                    </tr>
                     </tbody>
                  </table>
               </fieldset>
@@ -614,7 +676,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                     ?>
  
                                   </td>  
-                                  <td id="dato2" nowrap="nowrap" colspan="5">
+                                  <td class="Estilo6" nowrap="nowrap" colspan="5">
                                       <a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_notas['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_notas['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo utf8_encode($row_ordenes_notas['notaweb']);?></a>
                                   </td>  
                                 <td id="dato2">
@@ -674,6 +736,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                 <td id="titulo4"><a href="verificaciones_criticos.php"><!--<img src="images/v.gif" alt="VERIFICACIONES (CRITICOS)" border="0" style="cursor:hand;"/>--></a><a href="orden_compra_cl2.php?listar=<?php echo "b_estado_oc ASC";?>">ESTADO</a></td>
                                 <?php if($_SESSION['acceso']): ?><td id="titulo4" nowrap>ADDFACT</td> 
                                 <?php endif; ?>
+                                <td id="titulo4">FECHA AUTOR.</td>
                                 <td id="titulo4" nowrap="nowrap" >AUTORIZAR SALIDA</td>
                               </tr>
                               </thead>
@@ -817,7 +880,8 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                           <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando... Numero de Factura!</b>
                                           </div>
                                           <?php endif; ?>
-                                       <td id="fuente2">
+                                        <td id="dato1"><?php echo $row_ordenes_compra['fecha_autoriza'];?></td>
+                                       <td id="fuente2"> 
                                          <?php if($row_ordenes_compra['autorizado']=='SI'): ?>
                                             <a href="javascript:updateAutorizar('Desautorizar',<?php echo $row_ordenes_compra['id_pedido']; ?>,'orden_compra_cl2.php','<?php echo $row_ordenes_compra['str_numero_oc']; ?>')" ><img src="images/accept.png" alt="AUTORIZADA" title="AUTORIZADA" border="0" style="cursor:hand;" width="20" height="18" /></a>
                                                <?php else: ?>
@@ -879,7 +943,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
  });
 */
 
-  function uPDATE(id,valor,colum,proceso,url){
+  function uPDATE(id,valor,colum,proceso,url,tabla){
  
      swal({   
       title: "Actualizar?",   
@@ -894,7 +958,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
       function(isConfirm){   
         if (isConfirm) {  
           swal("Actualizado!", "El registro se ha Actualizado.", "success"); 
-          actualizacion(id,valor,colum,proceso,url);
+          actualizacionBoton(id,valor,colum,proceso,url,tabla);
           location.reload(); 
         } else {     
           swal("Cancelado", "has cancelado :)", "error"); 
@@ -919,7 +983,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
        if (isConfirm) {  
          swal("Actualizado!", "El registro se ha Actualizado.", "success");  
          actualizacionBoton(id,valor,colum,proceso,url,tabla);
-         //location.reload(); 
+         location.reload(); 
        } else {     
          swal("Cancelado", "has cancelado :)", "error"); 
        } 

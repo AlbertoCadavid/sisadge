@@ -1,4 +1,8 @@
 	//------------------FUNCION PARA AGREGAR ITEMS DINAMICOS----//
+	
+
+  
+
 	var num=0;
 	function AddItemd() {
 	  var contador = num++ ;
@@ -29,11 +33,43 @@
 		}
 		if (tbody != null) {
 			  //$("#int_caja_rd").val(contador); 
+			valorKilo = document.getElementById("valorKilo").value; //'+valorKilo+'
+			cantotal = document.getElementById("int_cantidad_rest_io").value;
 			var tr = document.createElement('tr');
-			tr.innerHTML = '<td><input type="hidden" style="width:40px;" id="int_pesoneto_rd" name="int_pesoneto_rd[]"  value='+ num + ' required="required" /></td><td><input type="text" style="width:40px;" id="int_caja_rd" name="int_caja_rd[]" onKeypress="EnteryTap(event,this);" value='+contador+'  required="required" /></td><td><input type="text" style="width:150px;" id="int_numd_rd" name="int_numd_rd[]" onKeypress="EnteryTap(event,this);" onChange="CalcularRango(this);" onBlur="MayusEspacio(this);" value="" required="required" /></td><td><input type="text"  style="width:150px;"  id="int_numh_rd" name="int_numh_rd[]" onKeypress="EnteryTap(event,this);" onChange="CalcularRango(this);" onBlur="MayusEspacio(this);" value="" required="required" /></td><td><input type="text" style="width:80px;" id="int_cant_rd" name="int_cant_rd[]" value="" required="required" onKeypress="EnteryTap(event,this);" /></td><td><input type="text" style="width:80px;" id="int_peso_rd" name="int_peso_rd[]" value="" required="required" onKeypress="EnteryTap(event,this);" /></td><td><input tabindex="-1" type="text" style="width:80px;" size="2" id="total" name="total[]" readonly /></td><td><button tabindex="-1" class="botonDel" type="button" value="Borrar" onclick="eliminaItemDespacho(this);CalcularRango(this);">Borrar</button></td>';
+			tr.innerHTML = '<td><input type="hidden" style="width:40px;" id="int_pesoneto_rd" name="int_pesoneto_rd[]"  value='+ num + ' required="required" /></td><td><input type="text" style="width:40px;" id="int_caja_rd" name="int_caja_rd[]" onKeypress="EnteryTap(event,this);" value='+contador+'  required="required" /></td><td><input type="text" style="width:150px;" id="int_numd_rd" name="int_numd_rd[]" onKeypress="EnteryTap(event,this);" onChange="CalcularRango(this);" onBlur="MayusEspacio(this);" value="" required="required" /></td><td><input type="text"  style="width:150px;"  id="int_numh_rd" name="int_numh_rd[]" onKeypress="EnteryTap(event,this);" onChange="CalcularRango(this);" onBlur="MayusEspacio(this);" value="" required="required" /></td><td><input type="text" style="width:80px;" id="int_cant_rd" name="int_cant_rd[]" value="'+cantotal+'" required="required" onChange="CalcularRango(this);" onKeypress="EnteryTap(event,this);" /></td><td><input type="text" style="width:80px;" id="int_peso_rd" name="int_peso_rd[]" value="'+valorKilo+'"  required="required" onKeypress="EnteryTap(event,this);" /></td><td><input tabindex="-1" type="text" style="width:80px;" size="2" id="total" name="total[]" readonly /></td><td><button tabindex="-1" class="botonDel" type="button" value="Borrar" onclick="eliminaItemDespacho(this);CalcularRango(this);">Borrar</button></td>';
 			tbody.appendChild(tr);
 		}
  
+	}
+
+
+	//consulata valor kilo x cada 1000 bolsas
+	function valorx100bolsas(){
+	 kilosDesp = document.getElementById("valorKilo").value; 
+	  alert(kilosDesp) 
+	  $.ajax({ 
+	    type:  'post',
+	    url: 'funciones/funciones_php.php',
+	    data:{
+	     "kilosDesp": kilosDesp, 
+	    },
+	   dataType: 'json',//define las variables a mostrar 
+	 }).done(function( data, textStatus, jqXHR ) {
+
+	   if(data) {
+	    var html = '';
+	      var i;
+	      for (i = 0; i < data.length; i++) { 
+	         alert(data[i].cod_ref); 
+	      }
+	       
+	   } 
+	 }).fail(function( jqXHR, textStatus, errorThrown ) {
+	   if ( console && console.log ) {
+	     console.log( "La solicitud a fallado: " +  textStatus);
+	   }
+	 });  
+	
 	}
 
 
@@ -90,20 +126,53 @@
 	            		var cadena = codigos[1];
 	          		}  	
 	          	}//FIN IF INPUT HASTA
+
+
 	          	//------------INPUT CADENA SUBTOTAL-------------------------//  
 	            	if(nodes[x].firstChild.name == 'total[]') {
 	                	if(ahasta !='' && adesde!=''){
 	                	   int_total = parseInt((ahasta-adesde),10);
 	                	   total=(int_total+1);
 	                	   nodes[x].firstChild.value = total;
-
 	                	}else{
 	                	   nodes[x].firstChild.value = 0;
 
 	                	}
-	            	            
 
 	            	}//FIN IF INPUT TOTAL
+                   
+                    //valor x 100 bolsas 
+                 	if (nodes[x].firstChild.name == 'int_cant_rd[]') {
+                 		int_cant_rd = (nodes[x].firstChild.value); 
+                 		if(int_cant_rd!='0' || int_cant_rd!='') {    
+                   		var int_cant_rd = int_cant_rd;  
+                 		}   	
+                 	}
+                 	if (nodes[x].firstChild.name == 'int_peso_rd[]') {
+                 		int_peso_rd = (nodes[x].firstChild.value); 
+                 		if(int_peso_rd!='0' || int_peso_rd!='') {    
+                   		   var int_peso_rd = int_peso_rd;  
+                 		}else{
+                 		 
+	                	    nodes[x].firstChild.value = document.getElementById("valorKilo").value;
+                 		} 	
+	                  
+                 	}
+                 	if(nodes[x].firstChild.name == 'int_peso_rd[]') {
+	                		valorKilo = document.getElementById("valorKilo").value;
+	                		canttotal = document.getElementById("int_cantidad_rest_io").value;  
+	                	if(int_cant_rd!=''){
+	                	  
+	                	   valor = (parseFloat(int_cant_rd)*parseFloat(valorKilo))/parseFloat(canttotal);
+	                	   valor = parseFloat(valor).toFixed(2);
+	               		   nodes[x].firstChild.value = valor;
+	                	  
+	                	}else{
+	                	   nodes[x].firstChild.value  = document.getElementById("valorKilo").value;
+                           
+	                	}
+	                	
+	                } 	            
 		    }//FIN FORDE NODOS
  
 			
@@ -195,7 +264,7 @@
 				cadena=l; 
 				solonumeros=caract.match(/\d+/g); //d acepta solo numeros
 
-				    var cerosizq = cerosIzquierda(caract,solonumeros); //codigos especiales 
+				    var cerosizq = cerosIzquierda(caract,solonumeros,solonumeros); //codigos especiales 
 					  if(cerosizq!=undefined){
 					    var solonumeros = cerosizq; 
 					  } 
@@ -204,17 +273,19 @@
 			}
  
 
-   function cerosIzquierda(conletras,solonumero){
-   	var ceros=(conletras.search(/EM|MQ/i));//codigos especiales 
-   	 if(ceros== 0 ){
-   	  var cuantos = 8;
-   	   codigo = solonumero.toString().padStart(cuantos, "0");
-   
-           return codigo;	//si es cero es porq lo encuentra
-   
-       }
-   
-   }
+ function cerosIzquierda(conletras,solonumero,cuantos ){
+ 	var ceros=(conletras.search(/EM|MQ|AB|AC|BP|BM|C|BB|OA|BC/i));//codigos especiales 
+     
+ 	 var cuantos = cuantos.length ;
+ 	 //if(ceros== 0 ){
+ 	  //var cuantos = 8;
+ 	   codigo = solonumero.toString().padStart(cuantos, "0");
+ 
+         return codigo;	//si es cero es porq lo encuentra
+ 
+     //}
+ 
+ } 
 
 
     function buscaDigitos(caract){

@@ -638,7 +638,7 @@ if($vi!='' || $vr!='' || $vb!='') { ?>
         <td colspan="22" id="fondo1">&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="22" id="fondo1">Se evaluan tres clases de evaluacion con un 40% para Oportunidad, 35% para Calidad y un 25% para servicio para completar 100% en el porcentaje final.</td>
+        <td colspan="22" id="fondo1">Se evaluan tres clases de evaluacion con un 25% para Oportunidad, 40% para Calidad y un 35% para servicio para completar 100% en el porcentaje final.</td>
         </tr>
       <tr>
         <td colspan="2" id="fondo4">ORDEN COMPRA  </td>

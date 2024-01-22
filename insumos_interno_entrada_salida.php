@@ -364,10 +364,6 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
   </div>
   </div>
 
-  <!-- js Bootstrap-->
-  <!-- <script src="bootstrap-4/js/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="bootstrap-4/js/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="bootstrap-4/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
 
 
 </body>
@@ -433,9 +429,6 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
     consultaInsumos();
   });
 
-
-
-
   function subtotal() {
     var total = 0;
     cant = document.getElementsByClassName('cantidad')
@@ -461,7 +454,6 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
   }
 
 
-
   $('#cliente').change(function() {
     cliente = $("#cliente").val();
     let resp = consultaProveedor('comprobarProveedor', cliente)
@@ -485,7 +477,6 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
     }
 
-   
 
   }
 </script>

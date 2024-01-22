@@ -552,7 +552,7 @@ $('#imprimirt').on('change',function(){
       
 });
 
-
+  
 
   /*$("#int_desde_tn").on('change',function(){
     numeracionDesde(numDesde,caja,paquete); 

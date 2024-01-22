@@ -20,8 +20,8 @@ class mComercialList{
         try 
         { 
             $fecha = date("Y-m-d");  
- 
-            $update = $this->db->query("UPDATE $tabla SET pago_pendiente = 'NO', fecha_ingreso_oc = '$fecha' WHERE $id = $valor "); 
+            $fecha = fechahoraActual();
+            $update = $this->db->query("UPDATE $tabla SET pago_pendiente = 'NO', fecha_autoriza = '$fecha' WHERE $id = $valor "); //fecha_ingreso_oc
           die;//dejarlo para q no bote error
         } catch (Exception $e) 
         {
@@ -41,7 +41,7 @@ class mComercialList{
 
             $fechas_entrega = sumarMesyDias($fecha,3); //se agrega un mes mas 3 dias
              
-            $update = $this->db->query("UPDATE $tabla SET $colum = 'NO', autorizado = 'SI',  fecha_ingreso_oc='$fecha', fecha_entrega_oc='$fechas_entrega', fecha_autoriza='$hoy' WHERE $id = $valor");
+            $update = $this->db->query("UPDATE $tabla SET $colum = 'NO', autorizado = 'SI', proforma_oc='', fecha_autoriza='$hoy' WHERE $id = $valor");//fecha_ingreso_oc='$fecha',fecha_entrega_oc='$fechas_entrega', 
            
             
             $logs = $this->db->query("INSERT INTO tbl_logs ( codigo_id, descrip, fecha, modificacion, usuario) values ('$valor','OC','$hoy','autorizado SI','".$_SESSION['Usuario']."' ) " ); 

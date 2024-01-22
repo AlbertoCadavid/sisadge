@@ -13,8 +13,8 @@ function eliminar_fantasma(id,campo,pagina){
     closeOnCancel: false }, 
     function(isConfirm){   
       if (isConfirm) {  
-        swal("Eliminado!", "El registro se ha eliminado.", "success"); 
         configEliminacion(id,campo,pagina);
+        swal("Eliminado!", "El registro se ha eliminado.", "success"); 
       } else {     
         swal("Cancelado", "has cancelado :)", "error");
         window.history.go();
@@ -39,8 +39,11 @@ function configEliminacion(id,campo,pagina){
     },
     success: function(respuesta){
       //lo que se si el destino devuelve algo
+      if(respuesta){
        $('#resp').show(); 
        $('#resp').fadeIn(); 
+        
+      }
 
        setTimeout(function() {
         $("#resp").fadeOut();           

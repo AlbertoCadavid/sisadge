@@ -255,10 +255,11 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                         <td colspan="10" id="titulo4">EXTRUSION</td>
                         </tr>
                         <tr>
-                         <td  colspan="10" id="titulo4"> 
-                          Estrusora : 
+                         <td colspan="4" id="numero1"><em> Nota: Si no aparece el insumo es porque no esta como clase Insumo Extruder</em></td>
+                         <td colspan="6" id="titulo1"> 
+                          Extrusoras : 
                           <select name="extrusora_mp" id="extrusora_mp" class="busqueda selectsMedio" required="required" onchange="Extrusora();">
-                              <option value="">Extrusoras</option>
+                              <option value="">Seleccione</option>
                                  <?php  foreach($this->maquinas as $maquinas ) { ?>
                               <option value="<?php echo $maquinas['nombre_maquina']; ?>"<?php if (!(strcmp($row_mezcla['extrusora_mp'] , $maquinas['nombre_maquina']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($maquinas['nombre_maquina']); ?> 
                             </option>

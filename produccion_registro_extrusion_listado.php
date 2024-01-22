@@ -2,7 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
 ?>
-<?php require_once('Connections/conexion1.php'); ?>
+
 <?php
 //initialize the session
 if (!isset($_SESSION)) {
@@ -92,41 +92,27 @@ $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
-mysql_select_db($database_conexion1, $conexion1);
-$query_usuario = sprintf("SELECT * FROM usuario WHERE usuario = '%s'", $colname_usuario);
-$usuario = mysql_query($query_usuario, $conexion1);
-$row_usuario = mysql_fetch_assoc($usuario);
-$totalRows_usuario = mysql_num_rows($usuario);
-
-
+// INFO USER
+$row_usuario = $conexion->buscar('usuario', 'usuario', $colname_usuario);
 //PRIORIDAD
-mysql_select_db($database_conexion1, $conexion1);
-$query_prioridad = "SELECT * FROM Tbl_orden_produccion WHERE b_visual_op <> '0' AND b_borrado_op='0' ORDER BY b_visual_op ASC";
-$prioridad = mysql_query($query_prioridad, $conexion1);
-$row_prioridad = mysql_fetch_assoc($prioridad);
-$totalRows_prioridad = mysql_num_rows($prioridad);
+$row_prioridad = $conexion->buscarSencillo('*', 'Tbl_orden_produccion', "WHERE b_visual_op <> '0' AND b_borrado_op='0' ORDER BY b_visual_op ASC");
 
 $maxRows_orden_produccion = 20;
 $pageNum_orden_produccion = 0;
+
 if (isset($_GET['pageNum_orden_produccion'])) {
   $pageNum_orden_produccion = $_GET['pageNum_orden_produccion'];
 }
 $startRow_orden_produccion = $pageNum_orden_produccion * $maxRows_orden_produccion;
 
-mysql_select_db($database_conexion1, $conexion1);
-
-
-$query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE b_borrado_op='0' AND coextrusion='SI' ORDER BY b_visual_op,id_op DESC";
-$query_limit_orden_produccion = sprintf("%s LIMIT %d, %d", $query_orden_produccion, $startRow_orden_produccion, $maxRows_orden_produccion);
-$orden_produccion = mysql_query($query_limit_orden_produccion, $conexion1);
-$row_orden_produccion = mysql_fetch_assoc($orden_produccion);
+$row_orden_producciones = $conexion->buscarListar('Tbl_orden_produccion', '*', 'ORDER BY b_visual_op,id_op DESC', '', $maxRows_orden_produccion, $pageNum_orden_produccion, "WHERE b_borrado_op='0' AND coextrusion='SI' ");
 
 if (isset($_GET['totalRows_orden_produccion'])) {
   $totalRows_orden_produccion = $_GET['totalRows_orden_produccion'];
 } else {
-  $all_orden_produccion = mysql_query($query_orden_produccion);
-  $totalRows_orden_produccion = mysql_num_rows($all_orden_produccion);
+  $totalRows_orden_produccion = $conexion->conteoConsulta('Tbl_orden_produccion', "b_borrado_op='0' AND coextrusion='SI'");
 }
+
 $totalPages_orden_produccion = ceil($totalRows_orden_produccion / $maxRows_orden_produccion) - 1;
 
 $queryString_orden_produccion = "";
@@ -147,23 +133,9 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
-mysql_select_db($database_conexion1, $conexion1);
-$query_lista_op = "SELECT id_op FROM Tbl_orden_produccion WHERE b_borrado_op = '0' AND coextrusion='SI' ORDER BY id_op DESC";
-$lista_op = mysql_query($query_lista_op, $conexion1);
-$row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op);
+$row_lista_ops = $conexion->llenaListas("Tbl_orden_produccion",  "WHERE b_borrado_op = '0' AND coextrusion='SI'", "ORDER BY id_op DESC", "id_op");
 
-mysql_select_db($database_conexion1, $conexion1);
-$query_ref_op = "SELECT id_ref, cod_ref FROM Tbl_referencia order by n_egp_ref desc";
-$ref_op = mysql_query($query_ref_op, $conexion1);
-$row_ref_op = mysql_fetch_assoc($ref_op);
-$totalRows_ref_op = mysql_num_rows($ref_op);
-
-mysql_select_db($database_conexion1, $conexion1);
-$query_mensual = "SELECT * FROM mensual ORDER BY id_mensual ASC";
-$mensual = mysql_query($query_mensual, $conexion1);
-$row_mensual = mysql_fetch_assoc($mensual);
-$totalRows_mensual = mysql_num_rows($mensual);
+$row_mensual = $conexion->llenaSelect('mensual', '', 'ORDER BY id_mensual ASC');
 
 $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
@@ -191,10 +163,6 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
-  <!-- select2 -->
-  <!-- <link href="select2/css/select2.min.css" rel="stylesheet"/>
-    <script src="select2/js/select2.min.js"></script> -->
 
   <!-- Select3 Nuevo -->
   <meta charset="UTF-8">
@@ -267,35 +235,15 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <div id="resultado"><input name="retorno_mensaje" type="hidden">
                                 <select class='busqueda selectsMini' name="op" id="op">
                                   <option value="0">O.P.</option>
-                                  <?php
-                                  do {
-                                  ?>
+                                  <?php foreach ($row_lista_ops as $row_lista_op) { ?>
                                     <option value="<?php echo $row_lista_op['id_op'] ?>"><?php echo $row_lista_op['id_op'] ?></option>
-                                  <?php
-                                  } while ($row_lista_op = mysql_fetch_assoc($lista_op));
-                                  $rows = mysql_num_rows($lista_op);
-                                  if ($rows > 0) {
-                                    mysql_data_seek($lista_op, 0);
-                                    $row_lista_op = mysql_fetch_assoc($lista_op);
-                                  }
-                                  ?>
+                                  <?php }; ?>
                                 </select>
+
                                 <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
                                 <select class='busqueda selectsMini' name="id_ref" id="id_ref">
                                   <option value="0">REF</option>
-                                  <?php
-                                  do {
-                                  ?>
-                                    <option value="<?php echo $row_ref_op['cod_ref'] ?>"><?php echo $row_ref_op['cod_ref'] ?>
-                                    </option>
-                                  <?php
-                                  } while ($row_ref_op = mysql_fetch_assoc($ref_op));
-                                  $rows = mysql_num_rows($ref_op);
-                                  if ($rows > 0) {
-                                    mysql_data_seek($ref_op, 0);
-                                    $row_ref_op = mysql_fetch_assoc($ref_op);
-                                  }
-                                  ?>
+                                  <!-- List displayed with js -->
                                 </select>
                                 <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
 
@@ -308,20 +256,11 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 </select>
                                 <select class='busqueda selectsMini' name="mes" id="mes">
                                   <option value="0">MES</option>
-                                  <?php
-                                  do {
-                                  ?>
+                                  <?php foreach ($row_mensual as $row_mensual) { ?>
                                     <option value="<?php echo $row_mensual['id_mensual'] ?>">
                                       <?php echo $row_mensual['mensual'] ?>
                                     </option>
-                                  <?php
-                                  } while ($row_mensual = mysql_fetch_assoc($mensual));
-                                  $rows = mysql_num_rows($mensual);
-                                  if ($rows > 0) {
-                                    mysql_data_seek($mensual, 0);
-                                    $row_mensual = mysql_fetch_assoc($mensual);
-                                  }
-                                  ?>
+                                  <?php }; ?>
                                 </select>
                                 <select class='busqueda selectsMini' name="estado" id="estado">
                                   <option value="">ESTADO</option>
@@ -406,19 +345,19 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                                                 } ?></td>
                               <td nowrap="nowrap" id="titulo4">PROCESO</td>
                             </tr>
-                            <?php do { ?>
+                            <?php foreach ($row_orden_producciones as $row_orden_produccion) { ?>
+
+
                               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
                                 <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
                                 <td id="dato1"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000">
                                     <?php
                                     $id_c = $row_orden_produccion['int_cliente_op'];
-                                    $sqln = "SELECT * FROM  cliente WHERE cliente.id_c=$id_c";
-                                    $resultn = mysql_query($sqln);
-                                    $numn = mysql_num_rows($resultn);
+                                    $resultn = $conexion->buscarSencillo("nombre_c", "cliente", "WHERE cliente.id_c=$id_c");
+
+                                    $numn = sizeof($resultn);
                                     if ($numn >= '1') {
-                                      $nombre_cliente_c = mysql_result($resultn, 0, 'nombre_c');
-                                      $ca = $nombre_cliente_c;
-                                      echo $ca;
+                                      echo $resultn['nombre_c'];
                                     } else {
                                       echo "";
                                     } ?></a>
@@ -436,32 +375,29 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 <td id="dato2">
                                   <?php
                                   $op_c = $row_orden_produccion['id_op'];
-                                  $sqlno = "SELECT id_r,COUNT(rollo_r) as Rollos, SUM(kilos_r) AS kilos,fechaI_r FROM TblExtruderRollo WHERE id_op_r='$op_c'";
-                                  $resultno = mysql_query($sqlno);
-                                  $numno = mysql_num_rows($resultno);
+                                  $resultno = $conexion->buscarSencillo("id_r,COUNT(rollo_r) as Rollos, SUM(kilos_r) AS kilos,fechaI_r", "TblExtruderRollo", "WHERE id_op_r='$op_c'");
+                                  $numno = sizeof($resultno);
 
                                   if ($numno > '0') {
-                                    $kilosE = mysql_result($resultno, 0, 'kilos');
-                                    $RollosE = mysql_result($resultno, 0, 'Rollos');
-                                    $idrollo = mysql_result($resultno, 0, 'id_r');
-                                    $fechaI = mysql_result($resultno, 0, 'fechaI_r');
+                                    $kilosE = $resultno['kilos'];
+                                    $RollosE = $resultno['Rollos'];
+                                    $idrollo = $resultno['id_r'];
+                                    $fechaI = $resultno['fechaI_r'];
                                   }
-                                  $sqlno = "SELECT SUM(valor_desp_rd) AS kilos FROM tbl_reg_desperdicio WHERE op_rd = '$op_c' AND id_proceso_rd='1' "; //id_rollo='$idrollo' 
-                                  $resultdesp = mysql_query($sqlno);
-                                  $numdesp = mysql_num_rows($resultdesp);
+
+                                  $resultdesp = $conexion->buscarSencillo("SUM(valor_desp_rd) AS kilos", "tbl_reg_desperdicio", "WHERE op_rd = '$op_c' AND id_proceso_rd='1'"); //id_rollo='$idrollo'
+                                  $numdesp = sizeof($resultdesp);
                                   $DespRollo = '';
                                   if ($numdesp > '0') {
-                                    $DespRollo = mysql_result($resultdesp, 0, 'kilos');
+                                    $DespRollo = $resultdesp['kilos'];
                                   }
 
-                                  $op_c = $row_orden_produccion['id_op'];
-                                  $sqlparcial = "SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC";
-                                  $resultparcial = mysql_query($sqlparcial);
-                                  $numparcial = mysql_num_rows($resultparcial);
-
-                                  $parcial = mysql_result($resultparcial, 0, 'parcial');
+                                  $resultparcial = $conexion->buscarSencillo("parcial", "Tbl_reg_produccion", "WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC");
+                                  $numparcial = sizeof($resultparcial);
+                                  $parcial = $resultparcial['parcial'];
                                   /*< $row_orden_produccion['int_kilos_op']*/
                                   ?>
+
                                   <?php if ($kilosE == '') { ?>
 
                                     <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
@@ -478,39 +414,35 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 <td id="dato2">
                                   <?php
                                   $id_ref_pr = $row_orden_produccion['int_cod_ref_op'];
-                                  $sqloca = "SELECT * FROM tbl_caracteristicas_prod WHERE cod_ref='$id_ref_pr' AND proceso = '1' ORDER BY cod_ref DESC LIMIT 1";
-                                  $resultca = mysql_query($sqloca);
-                                  $numca = mysql_num_rows($resultca);
-                                  $id_codp = mysql_result($resultca, 0, 'cod_ref');
+                                  $resultca = $conexion->llenaListas("tbl_caracteristicas_prod", " WHERE cod_ref='$id_ref_pr' AND proceso = '1'", "ORDER BY cod_ref DESC LIMIT 1", "*");
+                                  $numca = sizeof($resultca);
+                                  $id_codp = $resultca[0]['cod_ref'];
                                   if ($numca >= '1') {
                                   ?>
-
                                     <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_codp; ?>','1600','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php } else { ?><a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $id_ref_pr; ?>','1600','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER" border="0" /></a>
                                   <?php } ?>
                                   <?php
                                   $estado_op = $row_orden_produccion['b_estado_op'];
-                                  //if ($estado_op > '0'){
+                                  
                                   $op_c = $row_orden_produccion['id_op'];
-                                  $sqlsell = "SELECT SUM(int_kilos_prod_rp) AS int_kilos_prod_rp, id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY rollo_rp DESC";
-                                  $resultsell = mysql_query($sqlsell);
-                                  $numliquid = mysql_num_rows($resultsell);
-
-                                  $id_rp = mysql_result($resultsell, 0, 'id_rp');
-                                  $id_op_rp = mysql_result($resultsell, 0, 'id_op_rp');
-                                  $id_ref_rp = mysql_result($resultsell, 0, 'id_ref_rp');
-                                  $rollosreg_prod = mysql_result($resultsell, 0, 'rollo_rp');
-                                  $totalKilosliq = mysql_result($resultsell, 0, 'int_kilos_prod_rp');
-
-
-                                  $sqlre = "SELECT SUM(valor_prod_rp) AS totalkilos FROM  Tbl_reg_kilo_producido WHERE op_rp='$op_c' AND id_proceso_rkp='1' ";
-                                  $resultre = mysql_query($sqlre);
-                                  $numere = mysql_num_rows($resultre);
+                                  $resultsell = $conexion->llenaListas("Tbl_reg_produccion", "WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1'", "ORDER BY rollo_rp DESC", "SUM(int_kilos_prod_rp) AS int_kilos_prod_rp, id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp"); 
+                                  
+                                  $id_rp = $resultsell[0]['id_rp'];
+                                  $id_op_rp = $resultsell[0]['id_op_rp'];
+                                  $id_ref_rp = $resultsell[0]['id_ref_rp'];
+                                  $rollosreg_prod = $resultsell[0]['rollo_rp'];
+                                  $totalKilosliq = $resultsell[0]['int_kilos_prod_rp'];
+                                  
+                                  $resultre = $conexion->llenaListas("Tbl_reg_kilo_producido", "WHERE op_rp='$op_c' AND id_proceso_rkp='1'", "", "SUM(valor_prod_rp) AS totalkilos");
+                                  /* $sqlre = "SELECT SUM(valor_prod_rp) AS totalkilos FROM  Tbl_reg_kilo_producido WHERE op_rp='$op_c' AND id_proceso_rkp='1' ";
+                                  $resultre = mysql_query($sqlre);*/
+                                  $numere = sizeof($resultre); 
                                   if ($numere >= '1') {
-                                    $cantidadKilosprod = mysql_result($resultre, 0, 'totalkilos');
+                                    $cantidadKilosprod = $resultre[0]['totalkilos'];
                                   }
-
+                                  
                                   //KILOS DE LOS ROLLO A ROLLO 
-                                  $kilosE = round($kilosE,2);
+                                  $kilosE = round($kilosE, 2);
                                   $totalKilosRollodesp = ($kilosE + $DespRollo); //KILOS DEL ROLLO MAS DESPERDICIO 
 
                                   ?>
@@ -573,7 +505,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                       <?php endif; ?>
                                 </td>
                               </tr>
-                            <?php } while ($row_orden_produccion = mysql_fetch_assoc($orden_produccion)); ?>
+                            <?php } ?>
                           </table>
                         </fieldset>
                       </form>
@@ -723,22 +655,20 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
 <?php
 
-mysql_free_result($usuario);
+
 mysql_free_result($prioridad);
 mysql_free_result($orden_produccion);
 mysql_free_result($all_orden_produccion);
 mysql_free_result($lista_op);
 mysql_free_result($ref_op);
 mysql_free_result($mensual);
-mysql_free_result($resultnp);
-mysql_free_result($resultno);
+mysql_free_result($resultnp);;
 mysql_free_result($resultparcial);
 mysql_free_result($resultca);
 mysql_free_result($resultsell);
-mysql_free_result($resultn);
-mysql_free_result($resultno);
+
 mysql_free_result($resultparcial);
-mysql_free_result($resultca);
+
 mysql_free_result($resultsell);
 
 ?>

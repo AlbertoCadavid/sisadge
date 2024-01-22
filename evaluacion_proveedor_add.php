@@ -351,7 +351,7 @@ $totalRows_verificaciones_insumos = mysql_num_rows($verificaciones_insumos);
           <td colspan="4" id="arriba2">OPORTUNOS (&lt;=0 dias) </td>
           <td colspan="3" id="arriba2">CANTIDAD (&gt;=90%) </td>
           <td colspan="3" id="arriba2">CALIDAD (&gt;=95%) </td>
-          <td colspan="3" id="arriba2">SERVICIO ( <?php echo utf8_encode('Calificac�on'); ?> de 1 a 10) </td>
+          <td colspan="3" id="arriba2">SERVICIO ( <?php echo utf8_encode('Calificacion'); ?> de 1 a 10) </td>
         </tr>
         <tr>
           <td id="arriba2">RECIBE</td>
@@ -1208,7 +1208,7 @@ $totalRows_verificaciones_insumos = mysql_num_rows($verificaciones_insumos);
                           <td id="fuente3">Atencion <input name="total_atencion_ev" type="text" id="total_atencion_ev" value="<?php echo $serviciosi; ?>" size="5"></td>
                         </tr>
                         <tr>
-                          <td colspan="2" rowspan="2" id="dato1">Se evaluan cuatro clases de evaluacion con un 25% cada uno, para completar 100% en el porcentaje final.</td>
+                          <td colspan="2" rowspan="2" id="dato1">Se evaluan cuatro clases de evaluacion oportuno 20%, cumplimiento 25%, calida 40% y servicio 15% para completar 100% del porcentaje final.</td>
                           <td nowrap id="fuente3">No oportunos
                             <input name="total_no_oportunos_ev" type="text" id="total_no_oportunos_ev" value="<?php echo $noportunos; ?>" size="5">
                           </td>
@@ -1221,7 +1221,7 @@ $totalRows_verificaciones_insumos = mysql_num_rows($verificaciones_insumos);
                           <td nowrap id="fuente3">No atencion<input name="total_no_atencion_ev" type="text" id="total_no_atencion_ev" value="<?php echo $serviciono; ?>" size="5"></td>
                         </tr>
                         <tr>
-                          <td nowrap id="fuente3">% Oportunos <?php $porc = (($oportunos / $suma_vr) * 25);
+                          <td nowrap id="fuente3">% Oportunos <?php $porc = (($oportunos / $suma_vr) * 20);
                                                               $porcentaje = round($porc * 100) / 100;
                                                               if ($porcentaje == '') {
                                                                 $porcentaje = 0;
@@ -1235,12 +1235,12 @@ $totalRows_verificaciones_insumos = mysql_num_rows($verificaciones_insumos);
                                                             } ?>
                             <input name="porcentaje_cumple_ev" type="text" id="porcentaje_cumple_ev" value="<?php echo $porcentaje2; ?>" size="5">
                           </td>
-                          <td nowrap id="fuente3">% Conforme <?php $porc_conforme1 = ($abuena / $suma_vr) * 25;
+                          <td nowrap id="fuente3">% Conforme (Calidad) <?php $porc_conforme1 = ($abuena / $suma_vr) * 40;
                                                               $porc_conforme = round($porc_conforme1 * 100) / 100;
                                                               if ($porc_conforme == '') {
                                                                 $porc_conforme = 0;
                                                               }  ?><input name="porcentaje_conforme_ev" type="text" id="porcentaje_conforme_ev" value="<?php echo $porc_conforme; ?>" size="5"></td>
-                          <td nowrap id="fuente3">% Atencion <?php $porc_atencion1 = ($serviciosi / $suma_vr) * 25;
+                          <td nowrap id="fuente3">% Atencion (servicio) <?php $porc_atencion1 = ($serviciosi / $suma_vr) * 15;
                                                               $porc_atencion = round($porc_atencion1 * 100) / 100;
                                                               if ($porc_atencion == '') {
                                                                 $porc_atencion = 0;

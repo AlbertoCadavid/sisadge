@@ -12,7 +12,7 @@ $conexion = new ApptivaDB();
 $id_fantasma=$_GET['id_fantasma'];
 if($id_fantasma !='') {
 
-   $sqlcn="SELECT id_op_rp,rollo_rp FROM Tbl_reg_produccion WHERE id_rp='$id_fantasma'";
+   $sqlcn="SELECT id_op_rp,rollo_rp FROM Tbl_reg_produccion WHERE id_rp=$id_fantasma";
    $resultcn= mysql_query($sqlcn);
    $numcn= mysql_num_rows($resultcn);
    if($numcn >='1') {
@@ -29,7 +29,7 @@ if($id_fantasma !='') {
    $resulrttiempop=mysql_query($sqlrttiempop);
    $sqlrtdes="DELETE FROM tbl_reg_desperdicio WHERE op_rd=$op_sell and int_rollo_rd=$rollo_imp and id_proceso_rd='2' " ;
    $resulrtdes=mysql_query($sqlrtdes);
-   $sqlrt="DELETE FROM Tbl_reg_produccion WHERE id_rp='$id_fantasma'";
+   $sqlrt="DELETE FROM Tbl_reg_produccion WHERE id_rp=$id_fantasma";
    $resulrt=mysql_query($sqlrt); 
 
    if($resulrt==1){
@@ -132,6 +132,16 @@ if($id_salirExt !='') {
       echo 'ko!';    
    }
    require_once($_GET['pagina']);
+
+}
+
+$id_matPrima=$_GET['id_rkp'];
+if($id_matPrima !='') {
+
+   $sqlrt="DELETE FROM tbl_reg_kilo_producido WHERE id_rkp = '$id_matPrima'";
+   $resulrt=mysql_query($sqlrt);
+  
+   
 
 }
 

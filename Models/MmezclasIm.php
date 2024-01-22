@@ -108,6 +108,46 @@ class oMmezclasIm{
         }
     }
 
+
+    public function RegistrarMaster($tabla,$columna,$filtro,$id, $data)
+    { 
+
+
+        try 
+        {
+            $array_codificado = UtilHelper::arrayEncode($data);
+            $array_deco = UtilHelper::arrayDecode($array_codificado); 
+            $arrayPHP =  ($array_deco) ;
+            
+            $consulta=$this->db->query("SELECT * FROM $tabla WHERE ".$filtro." ='$id' and id_proceso_mm = '2' ");
+            if($consulta){
+             while($filas=$consulta->fetch_assoc()){
+                $this->existe[]=$filas;
+             }
+
+            }
+             
+
+
+            if(is_null($this->existe)){ 
+ 
+              $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_ref_pm'] ."','". $arrayPHP['cod_ref'] ."','". $arrayPHP['id_proceso'] ."' );");
+ 
+            }else{ 
+
+                $updatepro = $this->db->query("UPDATE $tabla SET int_id_ref_mm='". $arrayPHP['id_ref_pm'] ."',int_cod_ref_mm='". $arrayPHP['cod_ref'] ."',id_proceso_mm='". $arrayPHP['id_proceso'] ."' WHERE ".$filtro." = '". $id ."'  and id_proceso_mm='2' ;" );
+              
+            }
+            
+    
+
+     
+        } catch (Exception $e) 
+        {
+            die($e->getMessage());
+        }
+    }
+
     public function Registrar($tabla,$columna,$filtro,$id, $data)
     { 
 
