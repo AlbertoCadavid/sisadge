@@ -827,7 +827,7 @@ function ceros($numero){
 function eliminar_tildes($cadena){
 
     //Codificamos la cadena en formato utf8 en caso de que nos de errores
-    $cadena = utf8_encode($cadena);
+    //$cadena = utf8_encode($cadena);//modificado 08-02-2022
 
     //Ahora reemplazamos las letras
     $cadena = str_replace(

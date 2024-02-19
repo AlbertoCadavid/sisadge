@@ -252,8 +252,9 @@ $row_insumo = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('2') ", "
 $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('30','33','32') AND estado_insumo='0' ", "ORDER BY descripcion_insumo ASC");
 
 $refop = $_GET['int_cod_ref_op'] == '' ? 0 : $_GET['int_cod_ref_op'];
-if ($refop != '')
+if ($refop != ''){
   $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $refop . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref");
+}
 
 //arte
 if ($id_ref != '')
@@ -622,6 +623,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                                                 echo "UNIDADES SOLICITADAS";
                                                               } ?></td>
                                   <td colspan="2" id="talla1">TIPO DE BOLSA</td>
+                                  <td colspan="2" nowrap="nowrap" id="talla1"><strong>EXTRUSION</strong></td> 
                                   <td colspan="2" id="talla1">PESO MILLAR</td>
                                   <td colspan="2" id="talla1">METROS LINEAL</td>
                                 </tr>
@@ -659,10 +661,15 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                       <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['tipo_bolsa_ref']))) {
                                                                 echo "selected=\"selected\"";
                                                               } ?>>LAMINA</option>
-                                      <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['tipo_bolsa_ref']))) {
-                                                                          echo "selected=\"selected\"";
-                                                                        } ?>>BOLSA TROQUELADA</option>
-                                    </select></td>
+                                      <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['tipo_bolsa_ref']))) { echo "selected=\"selected\""; } ?>>BOLSA TROQUELADA</option>
+                                    </select>
+                                  </td>
+                                    <td  id="talla1">
+                                      <select name="coextrusion" id="coextrusion">
+                                        <option value="SI">SI</option>
+                                        <option value="NO">NO</option>
+                                      </select>
+                                    </td>
                                   <td colspan="2" id="fuente1"><input id="int_pesom_op" name="int_pesom_op" style="width:60px" type="number" min="0" step="0.01" value="<?php echo $row_datos_oc['peso_millar_ref']; ?>" required="required" onBlur="calcular_op();" /></td>
                                   <td colspan="2" id="fuente1"><input id="metroLineal_op" name="metroLineal_op" style="width:70px" type="number" min="0" size="5" step="0.01" required="required" onblur="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { alert('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}" /></td>
                                 </tr>
@@ -2809,18 +2816,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                       </tr>
                                       <tr>
                                         <td id="talla1">&nbsp;</td>
-                                      </tr>
-                                      <tr>
-                                        <td colspan="2" nowrap="nowrap" id="talla1">CON/SIN EXTRUSION</td>
-                                      </tr>
-                                      <tr>
-                                        <td colspan="2" id="talla1">
-                                          <select name="coextrusion" id="coextrusion">
-                                            <option value="SI">Con Extrusion</option>
-                                            <option value="NO">Sin Extrusion</option>
-                                          </select>
-                                        </td>
-                                      </tr>
+                                      </tr>  
                                     </table>
                                   </td>
                                 </tr>
@@ -2846,7 +2842,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   <td colspan="11" id="dato2"><input name="id_proceso" type="hidden" value="1" />
                                     <input name="b_estado_op" type="hidden" value="0" />
                                     <input name="b_borrado_op" type="hidden" id="b_borrado_op" value="0" />
-                                    <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_datos_oc['id_ref'] ?>" />
+                                    <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_datos_oc['id_ref']=='' ? $row_referencia['id_ref'] : $row_datos_oc['id_ref']; ?>" />
                                     <input type="hidden" name="MM_insert" value="form1" />
                                     <input type="submit" class="botonGeneral" name="GUARDAR" id="GUARDAR" value="GUARDAR" />
                                   </td>

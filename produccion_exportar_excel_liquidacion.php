@@ -238,7 +238,11 @@ switch ($tipoListado) {
         </tr>
         <?php do { ?>
           <tr>
+            <!-- N_OP -->
             <td nowrap="nowrap" id="dato2"><?php echo $row_orden_produccion['id_op_r']; ?></td>
+            <!--  -->
+
+            <!-- Cliente -->
             <td nowrap="nowrap" id="dato2">
               <?php
               $op_c = $row_orden_produccion['id_op_r'];
@@ -262,10 +266,23 @@ switch ($tipoListado) {
               } else {
                 echo "";
               } ?>
-              </a></td>
+              </a>
+            </td>
+            <!--  -->
+
+            <!-- Ref -->
             <td id="dato2"><?php echo $row_orden_produccion['ref_r']; ?></td>
+            <!--  -->
+            
+            <!-- Rollo -->
             <td id="dato2"><?php echo $num_rollo; ?></td>
+            <!--  -->
+
+            <!-- Kilos -->
             <td id="dato2"><?php echo round($row_orden_produccion['KILOS'], 2); ?></td>
+            <!--  -->
+
+            <!-- Kilos Desp -->
             <td id="dato2"><?php
 
                             $fechaI = $row_orden_produccion['fechaI_r'];
@@ -277,11 +294,18 @@ switch ($tipoListado) {
                               echo $row_desperdicio['T_desp'];
                             }
                             //echo $row_orden_produccion['int_kilos_desp_rp']; 
-                            ?></td>
+                            ?>
+            </td>
+            <!--  -->
+
+            <!-- Tiempos Total -->
             <td id="dato2"><?php
                             $tiempototal = $row_orden_produccion['TIEMPODIFE'];
                             $totaltiempo = horadecimalUna($tiempototal);
-                            echo $totaltiempo; ?></td>
+                            echo $totaltiempo; ?>
+            </td>
+            <!--  -->
+
             <td id="dato2"><?php
                             if ($num_rollo != '') {
                               $query_tiempoMuerto = "SELECT SUM(trt.valor_tiem_rt) AS muertos FROM Tbl_reg_tiempo trt WHERE trt.op_rt=$op_c AND trt.id_rpt_rt <> '141' AND trt.int_rollo_rt=$num_rollo AND trt.id_proceso_rt='4' AND trt.fecha_rt='$fechaI'";

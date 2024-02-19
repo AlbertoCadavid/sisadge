@@ -327,19 +327,19 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                   </tr>
                   <tr>
                     <td colspan="3" id="dato1" nowrap="nowrap">
-                      <img src="images/extruir.gif" width="20" height="17" alt="O.P EXTRUIDA"title="O.P EXTRUIDA" border="0" style="cursor:hand;"/>O.P en Extrusion <br>
-                      <img src="images/imprimir.gif" width="20" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/>O.P en Impresion<br>
+                      <img src="images/falta7.gif" width="20" height="17" alt="O.P EXTRUIDA"title="O.P EXTRUIDA" border="0" style="cursor:hand;"/>O.P Extruida <br>
+                      <img src="images/imprimir.gif" width="20" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/>O.P Impresa y Liquidada<br>
                       ROLLOS S.EX: Rollos sin Extrusion
                     </td>
                     <td colspan="3" id="dato1" nowrap="nowrap">
-                      <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA"title="O.P INGRESADA" border="0" style="cursor:hand;"/>O.P Falta por liquidar<br>
-                      <img src="images/completo.gif" width="18" height="18" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/>Rollos ingresados                    
+                      <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA"title="O.P INGRESADA" border="0" style="cursor:hand;"/>O.P Proceso en Impresion<br>
+                      <img src="images/completo.gif" width="18" height="18" alt="ROLLOS INGRESADOS"title="ROLLOS INGRESADOS" border="0" style="cursor:hand;"/>Rollos ingresados                    
                       
                     </td>
                     <td colspan="3" id="dato1" nowrap="nowrap">
                         <img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" />Tiene las mezclas de impresion<br>
                         <img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" border="0" />No Tiene mezclas de impresion <br>
-                        N.R.E : No tiene Rollos registrados en Extruder
+                        N.R.E : Sin Rollos registrados en Extruder
                       </td>
                     </tr>
                   </table>
@@ -402,12 +402,12 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                       endif;
                       ?> 
                       <?php 
-                      $id_ref_pr=$row_orden_produccion['int_cod_ref_op'];
-                $sqloca="SELECT * FROM tbl_maestra_mezcla_caract mmc LEFT JOIN tbl_caracteristicas_prod cp ON mmc.int_cod_ref_mm=cp.cod_ref WHERE mmc.int_cod_ref_mm='$id_ref_pr'  AND mmc.id_proceso_mm = '2' ORDER BY cp.proceso DESC LIMIT 1"; //valida vieja y tabla
+                $id_ref_pr=$row_orden_produccion['int_cod_ref_op'];
+                $sqloca="SELECT mmc.int_cod_ref_mm as cod_ref, mmc.id_proceso_mm as proceso  FROM tbl_maestra_mezcla_caract mmc WHERE mmc.int_cod_ref_mm='$id_ref_pr'  AND mmc.id_proceso_mm = '2' ORDER BY mmc.id_proceso_mm DESC LIMIT 1"; //valida vieja y tabla
                 $resultca = mysql_query($sqloca); 
                 $existenuevamezcla=mysql_num_rows($resultca); 
-                $refNueva = mysql_result($resultca, 0, 'cod_ref');
-                $procesoNuevo = mysql_result($resultca, 0, 'proceso');
+                $refVieja = mysql_result($resultca, 0, 'cod_ref');
+                $procesoVieja = mysql_result($resultca, 0, 'proceso'); 
 
 
 
@@ -419,14 +419,16 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
 
                 if($existenuevamezcla > 0 || $refNuevaNueva > 0 ): ?> 
 
-                  <?php if($rolloE > 0 && $rolloI < $rolloE): ?>           
+                  <?php if($rolloE > 0 && ($rolloI < $rolloE)): ?>           
                     <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/mas.gif" alt="ADD ROLLOS"title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
+ 
+
                     <?php elseif($rolloE == 0 ) :?> 
 
                        <?php if($row_orden_produccion['coextrusion'] == 'NO' ) :?> 
 
                                    <?php if($rolloI > '0'):?> 
-                                      <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="CON ROLLOS Y SIN EXTRUDER"title="CON ROLLOS Y SIN EXTRUDER" border="0" style="cursor:hand;" /></a>
+                                      <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/completo.gif" alt="CON ROLLOS EN IMPRESION"title="CON ROLLOS EN IMPRESION" border="0" style="cursor:hand;" /></a>
                                     <?php else: ?> 
                                       <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')">ROLLOS S.EX</a>
                                     <?php endif; ?>
@@ -445,21 +447,25 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
 
                       <?php else: ?> 
 
-                        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','870','710')"><img src="images/mas.gif" alt="ADD MEZCLA"title="ADD MEZCLA" border="0" style="cursor:hand;" /></a></a>
+                        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','1300','700')"><img src="images/mas.gif" alt="ADD MEZCLA"title="ADD MEZCLA" border="0" style="cursor:hand;" /></a></a>
 
                       <?php endif; ?> 
                     </td> 
                     <td id="dato2">
-                     <?php if($existenuevamezcla >= '1' || $refNuevaNueva >= '1' ):  ?>
-                      <?php if($procesoNuevo==2 ): ?>
-                        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $refNueva;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a>
 
-                        <?php else: ?> 
-                        <!-- <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $refNueva;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a> -->
-                          
+
+                     <?php if($existenuevamezcla >= '1' || $refNuevaNueva >= '1' ):  ?>
+                      <?php if($procesoVieja == 2 ): ?>
                           <a href="javascript:popUp('produccion_caract_impresion_vista.php?id_ref=<?php echo $row_orden_produccion['id_ref_op'];?>','870','600')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA ANTIGUA" title="VISUALIZAR CARACTERISTICA ANTIGUA" border="0" /></a>
-                        <?php endif; ?>
-                        <?php else: ?>
+
+                        <?php else : ?> 
+                         
+                        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a>
+ 
+                         <?php endif; ?>
+
+
+                    <?php else: ?>
                           <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LA MEZCLA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LA MEZCLA DE ESTA REFERENCIA EN IMPRESION" border="0" /></a>
 
                         <?php endif; ?>
@@ -472,33 +478,51 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                           $sqlimpr="SELECT id_ref_rp,id_op_rp,fecha_ini_rp FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='2'"; 
                           $resultimpr=mysql_query($sqlimpr); 
                           $numimpr=mysql_num_rows($resultimpr); 	
-                          ?> 
-
-                          <?php if($numimpr != ''): 
                            $id_op_rp = mysql_result($resultimpr, 0, 'id_op_rp');
                            $id_ref_rp = mysql_result($resultimpr, 0, 'id_ref_rp');
                            $fechaS = mysql_result($resultimpr, 0, 'fecha_ini_rp');
-                           ?>
+                          ?> 
 
-                           <a href="javascript:verFoto('produccion_registro_impresion_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/imprimir.gif" width="20" height="20" alt="LIQUIDADA" title="LIQUIDADA" border="0" style="cursor:hand;" /></a>
+                                <?php if($numimpr != ''):  ?>
+                                 
+                                 <a href="javascript:verFoto('produccion_registro_impresion_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/imprimir.gif" width="20" height="20" alt="LIQUIDADA" title="LIQUIDADA" border="0" style="cursor:hand;" /></a>      
 
-                           <?php else: ?>
-                             <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="20" height="20" alt="FALTA POR LIQUIDAR" title="FALTA POR LIQUIDAR" border="0" style="cursor:hand;" /></a>    	  
-                           <?php endif; ?>
+                                 <?php else: ?>
+                                   <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="20" height="20" alt="FALTA POR LIQUIDAR" title="FALTA POR LIQUIDAR" border="0" style="cursor:hand;" /></a>    	  
+                                 <?php endif; ?>
 
 
                            <?php  else: ?>
 
-                            <?php  if( ($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' ) && $rolloI < $rolloE  ):  ?>
-                             <a href="javascript:verFoto('produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="20" height="20" alt="INGRESE ROLLOS Y LIQUIDE" title="INGRESE ROLLOS Y LIQUIDE" border="0" style="cursor:hand;" /></a> 
-                             <?php  elseif(($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' )  && $rolloE == 0  ) : ?>
-                              <img src="images/extruir.gif" width="20" height="20" border="0" style="cursor:hand;" alt="ESTA EN EXTRUDER SIN ROLLOS REGISTRADOS" title="ESTA EN EXTRUDER SIN ROLLOS REGISTRADOS" /> 
-                              <?php elseif( ($existenuevamezcla == '0' || $refNuevaNueva == '0') && $rolloI < $rolloE  ):  ?>
-                                <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','870','710')"><img src="images/falta6.gif" width="20" height="20" alt="FALTA LA MEZCLA EN IMPRESION" title="FALTA LA MEZCLA EN IMPRESION" border="0" style="cursor:hand;" /></a>
-                                <?php else:  ?>
-                                  <a href="javascript:verFoto('produccion_registro_impresion_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/imprimir.gif" width="20" height="20" alt="LIQUIDADA" title="LIQUIDADA" border="0" style="cursor:hand;" /></a>
+                            <?php if($row_orden_produccion['coextrusion'] == 'SI' ) :?> 
+                               
+                                   <?php  if( ($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' ) && $rolloI ==0 && ($rolloI < $rolloE)  ):  ?>
+                                         <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta7.gif" width="20" height="20" alt="EXTRUIDA" title="EXTRUIDA" border="0" style="cursor:hand;" /></a>
+                                     <?php elseif( ($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' ) && $rolloI > 0 && ($rolloI < $rolloE)  ):  ?>
+                                          <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="20" height="20" alt="IMPRIMIENDO" title="IMPRIMIENDO" border="0" style="cursor:hand;" /></a> 
 
-                                <?php endif; ?>
+                                   <?php elseif(($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' )  && $rolloE == 0  ) : ?>
+                                     <img src="images/falta7.gif" width="20" height="20" border="0" style="cursor:hand;"  alt="SIN ROLLOS REGISTRADOS" title="SIN ROLLOS REGISTRADOS"  /> 
+                                   <?php elseif( ($existenuevamezcla == '0' || $refNuevaNueva == '0') && $rolloI < $rolloE  ):  ?>
+                                     <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','870','710')"><img src="images/falta7.gif" width="20" height="20" alt="FALTA LA MEZCLA EN IMPRESION" title="FALTA LA MEZCLA EN IMPRESION" border="0" style="cursor:hand;" /></a>
+                                    <?php else:  ?>
+                                       <a href="javascript:verFoto('produccion_registro_impresion_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/imprimir.gif" width="20" height="20" alt="LIQUIDADA" title="LIQUIDADA" border="0" style="cursor:hand;" /></a>
+
+                                     <?php endif; ?>
+                                 
+
+                             <?php else: ?>
+                                     <?php if( ($existenuevamezcla >= '1'  || $refNuevaNueva >= '1' ) && ($rolloI ==0)  ):  ?>
+                                       <a href="javascript:verFoto('produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta7.gif" width="20" height="20" alt="EXTRUIDA" title="EXTRUIDA" border="0" style="cursor:hand;" /></a>  
+                                     <?php elseif( ($existenuevamezcla == '0' || $refNuevaNueva == '0') && $rolloI ==0 ):  ?>
+                                       <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $id_ref_pr;?>','870','710')"><img src="images/falta7.gif" width="20" height="20" alt="FALTA LA MEZCLA EN IMPRESION" title="FALTA LA MEZCLA EN IMPRESION" border="0" style="cursor:hand;" /></a>
+                                      <?php else:  ?>
+                                         <a href="javascript:verFoto('produccion_registro_impresion_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/imprimir.gif" width="20" height="20" alt="LIQUIDADA" title="LIQUIDADA" border="0" style="cursor:hand;" /></a>
+
+                                       <?php endif; ?>
+ 
+                                 <?php endif; ?>
+
 
                               <?php endif; ?>
                             </td>	     

@@ -60,7 +60,7 @@ $conexion = new ApptivaDB();
 
                          $select_caja_num = $conexion->llenaListas('tbl_tiquete_numeracion',"WHERE int_op_tn='".$_GET['id_op']."'",'ORDER BY int_caja_tn DESC,int_paquete_tn DESC', "DISTINCT int_caja_tn,int_op_tn,imprime");
 
-                          
+                          $num = 0;
                         foreach($select_caja_num as $row_caja_num) {  ?> 
                
                           <p class="letraPaquete">
@@ -110,15 +110,23 @@ $conexion = new ApptivaDB();
                                     </table> <br> 
                                   </div>
                                 </div>
-                                <?php  
+                                <?php 
+                         
+                                if($row_caja_num['imprime']==1){
+                                  
+                                 echo $html = '<span style=cursor:pointer onclick="popUpNew(' . "'sellado_totaltiqxcaja_colas.php?id_op=".$row_caja_num['int_op_tn']."&int_caja_tn=".$row_caja_num['int_caja_tn']."'" .  ',1000,700)" > Caja: '.$row_caja_num['int_caja_tn'].'-IMPRIME TODOS ---</span>' ; 
+                                }else{
+
                                 echo $html = '<span style=cursor:pointer onclick="popUpNew(' . "'views/view_sellado_caja.php?id_op=".$row_caja_num['int_op_tn']."&int_paquete_tn=".$row_caja_num['int_paquete_tn']."&int_caja_tn=".$row_caja_num['int_caja_tn']."'" .  ',1000,700)" > Caja: '.$row_caja_num['int_caja_tn'].'-IMPRIME TODOS ---</span>' ; 
+                                }
                                 ?> 
 
                             <a href="#" style="color:red;" name="<?php echo $row_caja_num['imprime']; ?>" id="<?php echo $row_caja_num['int_caja_tn']; ?>" class="zonalink">VER PAQUETES DE CAJA: <?php echo $row_caja_num['int_caja_tn'];?>------</a> 
 
                             <a href="javascript:popUp('sellado_control_cajas_vista.php?id_op=<?php echo $row_caja_num['int_op_tn']; ?>&int_caja_tn=<?php echo $row_caja_num['int_caja_tn']; ?>','1200','780')" target="_top"><?php echo "IMPRIME STICKERS CAJAS: ".$row_caja_num['int_caja_tn']; ?></a>
+                            <?php if($num == 0) {?>
                             -- <a href="javascript:eliminarconAlerta(<?php echo $row_caja_num['int_op_tn']; ?>,<?php echo $row_caja_num['int_caja_tn']; ?>,'')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR TODOS LOS PAQUETES" title="ELIMINAR TODOS LOS PAQUETES" border="0"></a> 
-                          </p>
+                            <?php $num=1; }?></p>
                         <?php  } ?>
                       </div>
                     </div>

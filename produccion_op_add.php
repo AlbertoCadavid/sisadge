@@ -270,8 +270,10 @@ $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('30','33
 
 $refop = $_GET['int_cod_ref_op'] == '' ? 0 : $_GET['int_cod_ref_op'];
 
-if($refop!='')
-$row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='".$refop."' ", '',"ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref" );
+if($refop!=''){
+   $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='".$refop."' ", '',"ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref" );
+
+}
 
 //$row_numeraciones = $conexion->llenarCampos('tbl_tiquete_numeracion', " WHERE ref_tn='".$_GET['int_cod_ref_op']."' ", " ORDER BY  id_tn  DESC ","int_hasta_tn" );
 if($_GET['int_cod_ref_op']!='')
@@ -640,7 +642,8 @@ function alerta(){
                            <tr>
                              <td nowrap="nowrap" id="talla1">EXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELL&nbsp;&nbsp; DESPERDICIOS</td>
                              <td colspan="2" id="talla1"><?php if (!(strcmp("LAMINA", $row_datos_oc['tipo_bolsa_ref']))) {echo "KILOS SOLICITADOS";}else{echo "UNIDADES SOLICITADAS";} ?></td>
-                             <td colspan="2" id="talla1">TIPO DE BOLSA</td>
+                             <td colspan="2" id="talla1">TIPO DE BOLSA</td> 
+                             <td colspan="2" nowrap="nowrap" id="talla1"><strong>EXTRUSION</strong></td> 
                              <td colspan="2" id="talla1">PESO MILLAR</td>
                              <td colspan="2" id="talla1">METROS LINEAL</td>
                            </tr>
@@ -666,6 +669,12 @@ function alerta(){
                                <option value="PACKING LIST" <?php if (!(strcmp("PACKING LIST", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>PACKING LIST</option>
                                <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
                                <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option>
+                             </select>
+                           </td>
+                           <td id="talla1">
+                             <select name="coextrusion" id="coextrusion">
+                               <option value="SI">SI</option>
+                               <option value="NO">NO</option>
                              </select>
                            </td>
                              <td colspan="2" id="fuente1"><input id="int_pesom_op" name="int_pesom_op" style="width:60px" type="number" min="0" step="0.01" value="<?php echo $row_datos_oc['peso_millar_ref'] ?>" required="required" onblur="calcular_op();"/></td>
@@ -2595,9 +2604,9 @@ function alerta(){
                              <td colspan="11" id="dato2"><input name="id_proceso" type="hidden" value="1" />
                                <input name="b_estado_op" type="hidden" value="0" />
                                <input name="b_borrado_op" type="hidden" id="b_borrado_op" value="0" />
-                               <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_referencia['id_ref'] ?>" />
+                               <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_datos_oc['id_ref']=='' ? $row_referencia['id_ref'] : $row_datos_oc['id_ref']; ?>" />
                                <input type="hidden" name="MM_insert" value="form1" /> 
-                               <input name="coextrusion" id="coextrusion" type="hidden" value="SI" />
+                                
                                <input type="submit" class="botonGeneral" name="GUARDAR" id="GUARDAR" value="GUARDAR" /></td>
                            </tr>
                          </table>

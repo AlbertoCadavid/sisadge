@@ -117,6 +117,17 @@ if (isset($_SERVER['QUERY_STRING'])) {
 $tieneadjunto1=$_POST['adjunto1'];
 $tieneadjunto2=$_POST['adjunto22'];
 $tieneadjunto3=$_POST['adjunto33'];
+
+//para colocar un nombre diferente a la extencion del archivo
+ 
+
+  $str_archivo_oc = cambioExtension($_FILES['str_archivo_oc']['name'],$_POST['str_numero_oc'].'_ADJ1');
+  $adjunto2 = cambioExtension($_FILES['adjunto2']['name'],$_POST['str_numero_oc'].'_ADJ2');
+  $adjunto3 = cambioExtension($_FILES['adjunto3']['name'],$_POST['str_numero_oc'].'_ADJ3');
+   
+
+
+//echo eliminar_tildes($_FILES['str_archivo_oc']['name']);die;
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")&&($_POST['items']=='')) {
  echo "<script type=\"text/javascript\"> alert(\"NO SE PUEDE GUARDAR LA O.C SIN ITEMS INGRESADOS\");history.go(-1)</script>"; 
 }
@@ -125,13 +136,13 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")&&($_POST['i
 
   $directorio = "pdfacturasoc/";
   if (isset($_FILES['str_archivo_oc']) && $_FILES['str_archivo_oc']['name'] != "") 
-    $tieneadjunto1 = adjuntarArchivo($tieneadjunto1, $directorio, $_FILES['str_archivo_oc']['name'],$_FILES['str_archivo_oc']['tmp_name'],'UPDATES');
+    $tieneadjunto1 = adjuntarArchivo($tieneadjunto1, $directorio, $str_archivo_oc,$_FILES['str_archivo_oc']['tmp_name'],'UPDATES');
 
   if (isset($_FILES['str_archivo_oc']) && $_FILES['adjunto2']['name'] != "") 
-    $tieneadjunto2 = adjuntarArchivo($tieneadjunto2, $directorio, $_FILES['adjunto2']['name'],$_FILES['adjunto2']['tmp_name'],'UPDATES');
+    $tieneadjunto2 = adjuntarArchivo($tieneadjunto2, $directorio, $adjunto2,$_FILES['adjunto2']['tmp_name'],'UPDATES');
 
   if (isset($_FILES['str_archivo_oc']) && $_FILES['adjunto3']['name'] != "") 
-    $tieneadjunto3 = adjuntarArchivo($tieneadjunto3, $directorio, $_FILES['adjunto3']['name'],$_FILES['adjunto3']['tmp_name'],'UPDATES'); 
+    $tieneadjunto3 = adjuntarArchivo($tieneadjunto3, $directorio, $adjunto3,$_FILES['adjunto3']['tmp_name'],'UPDATES'); 
 
 
 $fechas_entrega = sumarMesyDias($_POST['fecha_ingreso_oc'],3); 

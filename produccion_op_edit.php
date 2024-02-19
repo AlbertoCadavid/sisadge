@@ -568,6 +568,9 @@ $row_orden_produccion = $conexion->llenarCampos("tbl_orden_produccion ", "WHERE 
 
 $_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
 
+
+$row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $_GET['int_cod_ref_op'] . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref");
+
 //CARGA O.C INTERNA
 $row_oc = $conexion->llenaSelect("Tbl_orden_compra_interna", " ", "ORDER BY Tbl_orden_compra_interna.numero_ocI DESC");
 
@@ -577,13 +580,14 @@ $row_clientes = $conexion->llenaSelect('cliente', " ", "ORDER BY nombre_c ASC");
 $row_precio = $conexion->llenarCampos("tbl_items_ordenc oci", "WHERE oci.int_cod_ref_io='" . $_GET['int_cod_ref_op'] . "' ", "  ", " oci.int_precio_io ");
 
 //imprime datos de ref
-if ($_GET['int_cod_ref_op'] != '') {
-  $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND  Tbl_orden_produccion.id_ref_op=Tbl_referencia.id_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
+if ( isset($_GET['int_cod_ref_op']) && $_GET['int_cod_ref_op'] != '') {
+  $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND  Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
 
-  $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND    Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
+  $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
 } else {
-
-  $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND  Tbl_orden_produccion.id_ref_op=Tbl_referencia.id_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
+  $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
+  $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
+ 
 }
 
 
@@ -702,7 +706,21 @@ $unidad_ocho = mysql_query($query_unidad_ocho, $conexion1) or die(mysql_error())
 $row_unidad_ocho = mysql_fetch_assoc($unidad_ocho);
 $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
-?>
+
+ 
+$numer_oc = $row_orden_produccion['str_numero_oc_op'];
+$resultoc = $conexion->llenarCampos("Tbl_orden_compra tmi ", " WHERE tmi.str_numero_oc= '" . $numer_oc . "' ", "", "tmi.fecha_ingreso_oc,tmi.str_nit_oc");
+$fech_oc = $resultoc['fecha_ingreso_oc'];
+$nit_oc = $resultoc['str_nit_oc']; 
+
+
+ 
+/*$ref_io = $row_orden_produccion['int_cod_ref_op'];
+$resultio = $conexion->llenarCampos("Tbl_items_ordenc tmi ", " WHERE tmi.str_numero_io= '" . $numer_oc . "'  AND int_cod_ref_io='" .$ref_io. "'  ", "", "tmi.fecha_entrega_io");
+$fech_io = $resultio['fecha_entrega_io'];*/
+ 
+ ?>
+ 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -827,29 +845,9 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     </tr>
                                     <tr id="tr1">
                                       <td width="89" nowrap="nowrap" id="dato1"><input name="fecha_registro_op" type="date" min="2000-01-02" value="<?php echo $row_orden_produccion['fecha_registro_op']; ?>" size="12" /></td>
-                                      <td colspan="2" nowrap="nowrap" id="dato1"><?php $numer_oc = $row_orden_produccion['str_numero_oc_op'];
-                                                                                  $sqloc = "SELECT * FROM Tbl_orden_compra WHERE str_numero_oc='$numer_oc'";
-                                                                                  $resultoc = mysql_query($sqloc);
-                                                                                  $numoc = mysql_num_rows($resultoc);
-                                                                                  if ($numoc >= '1') {
-                                                                                    $nombre_oc = mysql_result($resultoc, 0, 'fecha_ingreso_oc');
-                                                                                    $fech_oc = $nombre_oc;
-                                                                                    echo $fech_oc;
-                                                                                    $nit_oc = mysql_result($resultoc, 0, 'str_nit_oc');
-                                                                                  }
-                                                                                  ?>
+                                      <td colspan="2" nowrap="nowrap" id="dato1"><?php  echo $fech_oc;  ?>
                                       </td>
-                                      <td colspan="2" id="dato1"><?php
-                                                                  $numer_io = $row_orden_produccion['str_numero_oc_op'];
-                                                                  $ref_io = $row_orden_produccion['int_cod_ref_op'];
-                                                                  $sqlio = "SELECT * FROM Tbl_items_ordenc WHERE str_numero_io='$numer_io' AND int_cod_ref_io='$ref_io'";
-                                                                  $resultio = mysql_query($sqlio);
-                                                                  $numio = mysql_num_rows($resultio);
-                                                                  if ($numio >= '1') {
-                                                                    $nombre_io = mysql_result($resultio, 0, 'fecha_entrega_io');
-                                                                    $fech_io = $nombre_io;
-                                                                  }
-                                                                  ?>
+                                      <td colspan="2" id="dato1"> 
                                         <input name="fecha_entrega_op" type="date" value="<?php echo $row_orden_produccion['fecha_entrega_op']; ?>" required="required" />
                                       </td>
                                       <td id="dato3">&nbsp;</td>
@@ -871,9 +869,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                         <select name="op_destino" id="op_destino" style="width:100px" hidden="true">
                                           <option value="<?php echo $row_orden['id_op'] + 1; ?>" selected="selected"><?php echo $row_orden_produccion['id_op'] == '' ? $row_orden['id_op'] + 1 : $row_orden_produccion['id_op']; ?></option>
                                           <?php foreach ($row_orden as $row_orden) { ?>
-                                            <option value="<?php echo $row_orden['id_op'] ?>" <?php if (!(strcmp($row_orden['id_op'], $_GET['id_op']))) {
-                                                                                                echo "selected=\"selected\"";
-                                                                                              } ?>><?php echo $row_orden['id_op']; ?></option>
+                                            <option value="<?php echo $row_orden['id_op'] ?>" <?php if (!(strcmp($row_orden['id_op'], $_GET['id_op']))) { echo "selected=\"selected\"";} ?>><?php echo $row_orden['id_op']; ?></option>
                                           <?php } ?>
                                         </select>
                                       </td>
@@ -927,25 +923,14 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                       <td id="dato1">&nbsp;</td>
                                       <td colspan="3" id="dato3">Prioridad</td>
                                       <td colspan="2" id="dato1"><select name="b_visual_op" id="b_visual_op">
-                                          <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>0</option>
-                                          <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>1</option>
-                                          <option value="2" <?php if (!(strcmp("2", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>2</option>
-                                          <option value="3" <?php if (!(strcmp("3", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>3</option>
-                                          <option value="4" <?php if (!(strcmp("4", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>4</option>
-                                          <option value="5" <?php if (!(strcmp("5", $row_orden_produccion['b_visual_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>5</option>
-                                        </select></td>
+                                          <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['b_visual_op']))) { echo "selected=\"selected\"";}?>>0</option>
+                                          <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['b_visual_op']))) {echo "selected=\"selected\"";}?>>1</option>
+                                          <option value="2" <?php if (!(strcmp("2", $row_orden_produccion['b_visual_op']))) {echo "selected=\"selected\"";}?>>2</option>
+                                          <option value="3" <?php if (!(strcmp("3", $row_orden_produccion['b_visual_op']))) {echo "selected=\"selected\"";}?>>3</option>
+                                          <option value="4" <?php if (!(strcmp("4", $row_orden_produccion['b_visual_op']))) {echo "selected=\"selected\"";}?>>4</option>
+                                          <option value="5" <?php if (!(strcmp("5", $row_orden_produccion['b_visual_op']))) {echo "selected=\"selected\"";}?>>5</option>
+                                        </select>
+                                      </td>
                                     </tr>
                                     <tr id="tr1">
                                       <td colspan="11" id="titulo4">ESPECIFICACIONES</td>
@@ -967,13 +952,9 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     <tr>
                                       <td id="fuente1">
                                         <select name="int_cliente_op" id="int_cliente_op" class="selectsMini">
-                                          <option value="" <?php if (!(strcmp("", $row_orden_produccion['int_cliente_op']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>Cliente</option>
+                                          <option value="" <?php if (!(strcmp("", $row_orden_produccion['int_cliente_op']))) { echo "selected=\"selected\""; } ?>>Cliente</option>
                                           <?php foreach ($row_clientes as $row_clientes) { ?>
-                                            <option value="<?php echo $row_clientes['id_c'] ?>" <?php if (!(strcmp($row_clientes['id_c'], $row_orden_produccion['int_cliente_op']))) {
-                                                                                                  echo "selected=\"selected\"";
-                                                                                                } ?>><?php echo $row_clientes['nombre_c']; ?> </option>
+                                            <option value="<?php echo $row_clientes['id_c'] ?>" <?php if (!(strcmp($row_clientes['id_c'], $row_orden_produccion['int_cliente_op']))) { echo "selected=\"selected\""; } ?>><?php echo $row_clientes['nombre_c']; ?> </option>
                                           <?php } ?>
                                         </select>
                                       </td>
@@ -993,17 +974,13 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                       </td>
                                       <td nowrap="nowrap" id="fuente1"><?php echo $row_precio['int_precio_io']; ?></td>
                                       <td colspan="2" id="fuente1"><input type="number" style="width:60px" min="0" step="1" name="int_cotiz_op" id="int_cotiz_op" value="<?php echo $row_orden_produccion['int_cotiz_op'] ?>" required="required" readonly="readonly" /></td>
-                                      <td colspan="2" id="fuente1"><select name="str_entrega_op" id="str_entrega_op">
-                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_orden_produccion['str_entrega_op']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>N.A</option>
-                                          <option value="PARCIAL" <?php if (!(strcmp('PARCIAL', $row_orden_produccion['str_entrega_op']))) {
-                                                                    echo "selected=\"selected\"";
-                                                                  } ?>>PARCIAL</option>
-                                          <option value="TOTAL" <?php if (!(strcmp('TOTAL', $row_orden_produccion['str_entrega_op']))) {
-                                                                  echo "selected=\"selected\"";
-                                                                } ?>>TOTAL</option>
-                                        </select></td>
+                                      <td colspan="2" id="fuente1">
+                                        <select name="str_entrega_op" id="str_entrega_op">
+                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_orden_produccion['str_entrega_op']))) { echo "selected=\"selected\""; } ?>>N.A</option>
+                                          <option value="PARCIAL" <?php if (!(strcmp('PARCIAL', $row_orden_produccion['str_entrega_op']))) { echo "selected=\"selected\""; } ?>>PARCIAL</option>
+                                          <option value="TOTAL" <?php if (!(strcmp('TOTAL', $row_orden_produccion['str_entrega_op']))) { echo "selected=\"selected\""; } ?>>TOTAL</option>
+                                        </select>
+                                      </td>
                                     </tr>
                                     <tr>
                                       <td id="dato1"></td>
@@ -1016,48 +993,38 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     </tr>
                                     <tr>
                                       <td id="talla1">DESPERDICIO</td>
-                                      <td colspan="2" id="talla1"><?php if (!(strcmp("LAMINA", $row_orden_produccion['str_tipo_bolsa_op']))) {
-                                                                    echo "KILOS SOLICITADOS";
-                                                                  } else {
-                                                                    echo "UNIDADES SOLICITADAS";
-                                                                  } ?></td>
+                                      <td colspan="2" id="talla1"><?php if (!(strcmp("LAMINA", $row_orden_produccion['str_tipo_bolsa_op']))) { echo "KILOS SOLICITADOS"; } else { echo "UNIDADES SOLICITADAS"; } ?></td>
                                       <td colspan="2" id="talla1">TIPO DE BOLSA</td>
+                                      <td colspan="2" nowrap="nowrap" id="talla1">EXTRUSION</td> 
                                       <td colspan="2" id="talla1">PESO MILLAR</td>
                                       <td colspan="2" id="talla1">METROS LINEAL</td>
                                     </tr>
                                     <tr>
-                                      <td id="talla1"><input id="int_desperdicio_op" name="int_desperdicio_op" type="text" value="<?php echo $row_orden_produccion['int_desperdicio_op'] ?>" min="0" max="50" style="width:40px" required="required" onchange="calcular_op();validacion_tipocinta()" />
+                                      <td id="talla1">
+                                        <input id="int_desperdicio_op" name="int_desperdicio_op" type="text" value="<?php echo $row_orden_produccion['int_desperdicio_op'] ?>" min="0" max="50" style="width:40px" required="required" onchange="calcular_op();validacion_tipocinta()" />
                                         <strong>%</strong>
                                       </td>
                                       <td colspan="2" id="fuente1"><strong>
                                           <input type="number" name="int_cantidad_op" id="int_cantidad_op" value="<?php echo $row_orden_produccion['int_cantidad_op'] ?>" style="width:80px" onchange="calcular_op();" step="0.01" required="required" />
                                         </strong></td>
-                                      <td colspan="2" id="fuente1"><select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
-                                          <option value="N.A." <?php if (!(strcmp("N.A.", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                  echo "selected=\"selected\"";
-                                                                } ?>>N.A.</option>
-                                          <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                      echo "selected=\"selected\"";
-                                                                    } ?>>SEGURIDAD</option>
-                                          <option value="CURRIER" <?php if (!(strcmp("CURRIER", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                    echo "selected=\"selected\"";
-                                                                  } ?>>CURRIER</option>
-                                          <option value="BOLSA PLASTICA" <?php if (!(strcmp("BOLSA PLASTICA", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                            echo "selected=\"selected\"";
-                                                                          } ?>>BOLSA PLASTICA</option>
-                                          <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                          echo "selected=\"selected\"";
-                                                                        } ?>>BOLSA MONEDA</option>
-                                          <option value="PACKING LIST" <?php if (!(strcmp("PACKING LIST", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                          echo "selected=\"selected\"";
-                                                                        } ?>>PACKING LIST</option>
-                                          <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                    echo "selected=\"selected\"";
-                                                                  } ?>>LAMINA</option>
-                                          <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['str_tipo_bolsa_op']))) {
-                                                                              echo "selected=\"selected\"";
-                                                                            } ?>>BOLSA TROQUELADA</option>
-                                        </select></td>
+                                      <td colspan="2" id="fuente1">
+                                        <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
+                                          <option value="N.A." <?php if (!(strcmp("N.A.", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>N.A.</option>
+                                          <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>SEGURIDAD</option>
+                                          <option value="CURRIER" <?php if (!(strcmp("CURRIER", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>CURRIER</option>
+                                          <option value="BOLSA PLASTICA" <?php if (!(strcmp("BOLSA PLASTICA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>BOLSA PLASTICA</option>
+                                          <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>BOLSA MONEDA</option>
+                                          <option value="PACKING LIST" <?php if (!(strcmp("PACKING LIST", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>PACKING LIST</option>
+                                          <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>LAMINA</option>
+                                          <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>BOLSA TROQUELADA</option>
+                                        </select>
+                                      </td>
+                                      <td colspan="2" nowrap="nowrap" id="talla1">
+                                        <select name="coextrusion" id="coextrusion"> 
+                                          <option value="SI"<?php if (!(strcmp("SI", $row_orden_produccion['coextrusion']))) { echo "selected=\"selected\""; } ?>>SI</option>
+                                          <option value="NO"<?php if (!(strcmp("NO", $row_orden_produccion['coextrusion']))) { echo "selected=\"selected\""; } ?>>NO</option>
+                                        </select>
+                                      </td>
                                       <td colspan="2" id="fuente1"><input id="int_pesom_op" name="int_pesom_op" style="width:60px" type="number" min="0" step="0.01" value="<?php echo $row_orden_produccion['int_pesom_op']; ?>" required="required" /></td>
                                       <td colspan="2" id="fuente1"><input id="metroLineal_op" name="metroLineal_op" style="width:70px" type="number" min="0" size="5" step="0.01" required="required" value="<?php echo $row_orden_produccion['metroLineal_op']; ?>" onblur="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}" /></td>
                                     </tr>
@@ -1071,18 +1038,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     <tr>
                                       <td id="fuente1"><input type="text" name="str_matrial_op" id="str_matrial_op" size="14" value="<?php echo $row_datos_oc['material_ref']; ?>" /></td>
                                       <td colspan="2" id="fuente1"><select name="str_presentacion_op" id="str_presentacion_op" onchange="if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op();}">
-                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_presentacion']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>N.A</option>
-                                          <option value="LAMINA" <?php if (!(strcmp('LAMINA', $row_datos_oc['Str_presentacion']))) {
-                                                                    echo "selected=\"selected\"";
-                                                                  } ?>>LAMINA</option>
-                                          <option value="TUBULAR" <?php if (!(strcmp('TUBULAR', $row_datos_oc['Str_presentacion']))) {
-                                                                    echo "selected=\"selected\"";
-                                                                  } ?>>TUBULAR</option>
-                                          <option value="SEMITUBULAR" <?php if (!(strcmp('SEMITUBULAR', $row_datos_oc['Str_presentacion']))) {
-                                                                        echo "selected=\"selected\"";
-                                                                      } ?>>SEMITUBULAR</option>
+                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_presentacion']))) { echo "selected=\"selected\""; } ?>>N.A</option>
+                                          <option value="LAMINA" <?php if (!(strcmp('LAMINA', $row_datos_oc['Str_presentacion']))) { echo "selected=\"selected\""; } ?>>LAMINA</option>
+                                          <option value="TUBULAR" <?php if (!(strcmp('TUBULAR', $row_datos_oc['Str_presentacion']))) { echo "selected=\"selected\""; } ?>>TUBULAR</option>
+                                          <option value="SEMITUBULAR" <?php if (!(strcmp('SEMITUBULAR', $row_datos_oc['Str_presentacion']))) { echo "selected=\"selected\""; } ?>>SEMITUBULAR</option>
                                         </select></td>
                                       <td colspan="2" id="talla1">CANT. KLS REQUERIDOS</td>
                                       <td colspan="2" id="fuente1"><input name="int_kilos_op" type="number" required="required" id="int_kilos_op" style="width:60px" min="0" step="0.01" value="<?php echo $row_orden_produccion['int_kilos_op']; ?>" /></td>
@@ -1106,15 +1065,9 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                       <td colspan="3" id="fuente1">&nbsp;</td>
                                       <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                                       <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
-                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_tratamiento']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>N.A</option>
-                                          <option value="UNA CARA" <?php if (!(strcmp('UNA CARA',  $row_datos_oc['Str_tratamiento']))) {
-                                                                      echo "selected=\"selected\"";
-                                                                    } ?>>UNA CARA</option>
-                                          <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA',  $row_datos_oc['Str_tratamiento']))) {
-                                                                        echo "selected=\"selected\"";
-                                                                      } ?>>DOBLE CARA</option>
+                                          <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_tratamiento']))) { echo "selected=\"selected\""; } ?>>N.A</option>
+                                          <option value="UNA CARA" <?php if (!(strcmp('UNA CARA',  $row_datos_oc['Str_tratamiento']))) { echo "selected=\"selected\""; } ?>>UNA CARA</option>
+                                          <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA',  $row_datos_oc['Str_tratamiento']))) { echo "selected=\"selected\""; } ?>>DOBLE CARA</option>
                                         </select></td>
                                     </tr>
                                     <tr id="tr1">
@@ -1402,1477 +1355,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
                                     <?php else : ?>
                                       <!--  INICIA MEZCLAS DE IMPRESION NUEVAS-->
-
-                                      <td colspan="18">
-                                        <table style="width: 100%">
-                                          <tr>
-                                            <td colspan="18" id="fuente1">
-                                              Impresora : <?php echo $row_impresion['extrusora_mp']; ?>
-                                            </td>
-                                          </tr>
-                                          <tr id="tr1">
-                                            <td rowspan="2" id="fuente1"> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 1</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 2</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 3</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 4</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 5</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 6</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 7</b> </td>
-                                            <td nowrap="nowrap" colspan="2" id="fuente1"><b>UNIDAD 8</b> </td>
-                                          </tr>
-                                          <tr>
-                                            <td></td>
-                                          </tr>
-                                          <tr id="tr1">
-                                            <td id="talla1"><b>COLORES</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref1_tol1_pm']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref1_tol1_porc1_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo =  $row_impresion['int_ref3_tol3_pm']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref3_tol3_porc3_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_1']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_2']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_3']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_4']; ?>
-                                            </td>
-
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_5']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_6']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_7']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_8']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_9']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_10']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_11']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_12']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"><b>MEZCLAS</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref1_tol2_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref1_tol2_porc1_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref3_tol4_pm']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref3_tol4_porc3_pm']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_13']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_14']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_15']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_16']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_17']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_18']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_19']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_20']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_21']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_22']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_23']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_24']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr id="tr1">
-                                            <td id="talla1"></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref1_tol3_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref1_tol3_porc1_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_25']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_26']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_27']; ?>
-
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_28']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_29']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_30']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_31']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_32']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_33']; ?>
-
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_34']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_35']; ?>
-
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_36']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_37']; ?>
-
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_38']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref1_tol4_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref1_tol4_porc1_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_39']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_40']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_41']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_42']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_43']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_44']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_45']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_46']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_47']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_48']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_49']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_50']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_51']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_52']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref2_tol1_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref2_tol1_porc2_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_53']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_54']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_55']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_56']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_57']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_58']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_59']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_60']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_61']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_62']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_63']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_64']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_65']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_66']; ?>
-                                            </td>
-
-                                          </tr>
-                                          <tr id="tr1">
-                                            <td id="talla1"><b>ALCOHOL</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref2_tol2_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref2_tol2_porc2_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_67']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_68']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_69']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_70']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_71']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_72']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_73']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_74']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_75']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_76']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_77']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_78']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_79']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_80']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"><b>ACETATO</b> NPA</td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref2_tol3_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref2_tol3_porc2_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_81']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_82']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_83']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_84']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_85']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_86']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_87']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_88']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_89']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_90']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_91']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_92']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_93']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_94']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr id="tr1">
-                                            <td id="talla1"><b>METOXIPROPANOL</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref2_tol4_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref2_tol4_porc2_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_95']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_96']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_97']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_98']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_99']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_100']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_101']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_102']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_103']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_104']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_105']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_106']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_107']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_108']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"><b>VISCOSIDAD</b></td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref1_rpm_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref1_tol5_porc1_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref2_rpm_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref2_tol5_porc2_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref3_rpm_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['int_ref3_tol5_porc3_pm']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_137']; ?>
-                                            </td>
-                                            <td colspan="2" id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_138']; ?>
-                                            </td>
-                                          </tr>
-
-                                          <tr id="tr1">
-                                            <td id="talla1"><b>ANILOX</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref3_tol1_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref3_tol1_porc3_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_109']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_110']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_111']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_112']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_113']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_114']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_115']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_116']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_117']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_118']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_119']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_120']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_121']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_122']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr>
-                                            <td id="talla1"><b>BCM</b></td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_impresion['int_ref3_tol2_pm'];
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_impresion['int_ref3_tol2_porc3_pm']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_123']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_124']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_125']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_126']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_127']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_128']; ?>
-                                            </td>
-
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_129']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_130']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_131']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_132']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_133']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_134']; ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php $idinsumo = $row_mezclaycaract_impresion['campo_135']; ?>
-                                              <?php
-                                              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-                                              $resultm = mysql_query($sqlm);
-                                              $numm = mysql_num_rows($resultm);
-                                              if ($numm >= '1') {
-                                                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                                                echo $nombreInsumo;
-                                              } else {
-                                                echo "";
-                                              }
-                                              ?>
-                                            </td>
-                                            <td id="talla1">
-                                              <?php echo $row_mezclaycaract_impresion['campo_136']; ?>
-                                            </td>
-
-                                          </tr>
-
-                                          <tr id="tr1">
-                                            <td colspan="18" id="talla1">
-                                              Observacion: <?php echo $row_impresion['observ_pm']; ?>
-                                            </td>
-                                          </tr>
+ 
 
                                           <!-- INICIA CARACTERISTICAS -->
                                           <tr id="tr1">
@@ -2947,13 +1430,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   <tr>
                                     <td id="talla1"><strong>ANCHO</strong></td>
                                     <td id="talla1"><strong>LARGO</strong></td>
-                                    <td nowrap="nowrap" id="talla1"><strong>SOLAPA (<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) {
-                                                                                      echo "Sencilla";
-                                                                                    } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) {
-                                                                                      echo "Doble";
-                                                                                    } else {
-                                                                                      echo "";
-                                                                                    } ?>
+                                    <td nowrap="nowrap" id="talla1"><strong>SOLAPA (<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) { echo "Sencilla"; } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) {  echo "Doble"; } else { echo ""; } ?>
                                         <input type="hidden" name="valor_s" id="valor_s" value="<?php echo $row_datos_oc['b_solapa_caract_ref']; ?>" />)</strong></td>
                                     <td id="talla1">&nbsp;</td>
                                     <td id="talla1"><strong>BOLSILLO PORTAGUIA</strong></td>
@@ -3006,16 +1483,18 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     </td>
                                     <td id="talla1">&nbsp; </td>
                                     <td id="talla1"><?php if ($row_datos_ref['bolsillo_guia_ref'] != '0.00' && $row_datos_ref['tipoLamina_ref'] == '0') { ?>
-                                        <input name="tipoLamina" type="hidden" value="1" /><?php } else {
-                                                                                            $tipolam = $row_datos_ref['tipoLamina_ref'];
-                                                                                            $sqlinsumos = "SELECT descripcion_insumo FROM insumo WHERE id_insumo='$tipolam'";
-                                                                                            $resultinsumos = mysql_query($sqlinsumos);
-                                                                                            $numinsumos = mysql_num_rows($resultinsumos);
-                                                                                            if ($numinsumos >= '1') {
-                                                                                              echo  $tipoBols = mysql_result($resultinsumos, 0, 'descripcion_insumo');
-                                                                                            }
-                                                                                          }
-                                                                                            ?>
+                                        <input name="tipoLamina" type="hidden" value="1" />
+                                      <?php } else {
+
+                                    $tipolam = $row_datos_ref['tipoLamina_ref'];
+                                     $sqlinsumos = "SELECT descripcion_insumo FROM insumo WHERE id_insumo='$tipolam'";
+                                     $resultinsumos = mysql_query($sqlinsumos);
+                                     $numinsumos = mysql_num_rows($resultinsumos);
+                                      if ($numinsumos >= '1') {
+                                            echo  $tipoBols = mysql_result($resultinsumos, 0, 'descripcion_insumo');
+                                         }
+                                       }
+                                     ?>
                                     </td>
                                     <td id="talla1">&nbsp;</td>
                                   </tr>
@@ -3026,24 +1505,12 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   </tr>
                                   <tr>
                                     <td id="talla1"> <strong>(Ubicacion)
-                                        <input type="hidden" name="lam1" id="lam1" value="<?php if ($row_datos_oc['bol_lamina_1_ref'] == '') {
-                                                                                            echo '0';
-                                                                                          } else {
-                                                                                            echo $row_datos_oc['bol_lamina_1_ref'];
-                                                                                          } ?>" />
-                                        <input type="hidden" name="lam2" id="lam2" value="<?php if ($row_datos_oc['bol_lamina_2_ref'] == '') {
-                                                                                            echo '0';
-                                                                                          } else {
-                                                                                            echo $row_datos_oc['bol_lamina_2_ref'];
-                                                                                          } ?>" />
+                                        <input type="hidden" name="lam1" id="lam1" value="<?php if ($row_datos_oc['bol_lamina_1_ref'] == '') { echo '0'; } else { echo $row_datos_oc['bol_lamina_1_ref']; } ?>" />
+                                        <input type="hidden" name="lam2" id="lam2" value="<?php if ($row_datos_oc['bol_lamina_2_ref'] == '') { echo '0'; } else { echo $row_datos_oc['bol_lamina_2_ref']; } ?>" />
                                       </strong></td>
                                     <td id="talla1">&nbsp;</td>
                                     <td id="talla1">Calibre Bols.
-                                      <input type="number" name="calibre_bols" id="calibre_bols" value="<?php if ($row_datos_oc['calibreBols_ref'] == '') {
-                                                                                                          echo "0";
-                                                                                                        } else {
-                                                                                                          echo $row_datos_oc['calibreBols_ref'];
-                                                                                                        } ?>" style="width:50px" min="0" step="0.01" <?php if ($row_datos_oc['bol_lamina_1_ref'] > '0' || $row_datos_oc['bol_lamina_2_ref'] > '0') { ?>required="required" title="Debe agregar el calibre del bolsillo en la referencia" <?php } ?> onBlur="return metrosAkilos()" />
+                                      <input type="number" name="calibre_bols" id="calibre_bols" value="<?php if ($row_datos_oc['calibreBols_ref'] == '') { echo "0"; } else { echo $row_datos_oc['calibreBols_ref']; } ?>" style="width:50px" min="0" step="0.01" <?php if ($row_datos_oc['bol_lamina_1_ref'] > '0' || $row_datos_oc['bol_lamina_2_ref'] > '0') { ?>required="required" title="Debe agregar el calibre del bolsillo en la referencia" <?php } ?> onBlur="return metrosAkilos()" />
                                     </td>
                                     <td id="talla1"><strong>(Forma)</strong></td>
                                     <td id="talla1"><strong>(Lamina 1)</strong></td>
@@ -3076,13 +1543,9 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     <td id="talla1"><input name="undxpaqreal" style="width:50px" type="number" id="undxpaqreal" value="<?php echo $row_datos_oc['undxpaqreal']; ?>" required="required" size="12" min="0" /></td>
                                     <td id="talla1">
                                       <select name="marca_cajas_egp" id="opciones" style="width:100px" onchange="primeraletra(this),alerta()">
-                                        <option value="NA" <?php if (!(strcmp("0", $row_datos_oc['marca_cajas_egp']))) {
-                                                              echo "selected=\"selected\"";
-                                                            } ?>>NA</option>
+                                        <option value="NA" <?php if (!(strcmp("0", $row_datos_oc['marca_cajas_egp']))) { echo "selected=\"selected\""; } ?>>NA</option>
                                         <?php foreach ($row_insumo as $row_insumo) { ?>
-                                          <option value="<?php echo $row_insumo['id_insumo'] ?>" <?php if (!(strcmp($row_insumo['id_insumo'], $row_datos_oc['marca_cajas_egp']))) {
-                                                                                                    echo "selected=\"selected\"";
-                                                                                                  } ?>><?php echo $row_insumo['descripcion_insumo'] ?></option>
+                                          <option value="<?php echo $row_insumo['id_insumo'] ?>" <?php if (!(strcmp($row_insumo['id_insumo'], $row_datos_oc['marca_cajas_egp']))) { echo "selected=\"selected\""; } ?>><?php echo $row_insumo['descripcion_insumo'] ?></option>
                                         <?php } ?>
                                       </select>
                                     </td>
@@ -3105,18 +1568,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td colspan="8" id="talla3">Tiene Faltantes?
+                                    <td colspan="8" id="talla3">Tiene Faltantes? 
                                       <select name="imprimiop" id="imprimiop" required="required">
-                                        <option value="" <?php if (!(strcmp("", $row_datos_oc['imprimiop']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>Selecione</option>
-
-                                        <option value="0" <?php if (!(strcmp(0, $row_datos_oc['imprimiop']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>SI</option>
-                                        <option value="1" <?php if (!(strcmp(1, $row_datos_oc['imprimiop']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>NO</option>
+                                        <option value="" <?php if (!(strcmp("", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option> 
+                                        <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI</option>
+                                        <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO</option>
                                       </select>
                                     </td>
                                     <td colspan="7" id="talla1">&nbsp;<div id="resultado_generador"></div>
@@ -3191,13 +1647,9 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                                     ?>
 
                                       <select name="id_termica_op" id="id_termica_op" style="width:100px">
-                                        <option value="" <?php if (!(strcmp("", $row_referencia['tipoCinta_ref']))) {
-                                                            echo "selected=\"selected\"";
-                                                          } ?>>N.A</option>
+                                        <option value="" <?php if (!(strcmp("", $row_referencia['tipoCinta_ref']))) { echo "selected=\"selected\""; } ?>>N.A</option>
                                         <?php foreach ($row_insumo3 as $row_insumo3) { ?>
-                                          <option value="<?php echo $row_insumo3['id_insumo'] ?>" <?php if (!(strcmp($row_insumo3['id_insumo'], $row_referencia['tipoCinta_ref']))) {
-                                                                                                    echo "selected=\"selected\"";
-                                                                                                  } ?>><?php echo $row_insumo3['descripcion_insumo'] ?></option>
+                                          <option value="<?php echo $row_insumo3['id_insumo'] ?>" <?php if (!(strcmp($row_insumo3['id_insumo'], $row_referencia['tipoCinta_ref']))) { echo "selected=\"selected\""; } ?>><?php echo $row_insumo3['descripcion_insumo'] ?></option>
                                         <?php } ?>
                                       </select>
                                     </td>
@@ -3205,20 +1657,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   </tr>
                                   <tr>
                                     <td colspan="1" nowrap="nowrap" id="talla1"></td>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="1" nowrap="nowrap" id="talla1">EXTRUSION</td>
-
-                                  </tr>
-                                  <tr>
-                                    <td colspan="2" nowrap="nowrap" id="talla1">
-                                      <select name="coextrusion" id="coextrusion">
-                                        <option value="<?php echo $row_orden_produccion['coextrusion']; ?>"><?php echo $row_orden_produccion['coextrusion']; ?></option>
-                                        <option value="SI">Con Extrusion</option>
-                                        <option value="NO">Sin Extrusion</option>
-                                      </select>
-                                    </td>
-                                  </tr>
+                                  </tr>  
                                 </table>
                               </td>
                             </tr>
@@ -3245,7 +1684,8 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                             <tr id="tr1">
                               <td colspan="11" id="dato2">
                                 <input name="b_estado_op" type="hidden" value="<?php echo $row_orden_produccion['b_estado_op'] ?>" />
-                                <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_orden_produccion['id_ref_op'] ?>" />
+                                <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_orden_produccion['id_ref_op']=='' ? $row_referencia['id_ref'] : $row_orden_produccion['id_ref_op']; ?>" /> 
+ 
                                 <input name="MM_update" type="hidden" value="form1" />
                                 <input type="submit" name="EDITAR" class="botonGeneral" id="EDITAR" value="EDITAR" />
                               </td>
@@ -3271,12 +1711,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
   </table>
   </div>
   </div>
-  <script type="text/javascript">
-    $(document).ready(function() {
-
-
-    });
-  </script>
+  
 
 </body>
 

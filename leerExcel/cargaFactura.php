@@ -1,7 +1,8 @@
 <?php
-   require_once ('E:/xampp/htdocs/config.php');
-   require ('E:/xampp/htdocs/acycia/Controller/controller.php'); 
-?>
+   
+   require ('C:/xampp/htdocs/config.php');// $_SERVER['DOCUMENT_ROOT'].'/config.php'
+   include_once('C:/xampp/htdocs/acycia/Controller/controller.php');//ROOT_BBDD /Controller/controller.php 
+?> 
 <?php
  
  //require_once('conexion1.php');
@@ -10,18 +11,17 @@
  * Demostrar lectura de hoja de cálculo o archivo
  * de Excel con PHPSpreadSheet: leer todo el contenido
  * de un archivo de Excel
- *
- * @author parzibyte
+ * 
  */
 # Cargar librerias y cosas necesarias
-require_once "E:/xampp/htdocs/acycia/leerExcel/vendor/autoload.php";
+require_once "C:/xampp/htdocs/acycia/leerExcel/vendor/autoload.php";//ROOT
 
 # Indicar que usaremos el IOFactory
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 # Recomiendo poner la ruta absoluta si no está junto al script
 # Nota: no necesariamente tiene que tener la extensión XLSX
-$rutaArchivo = "E:/xampp/htdocs/acycia/CARTERAEXCEL/CARTERA.xlsx";
+$rutaArchivo = "C:/xampp/htdocs/acycia/CARTERAEXCEL/CARTERA.xlsx";//ROOT
 $documento = IOFactory::load($rutaArchivo);
 
 # Recuerda que un documento puede tener múltiples hojas
@@ -29,7 +29,7 @@ $documento = IOFactory::load($rutaArchivo);
 $totalDeHojas = $documento->getSheetCount();
 
 //Actualizo los estados de todas las facturas existentes en cartera A cero
-logs("SE ACTUALIZAN APARTIR DE LA FECHA: 2021-01-01 ". '<br>');
+logs("SE ACTUALIZAN APARTIR DE LA FECHA: 2024-01-01 ". '<br>');
 actualizoEstadoCartera();//todos a cero
  
 # Iterar hoja por hoja
@@ -125,8 +125,8 @@ function tipo($columna,$valorRaw,$fila){
 
 function actualizoEstadoCartera(){
     $conexion = new ApptivaDB(); 
-     $actualizo = $conexion->actualizar("tbl_orden_compra", " estado_cartera='0', tipo_pago_cartera='', valor_cartera='' ", " fecha_ingreso_oc >= '2021-06-01' " );
-    logs("Actualiza a 0 Estado Factura Despues de fecha 2021-06-01 " );
+     $actualizo = $conexion->actualizar("tbl_orden_compra", " estado_cartera='0', tipo_pago_cartera='', valor_cartera='' ", " fecha_ingreso_oc >= '2024-01-01' " );
+    logs("Actualiza a 0 Estado Factura Despues de fecha 2024-01-01 " );
 
 }
 

@@ -1,1 +1,1 @@
-E:\xampp\php\php.exe -f E:\xampp\htdocs\acycia\leerExcel\cargaFactura.php
+C:\xampp\php\php.exe -f C:\xampp\htdocs\acycia\leerExcel\cargaFactura.php

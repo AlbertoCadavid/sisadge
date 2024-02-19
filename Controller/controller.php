@@ -1,5 +1,5 @@
 <?php 
-require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para traer variables globales
+require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe dejar para traer variables globales
  
   class ApptivaDB{    
   private $host   = DB_HOST;
@@ -74,7 +74,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');//se debe dejar para trae
 
      //LLENAR CAMPOS
     public function llenarCampos($tabla, $condicion, $orden='', $distinct='' ){  
-      //echo "SELECT $distinct FROM $tabla $condicion $orden  "; 
+      
       $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden ") or die($this->conexion->error);
       if($resultado)
         $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)

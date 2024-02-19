@@ -1,13 +1,13 @@
 <?php
-   require_once ('E:/xampp/htdocs/config.php');
-   require ('E:/xampp/htdocs/acycia/Controller/controller.php'); 
- 
+    include ('C:/xampp/htdocs/config.php');//$_SERVER['DOCUMENT_ROOT'] 
+   include_once('C:/xampp/htdocs/acycia/Controller/controller.php');//ROOT_BBDD /Controller/controller.php 
+ //'C:/xampp/htdocs/acycia/Controller/controller.php'
 ?>
 <?php
 
-//__DIR__//E:\xampp\htdocs\acycia_dev\leerExcelInventario //directorio donde esta el archivo
-//ROOT_PATH//E:/xampp/htdocs/acycia_dev/
-//CONTROLLER_PATH//E:/xampp/htdocs/acycia_dev/controller/
+//__DIR__//C:\xampp\htdocs\acycia_dev\leerExcelInventario //directorio donde esta el archivo
+//ROOT_PATH//C:/xampp/htdocs/acycia_dev/
+//CONTROLLER_PATH//C:/xampp/htdocs/acycia_dev/controller/
  
  //require_once('conexion1.php');
  $conexion = new ApptivaDB();  
@@ -16,17 +16,16 @@
  * de Excel con PHPSpreadSheet: leer todo el contenido
  * de un archivo de Excel
  *
- * @author parzibyte
  */
 # Cargar librerias y cosas necesarias
-require_once "E:/xampp/htdocs/acycia/leerExcelInventario/vendor/autoload.php";
+require_once  "C:/xampp/htdocs/acycia/leerExcelInventario/vendor/autoload.php";//ROOT
  
 # Indicar que usaremos el IOFactory
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 # Recomiendo poner la ruta absoluta si no está junto al script
 # Nota: no necesariamente tiene que tener la extensión XLSX
-$rutaArchivo = "E:/xampp/htdocs/acycia/INVENTARIODIARIO/INVENTARIO.xlsx";
+$rutaArchivo = "C:/xampp/htdocs/acycia/INVENTARIODIARIO/INVENTARIO.xlsx";//ROOT
 $documento = IOFactory::load($rutaArchivo);
 # Recuerda que un documento puede tener múltiples hojas
 # obtener conteo e iterar
@@ -78,10 +77,10 @@ if($ultimaHoja == $totalDeHojas){
                           $columnaB = $valorRaw . ' ';//LA REFERENCIA  
                      }
                      if($columna == 'F' ){
-                          $columnaF = $valorRaw . ' ';//VALOR INVENTARIO
+                          $columnaF = $valorRaw . ' ';//VALOR INICIAL INVENTARIO
                      }
                      if($columna == 'I' ){
-                          $columnaI = $valorRaw . ' ';//VALOR  DESPACHO
+                          $columnaI = $valorRaw . ' ';//VALOR TOTAL DESPACHO
                      }
                      if($columna == 'K' ){
                           $columnaK = $valorRaw . '<BR>';//VALOR DISPONIBLE
@@ -125,7 +124,7 @@ function actualizoInventario(){
     $fechaActual = date('Y-m-d');
     $fechaini = restaDia($fechaActual,'2');
      $actualizo = $conexion->actualizar("tbl_inventario", " activo='0' ", " fecha >= '$fechaini' AND fecha <= '$fechaActual' " );
-    logs("Actualiza a 0 Estado Inventario Despues de fecha 2021-06-01 " );
+    logs("Actualiza a 0 Estado Inventario Despues de fecha 2023-06-01 " );
 
 }
 

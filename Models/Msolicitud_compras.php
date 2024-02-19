@@ -149,6 +149,7 @@ class Msolicitud_compras
 
 
         $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
+        return $envioCorreo;
     }
 
     public function mostrarListado($condicion = "", $condicion2 = "", $maxRows_registros,$pageNum_registros)

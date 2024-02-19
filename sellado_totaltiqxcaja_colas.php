@@ -18,14 +18,14 @@ $row_usuario = $conexion->buscar('usuario','usuario',$colname_usuario);
 //$row_tiquete_num =$conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE id_tn='".$_GET['id_tn']."' ", "", "int_undxcaja_tn,int_undxpaq_tn");
 
  
-$row_tiquete_num = $conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE int_op_tn='".$_GET['id_op']."' AND int_caja_tn='".$_GET['int_caja_tn']."'", "ORDER BY int_paquete_tn DESC LIMIT 1", "int_undxcaja_tn,int_undxpaq_tn");
+$row_tiquete_num = $conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE int_op_tn='".$_GET['id_op']."' AND int_caja_tn='".$_GET['int_caja_tn']."'", "ORDER BY int_paquete_tn DESC LIMIT 1", "int_paquete_tn,int_undxcaja_tn,int_undxpaq_tn,ref_tn");
 
 
 //$row_colas_tikets = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='".$_GET['id_op']."' "." AND int_caja_tn='".$cajamenos1."' ","ORDER BY int_caja_tn DESC LIMIT 1",'*' );
 $cajamenos1 = $_GET['int_caja_tn'];//-1;
 
 
-$row_colas_tikets = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='".$_GET['id_op']."' "." AND int_caja_tn='".$_GET['int_caja_tn']."' ", "ORDER BY int_paquete_tn DESC LIMIT 1","int_hasta_tn,int_caja_tn,fecha_ingreso_tn,hora_tn,int_op_tn,int_undxpaq_tn,int_cod_empleado_tn,int_undxcaja_tn,int_cod_rev_tn" );
+$row_colas_tikets = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='".$_GET['id_op']."' "." AND int_caja_tn='".$_GET['int_caja_tn']."' ", "ORDER BY int_paquete_tn DESC LIMIT 1","int_hasta_tn,int_caja_tn,fecha_ingreso_tn,hora_tn,int_op_tn,int_undxpaq_tn,int_cod_empleado_tn,int_undxcaja_tn,int_cod_rev_tn,int_paquete_tn,ref_tn" );
 
 $row_numeracion =$conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='".$_GET['id_op']."' "." AND int_caja_tn='".$cajamenos1."' ", "ORDER BY int_paquete_tn DESC LIMIT 1","int_hasta_tn " );
 
@@ -86,12 +86,14 @@ $hasta = $hastaLetr.($hastaNum-$undxcaja);//para q arranque desde primer caja
         </tr> -->
         <tr>
           <td nowrap="nowrap" ><b> PAQUETE</b></td>
-          <td nowrap="nowrap" id="stikers_fuentN2"><?php echo $paq_gen=$i+1; ?></td>
+          <td nowrap="nowrap" id="stikers_fuentN2"><?php 
+            $incrempaqu = ($row_colas_tikets['int_paquete_tn'] + $row_colas_tikets['int_undxcaja_tn']);
+            $verpaq=$row_colas_tikets['ref_tn']=='096' ? $incrempaqu : 1; echo $paq_gen=$i+$verpaq; ?></td>
           <td nowrap="nowrap" ><b> CAJA</b></td>
           <td nowrap="nowrap" id="stikers_fuentN2"><?php echo $caja_gen=$row_colas_tikets['int_caja_tn']; ?></td>
         </tr>    
         <tr>
-          <td nowrap="nowrap" colspan="2" ><b> FECHA</b></td>
+          <td nowrap="nowrap" colspan="2" ><b> FECHA</b></td> 
           <td nowrap="nowrap" colspan="2" ><?php echo $row_colas_tikets['fecha_ingreso_tn']; ?><b>/</b><?php echo ($row_colas_tikets['hora_tn']);?></td>
         </tr>
         <tr>

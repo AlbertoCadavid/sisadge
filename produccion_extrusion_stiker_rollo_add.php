@@ -129,8 +129,9 @@ $lista_op = mysql_query($query_lista_op, $conexion1) or die(mysql_error());
 $row_lista_op = mysql_fetch_assoc($lista_op);
 $totalRows_lista_op = mysql_num_rows($lista_op);
 
+
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  
+
   $insertSQL = sprintf(
     "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 
@@ -173,91 +174,103 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     GetSQLValueString($_POST['montaje2_r'],  "text")
   );
 
-  
-$idRollo = $conexion->insertarQuery($insertSQL); //devuelve el id del nuevo rollo que se guardo para ingresarlo a los desperdicios
 
-/* inicio Tiempos muertos */
-if (!empty($_POST['id_rpt']) && !empty($_POST['valor_tiem_rt'])) {
-  
-  foreach ($_POST['id_rpt'] as $key => $v)
-    $a[] = $v;
-  foreach ($_POST['valor_tiem_rt'] as $key => $v)
-    $b[] = $v;
-  $c = $_GET['id_op_r'];
+  $idRollo = $conexion->insertarQuery($insertSQL); //devuelve el id del nuevo rollo que se guardo para ingresarlo a los desperdicios
 
-  for ($i = 0; $i < count($a); $i++) {
-    if (!empty($a[$i]) && !empty($b[$i])) { //no salga error con campos vacios
-      $insertSQLt = sprintf(
-        "INSERT INTO Tbl_reg_tiempo (id_rpt_rt,id_rollo,valor_tiem_rt,op_rt,int_rollo_rt,id_proceso_rt,fecha_rt) VALUES (%s, %s, %s, %s,%s, %s, %s)",
-        GetSQLValueString($a[$i], "int"),
-        GetSQLValueString($idRollo, "int"),
-        GetSQLValueString($b[$i], "int"),
-        GetSQLValueString($c, "int"),
-        GetSQLValueString($_POST['rollo_r'], "text"),
-        GetSQLValueString($_POST['id_proceso'], "int"),
-        GetSQLValueString($_POST['fechaI_r'], "date")
-      );
-      
-      mysql_select_db($database_conexion1, $conexion1);
-      $Resultt = mysql_query($insertSQLt, $conexion1) or die(mysql_error());
+  /* Registro de las Banderas */
+  if (!empty($_POST['banderas'])) {
+
+    for ($i = 0; $i < sizeof($_POST['banderas']); $i++) {
+      $nombre = $_POST['banderas'][$i];
+      if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
+        $metros = $_POST['metroBandera'][$i];
+        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 1 ");
+      }
     }
   }
-}
-/* Fin Tiempos muertos */
 
-/* inicio Tiempos preparacion */
-if (!empty($_POST['id_rtp']) && !empty($_POST['valor_prep_rtp'])) {
-  foreach ($_POST['id_rtp'] as $key => $n)
-    $h[] = $n;
-  foreach ($_POST['valor_prep_rtp'] as $key => $n)
-    $l[] = $n;
-  $c = $_GET['id_op_r'];
+  /* inicio Tiempos muertos */
+  if (!empty($_POST['id_rpt']) && !empty($_POST['valor_tiem_rt'])) {
 
-  for ($x = 0; $x < count($h); $x++) {
-    if (!empty($h[$x]) && !empty($l[$x])) { //no salga error con campos vacios
-      $insertSQLp = sprintf(
-        "INSERT INTO Tbl_reg_tiempo_preparacion (id_rpt_rtp,id_rollo,valor_prep_rtp,op_rtp,int_rollo_rtp,id_proceso_rtp,fecha_rtp) VALUES (%s, %s, %s, %s,%s, %s, %s)",
-        GetSQLValueString($h[$x], "int"),
-        GetSQLValueString($idRollo, "int"),
-        GetSQLValueString($l[$x], "int"),
-        GetSQLValueString($c, "int"),
-        GetSQLValueString($_POST['rollo_r'], "text"),
-        GetSQLValueString($_POST['id_proceso'], "int"),
-        GetSQLValueString($_POST['fechaI_r'], "date")
-      );
-      mysql_select_db($database_conexion1, $conexion1);
-      $Resultp = mysql_query($insertSQLp, $conexion1) or die(mysql_error());
+    foreach ($_POST['id_rpt'] as $key => $v)
+      $a[] = $v;
+    foreach ($_POST['valor_tiem_rt'] as $key => $v)
+      $b[] = $v;
+    $c = $_GET['id_op_r'];
+
+    for ($i = 0; $i < count($a); $i++) {
+      if (!empty($a[$i]) && !empty($b[$i])) { //no salga error con campos vacios
+        $insertSQLt = sprintf(
+          "INSERT INTO Tbl_reg_tiempo (id_rpt_rt,id_rollo,valor_tiem_rt,op_rt,int_rollo_rt,id_proceso_rt,fecha_rt) VALUES (%s, %s, %s, %s,%s, %s, %s)",
+          GetSQLValueString($a[$i], "int"),
+          GetSQLValueString($idRollo, "int"),
+          GetSQLValueString($b[$i], "int"),
+          GetSQLValueString($c, "int"),
+          GetSQLValueString($_POST['rollo_r'], "text"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
+          GetSQLValueString($_POST['fechaI_r'], "date")
+        );
+
+        mysql_select_db($database_conexion1, $conexion1);
+        $Resultt = mysql_query($insertSQLt, $conexion1) or die(mysql_error());
+      }
     }
   }
-}
-/* Fin Tiempos preparacion */
+  /* Fin Tiempos muertos */
 
-/* inicio Desperdicios */
-if (!empty($_POST['id_rpd']) && !empty($_POST['valor_desp_rd'])) {
-  foreach ($_POST['id_rpd'] as $key => $k)
-    $f[] = $k;
-  foreach ($_POST['valor_desp_rd'] as $key => $k)
-    $g[] = $k;
+  /* inicio Tiempos preparacion */
+  if (!empty($_POST['id_rtp']) && !empty($_POST['valor_prep_rtp'])) {
+    foreach ($_POST['id_rtp'] as $key => $n)
+      $h[] = $n;
+    foreach ($_POST['valor_prep_rtp'] as $key => $n)
+      $l[] = $n;
+    $c = $_GET['id_op_r'];
 
-  for ($s = 0; $s < count($f); $s++) {
-    if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios
-      $insertSQLd = sprintf(
-        "INSERT INTO Tbl_reg_desperdicio (id_rpd_rd,id_rollo,valor_desp_rd,op_rd,int_rollo_rd,id_proceso_rd,fecha_rd,cod_ref_rd) VALUES (%s, %s, %s, %s, %s,%s, %s, %s)",
-        GetSQLValueString($f[$s], "int"),
-        GetSQLValueString($idRollo, "int"),
-        GetSQLValueString($g[$s], "double"),
-        GetSQLValueString($_GET['id_op_r'], "int"),
-        GetSQLValueString($_POST['rollo_r'], "text"),
-        GetSQLValueString($_POST['id_proceso'], "int"),
-        GetSQLValueString($_POST['fechaI_r'], "date"),
-        GetSQLValueString($row_orden['int_cod_ref_op'], "text")
-      );
-      mysql_select_db($database_conexion1, $conexion1);
-      $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
+    for ($x = 0; $x < count($h); $x++) {
+      if (!empty($h[$x]) && !empty($l[$x])) { //no salga error con campos vacios
+        $insertSQLp = sprintf(
+          "INSERT INTO Tbl_reg_tiempo_preparacion (id_rpt_rtp,id_rollo,valor_prep_rtp,op_rtp,int_rollo_rtp,id_proceso_rtp,fecha_rtp) VALUES (%s, %s, %s, %s,%s, %s, %s)",
+          GetSQLValueString($h[$x], "int"),
+          GetSQLValueString($idRollo, "int"),
+          GetSQLValueString($l[$x], "int"),
+          GetSQLValueString($c, "int"),
+          GetSQLValueString($_POST['rollo_r'], "text"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
+          GetSQLValueString($_POST['fechaI_r'], "date")
+        );
+        mysql_select_db($database_conexion1, $conexion1);
+        $Resultp = mysql_query($insertSQLp, $conexion1) or die(mysql_error());
+      }
     }
   }
-}
-/* Fin Desperdicios */
+  /* Fin Tiempos preparacion */
+
+  /* inicio Desperdicios */
+  if (!empty($_POST['id_rpd']) && !empty($_POST['valor_desp_rd'])) {
+    foreach ($_POST['id_rpd'] as $key => $k)
+      $f[] = $k;
+    foreach ($_POST['valor_desp_rd'] as $key => $k)
+      $g[] = $k;
+
+    for ($s = 0; $s < count($f); $s++) {
+      if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios
+        $insertSQLd = sprintf(
+          "INSERT INTO Tbl_reg_desperdicio (id_rpd_rd,id_rollo,valor_desp_rd,op_rd,int_rollo_rd,id_proceso_rd,fecha_rd,cod_ref_rd) VALUES (%s, %s, %s, %s, %s,%s, %s, %s)",
+          GetSQLValueString($f[$s], "int"),
+          GetSQLValueString($idRollo, "int"),
+          GetSQLValueString($g[$s], "double"),
+          GetSQLValueString($_GET['id_op_r'], "int"),
+          GetSQLValueString($_POST['rollo_r'], "text"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
+          GetSQLValueString($_POST['fechaI_r'], "date"),
+          GetSQLValueString($row_orden['int_cod_ref_op'], "text")
+        );
+        mysql_select_db($database_conexion1, $conexion1);
+        $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
+      }
+    }
+  }
+  /* Fin Desperdicios */
 
   $insertGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_r=" . $_POST['id_r'] . "";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -374,6 +387,7 @@ $query_desperdicios = "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE Tbl_reg_tipo
 $desperdicios = mysql_query($query_desperdicios, $conexion1) or die(mysql_error());
 $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
+
 ?>
 <html>
 
@@ -632,7 +646,7 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
         </td>
       </tr>
       <!-- fin desperdicio  -->
-      
+
       <!--inicio cuadro de tiempos muertos a -->
       <tr>
         <td colspan="4">
@@ -743,61 +757,42 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
         </td>
       </tr>
       <tr>
-        <td id="fuente1">Reventon</td>
-        <td id="fuente1">
-          <input class="bandera" name="reven_r" type="number" id="reven_r" style="width:40px" min="0" max="9" value="0" onchange="sumaBanderas();">
-          <input name="reven2_r" type="number" id="reven2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-        <td id="fuente1">Medida</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="medid_r" min="0" max="9" id="medid_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="medid2_r" type="number" id="medid2_r" style="width:60px" min="0" value="0">Metros
+        <td colspan="4" id="titulo1">BANDERAS</td>
+      </tr>
+
+      <tr>
+      <tr id="tablaf">
+
+        <td colspan="2">
+          <select oninput=actualizarTotal() name="banderas[]" id="banderas[]" class="banderas">
+            <option value="">SELECCIONE</option>
+            <option value="apagon">APAGON</option>
+            <option value="arrugas">ARRUGAS</option>
+            <option value="cortes_huecos">CORTES/HUECOS</option>
+            <option value="descalibre">DESCALIBRE</option>
+            <option value="medida">MEDIDA</option>
+            <option value="montaje">MONTAJE</option>
+            <option value="pigmentacion">PIGMENTACION</option>
+            <option value="reventon">REVENTON</option>
+            <option value="tratamiento">TRATAMIENTO</option>
+          </select>
+
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
         </td>
       </tr>
+
       <tr>
-        <td id="fuente1">Cortes/Huecos</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="corte_r" min="0" max="9" id="corte_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="corte2_r" type="number" id="corte2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-        <td id="fuente1">Descalibre</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="desca_r" min="0" max="9" id="desca_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="desca2_r" type="number" id="desca2_r" style="width:60px" min="0" value="0">Metros
+        <td></td>
+        <td style="text-align: right">
+          <span>Nueva Bandera</span>
+          <button style="width:40px" type="button" class="botonGMini" onClick="AddItemd();"> + </button>
         </td>
       </tr>
+
       <tr>
-        <td id="fuente1">Pigmentación</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="calib_r" min="0" max="9" id="calib_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="calib2_r" type="number" id="calib2_r" style="width:60px" min="0" value="0">Metros
+        <td id="fuente1" colspan="1">TOTAL BANDERAS:
+          <input type="number" readonly value="" name="bandera_r" id="totales" style="width:35px; border:0">
         </td>
-        <td id="fuente1">Tratamiento</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="trata_r" min="0" max="9" id="trata_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="trata2_r" type="number" id="trata2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Arrugas</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="arrug_r" min="0" max="9" id="arrug_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="arrug2_r" type="number" id="arrug2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-        <td id="fuente1">Apagón</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="apagon_r" min="0" max="9" id="apagon_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="apagon2_r" type="number" id="apagon2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Montaje</td>
-        <td id="fuente1">
-          <input class="bandera" type="number" name="montaje_r" min="0" max="9" id="montaje_r" style="width:40px" value="0" onchange="sumaBanderas();">
-          <input name="montaje2_r" type="number" id="montaje2_r" style="width:60px" min="0" value="0">Metros
-        </td>
-        <td id="fuente1"><strong>TOTAL BANDERAS</strong></td>
-        <td id="fuente1"><input name="bandera_r" type="number" id="bandera_r" value="0" style="width:40px" readonly onClick="sumaBanderas();" /></td>
       </tr>
       <tr>
         <td colspan="4" id="titulo1">OBSERVACIONES</td>
@@ -946,6 +941,68 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
   }
 
 
+  //------------------FUNCION PARA AGREGAR ITEMS DINAMICOS----//
+  var num = 0;
+  var contador = 1
+
+  function AddItemd() {
+    var contador = num++;
+    var tbody = null;
+    var tablaf = document.getElementById("tablaf");
+    var nodes = tablaf.childNodes;
+    var count = 0;
+    var acumula = 0;
+
+    for (var x = 0; x < nodes.length; x++) {
+      if (nodes[x].nodeName == 'TD') {
+        tbody = nodes[x];
+        break;
+      }
+      count = acumula + x;
+    }
+
+    if (tbody != null) {
+      contador = contador + 1;
+      var tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="2">
+          <select oninput=actualizarTotal() name="banderas[]" id="banderas[]" class="banderas">
+            <option value="">SELECCIONE</option>
+            <option value="apagon">APAGON</option>
+            <option value="arrugas">ARRUGAS</option>
+            <option value="cortes_huecos">CORTES/HUECOS</option>
+            <option value="descalibre">DESCALIBRE</option>
+            <option value="medida">MEDIDA</option>
+            <option value="montaje">MONTAJE</option>
+            <option value="pigmentacion">PIGMENTACION</option>
+            <option value="reventon">REVENTON</option>
+            <option value="tratamiento">TRATAMIENTO</option>
+          </select>
+
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+        </td>`;
+      tbody.appendChild(tr);
+      contador = contador + 1;
+    }
+
+  }
+
+  //funcion para sumar total de las cantidades
+
+  function actualizarTotal() {
+    var cantidades = document.getElementsByClassName("banderas");
+    var total = 0;
+
+    for (var i = 0; i < cantidades.length; i++) {
+      if (cantidades[i].value != '') {
+        var valorCampo = 1; // Convertir a número o usar 0 si no es válido
+        total += valorCampo;
+      }
+
+    }
+
+    // Actualizar el contenido del campo "total"
+    document.getElementById('totales').value = total;
+  }
 </script>
 
 <?php
@@ -962,8 +1019,8 @@ mysql_free_result($op_carga);
 ?>
 
 <?php
-  if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-    /* echo "si"; die; */
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+
   echo "<script type=\"text/javascript\">window.opener.location.reload();</script>";
   echo "<script type=\"text/javascript\">window.close();</script>";
 }

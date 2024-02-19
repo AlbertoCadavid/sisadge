@@ -96,6 +96,17 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
   header ("Location: sellado_control_numeracion_edit_paqxcaja.php?id_op=$id_op&int_caja_tn=$int_caja_t&NumeroPaqxCaja=$paqxca&contador=1");
 }*/
+
+$objCsellado = new CselladoController();
+$ops = $row_tiquete_num['int_op_n'] == '' ? $row_control_paquete['id_op'] :  $row_tiquete_num['int_op_n'];
+$numRollo = $row_tiquete_num['rollo'];
+
+
+$objSellado = new CselladoController();
+$infoRef = $objSellado->ConsultarRef($row_control_paquete['int_cod_ref_op']);
+$anchoBolsa = ($infoRef[0]['ancho_ref']);
+
+$idOp = $row_tiquete_num['int_op_n'] ==''? $row_control_paquete['id_op'] :  $row_tiquete_num['int_op_n'];
 ?>
 
 
@@ -209,14 +220,23 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                    </td>
                </tr>
            <tr>
-          <td colspan="6" id="titulo2">REGISTRO DE PAQUETES
+           <td><strong>ROLLO N:</strong> </td>
+            <td colspan="6" id="titulo2">REGISTRO DE PAQUETES
             <strong>  
-               <input type="hidden" name="id_tn" id="id_tn" value="<?php echo $select_tiquete_num['id_tn'];?>"> <b id="consecutivoPaq" > <?php echo $select_tiquete_num['id_tn'];?></b>
+              <input type="hidden" name="id_tn" id="id_tn" value="<?php echo $select_tiquete_num['id_tn'];?>"> <b id="consecutivoPaq" > <?php echo $select_tiquete_num['id_tn'];?></b>
             </strong>
               <input name="contador_tn" id="contador_tn" type="hidden" value="<?php echo $select_tiquete_num['contador_tn'];?>"> 
            
               <input name="ref_tn" type="hidden" id="ref_tn" value="<?php echo $row_control_paquete['int_cod_ref_op']; ?>">
            
+            </td>
+          </tr>
+          <tr>
+            <td> 
+                <select class="form-control" style="width:70px;" name="id_rollo" id="id_rollo">
+                  <!-- se llena desde ajaxControllers funcionesSellado verificarRollo -->
+                  <input type="hidden" name="rollo_r" id="rollo_r" value="">
+                </select>
             </td>
           </tr>
           <tr>
@@ -257,6 +277,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
           <td id="fuente1"><input class="form-control negro_inteso" type="number" name="int_op_tn" id="int_op_tn" style=" width:400px" value="<?php  echo $ops = $row_tiquete_num['int_op_n'] ==''? $row_control_paquete['id_op'] :  $row_tiquete_num['int_op_n']; ?>" readonly >
           </td>
           <td><span class="negro_inteso">REF:&nbsp;<?php echo $row_control_paquete['int_cod_ref_op'];?></span></td> 
+          <input type="hidden" id="anchoRef" name="anchoRef" value="<?php echo $anchoBolsa ?>">
         </tr>
         <tr>
           <td colspan="3"id="fuente1">BOLSAS</td>
@@ -508,6 +529,13 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
        e.preventDefault();
      }
    }))
+   
+   verificarRollo(  "<?php echo $idOp ?>") //consulta si existen rollos disponibles para sellado y llena el select id_rollo
+      .then(function(datos){
+          if(datos){
+            cargaInfoRolloSellado("<?php echo $idOp ?>", $('#rollo_r').val()) //consulta la cantidad de bolsas que han sellado de un rollo en especifico y lo convierte en metros
+          } 
+        })
  }); 
 
 
@@ -528,6 +556,8 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
     valCheck(numDesde);
     numeracionDesde(numDesde,caja,paquete,ref); //cuadra la numeracion inicial y el hasta
     consultaPaquetesxOp($("#int_op_tn").val());
+
+    
  }); 
   
 //AL DAR CLICK A CHECK Y CAMBIAR A SIN FALTANTES O CON FALTANTES
@@ -546,59 +576,72 @@ $('#imprimirt').on('change',function(){
                  //location.reload();//para que cargue bien la numeracion al cliquear
               }
         }
-    
       valCheck(numDesde);
       consultaMaestroAlCargar('int_op_n',$('#int_op_tn').val(),ref);
-      
 });
 
-  
 
-  /*$("#int_desde_tn").on('change',function(){
-    numeracionDesde(numDesde,caja,paquete); 
-  }); */ 
+
 
   $("#int_desde_tn").on('change',function(){
     //var ref = "<?php echo $select_tiquete_num['ref_tn'] == '' ? $row_control_paquete['int_cod_ref_op'] : $select_tiquete_num['ref_tn']; ?>";
     numeracionDesde($("#int_desde_tn").val(),$("#int_caja_tn").val(),$("#int_paquete_tn").val() ); 
   });
 
-
-   
-
-
   
-/*prefioFob();
-  function prefioFob(){
+  $("#botonSellado").show();
+  $("#paqycajasnormal").show(50);
+  $("#paquetexcaja").show(50);
+  $("#cajasnormal").show(50); 
+  $("#faltantess").show(50);
 
-  
+    
+  $("#id_rollo").on("change", function(){
+    $("#rollo_r").val($("#id_rollo option:selected").text()); 
+    var desde = numeracionChar($("#int_desde_tn").val());
+    var hasta = numeracionChar($("#int_hasta_tn").val());
+    var numRollo = $("#id_rollo option:selected").text();
+    
+    //GUARDAR TAMBIEN EN LA TABLA DE TBL_INFO_SELLADO SOLO SI EL NUMERO DEL ROLLO NO ESTA REGISTRADO EN LA TABLA
+    guardarRolloSeleccionado("<?php echo $idOp ?>", numRollo, desde[0], hasta[0]); 
+  })
 
-      var suma = 0;
-     $(".errorRango").each(function(index){ 
-     alert($(this).val());
-   
-       if (isNaN(parseFloat($(this).val()))) {
-              suma += 0; 
-            } else {
-              alert(suma)
-              suma += parseFloat($(this).val());
-            }
-            $('#Totalfob').text(suma);
-      });     
-  
-   }*/
- 
-  
-    $("#botonSellado").show();
-    $("#paqycajasnormal").show(50);
-    $("#paquetexcaja").show(50);
-    $("#cajasnormal").show(50); 
-    $("#faltantess").show(50);
- 
 
-   $( "#guardaboton" ).on( "click", function() { 
-       validaCampos();
-   });
+  $( "#guardaboton" ).on( "click", function() { 
+  consultaBanderas($('#int_op_tn').val(), 1, $('#id_rollo').val())
+  .then(function(datosBanderas) {
+    metrosSellados = $("#cant_metros").val();
+      datosBanderas.forEach(element => {
+        console.log(metrosSellados + ">=" + element.metros)
+        if (parseInt(metrosSellados) >= parseInt(element.metros)) {
+
+          var resultado = window.confirm(`Advertencia, viene una bandera de ${element.nombre}`);
+
+          let operario = $("#int_cod_empleado_tn").val();
+          let fecha = "<?php echo date("Y-m-d H:i:s"); ?>"
+          let estado = true;
+          let id_op = $('#int_op_tn').val();
+          let id_bandera = element.id_bandera;
+          if (resultado === true) {
+            actualizaBandera(operario, fecha, estado, id_op, id_bandera);
+          } else {
+            actualizaBandera(operario, fecha, estado, id_op, id_bandera);
+          }
+        }
+      });
+    });
+    
+    verificarRollo( $('#int_op_tn').val()) //consulta si existen rollos disponibles para sellado y llena el select id_rollo
+    .then(function(datos){
+        if(datos){
+          validaCampos();
+        } else {
+          swal("Error", "Debe seleccionar un Rollo ! :)", "error") 
+        }
+      })
+  });
+
+
    $( "#guardabotonporCajas" ).on( "click", function() {
        registroDuplicado();
        validaCampos();
@@ -615,59 +658,66 @@ $('#imprimirt').on('change',function(){
           $('#verAlert').fadeIn(); 
           setTimeout(function() { $("#verAlert").fadeOut();},4000); 
         
-           swal("Error", "El registro Ya Existe! :)", "error"); 
-           return false;
-         }
-         else if($("#int_paquete_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo paquete! :)", "error"); 
-           return false;
-         } 
-         else if($("#int_caja_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo caja! :)", "error"); 
-           return false;
-         } 
-         else if($("#fecha_ingreso_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo fecha_ingreso! :)", "error"); 
-           return false;
-         }
-         else if($("#int_op_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo op! :)", "error"); 
-           return false;
-         }
-         else if($("#int_bolsas_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo bolsas! :)", "error"); 
-           return false;
-         }
-         else if($("#int_undxcaja_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo undxcaja! :)", "error"); 
-           return false;
-         }
-         else if($("#int_undxpaq_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo undxpaq! :)", "error"); 
-           return false;
-         }
-         else if($("#int_desde_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo desde! :)", "error"); 
-           return false;
-         }
-         else if($("#int_hasta_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo hasta! :)", "error"); 
-           return false;
-         }
-         else if($("#int_cod_empleado_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo cod_empleado! :)", "error"); 
-           return false;
-         }
-         else if($("#int_cod_rev_tn").val()==''){
-           swal("Error", "Debe agregar un valor al campo cod_rev! :)", "error"); 
-           return false;
-         }
-         else if($("#validar").val() > 0 && $("#tipodesperdicio_f").val()==''){
- 
-           swal("Error", "Debe seleccionar un valor al campo tipo desperdicio ! :)", "error"); 
-           return false;
-         } else{
-          alertafaltantes();
+          swal("Error", "El registro Ya Existe! :)", "error"); 
+          return false;
+        }
+        else if($("#int_paquete_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo paquete! :)", "error"); 
+          return false;
+        } 
+        else if($("#int_caja_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo caja! :)", "error"); 
+          return false;
+        } 
+        else if($("#fecha_ingreso_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo fecha_ingreso! :)", "error"); 
+          return false;
+        }
+        else if($("#int_op_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo op! :)", "error"); 
+          return false;
+        }
+        else if($("#int_bolsas_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo bolsas! :)", "error"); 
+          return false;
+        }
+        else if($("#int_undxcaja_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo undxcaja! :)", "error"); 
+          return false;
+        }
+        else if($("#int_undxpaq_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo undxpaq! :)", "error"); 
+          return false;
+        }
+        else if($("#int_desde_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo desde! :)", "error"); 
+          return false;
+        }
+        else if($("#int_hasta_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo hasta! :)", "error"); 
+          return false;
+        }
+        else if($("#int_cod_empleado_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo cod_empleado! :)", "error"); 
+          return false;
+        }
+        else if($("#int_cod_rev_tn").val()==''){
+          swal("Error", "Debe agregar un valor al campo cod_rev! :)", "error"); 
+          return false;
+        }
+        else if($("#validar").val() > 0 && $("#tipodesperdicio_f").val()==''){
+          swal("Error", "Debe seleccionar un valor al campo tipo desperdicio ! :)", "error"); 
+          return false;
+        } else if ($("#id_rollo").val() == "" || $("#id_rollo").val() == null) {
+          swal("Error", "Debe seleccionar un Rollo ! :)", "error") 
+        } else{
+          let res = alertafaltantes();
+             if (res) { 
+               let numHasta = numeracionChar($("#int_hasta_tn").val());
+               actualizaInfoRolloSellado($("#int_op_tn").val(), $("#id_rollo").val(), numHasta[0]) 
+               guardarSelladoTiquetes();
+               cargaInfoRolloSellado("<?php echo $idOp ?>", $('#rollo_r').val()); //consulta la cantidad de bolsas que han sellado de un rollo en especifico y lo convierte en metros
+             }
          } 
    }
 

@@ -81,46 +81,43 @@ class CselladoController{
 
               require_once("views/view_sellado_numeracion_inicio.php");
     }
+ 
+         public function Numeracion(){  
+             echo 'Test1-Numeracion';
+              $conexion = new oMsellado();
+              $insumo = new oMsellado();
+              $this->insumo=$insumo->get_Insumo();
+             //CUANDO ARRANCA DESDE CERO EL INGRESO DE TIQUETES O CAMBIO DE CAJA
+           
+ 
+              if (isset($_REQUEST[mi_var_array]))//viene del listado
+                          
+              {      
+                    $a=stripslashes($_REQUEST[mi_var_array]);
+                          
+                    $mi_array=unserialize($a);
+                          
+                         $mi_array['int_op_tn'] = $_REQUEST['int_op_tn']=='' ? $mi_array['int_op_tn'] : $_REQUEST['int_op_tn'];
+                         $mi_array['int_caja_tn'] = $_REQUEST['int_caja_tn']=='' ? $mi_array['int_caja_tn'] : $_REQUEST['int_caja_tn'];          
+                    } else {
 
-    public function Numeracion(){  
-        echo 'Test1-';
-         $conexion = new oMsellado();
-         $insumo = new oMsellado();
-         $this->insumo=$insumo->get_Insumo();
-        //CUANDO ARRANCA DESDE CERO EL INGRESO DE TIQUETES O CAMBIO DE CAJA
-      
+                       $mi_array['int_op_tn'] = $_REQUEST['int_op_tn']=='' ? $mi_array['int_op_tn'] : $_REQUEST['int_op_tn'];
+                       $mi_array['int_caja_tn'] = $_REQUEST['int_caja_tn']=='' ? $mi_array['int_caja_tn'] : $_REQUEST['int_caja_tn']; 
 
-         if (isset($_GET[mi_var_array]))//viene del listado
-                     
-         {      
-               $a=stripslashes($_GET[mi_var_array]);
-                     
-               $mi_array=unserialize($a);
-                     
-              $mi_array['int_op_tn'] = $_GET['int_op_tn'];
-              $mi_array['int_caja_tn'] = $_GET['int_caja_tn'];          
-         } else {
+          }
 
-            $mi_array['int_op_tn'] = $_GET['int_op_tn'];
-            $mi_array['int_caja_tn'] = $_GET['int_caja_tn']; 
 
-         }
-        "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE Tbl_reg_tipo_desperdicio.id_proceso_rtd='4' AND Tbl_reg_tipo_desperdicio.codigo_rtp='3' AND estado_rtp='0' ORDER BY Tbl_reg_tipo_desperdicio.nombre_rtp ASC";
-
-        $this->insumo=$insumo->llenaSelect("tbl_reg_tipo_desperdicio","WHERE id_proceso_rtd='4' AND codigo_rtp='3' AND estado_rtp='0'","ORDER BY nombre_rtp ASC");
+      $this->insumo=$insumo->llenaSelect("tbl_reg_tipo_desperdicio","WHERE id_proceso_rtd='4' AND codigo_rtp='3' AND estado_rtp='0'","ORDER BY nombre_rtp ASC");
 
         $row_control_paquete = $conexion->buscar('tbl_orden_produccion','id_op',$mi_array['int_op_tn']); 
  
         $row_codigo_empleado = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado b ','ON a.codigo_empleado=b.codigo_empleado WHERE a.tipo_empleado IN(7,9) AND b.estado_empleado=1 ','ORDER BY a.nombre_empleado ASC'); 
-         
         $row_revisor = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado b ','ON a.codigo_empleado=b.codigo_empleado WHERE a.tipo_empleado IN(7,9) AND b.estado_empleado=1 ','ORDER BY a.nombre_empleado ASC');
  
         $row_tiquete_num = $conexion->llenarCampos("tbl_numeracion", "WHERE int_op_n=".$mi_array['int_op_tn']." ", "", "*");
-
-
  
          //MUESTRA PAQUETES X CAJA
-         $select_tiquete_num = $conexion->llenarCampos('tbl_tiquete_numeracion',"WHERE int_op_tn='".$mi_array['int_op_tn']."' ",' ORDER BY int_caja_tn DESC, int_paquete_tn DESC LIMIT 1',"id_tn,int_paquete_tn,int_caja_tn,int_hasta_tn,contador_tn,imprime");// AND int_caja_tn='".$mi_array['int_caja_tn']."' ORDER BY int_caja_tn DESC, int_paquete_tn DESC //Modificado 18-05-2022
+         $select_tiquete_num = $conexion->llenarCampos('tbl_tiquete_numeracion',"WHERE int_op_tn='".$mi_array['int_op_tn']."' ",' ORDER BY int_caja_tn DESC, int_paquete_tn DESC LIMIT 1',"id_tn,int_paquete_tn,int_caja_tn,int_hasta_tn,contador_tn,ref_tn,imprime");// AND int_caja_tn='".$mi_array['int_caja_tn']."' ORDER BY int_caja_tn DESC, int_paquete_tn DESC //Modificado 18-05-2022
 
         /*$paqueteF=$row_tiquete_num['int_paquete_n']=='' ? $select_tiquete_num['int_paquete_tn'] : $row_tiquete_num['int_paquete_n'];//se agrega para al cargar la vista este sume los faltantes al HASTA
 
@@ -234,28 +231,37 @@ class CselladoController{
          $this->proformas = new oMsellado();
          $this->tiquetes = new oMsellado();  
          $this->proforma = $_REQUEST;
-         $row_control_paquete = new oMsellado();
- 
-         
-         $result = $this->proformas->Registrar("tbl_tiquete_numeracion","int_op_tn, fecha_ingreso_tn, hora_tn, int_bolsas_tn, int_undxpaq_tn, int_undxcaja_tn,  int_desde_tn, int_hasta_tn, int_cod_empleado_tn, int_cod_rev_tn, contador_tn, int_paquete_tn, int_caja_tn, pesot, ref_tn, imprime ", $this->proforma);
-
-         $row_control_paquete = $this->proformas->buscarTres("tbl_tiquete_numeracion ","id_tn,int_op_tn,int_caja_tn", " WHERE int_op_tn= '".$_REQUEST['int_op_tn']."'  AND int_caja_tn='".$_REQUEST['int_caja_tn']."' AND  int_paquete_tn= '".$_REQUEST['int_paquete_tn']."'  LIMIT 1  " ); 
-
-         $this->proforma['id_tn'] = $row_control_paquete["id_tn"]; 
-
-         self::GuardarFaltante($this->proforma);
-
-         $this->proforma['id_tn_n'] = $row_control_paquete["id_tn"];
-         $insertNumeracion = $this->proformas->RegistrarAdd("tbl_numeracion","id_tn_n, fecha_ingreso_n, int_op_n, cod_ref_n, int_bolsas_n, int_undxpaq_n, int_undxcaja_n,  int_desde_n, int_hasta_n, int_cod_empleado_n, int_cod_rev_n, contador_n, int_paquete_n, int_caja_n, b_borrado_n, existeTiq_n", $this->proforma);
-      
-/*         $compactada = $this->proformas->buscarTres('tbl_numeracion'," * ","  WHERE int_op_n= '".$_REQUEST['int_op_tn']."' ", ""); 
+         $this->data = $_REQUEST;
+         $row_control_paquete = new oMsellado();  
+          
+        $row_control_paquete = $this->proformas->buscarTres('tbl_tiquete_numeracion',"id_tn,int_op_tn,int_bolsas_tn,int_undxpaq_tn,int_undxcaja_tn,int_desde_tn,int_hasta_tn,int_cod_empleado_tn,int_cod_rev_tn,contador_tn,int_paquete_tn,int_caja_tn,ref_tn","  WHERE int_op_tn= '".$_REQUEST['int_op_tn']."'  AND int_caja_tn='".$_REQUEST['int_caja_tn']."' AND  int_paquete_tn= '".$_REQUEST['int_paquete_tn']."' ", "ORDER BY int_caja_tn DESC, int_paquete_tn DESC LIMIT 1"); 
         
+        //si no exit el paquete pues lo registra
+         if($row_control_paquete['id_tn']==''){ 
 
-         $compactada=serialize($compactada); 
+              $result = $this->proformas->Registrar("tbl_tiquete_numeracion","int_op_tn, fecha_ingreso_tn, hora_tn, int_bolsas_tn, int_undxpaq_tn, int_undxcaja_tn,  int_desde_tn, int_hasta_tn, int_cod_empleado_tn, int_cod_rev_tn, contador_tn, int_paquete_tn, int_caja_tn, pesot, ref_tn, imprime ", $this->proforma);
 
-         $compactada=urlencode($compactada);
-         header("Location:view_index.php?c=csellado&a=Numeracion&mi_var_array=$compactada"); */
-         //require_once("views/view_sellado_numeracion.php");
+              $row_control_paquete = $this->proformas->buscarTres("tbl_tiquete_numeracion ","id_tn,int_op_tn,int_caja_tn", " WHERE int_op_tn= '".$_REQUEST['int_op_tn']."'  AND int_caja_tn='".$_REQUEST['int_caja_tn']."' AND  int_paquete_tn= '".$_REQUEST['int_paquete_tn']."'  LIMIT 1  " );      
+
+              $this->proforma['id_tn'] = $row_control_paquete["id_tn"];      
+
+              self::GuardarFaltante($this->proforma);     
+
+              $this->proforma['id_tn_n'] = $row_control_paquete["id_tn"];
+              //Se agrego al final del query el registro del rollo seleccionado
+              $insertNumeracion = $this->proformas->RegistrarAdd("tbl_numeracion","id_tn_n, fecha_ingreso_n, int_op_n, cod_ref_n, int_bolsas_n, int_undxpaq_n, int_undxcaja_n,  int_desde_n, int_hasta_n, int_cod_empleado_n, int_cod_rev_n, contador_n, int_paquete_n, int_caja_n, b_borrado_n, existeTiq_n, rollo", $this->proforma);
+              
+              } else {
+                $this->proforma = $row_control_paquete;//actualizo con el modelo Consultado
+                //ACTUALIZO tbl_tiquete_numeracion
+                $Updateresult=self::Actualizar("tbl_tiquete_numeracion ", " int_op_tn='".$_REQUEST['int_op_tn']."',fecha_ingreso_tn='".$_REQUEST['fecha_ingreso_tn']."',hora_tn='".$_REQUEST['hora_tn']."',int_bolsas_tn='".$_REQUEST['int_bolsas_tn']."',int_undxpaq_tn='".$_REQUEST['int_undxpaq_tn']."',int_undxcaja_tn='".$_REQUEST['int_undxcaja_tn']."',int_desde_tn='".$_REQUEST['int_desde_tn']."',int_hasta_tn='".$_REQUEST['int_hasta_tn']."',int_cod_empleado_tn='".$_REQUEST['int_cod_empleado_tn']."',int_cod_rev_tn='".$_REQUEST['int_cod_rev_tn']."',contador_tn='".$_REQUEST['contador_tn']."',int_paquete_tn='".$_REQUEST['int_paquete_tn']."',int_caja_tn='".$_REQUEST['int_caja_tn']."',pesot='".$_REQUEST['pesot']."',ref_tn='".$_REQUEST['ref_tn']."',  imprime='".$_REQUEST['tienefaltantes']."' ", " WHERE id_tn=".$row_control_paquete['id_tn']." ", "id_tn", "int_op_tn", "int_caja_tn", $this->proforma);
+                
+              }
+              
+              header("Location:view_index.php?c=csellado&a=Numeracion&int_op_tn=".$_REQUEST['int_op_tn']."&int_caja_tn=".$_REQUEST['int_caja_tn']." ");
+              
+              /* registrar datos en la nueva tabla de info_rollo_banderas para realizar el calculo del metraje */
+              $this->proformas->RegistrarInfoRollo("tbl_info_rollo_sellado", "id_op, rollo_r, num_inicial, num_final", $this->data);
  }
 
 
@@ -327,6 +333,23 @@ class CselladoController{
           $this->tiquetes->Consulta("tbl_orden_produccion","id_op",$_REQUEST['int_op_tn'],"","", "ORDER BY id_op DESC ");//consulto paquetes
 }
 
+public function ConsultarOProllo(){
+  $this->rollos = new oMsellado();
+  /* consulta cuantos rollos se extrulleron o imprimieron */
+  $this->rollos->consultaRollos2tablas("TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "TblImpresionRollo", "TblExtruderRollo", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)","TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+}
+
+/* consulta la info del rollo que se esta sellando para saber cuantas bolsas han sellado y convertirlas en metros */
+public function ConsultarInfoRollo(){
+  $this->info = new oMsellado();
+  $this->info->Consulta("tbl_info_rollo_sellado", "id_op", $_REQUEST['int_op_tn'], "", "", "AND rollo_r=$_REQUEST[rollo_r]");
+}
+
+public function ConsultarCantidadRollos(){
+  $this->rollos = new oMsellado();
+  /* consulta cuantos rollos se extrulleron o imprimieron */
+  $this->rollos->consultaRollos3tablas("tbl_numeracion.rollo as rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tbl_numeracion", "TblImpresionRollo", "TblExtruderRollo", "tbl_numeracion.int_op_n = $_REQUEST[id_op]", "TblImpresionRollo.id_op_r=$_REQUEST[id_op] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)","TblExtruderRollo.id_op_r=$_REQUEST[id_op] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+}
 
  public function ConsultarAdd(){
           
@@ -337,13 +360,33 @@ class CselladoController{
         
           $ref=$consulta["int_cod_ref_op"];
           $this->tiquetes->ConsultaPaquetes("tbl_orden_produccion op LEFT JOIN tbl_tiquete_numeracion tn  ON tn.ref_tn = op.int_cod_ref_op ","tn.ref_tn",$ref,"","", "ORDER BY CONVERT(tn.int_hasta_tn, SIGNED INTEGER) DESC LIMIT 1 ");//consulto paquetes desde ADD sellado
-
 } 
 
+public function consultarBanderas(){
+  $this->bandera = new oMsellado();
+
+  if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["id_op"] != "" && $_POST["rollo_r"] != ""){
+    $op_id = $_POST["id_op"];
+    $proceso = $_POST["proceso"];
+    $rollo = $_POST["rollo_r"];
+    
+    $resp =  $this->bandera->consultaBandera("tbl_banderas","id_op", $op_id, "AND proceso = $proceso AND rollo_r = $rollo AND visto is null ORDER BY metros ASC");
+    if($resp){
+      return $resp;
+    } else return false;
+  } 
+}
+
+public function ConsultarRef($ref){
+  $this->ref = new oMsellado();
+  $resp = $this->ref->consultaReferencia("tbl_referencia", "cod_ref", $ref, "");
+  if($resp){
+    return $resp;
+  } else return false;
+}
 
  public function Eliminar(){
       
-         
           $this->proformas =  new oMsellado();
           $faltantes =  new oMsellado();  
           $this->proforma = $_REQUEST;
@@ -354,7 +397,6 @@ class CselladoController{
           //Consulto ultimo registro para actualizar tbl_numeracion
           $consulta = $this->proformas->buscarTres('tbl_tiquete_numeracion',"id_tn,int_op_tn,int_bolsas_tn,int_undxpaq_tn,int_undxcaja_tn,int_desde_tn,int_hasta_tn,int_cod_empleado_tn,int_cod_rev_tn,contador_tn,int_paquete_tn,int_caja_tn,ref_tn","  WHERE int_op_tn= '".$_REQUEST['op']."'   ", " ORDER BY int_caja_tn DESC,int_paquete_tn DESC LIMIT 1 "); // ORDER BY fecha_ingreso_tn DESC, hora_tn DESC, int_caja_tn DESC,int_paquete_tn DESC LIMIT 1
           //modificado 17/05/2022
-       
 
           $resultdelet = $faltantes->DeleteFaltantes("tbl_faltantes"," id_tn_f= '". $_REQUEST['id'] ."' ");
          
@@ -426,10 +468,9 @@ class CselladoController{
 
 
   public function Actualizar($tabla,$sets,$condicion,$columna="",$columna2="",$columna3="",$data=""){
-           $this->proforma = new oMsellado();
-      
-           $this->proformas->Update($tabla,$sets,$condicion,$columna,$columna2,$columna3,$data);  
-            //header("Location:view_index.php?c=comprasFA&a=Crud&columna=". $_REQUEST['columna'] ."&id=". $_REQUEST['id'] ." ");  
+      $this->proforma = new oMsellado();
+      $this->proformas->Update($tabla,$sets,$condicion,$columna,$columna2,$columna3,$data);  
+      //header("Location:view_index.php?c=comprasFA&a=Crud&columna=". $_REQUEST['columna'] ."&id=". $_REQUEST['id'] ." ");  
   }
 
     public function Msellado($vista=''){ 
@@ -440,6 +481,54 @@ class CselladoController{
         require_once("views/view_sellado_numeracion.php");
         }
     }
+
+    public function actualizarInfoRollo(){
+      $this->rollo = new oMsellado();
+      $res = $this->rollo->actualizarRegistro("tbl_info_rollo_sellado", "num_final = $_REQUEST[num_final]", "WHERE id_op = $_REQUEST[int_op_tn] AND rollo_r=$_REQUEST[rollo_r]");
+      echo json_encode($res);
+    }
+
+    public function actualizarBandera(){
+      $this->bandera = new oMsellado();
+      if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["id_op"] != "" && $_POST["id_bandera"] != ""){
+      $operario = $_POST['operario_verificacion']; 
+      $fecha = $_POST['fecha_verificacion'];
+      $estado = $_POST['estado'];
+      $id_bandera = $_POST['id_bandera'];
+      $id_op = $_POST['id_op'];
+        $this->bandera->actualizarRegistro("tbl_banderas", "operario_verificacion = $operario, fecha_verificacion = '$fecha', visto = $estado", "WHERE id_bandera = $id_bandera AND id_op = $id_op");
+    }
+  }
+
+  public function guardarInfoCompletaRollo(){
+
+    $this->rollo = new oMsellado();
+    if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["int_op_tn"] != "" && $_POST["numRollo"] != ""){
+      $numRollo = $_POST["numRollo"];
+      $id_op = $_POST["int_op_tn"];
+      $desde = $_POST["desde"];
+      $hasta = $_POST["hasta"];
+      
+      $data = [
+        "int_op_tn" => $id_op,
+        "rollo_r" => $numRollo,
+        "int_desde_num" => $desde,
+        "int_hasta_num" => $hasta
+      ];
+        
+        $this->rollo->RegistrarInfoRollo("tbl_info_rollo_sellado", "id_op, rollo_r, num_inicial, num_final", $data);
+    }
+  }
+
+  /* public function guardarNumRollo(){
+    $this->rollo = new oMsellado();
+    if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["int_op_tn"] != "" && $_POST["numRollo"] != ""){
+    $numRollo = $_POST["numRollo"];
+    $id_op = $_POST["int_op_tn"];
+      $this->rollo->actualizarRegistro("tbl_numeracion", "rollo = $numRollo", "WHERE int_op_n = $id_op");
+  }
+} */
+
 /*
     public function listadonormal(){ 
       require_once("views/view_compras_em.php?id=".$_REQUEST['id'].'&columna=id_pedido&tabla=tbl_orden_compra_historico' );

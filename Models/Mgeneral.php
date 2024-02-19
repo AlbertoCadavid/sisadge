@@ -375,7 +375,22 @@ class omGeneral{
         }
     }
 
-    
+    public function actualizarRegistro($tabla, $sets, $condicion){
+        try {
+            //echo "UPDATE $tabla SET $sets $condicion"; 
+            $Registro = $this->db->query("UPDATE $tabla SET $sets $condicion");
+            
+            /* if ($Registro) {
+                echo json_encode($Registro);
+                exit();
+            } else {
+                echo 0;
+                exit();
+            } */
+        } catch (\Throwable $th) {
+            die($e->getMessage());
+        }
+    }
 
 }
 

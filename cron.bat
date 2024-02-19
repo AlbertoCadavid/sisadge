@@ -1,1 +1,1 @@
-E:\xampp\php\php.exe -f E:\xampp\htdocs\acycia\conexionpw.php
+C:\xampp\php\php.exe -f C:\xampp\htdocs\acycia\conexionpw.php

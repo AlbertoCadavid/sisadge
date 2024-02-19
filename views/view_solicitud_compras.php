@@ -12,12 +12,12 @@ if (!isset($_SESSION)) {
 }
 
 // ** Logout the current user. **
-$logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
-if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")){
-  $logoutAction .="&". htmlentities($_SERVER['QUERY_STRING']);
+$logoutAction = $_SERVER['PHP_SELF'] . "?doLogout=true";
+if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")) {
+  $logoutAction .= "&" . htmlentities($_SERVER['QUERY_STRING']);
 }
 
-if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
+if ((isset($_GET['doLogout'])) && ($_GET['doLogout'] == "true")) {
   //to fully log out a visitor we need to clear the session varialbles
   $_SESSION['MM_Username'] = NULL;
   $_SESSION['MM_UserGroup'] = NULL;
@@ -361,7 +361,13 @@ $id = $consecutivo['id_solicitud'];
       swal("Error", "Debe agregar un valor al campo insumo! :)", "error");
       return false;
     } else {
-      //guardarSolicitudConAlert($("#id_solicitud").val());
+      swal({
+        icon: "info",
+        title: "Enviando!.......",
+        text: "Guardando y enviando el correo",
+        timer: 3000,
+        showConfirmButton: false
+      });
     }
 
   });

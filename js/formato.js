@@ -733,3 +733,23 @@ function mayusculaPrimeras(oracion){
 	});
 }
 
+/* Delete Flags on Extruder */
+function eliminarBandera(bandera,idbandera,columnaTabla, valorcolumna, tabla, id_rollo, vista)
+{
+ 
+swal({   
+	title: "Esta seguro?",   
+	text: "Quiere Eliminar la Bandera?",   
+	type: "warning",   
+	showCancelButton: true,   
+	confirmButtonColor: "#DD6B55",   
+	confirmButtonText: "Si, eliminarlo!",   
+	closeOnConfirm: false 
+}, 
+function(){
+	window.location ="delete2.php?"+bandera+"="+idbandera+"&"+columnaTabla+"="+valorcolumna+"&tabla="+tabla+"&id_r="+id_rollo+"&vista="+vista;  
+	swal("Eliminado!", "Sus registros fueron eliminados.", "success"); 
+}); 
+
+}
+

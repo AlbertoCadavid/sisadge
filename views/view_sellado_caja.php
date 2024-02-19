@@ -66,10 +66,16 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
   <!--IMPRIME AL CARGAR POPUP-->
 <style type="text/css"> 
   .box {
-    align-items: center;
-    border: 2px solid #CCC;
-    height: 175px;
-    width: 335px;
+    height: 179px;
+  }
+
+  .tableFaltantes {
+    display: flex;
+    padding-top:0.5%;
+    border:2px solid #CCC; 
+    height:100%; 
+    width:337px;
+    align-items: start; 
   }
 
  #oculto {
@@ -132,7 +138,7 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
    <?php if($faltantes): ?>
 
         <div class="box" >
-          <table > <!-- border="1"  -->
+          <table align="center" class="tableFaltantes"> <!-- border="1"  -->
            <?php if($faltantes[0]['int_inicial_f']!=''){ ?>
                  <tr>
                    <td nowrap="nowrap" ><b>FALTANTES Paq: <?php echo $paq_gen; ?> Caja:<?php echo $caja_gen ; ?> OP:<?php echo $op_gen; ?> </b></td>

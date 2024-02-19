@@ -20,7 +20,6 @@ class Csolicitud_comprasController
             if ($res2 == 1) {
                 $alerta = 2;
 
-
                 header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
                 $objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad'], $_POST['id_solicitud']);
             } else {

@@ -304,7 +304,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <img src="images/completo.gif" width="20" height="17" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /> Ya tiene rollos
                             </td>
                             <td colspan="3" id="dato1">
-                              <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Falta por liquidar <br>
+                              <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Extruyendo Falta por liquidar <br>
                               <img src="images/falta5.gif" width="16" height="16" alt="KILOS DISTINTOS EN LIQUIDACION" title="KILOS DISTINTOS EN LIQUIDACION" border="0" style="cursor:hand;" /> Kilos de consumo son distintos<br>
                               <img src="images/parcial.gif" width="20" height="17" alt="ROLLOS PARCIALES" title="ROLLOS PARCIALES" border="0" style="cursor:hand;" /> Rollos parciales
                             <td colspan="3" id="dato1">
@@ -465,7 +465,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                       <a href="javascript:popUp('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta.gif" alt="INGRESE LOS ROLLOS" title="INGRESE LOS ROLLOS" width="16" height="16" border="0" style="cursor:hand;" /> </a>
                                     <?php elseif ($rollosreg_prod == '' && $RollosE > 0) : ?>
 
-                                      <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="16" height="16" alt="FALTA LIQUIDAR" title="FALTA LIQUIDAR" border="0" style="cursor:hand;" /></a>
+                                      <a href="javascript:verFoto('produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','870','710')"><img src="images/falta6.gif" width="16" height="16" alt="EXTRUYENDO FALTA POR LIQUIDAR" title="EXTRUYENDO FALTA POR LIQUIDAR" border="0" style="cursor:hand;" /></a>
 
                                     <?php else : ?>
 
@@ -654,21 +654,5 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 </script>
 
 <?php
-
-
-mysql_free_result($prioridad);
-mysql_free_result($orden_produccion);
-mysql_free_result($all_orden_produccion);
-mysql_free_result($lista_op);
-mysql_free_result($ref_op);
-mysql_free_result($mensual);
-mysql_free_result($resultnp);;
-mysql_free_result($resultparcial);
-mysql_free_result($resultca);
-mysql_free_result($resultsell);
-
-mysql_free_result($resultparcial);
-
-mysql_free_result($resultsell);
 
 ?>

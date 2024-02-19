@@ -300,6 +300,19 @@ WHERE a.tipo_empleado IN(5,10) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_I
 
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($updateSQL, $conexion1) or die(mysql_error());
+
+/* Registro de las Banderas */
+if (!empty($_POST['banderas'])) {
+
+  for ($i = 0; $i < sizeof($_POST['banderas']); $i++) {
+    $nombre = $_POST['banderas'][$i];
+    if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
+      $metros = $_POST['metroBandera'][$i];
+      $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 2 ");
+    }
+  }
+}
+
   //apartir de aqui se registran los tiempos muertos y desperdicios
   if (!empty($_POST['id_rpt']) && !empty($_POST['valor_tiem_rt'])) {
     foreach ($_POST['id_rpt'] as $key => $v)
@@ -513,6 +526,9 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
 
 $registros = $conexion->llenaListas('Tbl_reg_kilo_producido', "WHERE Tbl_reg_kilo_producido.op_rp='$id_op' AND Tbl_reg_kilo_producido.id_proceso_rkp='2' ", 'ORDER BY Tbl_reg_kilo_producido.id_rkp ASC', 'id_rkp,id_rpp_rp,valor_prod_rp');
 
+/* obtener banderas */
+$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_impresion_edit[id_op_r] AND rollo_r = $row_rollo_impresion_edit[rollo_r] AND proceso = 2", "ORDER BY nombre ASC", "*");
+$num_banderas = sizeof($banderas);
 ?>
 <html>
 
@@ -1138,57 +1154,50 @@ $registros = $conexion->llenaListas('Tbl_reg_kilo_producido', "WHERE Tbl_reg_kil
 
         </td>
       </tr>
+      <tr><td >&nbsp;</td></tr>
       <tr>
-        <td colspan="5" id="titulo1">DEFECTOS</td>
+        <td colspan="2" id="titulo1">DEFECTOS/BANDERAS
+          <!-- grid -->
+          <?php if ($num_banderas > 0) { ?>
+            <hr>
+            <table id="example" class="display" style="width:100%" border="1">
+              <thead>
+                <tr id="titulo1">
+                  <td style="text-align: center;">NOMBRE</td>
+                  <td>METROS</td>
+                  <td>ELIMINAR</td>
+                </tr>
+              </thead>
+              <tbody id="DataResult">
+                <?php foreach ($banderas as $value) { ?>
+                  <tr>
+                    <td nowrap id="detalle2"> <?php echo  ucfirst($value['nombre']) ?></td>
+                    <td nowrap id="detalle2"> <?php echo $value['metros'] ?></td>
+                    <td style="text-align: center;"><a href="javascript:eliminarBandera('id_bandera',<?php echo $value['id_bandera'] ?>, 'proceso', <?php echo $value['proceso'] ?>,'Tbl_banderas', <?php echo $_GET['id_r'] ?>, 'produccion_impresion_stiker_rollo_edit.php?id_r=')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR BANDERA" border="0"></td>
+                  </tr>
+
+                <?php } ?>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      <?php } ?>
+
+      <tr id="tablaf">
+        <td></td>
       </tr>
+
       <tr>
-        <td id="fuente1">Desregistro</td>
-        <td id="fuente1"><input name="desf_r" type="number" id="desf_r" style="width:40px" min="0" max="9" value="<?php echo $row_rollo_impresion_edit['desf_r']; ?>" onChange="sumaBanderasI();">
-          <input name="desf2_r" type="number" id="desf2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['desf2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Tanteo</td>
-        <td id="fuente1"><input type="number" name="tante_r" min="0" max="9" id="tante_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['tante_r']; ?>" onChange="sumaBanderasI();">
-          <input name="tante2_r" type="number" id="tante2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['tante2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">&nbsp;</td>
-      </tr>
-      <tr>
-        <td id="fuente1">Manchas</td>
-        <td id="fuente1"><input type="number" name="manch_r" min="0" max="9" id="manch_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['manch_r']; ?>" onChange="sumaBanderasI();">
-          <input name="manch2_r" type="number" id="manch2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['manch2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Color</td>
-        <td colspan="2" id="fuente1"><input type="number" name="color_r" min="0" max="9" id="color_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['color_r']; ?>" onChange="sumaBanderasI();">
-          <input name="color2_r" type="number" id="color2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['color2_r']; ?>">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Empates</td>
-        <td id="fuente1"><input type="number" name="empat_r" min="0" max="9" id="empat_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['empat_r']; ?>" onChange="sumaBanderasI();">
-          <input name="empat2_r" type="number" id="empat2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['empat2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Medida</td>
-        <td colspan="2" id="fuente1"><input type="number" name="medid_r" min="0" max="9" id="medid_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['medid_r']; ?>" onChange="sumaBanderasI();">
-          <input name="medid2_r" type="number" id="medid2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['medid2_r']; ?>">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Rasquetas</td>
-        <td id="fuente1"><input type="number" name="rasqueta_r" min="0" max="9" id="rasqueta_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['rasqueta_r']; ?>" onChange="sumaBanderasI();">
-          <input name="rasqueta2_r" type="number" id="rasqueta2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['rasqueta2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Apagón</td>
-        <td id="fuente1"><input type="number" name="apagon_r" min="0" max="9" id="apagon_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['apagon_r']; ?>" onChange="sumaBanderasI();">
-          <input name="apagon2_r" type="number" id="apagon2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['apagon2_r']; ?>">Metros
+        <td></td>
+        <td style="text-align: right">
+          <span>Nueva Bandera</span>
+          <button style="width:40px" type="button" class="botonGMini" onClick="AddItemd();"> + </button>
         </td>
       </tr>
       <tr>
-        <td id="fuente1">Montaje</td>
-        <td id="fuente1"><input type="number" name="montaje_r" min="0" max="9" id="montaje_r" style="width:40px" value="<?php echo $row_rollo_impresion_edit['montaje_r']; ?>" onChange="sumaBanderasI();">
-          <input name="montaje2_r" type="number" id="montaje2_r" style="width:60px" min="0" value="<?php echo $row_rollo_impresion_edit['montaje2_r']; ?>">Metros
+        <td id="fuente1" colspan="1">TOTAL BANDERAS:
+          <input type="number" readonly value="" name="bandera_r" id="totales" style="width:35px; border:0">
         </td>
-        <td id="fuente1"><strong>TOTAL BANDERAS</strong></td>
-        <td colspan="2" id="fuente1"><input name="bandera_r" type="number" id="bandera_r" value="<?php echo $row_rollo_impresion_edit['bandera_r']; ?>" style="width:40px" readonly onClick="sumaBanderasI();" /></td>
       </tr>
       <tr>
         <td colspan="5" id="dato1">Nota: Al guardar el rollo tambien se guarda los datos principales en la tabla maestra (<em>reg_produccion</em>)</td>
@@ -1259,6 +1268,70 @@ $registros = $conexion->llenaListas('Tbl_reg_kilo_producido', "WHERE Tbl_reg_kil
     $('#metro_r3').val($('#metro_r').val());
 
   })
+
+  //------------------FUNCION PARA AGREGAR ITEMS DINAMICOS----//
+  var num = 0;
+  var contador = 1
+
+  function AddItemd() {
+    var contador = num++;
+    var tbody = null;
+    var tablaf = document.getElementById("tablaf");
+    var nodes = tablaf.childNodes;
+    var count = 0;
+    var acumula = 0;
+
+    for (var x = 0; x < nodes.length; x++) {
+      if (nodes[x].nodeName == 'TD') {
+        tbody = nodes[x];
+        break;
+      }
+      count = acumula + x;
+    }
+
+    if (tbody != null) {
+      contador = contador + 1;
+      var tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="2">
+          <select oninput=actualizarTotal() name="banderas[]" id="banderas[]" class="banderas">
+            <option value="">SELECCIONE</option>
+            <option value="desregistro">Desregistro</option>
+            <option value="tanteo">Tanteo</option>
+            <option value="manchas">Manchas</option>
+            <option value="color">Color</option>
+            <option value="empates">Empates</option>
+            <option value="medida">Medida</option>
+            <option value="rasquetas">Rasquetas</option>
+            <option value="apagon">Apagón</option>
+            <option value="montaje">Montaje</option>
+          </select>
+
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+        </td>`;
+      tbody.appendChild(tr);
+      contador = contador + 1;
+    }
+
+  }
+
+  //funcion para sumar total de las cantidades
+  actualizarTotal();
+
+  function actualizarTotal() {
+    var cantidades = document.getElementsByClassName("banderas");
+    var total = <?php echo $num_banderas ?>;
+
+    for (var i = 0; i < cantidades.length; i++) {
+      if (cantidades[i].value != '') {
+        var valorCampo = 1; // Convertir a número o usar 0 si no es válido
+        total += valorCampo;
+      }
+
+    }
+
+    // Actualizar el contenido del campo "total"
+    document.getElementById('totales').value = total;
+  }
 </script>
 <?php
 mysql_free_result($usuario);

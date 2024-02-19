@@ -20,7 +20,9 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		  if(cerosizq!=undefined){
 		    var sumoUno = cerosizq; 
 		  } 
-	document.form1.int_desde_tn.value=cadena+sumoUno;		
+	document.form1.int_desde_tn.value=cadena+sumoUno;
+	let numeroDesde = numeracionChar(cadena+sumoUno);
+	document.form1.int_desde_num.value= numeroDesde[0] ; //lleno el input sin caracteres para que lo envie en el form y actualice la tabla tbl_info_rollo_sellado	
 	
 
 	    var cerosizq2 = cerosIzquierda(desde,tnum,numeros); //codigos especiales 
@@ -28,6 +30,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		    var tnum = cerosizq2; 
 		  }
 	document.form1.int_hasta_tn.value=cadena+tnum; 
+	let numeroHasta = numeracionChar(cadena+tnum);
+	document.form1.int_hasta_num.value= numeroHasta[0];  //lleno el input sin caracteres para que lo envie en el form y actualice la tabla tbl_info_rollo_sellado
 
     cambioCajaODesdeListado(caja,paquete,ref);
 
@@ -356,7 +360,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 
      		var hastaGeneral = divideCadenas(hastaGeneral); 
      		var hastaGeneral = hastaGeneral[0];      
-            var bandera = 0
+            var bandera = 0;
+			var estado = false;
 
      		var elements = document.getElementsByClassName('errorRango'); 
             // valida todos los faltantes iniciales 
@@ -384,13 +389,12 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
      		 );   
      		 
            	if(bandera==0){
-                 
+                 estado = true;
                          $('#content').html('<div class="loader"></div>');
-                              setTimeout(function() { $(".loader").fadeOut("slow");},500);
-                               guardarSelladoTiquetes();   
+                              setTimeout(function() { $(".loader").fadeOut("slow");},500); 
            	}
-              
-             
+            
+			return estado
          }
  
 
@@ -774,7 +778,133 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		  			  	     }
 		  			  	   });  
 		  			  	}
+
+						function cargaInfoRollos(id_op){ //consulta los rollos que estan asociados a la op seleccionada en sellado numeracion inicio
+							
+							var getUrl = window.location.pathname;
+							$.ajax({
+								dataType: "json",
+								data: {
+									"int_op_tn": id_op
+								},
+								url: getUrl+"/view_index.php?c=csellado&a=ConsultarOProllo&int_op_tn="+id_op,
+								type: 'post',
+							}).done(function( data, textStatus, jqXHR ){
+								
+								document.querySelector("#id_rollo").innerHTML="" //Borra todo lo que tenga el select
+								if(data != "0"){
+									$("#id_rollo").append($('<option>',{
+										value: "",
+										text: "Rollos"
+									}))
+									data.forEach(element => {
+										$("#id_rollo").append($('<option>',{
+											value: element.rollo_r,
+											text: element.rollo_r
+										}))
+										
+									});
+								}
+							}).fail(function( jqXHR, textStatus, errorThrown ) {
+								console.log( "La solicitud a fallado: " +  textStatus);
+							});  
+						}
  
+						function cargaInfoRolloSellado(id_op, rollo_r){ //consulta la cantidad de bolsas que han sellado de un rollo en especifico en la pag sellado numeracion
+							
+							var getUrl = window.location.pathname;
+							
+							$.ajax({
+								dataType: "json",
+								data: {
+									"int_op_tn": id_op,
+									"rollo_r" : rollo_r
+								},
+								url: getUrl+"?c=csellado&a=ConsultarInfoRollo&int_op_tn="+id_op+"&rollo_r="+rollo_r,
+								type: 'post',
+							}).done(function( data, textStatus, jqXHR ){
+
+								var anchoBolsa = $("#anchoRef").val();
+								var metros = parseInt((((data[0].num_final)-(data[0].num_inicial))+1)*(anchoBolsa/100));
+								
+								console.log("anchobolsa:"+anchoBolsa+" cantBolsas: "+(((data[0].num_final)-(data[0].num_inicial))+1)+"--"+"metros "+metros);
+							}).fail(function( jqXHR, textStatus, errorThrown ) {
+								console.log( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+							});  
+						}
+
+
+						async function consultaBanderas(id_op, proceso, rollo_r){ //consulta la cantidad de bolsas que han sellado de un rollo en especifico en la pag sellado numeracion
+							
+							var getUrl = window.location.pathname;
+							
+							return new Promise((resolve, reject) => {
+							$.ajax({
+								dataType: "json",
+								data: {
+									"id_op": id_op,
+									"rollo_r" : rollo_r,
+									"proceso" : proceso,
+									
+								},
+								url: getUrl+"?c=csellado&a=consultarBanderas&id_op="+id_op+"&rollo_r="+rollo_r,
+								type: 'POST',
+							}).done(function( data, textStatus, jqXHR ){
+								resolve(data);
+							}).fail(function( jqXHR, textStatus, errorThrown ) {
+								reject( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+							});  
+						})
+						}
+
+						//consulta si existen rollos disponibles para sellado y llena el select id_rollo en view_sellado_numeracion
+						async function verificarRollo(id_op){ 
+							
+							var getUrl = window.location.pathname;
+							
+							return new Promise((resolve, reject) => {
+							$.ajax({
+								dataType: "json",
+								data: {
+									"id_op": id_op
+								},
+								url: getUrl+"?c=csellado&a=ConsultarCantidadRollos&id_op="+id_op,
+								type: 'POST',
+							}).done(function( data, textStatus, jqXHR ){
+								
+								
+								document.querySelector("#id_rollo").innerHTML="" //Borra todo lo que tenga el select
+								if(data.length != 1){
+									$("#id_rollo").append($('<option>',{
+										value: "",
+										text: "Rollos"
+									}))
+									data.forEach(element => {
+										$("#id_rollo").append($('<option>',{
+											value: element.rollo_r,
+											text: element.rollo_r
+										}))
+										
+									});
+									resolve(false);
+								} else {
+									$("#id_rollo").append($('<option>',{
+										value: data[0].rollo_r,
+										text: data[0].rollo_r
+									}))
+									$("#rollo_r").val(data[0].rollo_r)
+									resolve(true);
+								}
+
+								/* cargaInfoRolloSellado(id_op, $('#rollo_r').val()) */
+
+							}).fail(function( jqXHR, textStatus, errorThrown ) {
+								reject( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+							}); 
+						}); 
+						}
+						
+
 	 	 function consultaCajaPaqAddNew(columna,ref,numeracionIni){  
 		     var getUrl = window.location.pathname;
              var numeracionInicial = numeracionIni;
@@ -1195,7 +1325,74 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
 		}
 
 
+		function actualizaInfoRolloSellado(id_op, rollo_r, num_final){ //consulta la cantidad de bolsas que han sellado de un rollo en especifico en la pag sellado numeracion
+							
+			var getUrl = window.location.pathname;
+			
+			$.ajax({
+				dataType: "json",
+				data: {
+					"int_op_tn": id_op,
+					"rollo_r" : rollo_r,
+					"num_final": num_final
+				},
+				url: getUrl+"?c=csellado&a=actualizarInfoRollo&int_op_tn="+id_op+"&rollo_r="+rollo_r+"&num_final="+num_final,
+				type: 'post',
+			}).done(function( data, textStatus, jqXHR ){
+				
+				
+				
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				console.log( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+			});  
+		}
 
+		function actualizaBandera(operario, fecha, estado, id_op, id_bandera){ //consulta la cantidad de bolsas que han sellado de un rollo en especifico en la pag sellado numeracion
+							
+			var getUrl = window.location.pathname;
+			
+			$.ajax({
+				dataType: "json",
+				data: {
+					"operario_verificacion" : operario,
+					"fecha_verificacion" : fecha,
+					"estado" : estado,
+					"id_op" : id_op,
+					"id_bandera" : id_bandera
+				},
+				url: getUrl+"?c=csellado&a=actualizarBandera&int_op_tn="+id_op+"&id_bandera="+id_bandera,
+				type: 'post',
+			}).done(function( data, textStatus, jqXHR ){
+				
+				console.log(data);
+				
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				console.log( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+			});  
+		}
+
+		function guardarRolloSeleccionado(id_op, numRollo, desde, hasta){ //consulta la cantidad de bolsas que han sellado de un rollo en especifico en la pag sellado numeracion
+							
+			var getUrl = window.location.pathname;
+			
+			$.ajax({
+				dataType: "json",
+				data: {
+					"int_op_tn" : id_op,
+					"numRollo" : numRollo,
+					"desde" : desde,
+					"hasta" : hasta
+				},
+				url: getUrl+"?c=csellado&a=guardarInfoCompletaRollo&int_op_tn="+id_op+"&numRollo="+numRollo+"&desde="+desde+"&hasta="+hasta,
+				type: 'post',
+			}).done(function( data, textStatus, jqXHR ){
+				
+				console.log(textStatus);
+				
+			}).fail(function( jqXHR, textStatus, errorThrown ) {
+				console.log( "La solicitud a fallado: " +  textStatus+" -- "+errorThrown);
+			});  
+		}
 
 
     function eliminarconAlerta(idop,caja){
@@ -1277,8 +1474,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
        if(ref =='096'){
 
        	    if($("#imprimirt").val()==1){
-
-       	    	$('#int_paquete_tn').val(parseInt(paquete) + parseInt(1))
+                var undxcaja = $('#int_undxcaja_tn').val()//se debe guardar siempre en el paquete que termmina la caja cuando se guarda sin faltantes
+       	    	$('#int_paquete_tn').val(parseInt(paquete) + (parseInt(undxcaja)  + parseInt(1)) )
        	    	$('#int_caja_tn').val(parseInt(caja) + parseInt(1) );
        	    	$('.paqdesde').text(totalPaquete);
        	    	$('.paqhasta').text(totalPaquete);
@@ -1310,10 +1507,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
         			    	 $('#int_caja_tn').val(parseInt(caja) );
         			}
         	}
-        		            
-
+        		
         }else{
-
 
      		if($("#imprimirt").val()==1){     
 
@@ -1343,15 +1538,8 @@ function numeracionDesdeAdd(numDesde,caja,paquete,ref='',selladoadd='') {
           	             	$('#int_caja_tn').val(caja);
           	             }     
      
-     
-     
-
           	         }     
-
              }
-
-    
-
 
 	}
 

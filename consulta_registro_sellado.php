@@ -31,13 +31,14 @@ if(isset($_GET['getClientId'])&&$_GET['getClientId']!=''){
 
          	$inf4=$conexion->llenarCampos("TblSelladoRollo ","WHERE id_op_r ='$id_op'" ,"ORDER BY fechaF_r DESC LIMIT 1","numFin_r " );  
          	$numeracionIn=$inf4["numFin_r"]+1;   
-            
+			 
             if(!$inf4){
+				
               //si no se ha guardado ningun rollo que traiga numeracion de la o.p
               $inf5=$conexion->llenarCampos("tbl_orden_produccion","WHERE  id_op = '$id_op'  ", "ORDER BY id_op DESC ","numInicio_op");  
               $inf5["numInicio_op"];
             }
-
+			
          	$fecha2 = $fecha2."T".$hora2;  
          	$placa=$id_op."-".$inf[0][2];   
  

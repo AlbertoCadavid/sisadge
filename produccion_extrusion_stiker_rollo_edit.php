@@ -121,7 +121,7 @@ $conexion = new ApptivaDB();
 
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
-  
+
   $updateSQL = sprintf(
     "UPDATE TblExtruderRollo SET rollo_r=%s, id_op_r=%s, ref_r=%s, id_c_r=%s, tratInter_r=%s, tratExt_r=%s, pigmInt_r=%s, pigmExt_r=%s, calibre_r=%s, presentacion_r=%s, cod_empleado_r=%s, turno_r=%s, fechaI_r=%s, fechaF_r=%s, metro_r=%s, kilos_r=%s, reven_r=%s, medid_r=%s, corte_r=%s, desca_r=%s, calib_r=%s, trata_r=%s, arrug_r=%s, bandera_r=%s,montaje_r=%s, apagon_r=%s, observ_r=%s, reven2_r=%s,medid2_r=%s,corte2_r=%s,desca2_r=%s,calib2_r=%s,trata2_r=%s,arrug2_r=%s,apagon2_r=%s,montaje2_r=%s WHERE id_r=%s",
     GetSQLValueString($_POST['rollo_r'], "int"),
@@ -166,6 +166,19 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($updateSQL, $conexion1) or die(mysql_error());
 
+
+  /* Registro de las Banderas */
+  if (!empty($_POST['banderas'])) {
+
+    for ($i = 0; $i < sizeof($_POST['banderas']); $i++) {
+      $nombre = $_POST['banderas'][$i];
+      if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
+        $metros = $_POST['metroBandera'][$i];
+        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 1 ");
+      }
+    }
+  }
+
   $id_proceso = 1;
   /* inicio Tiempos muertos */
   if (!empty($_POST['id_rpt']) && !empty($_POST['valor_tiem_rt'])) {
@@ -188,7 +201,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
           GetSQLValueString($id_proceso, "int"),
           GetSQLValueString($_POST['fechaI_r'], "date")
         );
-        
+
         mysql_select_db($database_conexion1, $conexion1);
         $Resultt = mysql_query($insertSQLt, $conexion1) or die(mysql_error());
       }
@@ -216,7 +229,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
           GetSQLValueString($id_proceso, "int"),
           GetSQLValueString($_POST['fechaI_r'], "date")
         );
-        
+
         mysql_select_db($database_conexion1, $conexion1);
         $Resultp = mysql_query($insertSQLp, $conexion1) or die(mysql_error());
       }
@@ -244,7 +257,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
           GetSQLValueString($_POST['fechaI_r'], "date"),
           GetSQLValueString($_POST['cod_ref_rd'], "text")
         );
-        
+
         mysql_select_db($database_conexion1, $conexion1);
         $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
       }
@@ -257,13 +270,13 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   $queryExisteLiquidacion = "SELECT id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND rollo_r = $rollo_rd";
   $existeLiquidacion = mysql_query($queryExisteLiquidacion);
   $liquidacion = mysql_result($existeLiquidacion, 0, 'id_rp');
-  
-  if($liquidacion != 0 || $liquidacion != null){
+
+  if ($liquidacion != 0 || $liquidacion != null) {
     $sqlliq = "SELECT SUM(metro_r) AS metros, SUM(kilos_r) AS kilos, id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND id_rp = $liquidacion";
     $resultliq = mysql_query($sqlliq);
     $kilos = mysql_result($resultliq, 0, 'kilos');
     $metros = mysql_result($resultliq, 0, 'metros');
-    
+
     $sqlsuma = "UPDATE Tbl_reg_produccion SET int_total_kilos_rp=$kilos, int_metro_lineal_rp=$metros WHERE id_op_rp = $id_op AND id_proceso_rp='1' AND id_rp = $liquidacion ";
     mysql_select_db($database_conexion1, $conexion1);
     $Resultsuma = mysql_query($sqlsuma, $conexion1) or die(mysql_error());
@@ -364,6 +377,9 @@ $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error())
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
 
+/* obtener banderas */
+$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_estrusion_edit[id_op_r] AND rollo_r = $row_rollo_estrusion_edit[rollo_r] AND proceso = 1", "ORDER BY nombre ASC", "*");
+$num_banderas = sizeof($banderas);
 
 /*if($row_tiempoMuerto['fecha_rt'] !='' || $row_tiempoPreparacion['fecha_rtp']!='' || $row_desperdicio['fecha_rd']!=''){
   $fechaibloque = $row_tiempoMuerto['fecha_rt'] =='' ? $row_tiempoPreparacion['fecha_rtp'] : $row_desperdicio['fecha_rd'];
@@ -580,7 +596,9 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
         <td id="fuente1">PESO</td>
         <td id="fuente1"><input name="kilos_r" type="number" id="kilos_r" min="1.00" step="0.01" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['kilos_r']; ?>" required /></td>
       </tr>
-      <tr><td colspan="4">&nbsp;</td></tr>
+      <tr>
+        <td colspan="4">&nbsp;</td>
+      </tr>
 
       <!-- Desperdicio -->
       <tr id="tr1">
@@ -595,7 +613,7 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
         <td id="dato1" style="text-align:center"><input type="button" name="button2" class="botonFinalizar" id="button2" value="Crear otra fila" onclick="tiemposP()" style="width:193px" /></td>
         <td id="dato1"><input type="button" name="button3" class="botonFinalizar" id="button3" value="Crear otra fila" onclick="tiemposD()" style="width:193px" /></td>
         <td><input type="hidden" name="cod_ref_rd" id="cod_ref_rd" value="<?php echo $row_orden['int_cod_ref_op'] ?>" /></td>
-        </tr>
+      </tr>
 
       <tr>
         <td colspan="1" id="dato1">
@@ -609,7 +627,9 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
         </td>
       </tr>
 
-      <tr><td colspan="4">&nbsp;</td></tr>
+      <tr>
+        <td colspan="4">&nbsp;</td>
+      </tr>
 
       <tr>
         <td colspan="4">
@@ -719,55 +739,53 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
           </table>
         </td>
       </tr>
+
+      <tr><td >&nbsp;</td></tr>
       <tr>
-        <td id="fuente1">Reventon</td>
-        <td id="fuente1"><input name="reven_r" type="number" id="reven_r" style=" width:40px" min="0" max="9" value="<?php echo $row_rollo_estrusion_edit['reven_r'] == '' ? 0 : $row_rollo_estrusion_edit['reven_r']; ?>" onChange="sumaBanderas();">
-          <input name="reven2_r" type="number" id="reven2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['reven2_r'] == '' ? 0 : $row_rollo_estrusion_edit['reven2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Medida</td>
-        <td id="fuente1"><input type="number" name="medid_r" min="0" max="9" id="medid_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['medid_r'] == '' ? 0 : $row_rollo_estrusion_edit['medid_r']; ?>" onChange="sumaBanderas();">
-          <input name="medid2_r" type="number" id="medid2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['medid2_r'] == '' ? 0 : $row_rollo_estrusion_edit['medid2_r']; ?>">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Cortes/Huecos</td>
-        <td id="fuente1"><input type="number" name="corte_r" min="0" max="9" id="corte_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['corte_r'] == '' ? 0 : $row_rollo_estrusion_edit['corte_r']; ?>" onChange="sumaBanderas();">
-          <input name="corte2_r" type="number" id="corte2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['corte2_r'] == '' ? 0 : $row_rollo_estrusion_edit['corte2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Descalibre</td>
-        <td id="fuente1"><input type="number" name="desca_r" min="0" max="9" id="desca_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['desca_r'] == '' ? 0 : $row_rollo_estrusion_edit['desca_r']; ?>" onChange="sumaBanderas();">
-          <input name="desca2_r" type="number" id="desca2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['desca2_r'] == '' ? 0 : $row_rollo_estrusion_edit['desca2_r']; ?>">Metros
-        </td>
-      </tr>
-      <tr>
-        <td id="fuente1">Pigmentación</td>
-        <td id="fuente1"><input type="number" name="calib_r" min="0" max="9" id="calib_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['calib_r'] == '' ? 0 : $row_rollo_estrusion_edit['calib_r']; ?>" onChange="sumaBanderas();">
-          <input name="calib2_r" type="number" id="calib2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['calib2_r'] == '' ? 0 : $row_rollo_estrusion_edit['calib2_r']; ?>">Metros
-        </td>
-        <td id="fuente1">Tratamiento</td>
-        <td id="fuente1"><input type="number" name="trata_r" min="0" max="9" id="trata_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['trata_r'] == '' ? 0 : $row_rollo_estrusion_edit['trata_r']; ?>" onChange="sumaBanderas();">
-          <input name="trata2_r" type="number" id="trata2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['trata2_r'] == '' ? 0 : $row_rollo_estrusion_edit['trata2_r']; ?>">Metros
-        </td>
+        <td colspan="2" id="titulo1">BANDERAS
+          <!-- grid -->
+          <?php if ($num_banderas > 0) { ?>
+            <hr>
+            <table id="example" class="display" style="width:100%" border="1">
+              <thead>
+                <tr id="titulo1">
+                  <td style="text-align: center;">NOMBRE</td>
+                  <td>METROS</td>
+                  <td>ELIMINAR</td>
+                </tr>
+              </thead>
+              <tbody id="DataResult">
+                <?php foreach ($banderas as $value) { ?>
+                  <tr>
+                    <td nowrap id="detalle2"> <?php echo  ucfirst($value['nombre']) ?></td>
+                    <td nowrap id="detalle2"> <?php echo $value['metros'] ?></td>
+                    <td style="text-align: center;"><a href="javascript:eliminarBandera('id_bandera',<?php echo $value['id_bandera'] ?>, 'proceso', <?php echo $value['proceso'] ?>,'Tbl_banderas', <?php echo $_GET['id_r'] ?>, 'produccion_extrusion_stiker_rollo_edit.php?id_r=')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR BANDERA" border="0"></td>
+                  </tr>
+
+                <?php } ?>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      <?php } ?>
+
+      <tr id="tablaf">
+        <td></td>
       </tr>
 
       <tr>
-        <td id="fuente1">Arrugas</td>
-        <td id="fuente1"><input type="number" name="arrug_r" min="0" max="9" id="arrug_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['arrug_r'] == '' ? 0 : $row_rollo_estrusion_edit['arrug_r']; ?>" onChange="sumaBanderas();">
-          <input name="arrug2_r" type="number" id="arrug2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['arrug2_r'] == '' ? 0 : $row_rollo_estrusion_edit['arrug2_r']; ?>">Metros
-        </td>
-        <td nowrap="nowrap" id="fuente1">Apagón:</td>
-        <td id="fuente1"><input type="number" name="apagon_r" min="0" max="9" id="apagon_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['apagon_r'] == '' ? 0 : $row_rollo_estrusion_edit['apagon_r']; ?>" onChange="sumaBanderas();">
-          <input name="apagon2_r" type="number" id="apagon2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['apagon2_r'] == '' ? 0 : $row_rollo_estrusion_edit['apagon2_r']; ?>">Metros
+        <td></td>
+        <td style="text-align: right">
+          <span>Nueva Bandera</span>
+          <button style="width:40px" type="button" class="botonGMini" onClick="AddItemd();"> + </button>
         </td>
       </tr>
       <tr>
-        <td nowrap="nowrap" id="fuente1">Montaje:</td>
-        <td id="fuente1"><input type="number" name="montaje_r" min="0" max="9" id="montaje_r" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['montaje_r'] == '' ? 0 : $row_rollo_estrusion_edit['montaje_r']; ?>" onChange="sumaBanderas();">
-          <input name="montaje2_r" type="number" id="montaje2_r" style="width:60px" min="0" value="<?php echo $row_rollo_estrusion_edit['montaje2_r'] == '' ? 0 : $row_rollo_estrusion_edit['montaje2_r']; ?>">Metros
+        <td id="fuente1" colspan="1">TOTAL BANDERAS:
+          <input type="number" readonly value="" name="bandera_r" id="totales" style="width:35px; border:0">
         </td>
-        <td id="fuente1"><strong>TOTAL BANDERAS</strong></td>
-        <td id="fuente1"><input name="bandera_r" type="number" id="bandera_r" value="<?php echo $row_rollo_estrusion_edit['bandera_r']; ?>" style=" width:40px" readonly onClick="sumaBanderas();" /></td>
       </tr>
+
       <tr>
         <td colspan="4" id="titulo1">OBSERVACIONES</td>
       </tr>
@@ -793,7 +811,6 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
 
 </html>
 <script type="text/javascript">
-
   function desperdicios() {
     idop = $("#id_op_r").val();
     fechaIni = $("#fecha_ini_rp").val();
@@ -908,6 +925,71 @@ $totalRows_desperdicio = mysql_num_rows($desperdicio);
 
     document.getElementById("moreUploads3").appendChild(f);
     upload_number++;
+  }
+
+
+  //------------------FUNCION PARA AGREGAR ITEMS DINAMICOS----//
+  var num = 0;
+  var contador = 1
+
+  function AddItemd() {
+    var contador = num++;
+    var tbody = null;
+    var tablaf = document.getElementById("tablaf");
+    var nodes = tablaf.childNodes;
+    var count = 0;
+    var acumula = 0;
+
+    for (var x = 0; x < nodes.length; x++) {
+      if (nodes[x].nodeName == 'TD') {
+        tbody = nodes[x];
+        break;
+      }
+      count = acumula + x;
+    }
+
+    if (tbody != null) {
+      contador = contador + 1;
+      var tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="2">
+          <select oninput=actualizarTotal() name="banderas[]" id="banderas[]" class="banderas">
+            <option value="">SELECCIONE</option>
+            <option value="apagon">APAGON</option>
+            <option value="arrugas">ARRUGAS</option>
+            <option value="cortes_huecos">CORTES/HUECOS</option>
+            <option value="descalibre">DESCALIBRE</option>
+            <option value="medida">MEDIDA</option>
+            <option value="montaje">MONTAJE</option>
+            <option value="pigmentacion">PIGMENTACION</option>
+            <option value="reventon">REVENTON</option>
+            <option value="tratamiento">TRATAMIENTO</option>
+          </select>
+
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+        </td>`;
+      tbody.appendChild(tr);
+      contador = contador + 1;
+    }
+
+  }
+
+  //funcion para sumar total de las cantidades
+  actualizarTotal();
+
+  function actualizarTotal() {
+    var cantidades = document.getElementsByClassName("banderas");
+    var total = <?php echo $num_banderas ?>;
+
+    for (var i = 0; i < cantidades.length; i++) {
+      if (cantidades[i].value != '') {
+        var valorCampo = 1; // Convertir a número o usar 0 si no es válido
+        total += valorCampo;
+      }
+
+    }
+
+    // Actualizar el contenido del campo "total"
+    document.getElementById('totales').value = total;
   }
 </script>
 

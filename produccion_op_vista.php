@@ -313,6 +313,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
         <td colspan="2" id="detalle1">DESPERDICIO</td>
         <td colspan="2" id="detalle1">UNIDADES SOLICITADAS</td>
         <td colspan="2" id="detalle1">TIPO DE BOLSA</td>
+        <td id="detalle1"><strong>EXTRUSION</strong></td>
         <td id="detalle1">PESO MILLAR</td>
         <td colspan="2" id="detalle1">Prioridad</td>
       </tr>
@@ -320,6 +321,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_desperdicio_op']; ?> %<strong></strong></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_cantidad_op']; ?></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['str_tipo_bolsa_op']; ?></td>
+        <td id="detalle1"><?php echo $row_orden_produccion['coextrusion'] ?></td>
         <td id="detalle1"><?php echo $row_orden_produccion['int_pesom_op']; ?></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['b_visual_op']; ?></td>
       </tr>
@@ -2384,10 +2386,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
       <tr>
         <td colspan="2" id="detalle1"><strong> EXTRUSION </strong></td>
-      </tr>
-      <tr>
-        <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['coextrusion'] ?></td>
-      </tr>
+      </tr> 
 
       <tr>
         <td colspan="9" id="subppal2">Observacion en Sellado</td>

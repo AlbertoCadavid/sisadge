@@ -1,4 +1,11 @@
-<?php require_once('Connections/conexion1.php'); ?><?php
+<?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
+require(ROOT_BBDD);
+?>
+<?php 
+require_once('Connections/conexion1.php'); 
+?>
+<?php
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -27,6 +34,8 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) {
   } 
   return $isValid; 
 }
+
+$conexion = new ApptivaDB();
 
 $MM_restrictGoTo = "usuario.php";
 if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {   
@@ -78,6 +87,7 @@ $editFormAction = $_SERVER['PHP_SELF'];
 if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 }
+
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   $updateSQL = sprintf("UPDATE TblImpresionRollo SET fechaV_r=%s WHERE id_r=%s",
 					   GetSQLValueString($_POST['fechaV_r'], "date"),
@@ -138,6 +148,14 @@ $query_existe = sprintf("SELECT Tbl_reg_produccion.int_total_kilos_rp, Tbl_reg_p
 $existe_edit = mysql_query($query_existe, $conexion1) or die(mysql_error());
 $row_existe_edit = mysql_fetch_assoc($existe_edit);
 $totalRows_existe_edit = mysql_num_rows($existe_edit);
+
+/* obtener banderas */
+$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_impresion[id_op_r] AND rollo_r = $row_rollo_impresion[rollo_r] AND proceso = 2", "ORDER BY metros ASC", "nombre, metros");
+$num_banderas = sizeof($banderas);
+$modulo = $num_banderas % 3;
+if ($modulo == 0) {
+  $num_filas = $num_banderas / 3;
+} else $num_filas = intval(($num_banderas / 3) + 1)
 
 ?>
 <html>
@@ -208,10 +226,11 @@ function cerrar(num) {
      <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion['id_r']; ?>,'produccion_impresion_listado_rollos.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a>
       <a href="produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_impresion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a>
 	  <?php }?>--><a href="produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_rollo_impresion['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_impresion['rollo_r']; ?>&rollo_r=<?php echo $row_rollo_impresion['rollo_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS"title="LISTADO ROLLO" border="0" style="cursor:hand;"/></a>
-     <?php  if($totalRows_existe_edit > '0') {?>
-     <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion['id_r']; ?>,'produccion_impresion_listado_rollos.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a>
-     <a href="produccion_registro_impresion_vista.php?id_op=<?php echo $row_rollo_impresion['id_op_r']; ?>"><img src="images/adelante.gif" style="cursor:hand;" alt="LIQUIDAR" title="LIQUIDAR" border="0"/></a><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a>
-             <?php }?><img src="images/impresor.gif" onClick="envio_form();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR"/></td>
+    <?php  if($totalRows_existe_edit > '0') {?>
+    <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion['id_r']; ?>,'produccion_impresion_listado_rollos.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a>
+    <a href="produccion_registro_impresion_vista.php?id_op=<?php echo $row_rollo_impresion['id_op_r']; ?>"><img src="images/adelante.gif" style="cursor:hand;" alt="LIQUIDAR" title="LIQUIDAR" border="0"/></a>
+    <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a>
+    <?php }?><img src="images/impresor.gif" onClick="envio_form();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR"/></td>
   </tr>
 
   <tr>
@@ -271,10 +290,33 @@ function cerrar(num) {
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-bottom: 3px solid #000000;">PESO:</td>
     <td colspan="3" nowrap="nowrap" id="stikers_fuentN" style="border-bottom: 3px solid #000000;"><?php echo $row_existe_edit['int_total_kilos_rp'];  ?></td>
   </tr>
+
+   <!-- loop for show the flags into roll (3 per row)-->
+   <tr>
+        <?php $pos = 0;
+        for ($i = 0; $i < $num_filas; $i++) { ?>
+          <?php for ($j = 0; $j < 3; $j++) { ?>
+            <td nowrap="nowrap" id="stikersC_fuentN"><?php echo ucfirst($banderas[$pos]['nombre']) ?>:</td>
+            <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;">1&nbsp;/
+              <?php echo $banderas[$pos]['metros']; ?> mts
+              <?php if (!isset($banderas[$pos + 1]['nombre'])) {
+                break;
+              } ?>
+            </td>
+          <?php $pos++;
+          } ?>
+      <tr>
+      <?php } ?>
+      </tr>
+      <tr>
+        <td nowrap="nowrap" id="stikersC_fuentN">TOTAL B:</td>
+        <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;"><?php echo $row_rollo_impresion['bandera_r']; ?></td>
+
+      </tr>
   <!--<tr>
     <td colspan="6" nowrap="nowrap" id="stikersC_titu_grande" style="border-bottom: 3px solid #000000;">DEFECTOS BANDERAS</td>
   </tr>-->
-  <tr>
+  <!-- <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">Desregis:</td>
     <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_impresion['desf_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['desf2_r']; ?></td>
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Empates:</td>
@@ -297,12 +339,12 @@ function cerrar(num) {
     <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['montaje_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['apagon2_r']; ?></td> 
     <td nowrap="nowrap" id="stikersC_fuentN" style="border-left: 3px solid #000000;">Apagón:</td>
     <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_impresion['apagon_r']; ?>&nbsp;/&nbsp;<?php echo $row_rollo_impresion['montaje2_r']; ?></td> 
-  </tr>
+  </tr> -->
   <tr>
     <td nowrap="nowrap" id="stikersC_fuentN" ><input type="hidden" name="MM_update" value="form1"></td>
-    <td nowrap="nowrap" id="stikersC_fuentN" ></td> 
+    <!-- <td nowrap="nowrap" id="stikersC_fuentN" ></td> 
     <td colspan="2" id="stikersC_fuentN" style="border-left: 3px solid #000000;"><strong>BANDERAS: </strong></td>
-    <td id="stikers_fuentN" > <?php echo $row_rollo_impresion['bandera_r']; ?></td>
+    <td id="stikers_fuentN" > <?php echo $row_rollo_impresion['bandera_r']; ?></td> -->
   </tr>
   <!--<tr>
     <td nowrap="nowrap" id="stikersC_fuentN">OBSERV:</td>

@@ -216,13 +216,14 @@ if (isset($_SERVER['QUERY_STRING'])) {
         <div class="container"> 
     <br> 
  
-  <form action="view_index.php?c=csellado&a=GuardarAdd" method="POST" id="form1" name="form1" onSubmit="return validacion_select();">
+  <form action="view_index.php?c=csellado&a=GuardarAdd" method="POST" id="form1" name="form1" >
     <table align="center" id="tabla35">
       <tr>
         <td colspan="6" id="dato3">
           <a href="sellado_numeracion_listado.php"><img src="images/identico.gif" style="cursor:hand;" alt="LISTADO O.P" border="0"title="LISTADO O.P"/> </a><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a></td>
       </tr>
       <tr>
+      <td ><strong>ROLLO N:</strong> </td>
         <td colspan="6" id="titulo2">REGISTRO DE PAQUETES <strong>  
           <input type="hidden" name="b_borrado_n" id="b_borrado_n" value="0">
           <input type="hidden" name="existeTiq_n" id="existeTiq_n" value="1">
@@ -231,6 +232,12 @@ if (isset($_SERVER['QUERY_STRING'])) {
           
           <input name="ref_tn" type="hidden" id="ref_tn" value="">
         </strong></td>
+      </tr>
+      <tr>
+        <td > 
+          <select class="form-control" style="width:70px;" name="id_rollo" id="id_rollo"></select>
+          <input type="hidden" name="rollo_r" id="rollo_r" value="">
+        </td>
       </tr>
       <tr>
         <td colspan="3"><strong>PAQUETE N:</strong> </td>
@@ -307,18 +314,21 @@ if (isset($_SERVER['QUERY_STRING'])) {
         </td>
         <td colspan="2" > 
           <input class="form-control negro_inteso " type="text" <?php if ($restrincion!='1') {echo "readonly";}?> name="int_desde_tn"  id="int_desde_tn"  value=""  min="0" onBlur="conMayusculas(this);" autofocus required>
-      </td>
+          <input type="hidden" name="int_desde_num" id="int_desde_num" value="">
+        </td>
         <td >
         <input class="form-control negro_inteso charfin" style=" width:100px" type="text" name="charfin" autofocus id="charfin" value="" min="0" onchange="conMayusculas(this)" readonly="readonly" >
       </td> 
     </tr>
 <tr>
   <td colspan="3" id="fuente1"><strong>HASTA</strong></td>
-  <td colspan="2" ><input class="form-control negro_inteso " type="text" name="int_hasta_tn" id="int_hasta_tn" required="required" value="" min="0" <?php if ($restrincion!='1') {echo "readonly";}?>>
+  <td colspan="2" >
+    <input class="form-control negro_inteso " type="text" name="int_hasta_tn" id="int_hasta_tn" required="required" value="" min="0" <?php if ($restrincion!='1') {echo "readonly";}?>>
+    <input type="hidden" name="int_hasta_num" id="int_hasta_num" value="">
   </td>
   <td> 
       <input class="form-control negro_inteso charfin" style=" width:100px" type="text" name="charfin" autofocus id="charfin" value="<?php echo $row_op_carga['charfin'];?> " min="0" onchange="conMayusculas(this)" readonly="readonly"> 
-  </td>
+    </td>
 </tr>
 <tr>
   <td colspan="3" id="fuente1">CODIGO DE OPERARIO</td>
@@ -536,8 +546,6 @@ if (isset($_SERVER['QUERY_STRING'])) {
   /***************************************AQUI INICIA TODA LA PROGRAMACION NUEVA**************************************************************/
  
   $(document).ready(function(){
- 
-
     $("#int_op_tn").on('change',function(){
       if( $("#int_op_tn").val()!='' && $("#selladonum").val()=='SI' ){ 
           cargaInfoOpAddNew($("#int_op_tn").val()); 
@@ -546,6 +554,11 @@ if (isset($_SERVER['QUERY_STRING'])) {
       }
     });
 
+    $("#int_op_tn").on('change',function(){
+      if( $("#int_op_tn").val()!='' ){ 
+        cargaInfoRollos($("#int_op_tn").val()); 
+      }
+    });
 
  }); 
 
@@ -687,16 +700,17 @@ if (isset($_SERVER['QUERY_STRING'])) {
  
            swal("Error", "Debe seleccionar un valor al campo tipo desperdicio ! :)", "error"); 
            return false;
-         } 
-         else{ 
+         } else if($("#id_rollo").val() == "" || $("#id_rollo").val() == null){
+          swal("Error", "Debe seleccionar un Rollo ! :)", "error")
+         } else{ 
           /*$('#content').html('<div class="loader"></div>');
              setTimeout(function() { $(".loader").fadeOut("slow");},10000);
-
              guardarSelladoTiquetes(); */
-             alertafaltantes();
-             envioEdit($("#int_op_tn").val(),$("#int_caja_tn").val());
- 
-           
+
+             let res = alertafaltantes();
+             if (res) { 
+               envioEdit($("#int_op_tn").val(),$("#int_caja_tn").val());
+             }
          }
    }
 
@@ -732,12 +746,17 @@ if (isset($_SERVER['QUERY_STRING'])) {
   
   }
 
-  function envioEdit(int_op_n,int_caja_n){
-    compactada = 'a%3A18%3A%7Bs%3A5%3A"id_tn"%3Bs%3A7%3A"2484710"%3Bs%3A9%3A"int_op_tn"%3Bs%3A4%3A"9215"%3Bs%3A11%3A"id_despacho"%3BN%3Bs%3A16%3A"fecha_ingreso_tn"%3Bs%3A10%3A"2021-11-11"%3Bs%3A7%3A"hora_tn"%3Bs%3A8%3A"03%3A42%3A06"%3Bs%3A13%3A"int_bolsas_tn"%3Bs%3A5%3A"40000"%3Bs%3A14%3A"int_undxpaq_tn"%3Bs%3A3%3A"100"%3Bs%3A15%3A"int_undxcaja_tn"%3Bs%3A4%3A"1000"%3Bs%3A12%3A"int_desde_tn"%3Bs%3A7%3A"2030711"%3Bs%3A12%3A"int_hasta_tn"%3Bs%3A7%3A"2030810"%3Bs%3A19%3A"int_cod_empleado_tn"%3Bs%3A2%3A"53"%3Bs%3A14%3A"int_cod_rev_tn"%3Bs%3A3%3A"264"%3Bs%3A11%3A"contador_tn"%3Bs%3A1%3A"1"%3Bs%3A14%3A"int_paquete_tn"%3Bs%3A1%3A"1"%3Bs%3A11%3A"int_caja_tn"%3Bs%3A3%3A"930"%3Bs%3A5%3A"pesot"%3Bs%3A1%3A"1"%3Bs%3A6%3A"ref_tn"%3Bs%3A3%3A"249"%3Bs%3A7%3A"';
-    url = "view_index.php?c=csellado&a=Numeracion&mi_var_array="+compactada+"&int_op_tn="+int_op_n+"&int_caja_tn="+int_caja_n+"";
-    $(location).attr('href',url); 
+  function envioEdit(int_op_n,int_caja_n, rollo_r){
+    form1.submit();
+    /* compactada = 'a%3A18%3A%7Bs%3A5%3A"id_tn"%3Bs%3A7%3A"2484710"%3Bs%3A9%3A"int_op_tn"%3Bs%3A4%3A"9215"%3Bs%3A11%3A"id_despacho"%3BN%3Bs%3A16%3A"fecha_ingreso_tn"%3Bs%3A10%3A"2021-11-11"%3Bs%3A7%3A"hora_tn"%3Bs%3A8%3A"03%3A42%3A06"%3Bs%3A13%3A"int_bolsas_tn"%3Bs%3A5%3A"40000"%3Bs%3A14%3A"int_undxpaq_tn"%3Bs%3A3%3A"100"%3Bs%3A15%3A"int_undxcaja_tn"%3Bs%3A4%3A"1000"%3Bs%3A12%3A"int_desde_tn"%3Bs%3A7%3A"2030711"%3Bs%3A12%3A"int_hasta_tn"%3Bs%3A7%3A"2030810"%3Bs%3A19%3A"int_cod_empleado_tn"%3Bs%3A2%3A"53"%3Bs%3A14%3A"int_cod_rev_tn"%3Bs%3A3%3A"264"%3Bs%3A11%3A"contador_tn"%3Bs%3A1%3A"1"%3Bs%3A14%3A"int_paquete_tn"%3Bs%3A1%3A"1"%3Bs%3A11%3A"int_caja_tn"%3Bs%3A3%3A"930"%3Bs%3A5%3A"pesot"%3Bs%3A1%3A"1"%3Bs%3A6%3A"ref_tn"%3Bs%3A3%3A"249"%3Bs%3A7%3A"';
+    url = "view_index.php?c=csellado&a=Numeracion&mi_var_array="+compactada+"&int_op_tn="+int_op_n+"&int_caja_tn="+int_caja_n+"&rollo_r="+rollo_r;
+    
+    $(location).attr('href',url); */ 
   }
-
+  
+  $("#id_rollo").on('change',function(){
+  $("#rollo_r").val($("#id_rollo option:selected").text()); 
+})
 
 </script>
  
