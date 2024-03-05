@@ -29,13 +29,14 @@ if (isset($_POST['id_remision'], $_POST['cliente'], $_POST['entrada'], $_POST['d
          }
       } else {
 
-         $resulrt = $conexion->insertar("tbl_remision_interna", "id_remision, entrada, cliente, fecha, telefono, direccion, elabora, recibe,celular,fecha_salida,contacto,documento,pais,observacion", " '" . $_POST['id_remision'] . "','" . $_POST['entrada'] . "','" . $_POST['cliente'] . "','" . $_POST['fecha'] . "','" . $_POST['telefono'] . "','" . $_POST['direccion'] . "','" . $_POST['elabora'] . "','" . $_POST['recibe'] . "','" . $_POST['celular'] . "','" . $_POST['fecha_salida'] . "','" . $_POST['contacto'] . "','" . $_POST['documento'] . "','" . $_POST['pais'] . "','" . $_POST['observacion'] . "' ");
+         echo $resulrt = $conexion->insertar("tbl_remision_interna", "id_remision, entrada, cliente, fecha, telefono, direccion, elabora, recibe,celular,fecha_salida,contacto,documento,pais,observacion", " '" . $_POST['id_remision'] . "','" . $_POST['entrada'] . "','" . $_POST['cliente'] . "','" . $_POST['fecha'] . "','" . $_POST['telefono'] . "','" . $_POST['direccion'] . "','" . $_POST['elabora'] . "','" . $_POST['recibe'] . "','" . $_POST['celular'] . "','" . $_POST['fecha_salida'] . "','" . $_POST['contacto'] . "','" . $_POST['documento'] . "','" . $_POST['pais'] . "','" . $_POST['observacion'] . "' ");
       }
    } else {
 
       if (isset($_POST['correo'])) {
-         $resulUP = $conexion->actualizar("tbl_remision_interna", " entrada = '" . $_POST['entrada'] . "', cliente = '" . $_POST['cliente'] . "',fecha = '" . $_POST['fecha'] . "',telefono = '" . $_POST['telefono'] . "',direccion = '" . $_POST['direccion'] . "',elabora = '" . $_POST['elabora'] . "',recibe = '" . $_POST['recibe'] . "',celular = '" . $_POST['celular'] . "',contacto = '" . $_POST['contacto'] . "',documento = '" . $_POST['documento'] . "',pais = '" . $_POST['pais'] . "', observacion='" . $_POST['observacion'] . "' , correo= '" . $_POST['correo'] . "'", " id_remision=" . $_POST['id_remision']);
-         echo guardarItemsProductoTerminado($conexion);
+
+         echo $resulUP = $conexion->actualizar("tbl_remision_interna", " entrada = '" . $_POST['entrada'] . "', cliente = '" . $_POST['cliente'] . "',fecha = '" . $_POST['fecha'] . "',telefono = '" . $_POST['telefono'] . "',direccion = '" . $_POST['direccion'] . "',elabora = '" . $_POST['elabora'] . "',recibe = '" . $_POST['recibe'] . "',celular = '" . $_POST['celular'] . "',contacto = '" . $_POST['contacto'] . "',documento = '" . $_POST['documento'] . "',pais = '" . $_POST['pais'] . "', observacion='" . $_POST['observacion'] . "' , correo= '" . $_POST['correo'] . "'", " id_remision=" . $_POST['id_remision']);
+          guardarItemsProductoTerminado($conexion);
       } else {
          echo $resulUP = $conexion->actualizar("tbl_remision_interna", " entrada = '" . $_POST['entrada'] . "', cliente = '" . $_POST['cliente'] . "',fecha = '" . $_POST['fecha'] . "',telefono = '" . $_POST['telefono'] . "',direccion = '" . $_POST['direccion'] . "',elabora = '" . $_POST['elabora'] . "',recibe = '" . $_POST['recibe'] . "',celular = '" . $_POST['celular'] . "',fecha_salida = '" . $_POST['fecha_salida'] . "',contacto = '" . $_POST['contacto'] . "',documento = '" . $_POST['documento'] . "',pais = '" . $_POST['pais'] . "', observacion='" . $_POST['observacion'] . "' ", " id_remision=" . $_POST['id_remision'] . " ");
       }
@@ -259,21 +260,24 @@ function enviarEmail() {
    $numFinal = $_POST['numFinal'];
    $caja = $_POST['caja'];
    $oc = $_POST['oc'];
-    /* $num = self::elementosArray($insumos); */
+   $email = $_POST['correo'];
+   $cliente = $_POST['cliente'];
+
     $envioCorreo = new EnvioEmails();
-    //$to = $this->correo;
+    /* $to = $email;
+    $to2 = 'laboratorio@acycia.com';
+    $to3 = ['coordinacion@acycia.com']; */
     $to = "lidersistemas@acycia.com";
-    $to2 = 'andres85684@outlook.com';
-    //$to2 = 'compras@acycia.com';
+    $to2 = "andres85684@outlook.com";
+    $to3 = ['andres.11b85@gmail.com'];
     //$from = ;
-    $asunto = 'Informacion '.$_POST['entrada']." ".$_POST['cliente'];
-    $body = $_POST['entrada']." N: ".$_POST['id_remision']."<br>"."la siguiente es la lista de los items que recibio " . $_POST['recibe'] . ":" . "<br>";
+    $asunto = 'Informacion '.$_POST['entrada']." ".$cliente;
+    $body = $_POST['entrada']." N: ".$_POST['id_remision']."<br>"."Cliente: ".$cliente."<br>"."la siguiente es la lista de los items que recibio " . $_POST['recibe'] . ":" . "<br>";
     for ($i = 0; $i < sizeof($referencia); $i++) {
-        $body = $body . "Referencia: " . $referencia[$i] . ", Cantidad: " . $cantidad[$i] . ", Numeracion Inicio: ".$numInicio[$i]. ",Numeracion Final: ". $numFinal[$i] . ",Numero de caja: ". $caja[$i] . ", Orden de compra: ". $oc[$i]."<br>";
+        $body = $body . "Referencia: " . $referencia[$i] . ", Cantidad: " . $cantidad[$i] . ", Numeracion Inicio: ".$numInicio[$i]. ", Numeracion Final: ". $numFinal[$i] . ", Numero de caja: ". $caja[$i] . ", Orden de compra: ". $oc[$i]."<br>";
     };
     $body = $body . "<br>" . "OBSERVACIONES:" . "<br>" . $_POST['observacion'];
 
-
-    $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '');
+    $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '', $to3);
 }
 ?>

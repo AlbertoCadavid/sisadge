@@ -840,7 +840,11 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td id="dato1">FECHA REGISTRO O.P</td>
                                       <td colspan="2" id="dato1">FECHA INGRESO O.C.</td>
                                       <td colspan="2" id="dato1">FECHA ENTREGA O.C.</td>
-                                      <td colspan="3" id="dato3"><a href="javascript:eliminar1('id_op',<?php echo $row_orden_produccion['id_op']; ?>,'produccion_op_edit.php')"><img src="images/por.gif" border="0" style="cursor:hand;" alt="ELIMINAR" /></a><a href="referencias.php" target="new"><img src="images/a.gif" style="cursor:hand;" alt="ADD MEZCLAS" title="ADD MEZCLAS" border="0" /></a><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>&amp;tipo=<?php echo $_SESSION['Usuario']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" title="VISTA IMPRESION" border="0" /></a> <a href="produccion_ordenes_produccion_listado.php"><img src="images/opciones.gif" style="cursor:hand;" alt="LISTADO O.P" title="LISTADO O.P" border="0" /></a> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" border="0" /></a><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a></td>
+                                      <td colspan="3" id="dato3">
+                                         <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?> 
+                                        <a href="javascript:eliminar1('id_op',<?php echo $row_orden_produccion['id_op']; ?>,'produccion_op_edit.php')"><img src="images/por.gif" border="0" style="cursor:hand;" alt="ELIMINAR" /></a>
+                                      <?php endif; ?>
+                                        <a href="referencias.php" target="new"><img src="images/a.gif" style="cursor:hand;" alt="ADD MEZCLAS" title="ADD MEZCLAS" border="0" /></a><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>&amp;tipo=<?php echo $_SESSION['Usuario']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" title="VISTA IMPRESION" border="0" /></a> <a href="produccion_ordenes_produccion_listado.php"><img src="images/opciones.gif" style="cursor:hand;" alt="LISTADO O.P" title="LISTADO O.P" border="0" /></a> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" border="0" /></a><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a></td>
                                       <td id="dato3">&nbsp;</td>
                                     </tr>
                                     <tr id="tr1">
@@ -1566,13 +1570,13 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                                     ?>
                                       <input name="numeracion_inicial" type="hidden" id="numeracion_inicial" value="<?php echo $row_ultima_numeraciones['numeracion_inicial']; ?>" />
                                     </td>
-                                  </tr>
+                                  </tr> 
                                   <tr>
-                                    <td colspan="8" id="talla3">Tiene Faltantes? 
+                                    <td colspan="8" id="talla3">Faltantes: 
                                       <select name="imprimiop" id="imprimiop" required="required">
                                         <option value="" <?php if (!(strcmp("", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option> 
-                                        <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI</option>
-                                        <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO</option>
+                                        <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI TIENE FALTANTES</option>
+                                        <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO SI TIENE FALTANTES</option>
                                       </select>
                                     </td>
                                     <td colspan="7" id="talla1">&nbsp;<div id="resultado_generador"></div>

@@ -92,7 +92,13 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
  
     <div class="container" id="seleccion" onClick="cerrar('seleccion');return false" >
    
-       <?php foreach($row_colas as $row_colas_tikets) { $paq_gen=$row_colas_tikets['int_paquete_tn'];  ?>
+       <?php $councajas=0; 
+       foreach($row_colas as $row_colas_tikets) { 
+        $councajas=$councajas+$row_colas_tikets['int_undxpaq_tn'];
+       }
+       foreach($row_colas as $row_colas_tikets) { 
+        $paq_gen=$row_colas_tikets['int_paquete_tn'];
+         ?>
   
       <table align="center" style="padding-top:0.5%;border:2px solid #CCC;" ><!-- border:2px hay q dejarlo en 1 porq son varios ticket-->
         <tr>
@@ -117,7 +123,7 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
         </tr>
         <tr>
          <td nowrap="nowrap" ><b>UNIDADES X CAJA</b></td>
-         <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_undxcaja_tn'];?></td>
+         <td nowrap="nowrap" ><?php echo $councajas;?></td>
          <td nowrap="nowrap" ><b>CODIGO REV.</b></td>
          <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_rev_tn']; ?></td>
        </tr>

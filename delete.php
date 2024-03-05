@@ -1456,12 +1456,33 @@ if($id_rliqs!='')
 }
  //ELIMINA OP PRODUCCION
 if($id_op_bo!='')
-{
-	$sqlOP="UPDATE Tbl_orden_produccion SET b_borrado_op='1' WHERE id_op='$id_op_bo'";
-	$resultOP=mysql_query($sqlOP);
-	$sqln="UPDATE Tbl_numeracion SET b_borrado_n='1' WHERE int_op_n='$id_op_bo' AND b_borrado_n='0'";
-	$resultn=mysql_query($sqln);
-	header("location:produccion_ordenes_produccion_listado_inactivo.php");
+{  
+   $id=0; 
+	$sqlv="SELECT id_op FROM tbl_orden_produccion order by id_op desc LIMIT 1";
+	 $resultv= mysql_query($sqlv);
+	 $numv= mysql_num_rows($resultv);
+	 $id_op_max=mysql_result($resultv,0,'id_op');
+	if($numv >='1' && $id_op_bo >= $id_op_max)
+     { 
+        $sqldelop="DELETE FROM tbl_orden_produccion WHERE id_op=$id_op_bo";
+        $resultdelop=mysql_query($sqldelop);
+        if($resultdelop==''){
+         $id=2;
+        }else if($resultdelop!=''){
+        	 $id=5;
+        }
+ 
+     }else{ 
+       
+    	$sqlOP="UPDATE tbl_orden_produccion SET b_borrado_op='1' WHERE id_op='$id_op_bo'";
+    	$resultOP=mysql_query($sqlOP);
+    	$sqln="UPDATE tbl_numeracion SET b_borrado_n='1' WHERE int_op_n='$id_op_bo' AND b_borrado_n='0'";
+    	$resultn=mysql_query($sqln);
+    	if($resultn=='1') { $id=1;};
+
+    }
+    header("location:produccion_ordenes_produccion_listado.php?id=$id"); 
+    	
 }
 
 if($id_nov!='')

@@ -830,10 +830,21 @@ if ($_GET['id_bandera'] != '' && $_GET['proceso']) {
 	if ($_GET['id_bandera'] != '') {
 		$sqlrd = "DELETE FROM $tabla WHERE id_bandera = $value AND proceso = $proceso";
 		$resulrd = mysql_query($sqlrd);
-		header("location:".$vista.$id_rollo);
+		header("location:" . $vista . $id_rollo);
 	}
 }
 
+/* ELIMINAR TODAS LAS BANDERAS ASOCIADAS A UN ROLLO */
+if ($_GET['banderas'] == 'eliminar') {
+	$id_op = $_GET['id_op'];
+	$proceso = $_GET['proceso'];
+	$rollo_r = $_GET['rollo_r'];
+
+	if ($_GET['id_op'] != '' && $_GET['rollo_r'] != '' && $_GET['proceso'] != '') {
+		$query = "DELETE FROM tbl_banderas WHERE id_op = $id_op AND rollo_r = $rollo_r AND proceso = $proceso";
+		$resulrd = mysql_query($query);
+	}
+}
 
 
 ?>

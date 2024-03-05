@@ -2712,18 +2712,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="8" id="talla3">Tiene Faltantes?
+                                        <td colspan="8" id="talla3">Faltantes:
                                           <select name="imprimiop" id="imprimiop" required="required">
-                                            <option value="" <?php if (!(strcmp('', $row_datos_oc['imprimiop']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>Selecione</option>
-
-                                            <option value="0" <?php if (!(strcmp(0, $row_datos_oc['imprimiop']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>SI</option>
-                                            <option value="1" <?php if (!(strcmp(1, $row_datos_oc['imprimiop']))) {
-                                                                echo "selected=\"selected\"";
-                                                              } ?>>NO</option>
+                                            <option value="" <?php if (!(strcmp('', $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option> 
+                                            <option value="0" <?php if (!(strcmp(0, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI TIENE FALTANTES</option>
+                                            <option value="1" <?php if (!(strcmp(1, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO TIENE FALTANTES</option>
                                           </select>
                                         </td>
                                         <td colspan="7" id="talla1">&nbsp;<div id="resultado_generador"></div>
@@ -2930,7 +2923,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
             var5: "cod_ref",
             var6: "cod_ref" //columna a buscar
           };
-        },
+        }, 
         processResults: function(response) {
           return {
             results: response

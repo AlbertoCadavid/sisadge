@@ -183,7 +183,7 @@ $totalRows_liquidado = mysql_num_rows($rollo_liquidado);*/
 //ROLLO SELLADOS
 $horasOpmes=$_GET['id_op'];
 $resultOpmes = mysql_query("SELECT  id_r, `rollo_r`,  `cod_empleado_r`,`cod_auxiliar_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS TIEMPOINI, DATE_FORMAT(MAX(`fechaF_r`),'%k.%i.%s') AS TIEMPOFIN, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS KILOS, SUM(reproceso_r) AS reproceso, SUM(`bolsas_r`) AS BOLSAS, rolloParcial_r FROM `TblSelladoRollo` WHERE `id_op_r`= '$horasOpmes' GROUP BY `fechaI_r`,`cod_empleado_r`,`cod_auxiliar_r` ASC");
-$numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
+$numOpmes=mysql_num_rows($resultOpmes); //enviar cï¿½digo MySQL
 ?>
 <html>
 <head>
@@ -524,7 +524,7 @@ $numOpmes=mysql_num_rows($resultOpmes); //enviar código MySQL
     </tr>
     
     <tr>
-      <td nowrap="nowrap" id="subppal2">Rollo N°</td>
+      <td nowrap="nowrap" id="subppal2">Rollo Nï¿½</td>
       <td nowrap="nowrap" id="subppal2">Kilo Inicial / Impresion</td>
       <td nowrap="nowrap" id="subppal2">Desperdicio</td>
       <td nowrap="nowrap" id="subppal2">Kilo Consumo</td>

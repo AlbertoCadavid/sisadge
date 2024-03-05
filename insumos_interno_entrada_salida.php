@@ -50,8 +50,8 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
   <script type="text/javascript" src="AjaxControllers/js/consultas.js"></script>
   <script type="text/javascript" src="AjaxControllers/js/delete.js"></script>
   <!-- sweetalert -->
-  <script src="librerias/sweetalert/dist/sweetalert.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+  <!-- <script src="librerias/sweetalert/dist/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css"> -->
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -356,7 +356,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
   </div>
   </div>
-  </div>
+  </div><div class="loader" style="display:none"></div>
   </div>
   </td>
   </tr>
@@ -370,10 +370,22 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
 </html>
 
+<style type="text/css">
+    .loader {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 3200;
+      background: url('images/load_blue.gif') 50% 50% no-repeat rgb(250, 250, 250);
+      background-size: 150px 150px; /*tamaño del gif*/
+      -moz-opacity: 65;
+      opacity: 0.65;
+    }
+  </style>
+
 <script type="text/javascript">
-  /* $(document).ready(function() {
-    consultasItems($("#id_remision").val()); //despliega los items
-  }); */
 
    function showAlert(){
   Swal.fire({
@@ -402,6 +414,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
       Swal.fire("Error", "Debe agregar un valor al campo contacto! :)", "error");
       return false;
     } else {
+      document.querySelector(".loader").style.display='block';
       guardarConAlert($("#id_remision").val());
     }
 

@@ -308,7 +308,7 @@ if (!empty($_POST['banderas'])) {
     $nombre = $_POST['banderas'][$i];
     if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
       $metros = $_POST['metroBandera'][$i];
-      $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 2 ");
+      $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `metros_rollo`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, $_POST[metro_r2], 2 ");
     }
   }
 }
@@ -754,7 +754,7 @@ $num_banderas = sizeof($banderas);
       <tr>
         <td colspan="5" id="fuente3"><a href="produccion_impresion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_impresion_edit['id_r']; ?>"><img src="images/hoja.gif" alt="VISTA" title="VISTA" border="0" /></a><a href="produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_rollo_impresion_edit['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_impresion_edit['rollo_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a>
           <?php if ($row_usuario['tipo_usuario'] == 1) { ?><a href="produccion_impresion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_impresion_edit['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRESION TODOS LOS ROLLOS" title="IMPRESION TODOS LOS ROLLOS" border="0" /></a>
-            <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion_edit['id_r']; ?>,'produccion_impresion_listado_rollos.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;" /></a>
+            <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion_edit['id_r']; ?>,'produccion_impresion_listado_rollos.php', '<?php echo $row_rollo_impresion_edit['id_op_r']; ?>', '<?php echo $row_rollo_impresion_edit['rollo_r']; ?>', 2)"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;" /></a>
           <?php } ?>
           <?php if ($totalRows_liquidado_edit > '0') { ?>
             <a href="produccion_registro_impresion_vista.php?id_op=<?php echo $row_rollo_impresion_edit['id_op_r']; ?>&id_r=<?php echo $row_rollo_impresion_edit['id_r']; ?>"><img src="images/palomita.gif" style="cursor:hand;" alt="LIQUIDADO" title="LIQUIDADO" border="0" /></a><a href="javascript:location.reload()">
@@ -1306,7 +1306,7 @@ $num_banderas = sizeof($banderas);
             <option value="montaje">Montaje</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderas()">Metros
         </td>`;
       tbody.appendChild(tr);
       contador = contador + 1;

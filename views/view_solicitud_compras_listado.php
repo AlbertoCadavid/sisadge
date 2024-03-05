@@ -32,7 +32,8 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
 
 ?>
 <?php
-$currentPage = $_SERVER["PHP_SELF"] . "?c=" . $_GET['c'] . "&a=" . $_GET['a'];
+//$currentPage = $_SERVER["PHP_SELF"] . "?c=" . $_GET['c'] . "&a=" . $_GET['a'];
+$currentPage = $_SERVER['REQUEST_URI'];
 
 $maxRows_registros = 10;
 $pageNum_registros = 0;
@@ -199,10 +200,16 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros)-1;
 
                       <div class="container-fluid">
                         <h3 id="dato2"><strong>SOLICITUDES - INGRESADAS</strong></h3>
+                        <?php if ($_GET['alerta'] == 3) : ?> <span id="alertG" style="color: red;">
+                            <h2> ERROR, No se guardo la solicitud </h2>
+                          </span> <?php endif; ?>
                         <?php if ($_GET['alerta'] == 1) : ?> <span id="alertG" style="color: blue;">
                             <h4> Actualizo Correctamente </h4>
                           </span> <?php endif; ?>
-                        <?php if ($_GET['alerta'] == 2) : ?> <span id="alertG" style="color: blue;">Se Guardo Correctamente </span> <?php endif; ?>
+                        <?php if ($_GET['alerta'] == 2) : ?> 
+                          <span id="alertG" style="color: blue;"> Se Guardo Correctamente </span> 
+                          <?php endif; ?>
+                          
                         <div style="text-align: right;">NUEVO <a href="view_index.php?c=Csolicitud_compras&a=Inicio"><img src="images/masazul.PNG" alt="AGREGAR SOLICITUD DE COMPRA" title="AGREGAR SOLICITUD DE COMPRA" border="0" style="cursor:hand;" /></a></div>
                         <hr>
                         <div class="row align-items-start">
@@ -329,8 +336,9 @@ $totalPages_registros = ceil($totalRows_registros / $maxRows_registros)-1;
 
   window.setTimeout(function() {
     window.location.reload();
-    window.location.assign('<?php echo BASE_URL; ?>' + 'view_index.php?c=Csolicitud_compras&a=inicioListado');
+    window.location.assign('<?php echo $_SERVER['REQUEST_URI'] ?>');
   }, 60000);
+
 
   setTimeout(function() {
     $("#alertG").fadeOut();

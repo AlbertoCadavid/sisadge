@@ -319,7 +319,7 @@ WHERE a.tipo_empleado IN(5,10) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_I
       $nombre = $_POST['banderas'][$i];
       if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
         $metros = $_POST['metroBandera'][$i];
-        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 2 ");
+        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `metros_rollo`,`proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, $_POST[metro_r2], 2 ");
       }
     }
   }
@@ -675,7 +675,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
 
 <body>
   <?php echo $conexion->header('vistas'); ?>
-  <form action="<?php echo $editFormAction; ?>" method="POST" name="form1" onSubmit="return validacion_unodelosdos_imp()">
+  <form action="<?php echo $editFormAction; ?>" method="POST" name="form1" onSubmit="return validacion_unodelosdos_imp();">
     <table align="center" class="table table-bordered table-sm">
       <tr>
         <td rowspan="4" id="fondo"><img src="images/logoacyc.jpg" width="97" height="71" /></td>
@@ -963,7 +963,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
         </h5>
         </td>
         <td id="fuente3" colspan="5">
-          <input class="botonGeneral" type="submit" name="button_name" id="button_imp_rollo2" value="GUARDAR" onclick="validacion_unodelosdos_imp()"><!--onClick="envio_form(this);"-->
+          <input class="botonGeneral" type="submit" name="button_name" id="button_imp_rollo2" value="GUARDAR" onclick="validacion_unodelosdos_imp();"><!--onClick="envio_form(this);"-->
         </td>
       </tr>
       <tr>
@@ -1037,7 +1037,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
             <option value="montaje">Montaje</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderas()">Metros
         </td>
       </tr>
 
@@ -1203,7 +1203,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
             <option value="montaje">Montaje</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderas()">Metros
         </td>`;
       tbody.appendChild(tr);
       contador = contador + 1;
@@ -1228,6 +1228,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
     // Actualizar el contenido del campo "total"
     document.getElementById('totales').value = total;
   }
+
 </script>
 <?php
 mysql_free_result($usuario);

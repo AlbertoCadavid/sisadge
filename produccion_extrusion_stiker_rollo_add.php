@@ -184,7 +184,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       $nombre = $_POST['banderas'][$i];
       if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
         $metros = $_POST['metroBandera'][$i];
-        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 1 ");
+        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `metros_rollo`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, $_POST[metro_r], 1 ");
       }
     }
   }
@@ -777,7 +777,7 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
             <option value="tratamiento">TRATAMIENTO</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderasExt()">Metros
         </td>
       </tr>
 
@@ -978,7 +978,7 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
             <option value="tratamiento">TRATAMIENTO</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderasExt()">Metros
         </td>`;
       tbody.appendChild(tr);
       contador = contador + 1;

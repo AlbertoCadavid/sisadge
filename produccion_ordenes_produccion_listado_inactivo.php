@@ -211,12 +211,19 @@ session_start();
 <td id="titulo2" colspan="7">LISTADO DE  ORDENES DE PRODUCCION EN EXTRUSION </td>
 </tr>
   <tr>
-    <td colspan="2" id="dato1"><input name="usuario" type="hidden" id="usuario" value="<?php echo $row_usuario['nombre_usuario']; ?>" />
+    <td colspan="2" id="dato1">
+      <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?> 
+      <input name="usuario" type="hidden" id="usuario" value="<?php echo $row_usuario['nombre_usuario']; ?>" />
       <input name="borrado" type="hidden" id="borrado" value="35" />
-      <input class="botonUpdate" name="Input" type="submit" value="Activar"/></td>
-    <td colspan="3" id="dato1"><?php $id=$_GET['id']; 
-  if($id >= '1') { ?> <div id="acceso1"> <?php echo "SE REACTIVO CORRECTAMENTE"; ?> </div> <?php }
-  if($id == '0') { ?><div id="numero1"> <?php echo "NO HA SELECCIONADO"; ?> </div> <?php }?></td>
+      <input class="botonUpdate" name="Input" type="submit" value="Activar"/>
+      <?php endif; ?>
+    </td>
+    <td colspan="3" id="dato1">
+      <?php 
+      $id=$_GET['id']; 
+       if($id >= '1') { ?> <div id="acceso1"> <?php echo "SE REACTIVO CORRECTAMENTE"; ?> </div> <?php }
+       if($id == '0') { ?><div id="numero1"> <?php echo "NO HA SELECCIONADO"; ?> </div> <?php }?>
+     </td>
     <td colspan="2" id="dato3"><a href="produccion_op_interna.php"><img src="images/mas_r.gif" alt="ADD O.P INTERNA" title="ADD O.P INTERNA" border="0" style="cursor:hand;"/></a><a href="produccion_op_add.php"><img src="images/mas.gif" alt="ADD O.P" title="ADD O.P" border="0" style="cursor:hand;"/></a><a href="produccion_ordenes_produccion_listado.php" target="_top"><img src="images/a.gif" alt="O.P. ACTIVAS"title="O.P ACTIVAS" border="0" style="cursor:hand;"/></a><a href="produccion_op_estados.php"><img src="images/p.gif" style="cursor:hand;" alt="LISTADO PROGRAMADAS" title="LISTADO PROGRAMADAS" border="0" /></a><a href="produccion_op_ordenconsultar.php"><img src="images/accept.png" style="cursor:hand;" alt="O.P FINALIZADAS" title="O.P FINALIZADAS" border="0" /></a> <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a></td>
     </tr>
   <tr>
@@ -225,7 +232,9 @@ session_start();
     <td colspan="2" id="dato5">&nbsp;</td>
   </tr>  
   <tr id="tr1">
+    <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?> 
       <td id="titulo4"><input name="chulo1" type="checkbox" onClick="if(seleccion.chulo1.checked) { seleccionar_todo() } else{ deseleccionar_todo() } "/></td>
+      <?php endif; ?>
     <td nowrap="nowrap"id="titulo4">N&deg; O.P </td>
     <td nowrap="nowrap"id="titulo4">FECHA INGRESO</td>
     <td nowrap="nowrap"id="titulo4">CLIENTE</td>
@@ -236,7 +245,8 @@ session_start();
   </tr>
   <?php do { ?>
     <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-      <td id="dato2"><input name="borrar[]" type="checkbox" value="<?php echo $row_orden_produccion['id_op'];?>" /></td>
+      <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?> <td id="dato2"><input name="borrar[]" type="checkbox" value="<?php echo $row_orden_produccion['id_op'];?>" /></td>
+      <?php endif; ?>
       <td nowrap="nowrap"id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
       <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
       <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000">

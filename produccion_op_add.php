@@ -2490,13 +2490,13 @@ function alerta(){
                         
                        </td>
                           
-                       </tr>
+                       </tr> 
                        <tr>
-                         <td colspan="8" id="talla3">Tiene Faltantes?
+                         <td colspan="8" id="talla3">Faltantes: 
                          <select name="imprimiop" id="imprimiop" required="required" >
                             <option value="">Selecione</option> 
-                            <option value="0">SI</option>
-                            <option value="1">NO</option> 
+                            <option value="0">SI TIENE FALTANTES</option>
+                            <option value="1">NO TIENE FALTANTES</option> 
                          </select>
                          </td>
                          <td colspan="6" id="talla4">&nbsp;<div id="resultado_generador"></div></td>

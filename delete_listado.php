@@ -1,5 +1,11 @@
 <?php require_once('Connections/conexion1.php'); ?>
 <?php mysql_select_db($database_conexion1, $conexion1);
+
+
+if (!isset($_SESSION)) {
+	session_start();
+}
+
 /*EGP DE LA BOLSA*/
 if ($_GET['borrado'] == '1') {
 	if (count($_GET['borrar'])) {
@@ -782,7 +788,7 @@ $id_pm_cv=mysql_result($resultc,0,'id_pm_cv');*/
 	}
 }
 //UPDATE AL ESTADO DESACTIVADO DE LAS OP DESDE SELLADO
-$usuario = $_GET['usuario'];
+$usuario = $_GET['usuario'] == '' ? $_SESSION['Usuario'] : $_GET['usuario'];
 if ($_GET['borrado'] == '34') {
 	if (count($_GET['borrar'])) {
 		foreach ($_GET['borrar'] as $v) {
@@ -797,7 +803,7 @@ if ($_GET['borrado'] == '34') {
 
 			$sqldel2 = "DELETE FROM tbl_tiquete_numeracion WHERE int_op_tn=$v ";
 			$resultdel2 = mysql_query($sqldel2);
-			
+
 			$sqldel3 = "DELETE FROM tbl_info_rollo_sellado WHERE id_op=$v ";
 			$resultdel3 = mysql_query($sqldel3);
 
@@ -810,15 +816,54 @@ if ($_GET['borrado'] == '34') {
 	}
 }
 //ACTIVAR UPDATE AL ESTADO  ACTIVADO DE LAS OP DESDE LISTADO O.P INACTIVO
-$usuario = $_GET['usuario'];
+$usuario = $_GET['usuario'] == '' ? $_SESSION['Usuario'] : $_GET['usuario'];
+
 if ($_GET['borrado'] == '35') {
+	$id = 0;
 	if (count($_GET['borrar'])) {
 		foreach ($_GET['borrar'] as $v) {
 			$sqlop = "UPDATE Tbl_orden_produccion SET str_responsable_op='$usuario', b_borrado_op='0' WHERE id_op=$v AND b_borrado_op='1'";
 			$resultop = mysql_query($sqlop);
 			$sqln = "UPDATE Tbl_numeracion SET b_borrado_n='0' WHERE int_op_n=$v AND b_borrado_n='1'";
 			$resultn = mysql_query($sqln);
-			$id = 1;
+			if ($resultn == '1') {
+				$id = 1;
+				header("location:produccion_ordenes_produccion_listado.php?id=$id");
+			}
+		}
+	}
+	header("location:produccion_ordenes_produccion_listado_inactivo.php?id=$id");
+}
+//BORRAR DEFINITIVAMENTE LA O.P DESDE LISTADOP SIEMPRE Y CUANDO SEA LA ULTIMA SINO CAMBIA ESTADO A INACTIVO 
+$usuario = $_SESSION['Usuario'];
+if ($_GET['b_borrado_op'] == 'b_borrado_op') {
+	$id = 0;
+	if (count($_GET['id_op_del'])) {
+		$sqlv = "SELECT id_op FROM tbl_orden_produccion order by id_op desc LIMIT 1";
+		$resultv = mysql_query($sqlv);
+		$numv = mysql_num_rows($resultv);
+		$id_op_max = mysql_result($resultv, 0, 'id_op');
+		foreach ($_GET['id_op_del'] as $v) {
+
+			if ($numv >= '1' && $v >= $id_op_max) {
+				$sqldelop = "DELETE FROM tbl_orden_produccion WHERE id_op=$v";
+				$resultdelop = mysql_query($sqldelop);
+				if ($resultdelop == '') {
+					$id = 2;
+				} else if ($resultdelop != '') {
+					$id = 5;
+				}
+			} else {
+
+				$sqlop = "UPDATE tbl_orden_produccion SET str_responsable_op='$usuario', b_borrado_op='1' WHERE id_op=$v "; //INACTIVO
+				$resultop = mysql_query($sqlop);
+				$sqln = "UPDATE tbl_numeracion SET b_borrado_n='1' WHERE int_op_n=$v "; //INACTIVO
+				$resultn = mysql_query($sqln);
+
+				if ($resultn == '1') {
+					$id = 1;
+				};
+			}
 			header("location:produccion_ordenes_produccion_listado.php?id=$id");
 		}
 	} else {
@@ -826,6 +871,10 @@ if ($_GET['borrado'] == '35') {
 		header("location:produccion_ordenes_produccion_listado.php?id=$id");
 	}
 }
+
+
+
+
 /*-------------------LISTADOS EXTRUSION---------------------------*/
 /*-------------------ELIMINACION COMPLETA REGISTRO EXTRUSION------*/
 if ($_GET['borrado'] == 'eliminar_ext') {

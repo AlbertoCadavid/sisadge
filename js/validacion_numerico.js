@@ -423,65 +423,59 @@ function validacion_unodelosdos_imp() {
 
              var fecha_inicial=document.getElementById('fecha_ini_rp').value;
              var fecha_final=document.getElementById('fecha_fin_rp').value;
-			  
+			 var metrosBanderas = document.getElementsByName("metroBandera[]");
+			
+			 
 			 if(indice1 == '') {
  			  swal('[ERROR] Seleccione el rollo');
 			  document.getElementById("idrollo").focus();
-			  
-
 			  return false;
-			  }else
-			  if((indice2 == '') && (indice3 == '')){
- 			  swal('[ERROR] Los Operarios no deben estar vacios');
-			  document.getElementById("operario").focus();
-			  
+			  }else if((indice2 == '') && (indice3 == '')){
+						swal('[ERROR] Los Operarios no deben estar vacios');
+						document.getElementById("operario").focus();
+						return false;  
+						}else if(indice2 == indice3) { 
+							swal('[ERROR] Los Operarios no deben ser iguales');
+							document.getElementById("operario").focus(); 
+							return false;
+							} 
 
-			  return false;  
-			  }else
-			  if(indice2 == indice3) { 
- 			  swal('[ERROR] Los Operarios no deben ser iguales');
-			  document.getElementById("operario").focus(); 
-			  
-
-			  return false;
-			  } 
 			  if(document.getElementById('turno_r').value=='' ) { 
  			  swal('[ERROR] Llene el Turno');
 			  document.getElementById("turno_r").focus(); 
-			  
-
 			  return false;
-			  }else
-  			  if(indice4 == '') { 
- 			  swal('[ERROR] Seleccione la maquina'); 
-			  document.getElementById("maquina").focus();
-			  
+			  }else if(indice4 == '') { 
+						swal('[ERROR] Seleccione la maquina'); 
+						document.getElementById("maquina").focus();
+						return false;
+						}else if(Date.parse(fecha_final)<Date.parse(fecha_inicial)){
+								swal('[ERROR] La fecha final debe ser mayor a la fecha inicial');
+								return false;
+								} 
 
-			  return false;
-			  }else
-				if (Date.parse(fecha_final)<Date.parse(fecha_inicial))
-				{
-				swal('[ERROR] La fecha final debe ser mayor a la fecha inicial');
-				
- 				return false;
-				  } 
-				if ((fecha_inicial)=='')
-				{
+				if ((fecha_inicial)==''){
 				swal('[ERROR] Llene la fecha inicial');
 				document.getElementById("fecha_ini_rp").focus();
-				
 				return false; 
 				} 
-				if ((fecha_final)=='')
-				{
+
+				if ((fecha_final)==''){
 				swal('[ERROR] Llene la fecha final');
 				/*document.getElementById("fecha_fin_rp").focus();*/
 				return false; 
 				}  	
 
+				if(metrosBanderas.length > 0){
+					let res = validacionBanderas();
+					return res;
+				} 
+
 			   if(document.getElementById('button_imp_rollo').value){
                 document.getElementById('button_imp_rollo').style.display = 'none';
-			  }	   
+			  	}	 
+
+			    
+				
 			  return true;
 }
 
@@ -601,6 +595,8 @@ function validacion_registro_rollo() {
     			var indice1 = document.getElementById("montaje").selectedIndex; 
                 var fecha_inicial=document.getElementById('fecha_ini_rp').value;
                 var fecha_final=document.getElementById('fecha_fin_rp').value; 
+				var metrosBanderas = document.getElementsByName("metroBandera[]");
+
 				if(indice1 == '' || indice1 == 0) {
 				    swal("Error", 'Debe seleccionar el operario!', "error"); 
 				    document.getElementById("montaje").focus();
@@ -628,10 +624,39 @@ function validacion_registro_rollo() {
 				   
 				return false; 
 				} 
+
+				if(metrosBanderas.length > 0){
+					let res = validacionBanderasExt();
+					return res;
+				}
 				
   		 return true; 
  			  
 }
+
+function validacionBanderas(){
+    let metrosBanderas = document.getElementsByName("metroBandera[]");
+    let estado = true;
+    metrosBanderas.forEach(element => {
+      if(parseInt(element.value) >= parseInt(document.querySelector("#metro_r2").value)){
+        swal("Los metros "+element.value+" de la bandera deben ser menor a los del metros rollo final "+(document.querySelector("#metro_r2").value) );
+        estado = false;
+      }
+    });
+    return estado;
+  }
+
+  function validacionBanderasExt(){
+	  let metrosBanderas = document.getElementsByName("metroBandera[]");
+	  let estado = true;
+    metrosBanderas.forEach(element => {
+      if(parseInt(element.value) >= parseInt(document.querySelector("#metro_r").value)){
+        swal("Los metros "+element.value+" de la bandera deben ser menor a los metros del rollo final "+(document.querySelector("#metro_r").value) );
+        estado = false;
+      }
+    });
+    return estado;
+  }
 
 //FIN SELLADO
 

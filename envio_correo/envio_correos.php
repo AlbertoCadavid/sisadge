@@ -12,7 +12,7 @@ require 'PHPMailer/SMTP.php';
 
 class EnvioEmails
 {
-    function enviar($to, $to2 = '', $file = '', $from = '', $asunto = '', $body = '', $directorio = '')
+    function enviar($to, $to2 = '', $file = '', $from = '', $asunto = '', $body = '', $directorio = '', $to3 = array())
     {
 
         try {
@@ -37,6 +37,12 @@ class EnvioEmails
             $mail->addAddress($to, 'Sistemas');     //Si quiero enviar a otros email simplemente copio esta linea
             if ($to2 != '') {
                 $mail->addAddress($to2, 'Ventas');
+            }
+            
+            if(sizeof($to3) > 0){
+                foreach ($to3 as $value) {
+                    $mail->addAddress($value, 'Ventas');
+                }
             }
             /* $mail->addAddress('robinrt144@gmail.com');               //Name is optional
             $mail->addReplyTo('info@acycia.com', 'Information');

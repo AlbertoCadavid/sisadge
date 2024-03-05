@@ -87,7 +87,7 @@ $hasta = $hastaLetr.($hastaNum-$undxcaja);//para q arranque desde primer caja
         <tr>
           <td nowrap="nowrap" ><b> PAQUETE</b></td>
           <td nowrap="nowrap" id="stikers_fuentN2"><?php 
-            $incrempaqu = ($row_colas_tikets['int_paquete_tn'] + $row_colas_tikets['int_undxcaja_tn']);
+            $incrempaqu = ($row_colas_tikets['int_paquete_tn']-($row_colas_tikets['int_undxcaja_tn']/$row_colas_tikets['int_undxpaq_tn'])+1);
             $verpaq=$row_colas_tikets['ref_tn']=='096' ? $incrempaqu : 1; echo $paq_gen=$i+$verpaq; ?></td>
           <td nowrap="nowrap" ><b> CAJA</b></td>
           <td nowrap="nowrap" id="stikers_fuentN2"><?php echo $caja_gen=$row_colas_tikets['int_caja_tn']; ?></td>

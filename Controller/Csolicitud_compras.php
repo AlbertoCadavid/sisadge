@@ -9,7 +9,6 @@ class Csolicitud_comprasController
 
     public function guardarDatos()
     {
-
         $objMsolicitud = new Msolicitud_compras($_POST['id'], $_POST['id_solicitud'], strtoupper($_POST['area']), strtoupper($_POST['nombre']), $_POST['fecha'], strtoupper($_POST['maquina']), strtoupper($_POST['observaciones']), strtoupper($_POST['responsable']), strtoupper($_POST['autorizado']), strtolower($_POST['correo']));
 
         $idGenerado = $objMsolicitud->guardarSolicitud();
@@ -19,15 +18,15 @@ class Csolicitud_comprasController
 
             if ($res2 == 1) {
                 $alerta = 2;
-
-                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
                 $objMsolicitud->enviarEmail($_REQUEST['insumo'], $_REQUEST['cantidad'], $_POST['id_solicitud']);
+                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=' . $alerta);
             } else {
-                echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los Items");</script>';
+                header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=3');
             }
         } else {
-            echo '<script language="javascript">alert("!Error¡ No fue posible Guardar los datos");</script>';
+            header('Location:' . 'view_index.php?c=Csolicitud_compras&a=inicioListado&alerta=3');
         }
+        
     }
 
     public function actualizarDatos()

@@ -240,7 +240,7 @@ $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
 $totalRows_orden_produccion = mysql_num_rows($orden_produccion);
 //MAQUINAS
 mysql_select_db($database_conexion1, $conexion1);
-$query_maquinas = "SELECT * FROM maquina WHERE proceso_maquina='1' ORDER BY id_maquina DESC";
+$query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='1' ORDER BY id_maquina DESC";
 $maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
 $row_maquinas = mysql_fetch_assoc($maquinas);
 $totalRows_maquinas = mysql_num_rows($maquinas);

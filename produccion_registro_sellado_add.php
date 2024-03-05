@@ -6,7 +6,6 @@ require(ROOT_BBDD);
 require_once('Connections/conexion1.php');
 require_once("db/db.php");
 require_once 'Models/Mgeneral.php';
-//include 'Models/Msellado.php';
 ?>
 <?php
 //initialize the session
@@ -575,7 +574,7 @@ $totalRows_orden_produccion = mysql_num_rows($orden_produccion);
 
 //MAQUINAS
 mysql_select_db($database_conexion1, $conexion1);
-$query_maquinas = "SELECT * FROM maquina WHERE proceso_maquina='4' ORDER BY id_maquina DESC";
+$query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='4' ORDER BY id_maquina DESC";
 $maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
 $row_maquinas = mysql_fetch_assoc($maquinas);
 $totalRows_maquinas = mysql_num_rows($maquinas);
@@ -1081,8 +1080,8 @@ $totalRows_referencia = mysql_num_rows($referencia);*/
       do {
       ?>
       <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>"<?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $empleadocero))) {
-                                                                              echo "selected=\"selected\"";
-                                                                            } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
+                                                                            echo "selected=\"selected\"";
+                                                                          } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
       <?php
       } while ($row_codigo_empleado = mysql_fetch_assoc($codigo_empleado));
       $rows = mysql_num_rows($codigo_empleado);
@@ -1101,8 +1100,8 @@ $totalRows_referencia = mysql_num_rows($referencia);*/
         do {
         ?>
         <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>"<?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $auxiliarcero))) {
-                                                                                echo "selected=\"selected\"";
-                                                                              } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
+                                                                              echo "selected=\"selected\"";
+                                                                            } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
         <?php
         } while ($row_codigo_empleado = mysql_fetch_assoc($codigo_empleado));
         $rows = mysql_num_rows($codigo_empleado);

@@ -365,14 +365,10 @@ $id = $consecutivo['id_solicitud'];
         icon: "info",
         title: "Enviando!.......",
         text: "Guardando y enviando el correo",
-        timer: 3000,
         showConfirmButton: false
       });
     }
-
   });
-
-
 
 
   $("#btnEnviarItems").on("click", function() {

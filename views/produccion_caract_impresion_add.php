@@ -195,12 +195,14 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                   <td colspan="8" nowrap="nowrap" id="fuente2">&nbsp;</td>
                   <td width="126" colspan="7" nowrap="nowrap" id="fuente2">&nbsp;</td>
                   <td width="235" colspan="4" id="fuente2">&nbsp;</td>
-                </tr>
+                </tr> 
                 <tr id="tr1">
                   <td colspan="8" nowrap="nowrap" id="fuente2">Referencia</td>
                   <td colspan="7" id="fuente2">Version</td>
                   <td nowrap="nowrap" colspan="4" id="dato1">
+                    <?php if($_SESSION['superacceso'] || (in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])) ): ?>
                     <a class="botonGMini" onclick="vercopiaMezcla()">GENERAR COPIA</a>
+                    <?php endif; ?>
                      </td>
                 </tr>
                 <tr>
@@ -229,7 +231,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                         <td colspan="19" id="titulo4">IMPRESION</td>
                         </tr>
                         <tr>
-                         <td  colspan="19" id="titulo4"> 
+                         <td colspan="19" id="titulo4"> 
                           Impresora : 
                           <select name="extrusora_mp" id="extrusora_mp" class="busqueda selectsMedio" required="required" onchange="Impresora();">
                               <option value="">Impresora</option>
@@ -239,6 +241,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                           <?php } ?>
                           </select>  
                         </td>
+                       </tr>
+                       <tr id="tr1" >
+                         <td colspan="19"> <strong style="color: red;"> NOTA: Los colores de las 8 unidades se deben ingresar en la referencia</strong></td>
                        </tr>
                       <tr id="tr1">
                         <td rowspan="2" id="fuente1"> </td>

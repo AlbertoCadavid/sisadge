@@ -206,13 +206,14 @@ class oMsellado
             //echo("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "');"); die;
             $exist = $this->conexion->query("SELECT id_tabla FROM $tabla WHERE id_op = $arrayPHP[int_op_tn] AND rollo_r = $arrayPHP[rollo_r]");
             if ($exist) {
-                $resultado = $exist->fetch_assoc();
-                if($resultado == null){
+                $stmt = $exist->fetch_assoc();
+
+                if ($stmt == null) {
                     $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "');");
                 }
             }
-            
-            if($stmt){
+
+            if ($stmt) {
                 $numRollo = $arrayPHP['rollo_r'];
                 $id_op = $arrayPHP['int_op_tn'];
                 self::actualizarRegistro("tbl_numeracion", "rollo = $numRollo", "WHERE int_op_n = $id_op");
@@ -229,7 +230,7 @@ class oMsellado
             $array_codificado = UtilHelper::arrayEncode($data);
             $array_deco = UtilHelper::arrayDecode($array_codificado);
             $arrayPHP =  ($array_deco);
-            
+
             $updatepro = $this->conexion->query("UPDATE $tabla SET $sets $condicion"); //Update registro tbl_tiquete_numeracion 
 
             //$updatListado = $this->conexion->query("UPDATE tbl_numeracion SET id_tn_n = '". $arrayPHP['id_tn'] ."',cod_ref_n = '". $arrayPHP['ref_tn'] ."', int_bolsas_n = '". $arrayPHP['int_bolsas_tn'] ."',int_undxpaq_n = '". $arrayPHP['int_undxpaq_tn'] ."',int_undxcaja_n = '". $arrayPHP['int_undxcaja_tn'] ."',int_desde_n = '". $arrayPHP['int_desde_tn'] ."',int_hasta_n = '". $arrayPHP['int_hasta_tn'] ."',int_cod_empleado_n = '". $arrayPHP['int_cod_empleado_tn'] ."',int_cod_rev_n = '". $arrayPHP['int_cod_rev_tn'] ."',int_paquete_n = '". $arrayPHP['int_paquete_tn'] ."',int_caja_n = '". $arrayPHP['int_caja_tn'] ."' WHERE int_op_n = '". $arrayPHP['int_op_tn'] ."' ;" );//Update registro tbl_numeracion
@@ -240,11 +241,12 @@ class oMsellado
         }
     }
 
-    public function actualizarRegistro($tabla, $sets, $condicion){
+    public function actualizarRegistro($tabla, $sets, $condicion)
+    {
         try {
             //echo "UPDATE $tabla SET $sets $condicion"; die;
             $Registro = $this->conexion->query("UPDATE $tabla SET $sets $condicion");
-            
+
             if ($Registro) {
                 echo json_encode($Registro);
                 exit();
@@ -299,15 +301,15 @@ class oMsellado
         }
     }
 
-    public function consultaBandera($tabla, $columna, $id, $columna2)
+    public function consultaBandera($mostrar, $tabla, $sentencia = "", $columna, $id, $columna2)
     {
         //echo "SELECT * FROM $tabla WHERE  $columna = $id $columna2 " ; die;
-        $resultado = $this->conexion->query("SELECT * FROM $tabla WHERE  $columna = $id $columna2 ") or die($this->conexion->error);
+        $resultado = $this->conexion->query("SELECT $mostrar FROM $tabla $sentencia WHERE  $columna = $id $columna2 ") or die($this->conexion->error);
 
         if ($resultado) {
             $data = self::getResultados($resultado);
             echo json_encode($data);
-        exit();
+            exit();
         } else {
             echo 0;
             exit();
@@ -355,17 +357,16 @@ class oMsellado
     {
         /* echo "SELECT $mostrar1 FROM $tabla1 WHERE $where1"; die; */
         $result = $this->conexion->query("SELECT $mostrar1 FROM $tabla1 WHERE $where1");
-        
-        $data = self::getResultados($result);
-        
-        if ($data[0]['rollo_r'] == null){
-            $result2 = $this->conexion->query("SELECT $mostrar2 FROM $tabla2 WHERE $where2");
-            $data = self::getResultados($result2);
-            if (sizeof($data) == 0) {
-                $result3 = $this->conexion->query("SELECT $mostrar3 FROM $tabla3 WHERE $where3");
-                $data = self::getResultados($result3);
-            }
 
+        $data = [self::getResultados($result), true];
+
+        if ($data[0][0]['rollo_r'] == null) {
+            $result2 = $this->conexion->query("SELECT $mostrar2 FROM $tabla2 WHERE $where2");
+            $data = [self::getResultados($result2), false];
+            if (sizeof($data[0]) == 0) {
+                $result3 = $this->conexion->query("SELECT $mostrar3 FROM $tabla3 WHERE $where3");
+                $data = [self::getResultados($result3), false];
+            }
         }
 
 
@@ -445,8 +446,6 @@ class oMsellado
 
         return $rows;
     }
-
-    
 }
 
 class UtilHelper

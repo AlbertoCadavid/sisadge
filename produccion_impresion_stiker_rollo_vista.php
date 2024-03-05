@@ -227,7 +227,7 @@ function cerrar(num) {
       <a href="produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_impresion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a>
 	  <?php }?>--><a href="produccion_impresion_listado_rollos.php?id_op_r=<?php echo $row_rollo_impresion['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_impresion['rollo_r']; ?>&rollo_r=<?php echo $row_rollo_impresion['rollo_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS"title="LISTADO ROLLO" border="0" style="cursor:hand;"/></a>
     <?php  if($totalRows_existe_edit > '0') {?>
-    <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion['id_r']; ?>,'produccion_impresion_listado_rollos.php')"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a>
+    <a href="javascript:eliminar1('id_ri',<?php echo $row_rollo_impresion['id_r']; ?>,'produccion_impresion_listado_rollos.php', '<?php echo $row_rollo_impresion['id_op_r']; ?>', '<?php echo $row_rollo_impresion['rollo_r']; ?>', 2)"><img src="images/por.gif" alt="ELIMINAR" title="ELIMINAR" border="0" style="cursor:hand;"/></a>
     <a href="produccion_registro_impresion_vista.php?id_op=<?php echo $row_rollo_impresion['id_op_r']; ?>"><img src="images/adelante.gif" style="cursor:hand;" alt="LIQUIDAR" title="LIQUIDAR" border="0"/></a>
     <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a>
     <?php }?><img src="images/impresor.gif" onClick="envio_form();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR"/></td>

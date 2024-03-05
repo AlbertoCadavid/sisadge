@@ -95,8 +95,9 @@ $totalRows_usuario = mysql_num_rows($usuario);
 //aqui traigo el precio del la cotiz antes de todos los cambios del impuesto al plastico
 if (isset($_GET['id_ref'])&& $_GET['id_ref']!='0' && isset($_GET['Str_nit'])&& $_GET['Str_nit']!=''){  
 
-$precio_old = $conexion->llenarCampos('Tbl_referencia ref ',"LEFT JOIN Tbl_cotiza_bolsa cb ON ref.cod_ref=cb.N_referencia_c LEFT JOIN Tbl_egp te ON ref.n_egp_ref = te.n_egp WHERE ref.tipo_bolsa_ref<>'LAMINA' and ref.tipo_bolsa_ref<>'PACKING LIST' AND cb.fecha_creacion < '2023-03-15' AND ref.id_ref= ".$_GET['id_ref']." AND Str_nit=".$_GET['Str_nit']." ORDER BY cb.fecha_creacion DESC LIMIT 1  ",""," cb.N_precio as N_precio_old ");
+$precio_old = $conexion->llenarCampos('Tbl_referencia ref ',"LEFT JOIN Tbl_cotiza_bolsa cb ON ref.cod_ref=cb.N_referencia_c LEFT JOIN Tbl_egp te ON ref.n_egp_ref = te.n_egp WHERE ref.tipo_bolsa_ref<>'LAMINA' and ref.tipo_bolsa_ref<>'PACKING LIST' AND cb.fecha_creacion < '2023-03-15' AND ref.id_ref= ".$_GET['id_ref']." AND Str_nit='".$_GET['Str_nit']."'  ORDER BY cb.fecha_creacion DESC LIMIT 1  ",""," cb.N_precio as N_precio_old ");
 }
+ 
  
 //PARA IMPRIMIR NUMERO DE COTIZACION
 mysql_select_db($database_conexion1, $conexion1);

@@ -218,7 +218,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                           <tr>
                             <td></td>
                             <td style="text-align: right">
-                            <span>Añadir campo</span>
+                              <span>Añadir campo</span>
                               <button type="button" class="botonGMini" onClick="AddItemd();"> + </button>
                             </td>
 
@@ -261,11 +261,11 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
           <table border="1" style="width: 100%;">
 
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email1 = "dariov@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email1 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Dario Villarraga</strong>
               </td>
               <td align="center" id="fondo_3">
@@ -274,11 +274,11 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
             </tr>
 
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email2 = "mauricio.ruiz@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email2 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Mauricio Ruiz</strong>
               </td>
               <td align="center" id="fondo_3">
@@ -287,11 +287,11 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
             </tr>
 
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email3 = "sara.molina@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email3 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Sara Molina/PW</strong>
               </td>
               <td align="center" id="fondo_3">
@@ -300,11 +300,11 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
             </tr>
 
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email4 = "alvarocadavid@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email4 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Alvaro Cadavid</strong>
               </td>
               <td align="center" id="fondo_3">
@@ -313,24 +313,24 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
             </tr>
 
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email5 = "coordinacion@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email5 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Edilson Serna</strong>
               </td>
               <td align="center" id="fondo_3">
                 <input type="radio" name="correo" id="correo2" value="<?php echo $email5 ?>">
               </td>
             </tr>
-           
+
             <tr>
-              <td  align="center">
+              <td align="center">
                 <?php $email5 = "juliot@acycia.com" ?>
                 <a href="http://" target="_blank" rel="noopener noreferrer"><?php echo $email5 ?></a>
               </td>
-              <td  align="center">
+              <td align="center">
                 <strong>Julio Tagliaferri</strong>
               </td>
               <td align="center" id="fondo_3">
@@ -341,7 +341,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 
         <tr>
           <td colspan="2">
-           
+
             <div class="panel-footer" id="continuar" align="center">
               <?php
               if ($_GET["id_remision"] == '') : ?>
@@ -355,7 +355,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
         <input type="hidden" name="MM_insert" value="form1">
         </form>
         <tr>
-          
+
         </tr>
 
       </table>
@@ -398,6 +398,9 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
   </div>
   </div>
   </div>
+  <div id="content">
+    <div class="loader" style="display:none"></div>
+  </div>
   </td>
   </tr>
   </table>
@@ -408,9 +411,22 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
 </body>
 
 </html>
+<style type="text/css">
+    .loader {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      z-index: 3200;
+      background: url('images/load_blue.gif') 50% 50% no-repeat rgb(250, 250, 250);
+      background-size: 150px 150px; /*tamaño del gif*/
+      -moz-opacity: 65;
+      opacity: 0.65;
+    }
+  </style>
 
 <script type="text/javascript">
-
   $("#btnEnviarG").on("click", function() {
 
     if ($("#cliente").val() == '') {
@@ -446,24 +462,26 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
     } else if ($("#oc").val() == '') {
       swal.fire("Error", "Debe agregar un valor al campo orden de produccion! :)", "error");
       return false;
-    } else  if ($("#recibe").val() == '') {
+    } else if ($("#recibe").val() == '') {
       swal.fire("Error", "Debe agregar un valor al campo Recibido! :)", "error");
       return false;
     } else {
+      
+      document.querySelector(".loader").style.display='block';
       guardarConAlert($("#id_remision").val());
     }
 
   });
 
-function showAlert(){
-  Swal.fire({
-  position: "center",
-  icon: "success",
-  title: "Registro Guardado con Exito",
-  showConfirmButton: false,
-  timer: 1500
-});
-}
+  function showAlert() {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Registro Guardado con Exito",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
 
   $('#cliente').change(function() {
     cliente = $("#cliente").val();
@@ -473,6 +491,7 @@ function showAlert(){
   //------------------FUNCION PARA AGREGAR ITEMS DINAMICOS----//
   var num = 0;
   var contador = 1
+
   function AddItemd() {
     var contador = num++;
     var tbody = null;
@@ -480,7 +499,7 @@ function showAlert(){
     var nodes = tablaf.childNodes;
     var count = 0;
     var acumula = 0;
-    
+
     for (var x = 0; x < nodes.length; x++) {
       if (nodes[x].nodeName == 'TBODY') {
         tbody = nodes[x];
@@ -489,18 +508,18 @@ function showAlert(){
       count = acumula + x;
     }
     if (tbody != null) {
-      contador = contador+1;
+      contador = contador + 1;
       var tr = document.createElement('tr');
       tr.innerHTML = `<tr ><td colspan="12" id="dato1"> <input type="hidden" name="remision_id" id="remision_id" value="<?php echo $num; ?>" style="width:70px"> &nbsp; <input type="text" required="required" placeholder="Referencia" id="referencia" name="referencia[]" value="" style="width:195px"> &nbsp; <input oninput= actualizarTotal() class="cantidad" type="number" required="required" placeholder="Cantidad" id="cantidad" name="cantidad[]" value="" style="width:80px"> &nbsp; <input type="text" placeholder="Inicio" id="numInicio" name="numInicio[]" value="" style="width:95px"> &nbsp;<input type="text" placeholder="Final" id="numFinal" name="numFinal[]" value="" style="width:97px">&nbsp; <input type="text" required="required" placeholder="# Caja" id="caja" name="caja[]" value="" style="width:90px"> &nbsp;<input type="text" required="required" placeholder="OC" id="oc" name="oc[]" value="" style="width:90px"> </td></tr>`;
       tbody.appendChild(tr);
-      contador = contador+1;
+      contador = contador + 1;
     }
 
   }
 
   //funcion para sumar total de las cantidades
-  
-  function actualizarTotal(){
+
+  function actualizarTotal() {
     var cantidades = document.getElementsByClassName("cantidad");
     var total = 0;
 
@@ -512,8 +531,6 @@ function showAlert(){
     // Actualizar el contenido del campo "total"
     document.getElementById('totales').innerText = total;
   }
-
-
 </script>
 <?php
 

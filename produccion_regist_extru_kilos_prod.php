@@ -129,7 +129,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       $f[] = $k;
     foreach ($_POST['valor_prod_rp'] as $key => $k)
       $g[] = $k;
-    $c = $_POST['id_op_rp'];
+      $c = $_POST['id_op_rp'];
+
+    foreach ($_POST['lote'] as $key => $k)
+      $h[] = $k;  
 
     for ($s = 0; $s < count($f); $s++) {
       if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios
@@ -142,16 +145,15 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
         $valorMP = $row_valoresMP['valorkilo'];
 
         $insertSQLd = sprintf(
-          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp, valor_prod_rp, op_rp, int_rollo_rkp,id_proceso_rkp,fecha_rkp,costo_mp,id_rp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+          "INSERT INTO Tbl_reg_kilo_producido (id_rpp_rp,valor_prod_rp,op_rp,id_proceso_rkp,fecha_rkp,costo_mp,id_rp,lote) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
           GetSQLValueString($f[$s], "int"),
           GetSQLValueString($g[$s], "double"),
           GetSQLValueString($c, "int"),
-          GetSQLValueString($_POST['rollo_rp'], "int"),
           GetSQLValueString($_POST['id_proceso_rkp'], "int"),
           GetSQLValueString($_POST['fecha_ini_rp'], "date"),
           GetSQLValueString($valorMP, "double"),
-          GetSQLValueString($_GET['id_rp'], "int")
-        );
+          GetSQLValueString($_GET['id_rp'], "int"),
+          GetSQLValueString($h[$s], "text") );
 
         mysql_select_db($database_conexion1, $conexion1);
         $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
@@ -187,25 +189,26 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 ?>
 <?php
 //LLENA COMBOS DE MATERIAS PRIMAS
-/*mysql_select_db($database_conexion1, $conexion1);
+ mysql_select_db($database_conexion1, $conexion1);
 $query_insumo = "SELECT * FROM insumo WHERE clase_insumo='4' AND estado_insumo='0' ORDER BY descripcion_insumo ASC";
 $insumo = mysql_query($query_insumo, $conexion1) or die(mysql_error());
 $row_insumo = mysql_fetch_assoc($insumo);
-$totalRows_insumo = mysql_num_rows($insumo);*/
-
-$row_insumo = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo2 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo4 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo5 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo6 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo7 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo8 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo9 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo10 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo11 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-$row_insumo12 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
-
+$totalRows_insumo = mysql_num_rows($insumo); 
+  
+ 
+  /* $row_insumo1 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo2 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo4 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo5 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo6 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo7 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo8 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo9 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo10 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");
+   $row_insumo11 = $conexion->llenaSelect('insumo', "WHERE clase_insumo='4' AND estado_insumo='0'", "ORDER BY descripcion_insumo ASC");*/
+ 
+ 
 //MEZCLAS
 $colname_materiap = "-1";
 if (isset($_GET['id_op'])) {
@@ -302,143 +305,36 @@ $totalRows_totalKilos = mysql_num_rows($totalKilos);
       </tr>
       <tr>
         <td colspan="5" id="dato2">MATERIA PRIMA</td>
-        <td colspan="5" id="dato2">KILOS</td>
+        <td colspan="3" id="dato2">LOTE</td>
+        <td colspan="2" id="dato2">KILOS</td> 
       </tr>
+      <?php for ($i = 1; $i <= 12; $i++) { ?>
       <tr>
         <td colspan="5" id="dato2">
 
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo as $row_insumo) { ?>
-              <option value="<?php echo $row_insumo['id_insumo'] ?>"><?php echo $row_insumo['codigo_insumo'] . " (CODIGO) " . $row_insumo['descripcion_insumo']; ?></option>
-            <?php } ?>
+          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande fobval" onChange="unlock()">
+           <option value="">Referencia MP</option>
+          <?php do { ?>
+          <option value="<?php echo $row_insumo['id_insumo'] ?>"><?php echo $row_insumo['codigo_insumo'] . " (CODIGO) " . $row_insumo['descripcion_insumo']; ?></option>
+          <?php
+          } while ($row_insumo = mysql_fetch_assoc($insumo));
+            $rows = mysql_num_rows($insumo);
+            if($rows > 0) {
+                mysql_data_seek($insumo, 0);
+              $row_insumo = mysql_fetch_assoc($insumo);
+            }
+          ?>
           </select>
         </td>
-        <td colspan="5" id="dato2">
-          <input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" autofocus onBlur="return validacion_kilos_extrusion();" />
+        <td colspan="3" id="dato2">
+          <input type="text" name="lote[]" id="lote[]" min="0" size="12" placeholder="Lote" class="lote<?php echo $i; ?>"/>
+        </td>
+        <td colspan="2" id="dato2">
+          <input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" autofocus onBlur="return validacion_kilos_extrusion();" class="valor_prod_rp<?php echo $i; ?>"/>
         </td>
       </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo2 as $row_insumo2) { ?>
-              <option value="<?php echo $row_insumo2['id_insumo'] ?>"><?php echo $row_insumo2['descripcion_insumo'] . " (CODIGO) " . $row_insumo2['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo3 as $row_insumo3) { ?>
-              <option value="<?php echo $row_insumo3['id_insumo'] ?>"><?php echo $row_insumo3['descripcion_insumo'] . " (CODIGO) " . $row_insumo3['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo4 as $row_insumo4) { ?>
-              <option value="<?php echo $row_insumo4['id_insumo'] ?>"><?php echo $row_insumo4['descripcion_insumo'] . " (CODIGO) " . $row_insumo4['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo5 as $row_insumo5) { ?>
-              <option value="<?php echo $row_insumo5['id_insumo'] ?>"><?php echo $row_insumo5['descripcion_insumo'] . " (CODIGO) " . $row_insumo5['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo6 as $row_insumo6) { ?>
-              <option value="<?php echo $row_insumo6['id_insumo'] ?>"><?php echo $row_insumo6['descripcion_insumo'] . " (CODIGO) " . $row_insumo6['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo7 as $row_insumo7) { ?>
-              <option value="<?php echo $row_insumo7['id_insumo'] ?>"><?php echo $row_insumo7['descripcion_insumo'] . " (CODIGO) " . $row_insumo7['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo8 as $row_insumo8) { ?>
-              <option value="<?php echo $row_insumo8['id_insumo'] ?>"><?php echo $row_insumo8['descripcion_insumo'] . " (CODIGO) " . $row_insumo8['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo9 as $row_insumo9) { ?>
-              <option value="<?php echo $row_insumo9['id_insumo'] ?>"><?php echo $row_insumo9['descripcion_insumo'] . " (CODIGO) " . $row_insumo9['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo10 as $row_insumo10) { ?>
-              <option value="<?php echo $row_insumo10['id_insumo'] ?>"><?php echo $row_insumo10['descripcion_insumo'] . " (CODIGO) " . $row_insumo10['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo11 as $row_insumo11) { ?>
-              <option value="<?php echo $row_insumo11['id_insumo'] ?>"><?php echo $row_insumo11['descripcion_insumo'] . " (CODIGO) " . $row_insumo11['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-      </tr>
-      <tr>
-        <td colspan="5" id="dato2">
-          <select name="id_rpp[]" id="id_rpp[]" class="busqueda selectsGrande">
-            <option value="">Referencia MP</option>
-            <?php foreach ($row_insumo12 as $row_insumo12) { ?>
-              <option value="<?php echo $row_insumo12['id_insumo'] ?>"><?php echo $row_insumo12['descripcion_insumo'] . " (CODIGO) " . $row_insumo12['codigo_insumo'] ?></option>
-            <?php } ?>
-          </select>
-        </td>
-        <td colspan="5" id="dato2"><input type="number" name="valor_prod_rp[]" id="valor_prod_rp[]" min="0" step="0.01" size="12" placeholder="Kilos" onBlur="return validacion_kilos_extrusion();" /></td>
-
-      </tr>
+      <?php } ?>
+      
 
 
       <tr>
@@ -446,7 +342,7 @@ $totalRows_totalKilos = mysql_num_rows($totalKilos);
         </td>
       </tr>
       <tr>
-        <td colspan="10" id="dato2"><input type="submit" class="botonGeneral" value="ADD A EXTRUSION" onClick="envio_form(this);" /></td>
+        <td colspan="10" id="dato2"><input type="submit" class="botonGeneral" value="ADD A EXTRUSION" /><!-- onClick="envio_form(this);" --></td>
       </tr>
       <tr>
         <td colspan="10" id="dato2"><strong>DISTRIBUCION DE LA MEZCLA SEGUN LA FORMULA</strong></td>
@@ -687,6 +583,38 @@ $totalRows_totalKilos = mysql_num_rows($totalKilos);
     <input type="hidden" name="MM_insert" value="form1">
   </form>
   <?php echo $conexion->header('footer'); ?>
-</body>
+
+
+   
+  
+
+</body> 
 
 </html>
+<script>
+  
+  function unlock() {
+    var fobval = document.getElementsByClassName('fobval')
+
+    for (let i = 0; i < fobval.length; i++) {
+      if (fobval[i].value != "" ) {
+      
+        var b = document.querySelector(`.lote${i+1}`); 
+        b.setAttribute("required", "required");
+
+        var c = document.querySelector(`.valor_prod_rp${i+1}`); 
+        c.setAttribute("required", "required");  
+ 
+        }else{
+          var b = document.querySelector(`.lote${i+1}`); 
+          b.removeAttribute('required'); 
+
+          var c = document.querySelector(`.valor_prod_rp${i+1}`); 
+          c.removeAttribute('required'); 
+        } 
+
+     }
+ 
+ }
+
+</script>

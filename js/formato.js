@@ -108,7 +108,8 @@ function eliminar(campo,id,pagina)
 	 }
 	}
 //eliminar registro completamente
-function eliminar1(id,campo,pagina=''){
+function eliminar1(id,campo,pagina='', id_op='', rollo_r='', proceso=''){
+	
 	swal({   
 		title: "ELIMINAR?",   
 		text: "Esta seguro que Quiere Eliminar!",   
@@ -122,6 +123,7 @@ function eliminar1(id,campo,pagina=''){
 		function(isConfirm){   
 			if (isConfirm) {  
 				swal("Eliminado!", "El registro se ha eliminado.", "success"); 
+				eliminarTodasBanderas(id_op, rollo_r, proceso);
 				window.location ="delete.php?"+id+"="+campo+"&pagina="+pagina; 
 			} else {     
 				swal("Cancelado", "has cancelado :)", "error");
@@ -753,3 +755,6 @@ function(){
 
 }
 
+function eliminarTodasBanderas(id_op, rollo_r, proceso){
+	window.location ="delete2.php?"+"id_op="+id_op+"&"+"rollo_r="+rollo_r+"&proceso="+proceso+"&banderas=eliminar"; 
+}

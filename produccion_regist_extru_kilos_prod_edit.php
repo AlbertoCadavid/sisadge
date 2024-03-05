@@ -143,25 +143,32 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
     foreach($cant as $key=>$v)
     $b[]= $v;
 	
+
 	$id_m=($_POST['id_m']);
     foreach($id_m as $key=>$ins)
     $c[]= $ins;
 	
+  $lotes=($_POST['lote']);
+    foreach($lotes as $key=>$l)
+    $e[]= $l;
+
 	$desp=($_POST['desp']);
     foreach($desp as $key=>$v)
     $d[]= $v;
+
 	 	
 	for($x=0; $x<count($a); $x++){
+
 		if($a[$x]!=''&&$b[$x]!=''&&$c[$x]!=''){	
      	  $sqlcostoMP="SELECT valor_unitario_insumo AS valorkilo FROM insumo WHERE id_insumo = $c[$x]"; 
-	  $resultcostoMP=mysql_query($sqlcostoMP); 
-	  $numcostoMP=mysql_num_rows($resultcostoMP); 
-	  $row_valoresMP = mysql_fetch_assoc($resultcostoMP);
-	  $contValor=0;
-      $valorMP = $row_valoresMP['valorkilo']; 
+    	  $resultcostoMP=mysql_query($sqlcostoMP); 
+    	  $numcostoMP=mysql_num_rows($resultcostoMP); 
+    	  $row_valoresMP = mysql_fetch_assoc($resultcostoMP);
+    	  $contValor=0;
+        $valorMP = $row_valoresMP['valorkilo']; 
 	  				 
- $insertSQLkp = sprintf("UPDATE Tbl_reg_kilo_producido SET id_rpp_rp=%s, valor_prod_rp=%s, op_rp=%s, int_rollo_rkp=%s, id_proceso_rkp=%s, fecha_rkp=%s, costo_mp=%s, id_rp=%s WHERE id_rkp=%s",                                            
-                       GetSQLValueString($c[$x], "int"),
+ $insertSQLkp = sprintf("UPDATE Tbl_reg_kilo_producido SET id_rpp_rp=%s, valor_prod_rp=%s, op_rp=%s, int_rollo_rkp=%s, id_proceso_rkp=%s, fecha_rkp=%s, costo_mp=%s, id_rp=%s, lote=%s WHERE id_rkp=%s",                                            
+             GetSQLValueString($c[$x], "int"),
 					   GetSQLValueString($b[$x], "double"), 
 					   GetSQLValueString($_POST['id_op'], "int"),
 					   GetSQLValueString($_POST['rollo_rp'], "int"),
@@ -169,6 +176,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
 					   GetSQLValueString($_POST['fecha_ini_rp'], "date"),
 					   GetSQLValueString($valorMP, "double"),
              GetSQLValueString($_GET['id_rp'], "int"),
+             GetSQLValueString($e[$x], "text"),
 					   GetSQLValueString($a[$x], "int"));
   mysql_select_db($database_conexion1, $conexion1);
   
@@ -303,14 +311,14 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
         </tr>
         <tr id="tr1">
         <td colspan="2" nowrap="nowrap"id="subtitulo1">PRODUCTOS</td>
-        <td nowrap="nowrap"id="subtitulo1">KILOS INGRESADOS</td>
-        <td nowrap="nowrap"id="subtitulo1">KILOS A CORREGIR</td>
-        <td nowrap="nowrap"id="subtitulo1">&nbsp;</td>
+        <td nowrap="nowrap"id="subtitulo2">KILOS INGRESADOS</td>
+        <td nowrap="nowrap"id="subtitulo2">KILOS A CORREGIR</td>
+        <td nowrap="nowrap"id="subtitulo2">LOTE</td>
       </tr>
 	   <?php  for ($x=0;$x<=$totalRows_kilo_editar-1 ;$x++) { ?> 
        <tr>         
        <td colspan="2" id="fuente1"><?php $id_rkp=mysql_result($kilo_editar,$x,id_rkp);?><input name="id_i[]" type="hidden" value="<?php echo $id_rkp; ?>" />
-        <select name="id_m[]" id="id_m[]" style="width:400px">
+        <select name="id_m[]" id="id_m[]" style="width:400px" class="fobval" onChange="unlock()">
                  <option value="">Ref</option>
                  <?php
                  do {  
@@ -327,7 +335,9 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
        </select>         
       <td id="fuente1"><input name="valor[]" readonly type="text" size="6" value="<?php $valor=mysql_result($kilo_editar,$x,valor_prod_rp); echo $valor; ?>" style="width:80px"/></td>
       <td id="fuente1"><input name="cant[]" type="number" style="width:80px" placeholder="kilos" min="0"step="0.01" value="<?php $cant=mysql_result($kilo_editar,$x,valor_prod_rp); echo $cant; ?>"/></td>       
-      <td id="fuente1">&nbsp;</td> 
+      <td colspan="3" id="dato2">
+        <input type="text" name="lote[]" id="lote[]" min="0" size="12" placeholder="Lote" class="lote<?php echo $x+1; ?>" value="<?php echo $lote=mysql_result($kilo_editar,$x,lote); ?>"/>
+      </td>
        </tr>
 	   <?php  } ?>        
           <tr>
@@ -337,7 +347,7 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
             <td ></td>
             </tr>
           <tr>
-            <td colspan="5" id="dato2"><input type="submit" class="botonGeneral" onclick="return update2();" value="EDITAR " /></td>
+            <td colspan="5" id="dato2"><input type="submit" class="botonGeneral" value="EDITAR " /><!-- onclick="return update2();" --></td>
             </tr>
           <tr>
             <td colspan="5" id="dato5">&nbsp;</td>
@@ -347,9 +357,9 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
           </tr>
             <input type="hidden" name="MM_update" value="form2" />
   </form>
-
+ 
    <tr>
-    <td> 
+    <td>
      <table>
         <form action="delete_listado.php" method="get" name="form3">
       <tr>
@@ -358,10 +368,12 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
             <input name="id[]" type="hidden" value="<?php $id_borrar=mysql_result($kilo_editar,$y,id_rkp); echo $id_borrar;?>"/> 
             <?php } ?> 
        </td>
+    <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?>  
          <td colspan="2" id="titulo2"> 
             <input name="Delete" type="submit" onclick="return eliminar_u_i();" class="botonFinalizar" value="Delete"/>
             <input name="consumo_i" type="hidden" id="consumo_i" value="1" /> 
-           </td>           
+           </td>
+         <?php endif; ?>           
       </tr>
     </form>
     </table>
@@ -369,6 +381,32 @@ $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
      <?php echo $conexion->header('footer'); ?>
 </body>
 </html>
+<script>
+   $(document).ready(function() {
+
+   unlock()
+
+
+  });
+  function unlock() {
+    var fobval = document.getElementsByClassName('fobval')
+ 
+    for (let i = 0; i < fobval.length; i++) {
+      if (fobval[i].value != "" ) {
+      
+        var b = document.querySelector(`.lote${i+1}`); 
+        b.setAttribute("required", "required");  
+ 
+        }else{
+          var b = document.querySelector(`.lote${i+1}`); 
+          b.removeAttribute('required');  
+        } 
+
+     }
+ 
+ }
+
+</script>
 <?php
 mysql_free_result($usuario);
 mysql_free_result($kilo_editar);

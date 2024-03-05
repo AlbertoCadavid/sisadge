@@ -126,7 +126,7 @@ $conexion = new ApptivaDB();
                             <a href="javascript:popUp('sellado_control_cajas_vista.php?id_op=<?php echo $row_caja_num['int_op_tn']; ?>&int_caja_tn=<?php echo $row_caja_num['int_caja_tn']; ?>','1200','780')" target="_top"><?php echo "IMPRIME STICKERS CAJAS: ".$row_caja_num['int_caja_tn']; ?></a>
                             <?php if($num == 0) {?>
                             -- <a href="javascript:eliminarconAlerta(<?php echo $row_caja_num['int_op_tn']; ?>,<?php echo $row_caja_num['int_caja_tn']; ?>,'')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR TODOS LOS PAQUETES" title="ELIMINAR TODOS LOS PAQUETES" border="0"></a> 
-                            <?php $num=1; }?></p>
+                            <?php $num=1; } else {echo "--------";}?></p>
                         <?php  } ?>
                       </div>
                     </div>

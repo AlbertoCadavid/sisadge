@@ -226,7 +226,9 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                   <td colspan="3" nowrap="nowrap" id="fuente2">Referencia</td>
                   <td colspan="2" id="fuente2">Version</td>
                   <td nowrap="nowrap" colspan="2" id="dato1">
+                    <?php if($_SESSION['superacceso'] || (in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])) ): ?>
                     <a class="botonGMini" onclick="vercopiaMezcla()">GENERAR COPIA</a>
+                    <?php endif; ?>
                      </td>
                 </tr>
                 <tr>
@@ -684,7 +686,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                   <td colspan="2"id="fuente1"><input name="campo_47"  type="text"  id="campo_47" placeholder="Tor B" size="10"value="<?php echo $row_caract['campo_47'];?>"/>
                     </td>
                   <td id="fuente1"><input name="campo_48"  type="text"  id="campo_48" placeholder="Tor C" size="10"value="<?php echo $row_caract['campo_48'];?>"/>
-                    </td>
+                    </td> 
                   <td colspan="1" id="fuente1">Die Center Lower</td>
                   <td colspan="2" id="fuente1">
                     <input name="campo_49"  type="text"  id="campo_49" placeholder="Die Center Lower" size="5"value="<?php echo $row_caract['campo_49'];?>"/>

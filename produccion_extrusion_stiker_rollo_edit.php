@@ -166,7 +166,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($updateSQL, $conexion1) or die(mysql_error());
 
-
+  
   /* Registro de las Banderas */
   if (!empty($_POST['banderas'])) {
 
@@ -174,7 +174,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
       $nombre = $_POST['banderas'][$i];
       if ($nombre != "") { //no almacena si viene alguna bandera sin nombre
         $metros = $_POST['metroBandera'][$i];
-        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, 1 ");
+        $conexion->insertar("tbl_banderas", "`id_op`, `rollo_r`, `nombre`, `metros`, `metros_rollo`, `proceso`", "$_POST[id_op_r], $_POST[rollo_r], '$nombre', $metros, $_POST[metro_r], 1 ");
       }
     }
   }
@@ -465,7 +465,7 @@ $num_banderas = sizeof($banderas);
         <td id="titulo2">&nbsp;</td>
         <td colspan="4" id="fuente3"><a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion_edit['id_r']; ?>"><img src="images/hoja.gif" alt="VISTA" title="VISTA" border="0" /></a><a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a>
           <?php if ($row_usuario['tipo_usuario'] == 1) { ?><a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRESION TODOS LOS ROLLOS" title="IMPRESION TODOS LOS ROLLOS" border="0" /></a>
-            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion_edit['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php')"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
+            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion_edit['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php', <?php echo $row_rollo_estrusion_edit['id_op_r']; ?>, <?php echo $row_rollo_estrusion_edit['rollo_r']; ?>, 1)"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
           <?php } ?><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a>
         </td>
       </tr>
@@ -965,7 +965,7 @@ $num_banderas = sizeof($banderas);
             <option value="tratamiento">TRATAMIENTO</option>
           </select>
 
-          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0">Metros
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderasExt()">Metros
         </td>`;
       tbody.appendChild(tr);
       contador = contador + 1;

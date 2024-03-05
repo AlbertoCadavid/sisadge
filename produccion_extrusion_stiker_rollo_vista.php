@@ -234,7 +234,7 @@ if ($modulo == 0) {
             <a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRIME TODOS LOS ROLLOS" title="IMPRIME TODOS LOS ROLLOS" border="0" /></a>
           <?php } ?>
           <?php if ($row_existe_edit['id_rp'] == '') :  ?>
-            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php')"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
+            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php', <?php echo $row_rollo_estrusion['id_op_r']; ?>, <?php echo $row_rollo_estrusion['rollo_r']; ?>, 1)"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
           <?php else : ?>
             <img src="images/por.gif" alt="ELIMINAR" title="no se puede Eliminar debido a que ya esta liquidado" border="0" style="cursor:hand;" onclick="liquidado()" />
           <?php endif; ?>

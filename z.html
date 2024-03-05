@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Línea</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+    <canvas id="lineChart" width="600" height="50"></canvas>
+
+    
+</body>
+</html>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+canvas {
+    border: 1px solid #ccc;
+}
+
+</style>
+
+<script>
+   // Obtener el contexto del lienzo
+var ctx = document.getElementById('lineChart').getContext('2d');
+
+const labels = [0,10000];
+// Configurar los datos del gráfico
+var data = {
+    labels: labels,
+    datasets: [{
+        label: 'ROLLO',
+        data: [1,1],
+        fill: false,
+    }]
+};
+
+// Configurar opciones del gráfico
+var options = {
+    scales: {
+        x: {
+            type: 'linear',
+            position: 'bottom',
+        }
+    }
+};
+
+// Crear el gráfico de línea
+var lineChart = new Chart(ctx, {
+    type: 'line',
+   data: data,
+    options: options
+});
+setTimeout(() => {
+    
+
+// Insertar imágenes de puntos en las posiciones deseadas
+var img1 = new Image();
+img1.src = './images/b.gif'; // Ruta de la imagen del primer punto
+img1.onload = function() {
+    ctx.drawImage(img1, lineChart.chartArea.left + 20, lineChart.chartArea.bottom - 25, 20, 20); // Posición del primer punto
+};
+
+var img2 = new Image();
+img2.src = './images/b.gif'; // Ruta de la imagen del segundo punto
+img2.onload = function() {
+    ctx.drawImage(img2, lineChart.chartArea.left + 750, lineChart.chartArea.bottom - 25, 20, 20); // Posición del segundo punto
+};
+var img3 = new Image();
+img3.src = './images/b.gif'; // Ruta de la imagen del segundo punto
+img3.onload = function() {
+    ctx.drawImage(img3, lineChart.chartArea.left + 900, lineChart.chartArea.bottom - 25, 20, 20); // Posición del segundo punto
+};
+}, 2000);
+
+</script>
