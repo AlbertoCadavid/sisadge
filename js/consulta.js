@@ -1106,12 +1106,12 @@ function fechasDesp(){
 			return false; 
 		  }//FIN
   		    sum1 += parseFloat(ups[i].value, 10);//suma todo el acumulado de desperdicio
-  		    
- 			//regla de tres para metros
- 			var totalDesp=parseFloat(sum1)-parseFloat(reproceso);
- 			var kilosTotales=parseFloat(kilos)-parseFloat(totalDesp);
- 			var nuevosMetros = Math.round(kilosTotales * metros / kilos);
- 			
+			  //regla de tres para metros
+			  var totalDesp=parseFloat(sum1)-parseFloat(reproceso);
+			  var kilosTotales=parseFloat(kilos)-parseFloat(totalDesp);
+			  var nuevosMetros = Math.round(kilosTotales * metros / kilos);
+			  
+  		    console.log(kilosTotales+"*"+metros+"/"+kilos)
  			document.form1.metro_r2.value = nuevosMetros;
  			document.form1.int_total_kilos_rp.value=kilosTotales;
  			document.form1.int_kilos_desp_rp.value=totalDesp.toFixed(2); 
@@ -3888,3 +3888,4 @@ function nobackbutton(){
  function EnvioBoton(pag,name,valor,name2,valor2){
  	window.location.href = pag+"?"+name+"="+valor+"&"+name2+"="+valor2;
  }
+

@@ -203,13 +203,14 @@ class oMsellado
             $array_codificado = UtilHelper::arrayEncode($data);
             $array_deco = UtilHelper::arrayDecode($array_codificado);
             $arrayPHP =  ($array_deco);
+            
             //echo("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "');"); die;
             $exist = $this->conexion->query("SELECT id_tabla FROM $tabla WHERE id_op = $arrayPHP[int_op_tn] AND rollo_r = $arrayPHP[rollo_r]");
             if ($exist) {
-                $stmt = $exist->fetch_assoc();
+                $stmt = $exist->fetch_assoc(); //si existe el rollo asociado a la op entonces se guarda la informacion y se actualizza con los nuevos datos
 
-                if ($stmt == null) {
-                    $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "');");
+                if ($stmt == null) { //sino existe entonces se guarda la info
+                    $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "','" . $arrayPHP['mts_desperdicio'] . "');");
                 }
             }
 

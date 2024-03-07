@@ -222,8 +222,8 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                                                                 echo "selected=\"selected\"";
                                                               } ?>>Rollo</option>
                                       </select> &nbsp;
-                                      <input class="cantidad" oninput="subtotal()" type="number" disabled required="required" placeholder="Cantidad" id="cantidad<?php echo $i; ?>" name="cantidad[]" value="<?php echo $row_insumos['cantidad']; ?>" style="width:70px">&nbsp;
-                                      <input class="peso" oninput="subtotal()" type="number" disabled required="required" placeholder="Peso" id="peso<?php echo $i; ?>" name="peso[]" value="<?php echo $row_insumos['peso']; ?>" style="width:80px">&nbsp;
+                                      <input class="cantidad" oninput="subtotal()" type="number" disabled required="required" min=0 placeholder="Cantidad" id="cantidad<?php echo $i; ?>" name="cantidad[]" value="<?php echo $row_insumos['cantidad']; ?>" style="width:70px">&nbsp;
+                                      <input class="peso" oninput="subtotal()" type="number" disabled required="required" min=0 placeholder="Peso" id="peso<?php echo $i; ?>" name="peso[]" value="<?php echo $row_insumos['peso']; ?>" style="width:80px">&nbsp;
                                       <input type="text" required="required" placeholder="Subtotal" id="precio<?php echo $i; ?>" name="precio[]" value="<?php echo $row_insumos['precio']; ?>" style="width:80px">
                                     </td>
                                   </tr>

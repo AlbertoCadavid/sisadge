@@ -122,13 +122,13 @@ if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 }
 
-
-
-
 $conexion = new ApptivaDB();
 
-
-
+$objSellado = new oMsellado();
+$row_desperdicios = $objSellado->llenaSelect('Tbl_reg_tipo_desperdicio', "WHERE Tbl_reg_tipo_desperdicio.id_proceso_rtd='4' AND Tbl_reg_tipo_desperdicio.codigo_rtp='3' AND estado_rtp='0'", "ORDER BY Tbl_reg_tipo_desperdicio.nombre_rtp ASC");
+/* echo "<pre>";
+var_dump($row_desperdicios);
+echo "</pre>"; */
 ?>
 
 
@@ -516,6 +516,19 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
       <p>
         <input type="hidden" name="MM_insert" value="form1">
       </p>
+      <div>&nbsp;</div>
+        <div class="row">
+          <div id="subtitulo_1" style="margin: 5px 10px 5px 20px">Tiene Desperdicio?</div>
+          <select name="desp" id="desp" style="margin-bottom:5px">
+            <option value="">Seleccionar</option>
+            <option value="SI">SI</option>
+            <option value="NO">NO</option>
+          </select>
+        </div>
+        <div class="boton_desperdicio fuentev1"></div>
+        <div class="row">
+          <div id="moreUploads3" style="margin-left:15px"></div>
+        </div>
       </form><br>
       <form action="view_index.php?c=csellado&a=GuardarFaltante" method="POST" name="formfalta" id="formfalta">
         <div id="faltantess" style="display: none;">
@@ -551,10 +564,11 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
                   <td></td>
                 </tr>
               </tfoot>
+              <tr>
+              </tr>
               </tbody>
             </table>
-
-          </div>
+          </div>          
         </div>
       </form>
       <div id="content"></div> <!-- este bloquea pantalla evitando duplicidad -->
@@ -733,10 +747,18 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
     } else if ($("#id_rollo").val() == "" || $("#id_rollo").val() == null) {
       swal("Error", "Debe seleccionar un Rollo ! :)", "error")
     } //manejo de banderas
+    else if ($("#desp option:selected").val() == "") {
+      swal("Error", "Debe seleccionar Desperdicio ! :)", "error")
+      $("#desp").focus();
+    } //manejo de banderas
+    else if ($("#desp option:selected").val() == "SI" && $("#kilosDesp").val() == "") {
+        swal("Error", "Debe ingresar un valor a los kilos! :)", "error")
+        $("#desp").focus();
+    } //manejo de banderas
     else {
       let res = alertafaltantes();
       if (res) {
-        envioEdit($("#int_op_tn").val(), $("#int_caja_tn").val());
+        //envioEdit($("#int_op_tn").val(), $("#int_caja_tn").val());
       }
     }
   }
@@ -775,16 +797,66 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
 
   function envioEdit(int_op_n, int_caja_n, rollo_r) {
     compactada = 'a%3A18%3A%7Bs%3A5%3A"id_tn"%3Bs%3A7%3A"2484710"%3Bs%3A9%3A"int_op_tn"%3Bs%3A4%3A"9215"%3Bs%3A11%3A"id_despacho"%3BN%3Bs%3A16%3A"fecha_ingreso_tn"%3Bs%3A10%3A"2021-11-11"%3Bs%3A7%3A"hora_tn"%3Bs%3A8%3A"03%3A42%3A06"%3Bs%3A13%3A"int_bolsas_tn"%3Bs%3A5%3A"40000"%3Bs%3A14%3A"int_undxpaq_tn"%3Bs%3A3%3A"100"%3Bs%3A15%3A"int_undxcaja_tn"%3Bs%3A4%3A"1000"%3Bs%3A12%3A"int_desde_tn"%3Bs%3A7%3A"2030711"%3Bs%3A12%3A"int_hasta_tn"%3Bs%3A7%3A"2030810"%3Bs%3A19%3A"int_cod_empleado_tn"%3Bs%3A2%3A"53"%3Bs%3A14%3A"int_cod_rev_tn"%3Bs%3A3%3A"264"%3Bs%3A11%3A"contador_tn"%3Bs%3A1%3A"1"%3Bs%3A14%3A"int_paquete_tn"%3Bs%3A1%3A"1"%3Bs%3A11%3A"int_caja_tn"%3Bs%3A3%3A"930"%3Bs%3A5%3A"pesot"%3Bs%3A1%3A"1"%3Bs%3A6%3A"ref_tn"%3Bs%3A3%3A"249"%3Bs%3A7%3A"';
-    //url = "view_index.php?c=csellado&a=Numeracion&mi_var_array="+compactada+"&int_op_tn="+int_op_n+"&int_caja_tn="+int_caja_n+"";
-    //url = "view_index.php?c=csellado&a=GuardarAdd&mi_var_array="+compactada+"&int_op_tn="+int_op_n+"&int_caja_tn="+int_caja_n+"";
     form1.submit();
-    //$(location).attr('href',url); 
   }
 
   // manejo de banderas
   $("#id_rollo").on('change', function() {
     $("#rollo_r").val($("#id_rollo option:selected").text());
   })
+
+  //desperdicio banderas
+  $('#desp').on('change', function() {
+    let val = $("#desp option:selected").val();
+    if (val == "SI") {
+      botonDesp();
+      tiemposD();
+    } else {
+      $("#moreUploads3").html("");
+      $(".boton_desperdicio").html("");
+    }
+  })
+
+  //Crea el boton de desperdicio
+  function botonDesp(){
+    let div = document.createElement("div");
+    div.innerHTML = `<td id="fuente1">
+                        <input type="button" class="botonFinalizar" name="button3" id="button3" value="Desperdicios" onClick="tiemposD()" style="width:187px" />
+                    </td>`
+    document.querySelector(".boton_desperdicio").appendChild(div);
+  }
+
+  function tiemposD() {
+    
+    var f = document.createElement("div");
+    var file0 = document.createElement("select");
+    let opcionesDesperdicio = <?php echo json_encode($row_desperdicios)?>;
+
+    file0.setAttribute("name", "id_rpd[]");
+    /*file0.setAttribute("onChange", "restakilosD()" ); */
+    file0.setAttribute("required", "required");
+    file0.options[0] = new Option('Desperdicio', '');
+    
+    for (let i = 0; i < opcionesDesperdicio.length; i++) {
+      file0.options[i+1] = new Option(opcionesDesperdicio[i]['nombre_rtp'], opcionesDesperdicio[i]['id_rtp']);
+    }
+   
+    file0.setAttribute("style", "width:150px");
+    f.appendChild(file0);
+    var file = document.createElement("input");
+    file.setAttribute("type", "number");
+    file.setAttribute("id", "kilosDesp");
+    file.setAttribute("name", "valor_desp_rd[]");
+    file.setAttribute("min", "0");
+    file.setAttribute("step", "0.01");
+    file.setAttribute("placeholder", "kilos");
+    file.setAttribute("style", "width:65px");
+    file.setAttribute("required", "required");
+    f.appendChild(file);
+
+    document.getElementById("moreUploads3").appendChild(f);
+    upload_number++;
+  }
 </script>
 
 <?php

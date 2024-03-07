@@ -1702,11 +1702,12 @@ function cargaInfoRolloSellado(id_op, rollo_r) {
   })
     .done(function (data, textStatus, jqXHR) {
       var anchoBolsa = $("#anchoRef").val();
-      var metros = parseInt(
+      var metros = parseInt( //cantidad de metros que se van sellando, incrementa cada vez que guardan numeracion
         (data[0].num_final - data[0].num_inicial + 1) * (anchoBolsa / 100)
       );
       $("#cant_metros").val(metros);
-      console.log( "anchobolsa:" + anchoBolsa +"cm cantBolsas:" +(data[0].num_final - data[0].num_inicial + 1) + "--" +"metros " +metros);
+      $("#desperdicio_inicial").val(data[0].mts_desperdicio);
+      console.log( "anchobolsa:" + anchoBolsa +"cm cantBolsas:" +(data[0].num_final - data[0].num_inicial + 1) + "--" +"metros:" +metros+" desperdicio:"+data[0].mts_desperdicio+"mts");
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
       console.log(
@@ -1786,7 +1787,6 @@ async function verificarRollo(id_op) {
           resolve(true);
         }
 
-        /* cargaInfoRolloSellado(id_op, $('#rollo_r').val()) */
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
         reject("La solicitud a fallado: " + textStatus + " -- " + errorThrown);

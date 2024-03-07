@@ -196,7 +196,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
                                   <td colspan="12" id="dato1">
                                     <input type="hidden" name="remision_id" id="remision_id" value="<?php echo $num; ?>" style="width:70px">&nbsp;
                                     <input type="text" required="required" placeholder="Referencia" id="referencia" name="referencia[]" value="" style="width:195px"> &nbsp;
-                                    <input oninput=actualizarTotal() class="cantidad" type="number" required="required" placeholder="Cantidad" id="cantidad" name="cantidad[]" value="" style="width:80px"> &nbsp;
+                                    <input oninput=actualizarTotal() class="cantidad" type="number" required="required" min=0 placeholder="Cantidad" id="cantidad" name="cantidad[]" value="" style="width:80px"> &nbsp;
                                     <input type="text" placeholder="Inicio" id="numInicio" name="numInicio[]" value="" style="width:95px">&nbsp;
                                     <input type="text" placeholder="Final" id="numFinal" name="numFinal[]" value="" style="width:97px">&nbsp;
                                     <input type="text" required="required" placeholder="# Caja" id="caja" name="caja[]" value="" style="width:90px">&nbsp;
@@ -510,7 +510,7 @@ $insumos = $conexion->llenaSelect('insumo', '', 'ORDER BY descripcion_insumo DES
     if (tbody != null) {
       contador = contador + 1;
       var tr = document.createElement('tr');
-      tr.innerHTML = `<tr ><td colspan="12" id="dato1"> <input type="hidden" name="remision_id" id="remision_id" value="<?php echo $num; ?>" style="width:70px"> &nbsp; <input type="text" required="required" placeholder="Referencia" id="referencia" name="referencia[]" value="" style="width:195px"> &nbsp; <input oninput= actualizarTotal() class="cantidad" type="number" required="required" placeholder="Cantidad" id="cantidad" name="cantidad[]" value="" style="width:80px"> &nbsp; <input type="text" placeholder="Inicio" id="numInicio" name="numInicio[]" value="" style="width:95px"> &nbsp;<input type="text" placeholder="Final" id="numFinal" name="numFinal[]" value="" style="width:97px">&nbsp; <input type="text" required="required" placeholder="# Caja" id="caja" name="caja[]" value="" style="width:90px"> &nbsp;<input type="text" required="required" placeholder="OC" id="oc" name="oc[]" value="" style="width:90px"> </td></tr>`;
+      tr.innerHTML = `<tr ><td colspan="12" id="dato1"> <input type="hidden" name="remision_id" id="remision_id" value="<?php echo $num; ?>" style="width:70px"> &nbsp; <input type="text" required="required" placeholder="Referencia" id="referencia" name="referencia[]" value="" style="width:195px"> &nbsp; <input oninput= actualizarTotal() class="cantidad" type="number" min=0 required="required" placeholder="Cantidad" id="cantidad" name="cantidad[]" value="" style="width:80px"> &nbsp; <input type="text" placeholder="Inicio" id="numInicio" name="numInicio[]" value="" style="width:95px"> &nbsp;<input type="text" placeholder="Final" id="numFinal" name="numFinal[]" value="" style="width:97px">&nbsp; <input type="text" required="required" placeholder="# Caja" id="caja" name="caja[]" value="" style="width:90px"> &nbsp;<input type="text" required="required" placeholder="OC" id="oc" name="oc[]" value="" style="width:90px"> </td></tr>`;
       tbody.appendChild(tr);
       contador = contador + 1;
     }

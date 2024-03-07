@@ -551,6 +551,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
               </tbody>
             </table>
             <div><input type="hidden" id="cant_metros" value=""></div>
+            <div><input type="text" id="desperdicio_inicial" value=""></div>
           </div>
         </div>
       </form>
@@ -821,7 +822,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
   //banderas
   function calculoBanderas(datosBanderas) {
-    metrosSellados = parseInt($("#cant_metros").val()) - 30; // se resta 30 metros que son: 15 metros de longitud de la maquina para que la bandera se alerte cuando vaya a salir del rollo y otros 15 metros para tener un poco mas de margen por si hay algun retal que no se contabilizo
+    metrosSellados = parseInt($("#cant_metros").val()); 
     let metrosBanderas = 0;
     let banderaDesperdicio = 0;
     let metrosDesperdicio = 0;
@@ -830,7 +831,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
     datosBanderas.forEach(element => { //ciclo para saber cuantas banderas y cuantos mts de desperdicio salieron en impresion
       if (element.proceso === "2") {
-        metrosDesperdicio = (parseInt(element.metros_extruder) - parseInt(element.metros_rollo)); //resta los mts del rollo que salio de extruder con los mts del rollo que salio de impresion para saber cuantos metros fueron de desperdicio
+        metrosDesperdicio = (parseInt(element.metros_extruder) - parseInt(element.metros_rollo)); //resta los mts del rollo que salio de extruder con los mts del rollo que salio de impresion para saber cuantos metros fueron de desperdicio y mover la posicion de la bandera de extrusion
         mtsBandImpresion.push(parseInt(element.metros_extruder) - parseInt(element.metros)); // crea un array con los metros donde estan las banderas de impresion pero restando del metraje original del rollo para que en sellado quede en el orden correcto
         arrayBanderasImpresion = mtsBandImpresion.sort((a, b) => a < b ? -1 : 1) //ordeno en forma ascendente el valor de los metros para saber a que valores de las banderas de extrusion le debo restar el desperdicio
         if (metrosDesperdicio > 0) {
@@ -849,6 +850,12 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
       if (banderaDesperdicio == 1 && element.proceso !== "2" && parseInt(element.metros) > arrayBanderasImpresion[0]) {
         metrosBanderas = parseInt(element.metros) - metrosDesperdicio;
       }
+
+      if($("#desperdicio_inicial").val() > 0){ //si existe desperdicio en sellado entonces adelanta las banderas la cantidad de metros que da el desperdicio
+        metrosBanderas = metrosBanderas - parseInt($("#desperdicio_inicial").val());
+      }
+
+      metrosBanderas = metrosBanderas - 20; //adelanto la bandera 20 metros para que la alerta salga cuando la bandera aun este en el rollo y no en el area de mesa de recoleccion
 
       if (parseInt(metrosSellados) >= metrosBanderas) {
 
