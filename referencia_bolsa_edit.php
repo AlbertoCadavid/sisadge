@@ -398,7 +398,8 @@ $totalRows_ref_cirel = mysql_num_rows($ref_cirel);
 
 
 $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_bolsa'] : $row_referencia_editar['tipo_bolsa_ref'];
- 
+
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*');
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -611,14 +612,22 @@ $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_b
         <td id="fuente1">FONDO</td>
       </tr>
       <tr>
-        <td id="fuente1"><select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:100px" onChange="calcular_pesom();" onblur="anchoRolloRef();" > 
+        <td id="fuente1">
+
+          <!-- <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:100px" onChange="calcular_pesom();" onblur="anchoRolloRef();" > 
           <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $tippobolsa))) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
           <option value="CURRIER" <?php if (!(strcmp("CURRIER", $tippobolsa))) {echo "selected=\"selected\"";} ?>>CURRIER</option>
           <option value="BOLSA PLASTICA" <?php if (!(strcmp("BOLSA PLASTICA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA PLASTICA</option>
           <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
           <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $tippobolsa))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
-          <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option>
-        </select></td>
+          <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option> -->
+          <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:220px" onChange="calcular_pesom();" onblur="anchoRolloRef();" > 
+                 <?php  foreach($row_formulas as $row_formulas ) { ?>
+              <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+          <?php } ?>
+          </select> 
+        </select>
+      </td>
         <td id="fuente1">
           <select name="tipo_sello_egp" id="tipo_sello_egp" style="width:100px">
           <option></option>
@@ -787,8 +796,8 @@ $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_b
           <option value="COEXTRUSION" <?php if (!(strcmp("COEXTRUSION", $row_referencia_editar['tipo_ext_egp']))) {echo "selected=\"selected\"";} ?>>COEXTRUSION</option></select>-->
           
           <!--<input type="hidden" name="material_ref" id="material_ref" value="<?php echo $row_referencia_editar['material_ref'] ?>" />--></td>
-        <td id="dato1"><input type="text" name="pigm_ext_egp" value="<?php echo $row_referencia_editar['pigm_ext_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pigm_int_epg" value="<?php echo $row_referencia_editar['pigm_int_epg']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1"><input type="text" name="pigm_ext_egp" id="pigm_ext_egp" value="<?php echo $row_referencia_editar['pigm_ext_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1"><input type="text" name="pigm_int_epg" id="pigm_int_epg" value="<?php echo $row_referencia_editar['pigm_int_epg']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
         <td id="fuente1">Numero de Colores</td>
@@ -1301,7 +1310,54 @@ $('#tipolam').on('change', function() {
    }
  });
 
-
+ $('#tipo_bolsa_ref').on('change', function() { 
+          if($("#tipo_bolsa_ref").val() == 'Sika'){
+               $("#material_ref").val("PIGMENTADO B/B");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("BLANCO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Pigmentada Tratada Doble Cara'){
+               $("#material_ref").val("PIGMENTADO B/N");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("NEGRO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Seguridad pigmentado B/N'){
+               $("#material_ref").val("PIGMENTADO B/N");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("NEGRO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Seguridad pigmentado Blanca'){
+               $("#material_ref").val("PIGMENTADO B/B");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("BLANCO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Currier Pigmentado oxobiodegradable B/N'){
+               $("#material_ref").val("PIGMENTADO B/N");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("NEGRO");  
+          }else if($("#tipo_bolsa_ref").val() == 'Currier Pigmentado B/N'){
+               $("#material_ref").val("PIGMENTADO B/N");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("NEGRO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Pigmentada Blanca'){
+               $("#material_ref").val("PIGMENTADO B/B");
+               $("#pigm_ext_egp").val("BLANCO");
+               $("#pigm_int_epg").val("BLANCO"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Seguridad transparente y monedas'){
+               $("#material_ref").val("TRANSPARENTE");
+               $("#pigm_ext_egp").val("TRANSPARENTE");
+               $("#pigm_int_epg").val("TRANSPARENTE"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Currier transparente'){
+               $("#material_ref").val("TRANSPARENTE");
+               $("#pigm_ext_egp").val("TRANSPARENTE");
+               $("#pigm_int_epg").val("TRANSPARENTE");
+          }else if($("#tipo_bolsa_ref").val() == 'Alta Densidad'){
+               $("#material_ref").val("TRANSPARENTE"); 
+               $("#pigm_ext_egp").val("TRANSPARENTE");
+               $("#pigm_int_epg").val("TRANSPARENTE"); 
+          }else if($("#tipo_bolsa_ref").val() == 'Formulacion Agua'){
+               $("#material_ref").val("TRANSPARENTE");
+               $("#pigm_ext_egp").val("TRANSPARENTE");
+               $("#pigm_int_epg").val("TRANSPARENTE"); 
+          }
+  
+  });
    
 
 </script>

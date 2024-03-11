@@ -1,4 +1,8 @@
-<?php require_once('Connections/conexion1.php'); ?>
+<?php
+   require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+   require (ROOT_BBDD); 
+?>
+ <?php require_once('Connections/conexion1.php'); ?>
 <?php
 //initialize the session
 if (!isset($_SESSION)) {
@@ -60,6 +64,8 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) {
   return $isValid; 
 }
 
+$conexion = new ApptivaDB();
+
 $MM_restrictGoTo = "usuario.php";
 if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {   
   $MM_qsChar = "?";
@@ -103,6 +109,10 @@ NOT IN(SELECT Tbl_referencia.cod_ref FROM  Tbl_referencia)";
 $referencianueva3 = mysql_query($query_referencianueva3, $conexion1) or die(mysql_error());
 $row_referencianueva3 = mysql_fetch_assoc($referencianueva3);
 $totalRows_referencianueva3 = mysql_num_rows($referencianueva3);
+
+
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*'); 
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -174,35 +184,40 @@ $totalRows_referencianueva3 = mysql_num_rows($referencianueva3);
                           <!--<td id="dato3"><?php echo $row_referencianueva['N_referencia_c']; ?></td>-->
                           <td id="dato2"><?php echo $row_referencianueva['N_cotizacion']; ?></td>
                           <form name="form1" method="post" action="referencia_nueva2.php" enctype="multipart/form-data" onsubmit="MM_validateForm('presen','','R','trata','','R');return document.MM_returnValue">
-                           <td id="dato2"><?php /*if($row_referencianueva['B_sellado_seguridad']==1){echo "SEGURIDAD";}else if($row_referencianueva['B_sellado_permanente']==1){echo "CURRIER";}else if($row_referencianueva['B_sellado_resellable']==1){echo "CURRIER";}else if($row_referencianueva['B_sellado_hotm']==1){echo "CURRIER";}else if($row_referencianueva['tipo_bolsa']=="COMPOSTABLE"){echo "COMPOSTABLE";}else{echo $tippobolsa;} */
-
-                             $tippobolsa=$row_referencianueva['tipo_bolsa'];
-
-                           ?>
-
-                           <select name="tipo_bolsa" id="tipo_bolsa" style="width:100px" required >
-                             <option value=""></option> 
-                             <option value="SEGURIDAD"<?php if ($row_referencianueva['B_sellado_seguridad']==1) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
-                             <option value="CURRIER"<?php if ($row_referencianueva['B_sellado_permanente']==1 || $row_referencianueva['B_sellado_resellable']==1||$row_referencianueva['B_sellado_hotm']==1) {echo "selected=\"selected\"";} ?>>CURRIER</option>
+                           <td id="dato2"><?php $tippobolsa=$row_referencianueva['tipo_bolsa']; ?>
+                            
+                           <!-- <select name="tipo_bolsa" id="tipo_bolsa" style="width:130px" required >
+                             <option value="">Seleccione...</option> 
+                             <option value="SEGURIDAD" <?php if(!(strcmp("SEGURIDAD", $tippobolsa))) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
+                             <option value="CURRIER" <?php if (!(strcmp("CURRIER", $tippobolsa))) {echo "selected=\"selected\"";} ?>>CURRIER</option>
                              <option value="BOLSA PLASTICA" <?php if(!(strcmp("BOLSA PLASTICA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA PLASTICA</option>
                              <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
                              <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $tippobolsa))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
                              <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option>
-                           </select>
+                             <option value="AGUA" <?php if (!(strcmp("AGUA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>AGUA</option>
+                             <option value="SIKA" <?php if (!(strcmp("SIKA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>SIKA</option>
+                           </select> -->
+
+                           <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required>
+                               <option value="">Seleccione...</option>
+                                  <?php  foreach($row_formulas as $row_formulas ) { ?>
+                               <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                           <?php } ?>
+                           </select> 
  
                </td> 
         <td nowrap="nowrap" id="dato1"> 
-      <?php if ($row_referencianueva['N_solapa'] > 0){?>
-          <input type="radio" name="Tiposolapa" id="ocultar" value="0" required/>N/A<br/> 
-          <input type="radio" name="Tiposolapa" id="mostrar" value="2"/>Sencilla<br/>
-          <input type="radio" name="Tiposolapa" id="mostrar" value="1"/>Doble
+      <?php if($row_referencianueva['N_solapa'] > 0){?>
+          <input type="radio" name="Tiposolapa" id="ocultar" value="0"<?php if (!(strcmp($row_referencianueva['tiposolapa'],0))) {echo "checked=\"checked\"";} ?> required/>N/A<br/> 
+          <input type="radio" name="Tiposolapa" id="mostrar" value="2"<?php if (!(strcmp($row_referencianueva['tiposolapa'],2))) {echo "checked=\"checked\"";} ?>/>Sencilla<br/>
+          <input type="radio" name="Tiposolapa" id="mostrar" value="1"<?php if (!(strcmp($row_referencianueva['tiposolapa'],1))) {echo "checked=\"checked\"";} ?>/>Doble
 
-        <?php }?>
+        <?php } ?>
           </td>
           <td id="dato2"><?php echo $row_referencianueva['Str_tipo_coextrusion']; ?></td>
           <td colspan="3" id="dato1">
 
-            <select name="presen" id="presen" style="width:95px">
+            <select name="presen" id="presen" style="width:95px" required="required">
               <option value=""></option>
               <option value="N.A">N.A</option>
               <option value="LAMINA">LAMINA</option>
@@ -231,7 +246,6 @@ $totalRows_referencianueva3 = mysql_num_rows($referencianueva3);
           <input name="cod_ref" type="hidden" id="cod_ref" value="<?php echo $row_referencianueva['N_referencia_c']; ?>">
           <input name="Str_nit" type="hidden" id="Str_nit" value="<?php echo $row_referencianueva['Str_nit']; ?>">
           <input name="valor_impuesto" type="hidden" id="valor_impuesto" value="<?php echo $row_referencianueva['valor_impuesto']; ?>">
-
           <input name="id" type="hidden" id="id" value="2" />
         </form>
       </td>

@@ -137,7 +137,7 @@ $totalRows_usuario = mysql_num_rows($usuario);
     <td id="detalle1"><a href="vendedores.php">VENDEDORES</a></td>
     <td id="detalle1"><a href="medida.php">MEDIDA DE INSUMO</a></td>
     <td id="detalle1"><a href="tipo_generador.php">TIPOS DE GENERADOR </a></td>
-    <td id="detalle1"><a href="view_index.php?c=cformulacion&a=Inicio">FORMULACIONES </a></td>
+    <td id="detalle1"><a href="view_index.php?c=cformulacion&a=Inicio&proceso=1&material=1">FORMULACIONES </a></td>
   </tr>
   <tr id="tr3">
     <td id="detalle1"><a href="empleado_tipo.php">TIPO DE EMPLEADO</a></td>

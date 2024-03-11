@@ -258,12 +258,24 @@ C22.style.display = tem_valor;
   <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,tipo_bolsa_ref); echo $var; ?></td>
   <?php } ?>
 </tr>-->
-<tr>
-  <td id="subppal4">MATERIAL</td>
-  <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
-  <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,Str_tipo_coextrusion); echo $var; ?></td>
-  <?php } ?>
-</tr>               
+       <tr>
+         <td id="subppal4">TIPO DE BOLSA</td>
+         <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
+         <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,tipo_bolsa); echo $var; ?></td>
+         <?php } ?>
+        </tr>
+       <tr>
+          <td id="subppal4">SELLO SUPERIOR </td>
+          <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
+          <td id="fuente2"><?php $sell=mysql_result($ver_nueva,$i,sello_superior); echo $sell; ?></td>
+          <?php } ?>
+        </tr>               
+        <tr>
+         <td id="subppal4">MATERIAL</td>
+         <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
+         <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,Str_tipo_coextrusion); echo $var; ?></td>
+         <?php } ?> 
+       </tr>
         <tr>
           <td id="subppal4">ANCHO(cm)  </td>
           <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
@@ -295,7 +307,7 @@ C22.style.display = tem_valor;
         </td>
           <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
           <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,N_solapa);
-        $varsencilla=mysql_result($ver_existente,$j,b_solapa_caract_ref);
+         $varsencilla=mysql_result($ver_nueva,$i,tiposolapa);
          echo $var.' '; 
          switch ($varsencilla) {
              case '0':
@@ -455,18 +467,24 @@ C22.style.display = tem_valor;
           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
           <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,version_ref); echo $var; ?>		  </td><?php } ?>
         </tr>-->
-<!--<tr>
-  <td id="subppal4">TIPO DE BOLSA</td>
-  <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
-  <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,tipo_bolsa_ref); echo $var; ?></td>
-  <?php } ?>
-</tr>-->
-<tr>
-  <td id="subppal4">MATERIAL</td>
-  <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
-  <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,Str_tipo_coextrusion); echo $var; ?></td>
-  <?php } ?>
-</tr>               
+          <tr>
+           <td id="subppal4">TIPO DE BOLSA</td>
+           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
+           <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,tipo_bolsa); echo $var; ?></td>
+           <?php } ?>
+         </tr> 
+        <tr>
+           <td id="subppal4">SELLO SUPERIOR </td>
+           <?php  for ($j=0;$j<=$num1-1;$j++) { ?>
+           <td id="fuente2"><?php $sell=mysql_result($ver_existente,$j,sello_superior); echo $sell; ?></td>
+           <?php } ?>
+         </tr> 
+        <tr>
+          <td id="subppal4">MATERIAL</td>
+          <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
+          <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,Str_tipo_coextrusion); echo $var; ?></td>
+          <?php } ?>
+        </tr>               
         <tr>
           <td id="subppal4">ANCHO(cm)  </td>
           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
@@ -500,7 +518,7 @@ C22.style.display = tem_valor;
           </td>
           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
           <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,solapa_ref);
-          $varsencilla=mysql_result($ver_existente,$j,b_solapa_caract_ref);
+          $varsencilla=mysql_result($ver_existente,$j,tiposolapa);
            echo $var.' '; 
            switch ($varsencilla) {
                case '0':

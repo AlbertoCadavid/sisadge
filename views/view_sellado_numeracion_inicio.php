@@ -758,7 +758,7 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
     else {
       let res = alertafaltantes();
       if (res) {
-        //envioEdit($("#int_op_tn").val(), $("#int_caja_tn").val());
+        envioEdit($("#int_op_tn").val(), $("#int_caja_tn").val());
       }
     }
   }
@@ -833,7 +833,6 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
     let opcionesDesperdicio = <?php echo json_encode($row_desperdicios)?>;
 
     file0.setAttribute("name", "id_rpd[]");
-    /*file0.setAttribute("onChange", "restakilosD()" ); */
     file0.setAttribute("required", "required");
     file0.options[0] = new Option('Desperdicio', '');
     

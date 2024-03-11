@@ -224,6 +224,21 @@ class oMsellado
         }
     }
 
+    public function guardarDesperdicios($tabla, $columna, $data)
+    {
+
+        try {
+
+            $array_codificado = UtilHelper::arrayEncode($data);
+            $array_deco = UtilHelper::arrayDecode($array_codificado);
+            $arrayPHP =  ($array_deco);
+            $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['id_rpd_rd'] . "','" . $arrayPHP['valor_desp_rd'] . "','" . $arrayPHP['op_rd'] . "','" . $arrayPHP['int_rollo_rd'] . "','" . $arrayPHP['id_proceso_rd'] . "','" . $arrayPHP['fecha_rd'] . "','" . $arrayPHP['cod_ref_rd'] . "' );");
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+
 
     public function Update($tabla, $sets, $condicion, $columna = "", $columna2 = "", $columna3 = "", $data)
     {
@@ -356,7 +371,7 @@ class oMsellado
 
     public function consultaRollos3tablas($mostrar1, $mostrar2, $mostrar3, $tabla1, $tabla2, $tabla3, $where1, $where2, $where3)
     {
-        /* echo "SELECT $mostrar1 FROM $tabla1 WHERE $where1"; die; */
+        
         $result = $this->conexion->query("SELECT $mostrar1 FROM $tabla1 WHERE $where1");
 
         $data = [self::getResultados($result), true];

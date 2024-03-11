@@ -60,8 +60,8 @@ $conexion = new ApptivaDB();
           </tr>
           <?php foreach($this->modelos as $modelos) { ?>
             <tr >
-              <td id="detalle1"><a href="view_index.php?c=cformulacion&a=llenarEditar&id_for=<?php echo $modelos['id_for']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $modelos['nombre']; ?></a></td>
-              <td id="detalle1"><a href="view_index.php?c=cformulacion&a=llenarEditar&id_for=<?php echo $modelos['id_for']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $modelos['formulacion']; ?></a></td>
+              <td id="detalle1"><a href="view_index.php?c=cformulacion&a=llenarEditar&id_for=<?php echo $modelos['id_for']; ?>&proceso=1&material=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $modelos['nombre']; ?></a></td>
+              <td id="detalle1"><a href="view_index.php?c=cformulacion&a=llenarEditar&id_for=<?php echo $modelos['id_for']; ?>&proceso=1&material=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $modelos['formulacion']; ?></a></td>
               <td id="detalle2">
                
                 <!-- <a class="botonDel" id="btnDelItems" onclick='eliminar("<?php echo $modelos['id_for']; ?>","id_for","0","view_index.php?c=cformulacion&a=Eliminar","0" )' type="button">DELETE</a> -->
@@ -71,7 +71,9 @@ $conexion = new ApptivaDB();
             <?php } ?>
           <tr>
             <td id="dato2"><input name="nombre" type="text" id="nombre" value="" size="5" required /></td>
-            <td colspan="2" id="dato2"><input name="formulacion" type="text" id="formulacion" value="" size="30" required/></td>
+            <td colspan="2" id="dato2"><input name="formulacion" type="text" id="formulacion" value="" size="30" required/>
+            <input type="hidden" name="proceso" value="1">
+            <input type="hidden" name="material" value="1"></td>
             </tr>
           <tr>
             <td colspan="3" id="dato2"><input type="submit" value="ADICIONAR FORMULACION"></td>
@@ -102,6 +104,8 @@ $conexion = new ApptivaDB();
             </tr>
         </table>
         <input type="hidden" name="id_for" value="<?php echo $this->modelos_editar['id_for']; ?>">
+        <input type="hidden" name="proceso" value="1">
+        <input type="hidden" name="material" value="1">
         <input type="hidden" name="MM_update" value="form2">
       </form>
       <?php } ?>

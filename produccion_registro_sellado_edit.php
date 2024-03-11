@@ -559,6 +559,7 @@ $colname_tiempoMuerto = "-1";
 if (isset($id_op)) {
   $colname_tiempoMuerto = (get_magic_quotes_gpc()) ? $id_op : addslashes($id_op);
 }
+
 mysql_select_db($database_conexion1, $conexion1);
 $query_tiempoMuerto = sprintf("SELECT *, valor_tiem_rt AS muertos FROM Tbl_reg_tiempo WHERE op_rt='%s' AND int_rollo_rt = '$rolloNum' AND id_proceso_rt='4' ORDER BY id_rpt_rt ASC", $colname_tiempoMuerto);
 $tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
@@ -1273,8 +1274,7 @@ $totalRows_referencia = mysql_num_rows($referencia);
                               $totalTM += $var1; ?>
               <!--<input name="standby[]" id="standby[]" type="hidden" value="<?php echo $nombre1; ?> "/>-->
             </td>
-            <td id="fuente1"><a href="javascript:eliminar_varias('id_rts',<?php $delrt = mysql_result($tiempoMuerto, $k, id_rt);
-                                                                          echo $delrt; ?>,'id_rs',<?php echo $row_rollo_sellado_edit['id_r']; ?>,'produccion_registro_sellado_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0" /></a></td>
+            <td id="fuente1"><a href="javascript:eliminar_varias('id_rts',<?php $delrt = mysql_result($tiempoMuerto, $k, id_rt); echo $delrt; ?>,'id_rs',<?php echo $row_rollo_sellado_edit['id_r']; ?>,'produccion_registro_sellado_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0" /></a></td>
           </tr>
         <?php } ?>
         <tr>

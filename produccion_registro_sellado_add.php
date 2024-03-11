@@ -128,6 +128,7 @@ $conexion = new ApptivaDB(); //consultas
 
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+  
   //COSTO SELLADO
   $id_op = $_POST['id_op_rp'];
   $metros_imp = $_POST['metro_r2'];
@@ -447,13 +448,24 @@ WHERE a.tipo_empleado IN(7,9) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_SE
 
     for ($s = 0; $s < count($f); $s++) {
       if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios
-
-
         /*$id_proceso_rp = $conexion->seleccionProceso($f[$s],$_POST['rollo_rp'],$_POST['id_op_rp'],$g[$s],$_POST['metro_r2']);
         $id_proceso_rp = $id_proceso_rp=='' ? $_POST['id_proceso_rp'] : $id_proceso_rp;*/
-
         //$id_proceso_rp = seleccionProceso($f[$s],$_POST['rollo_rp'],$_POST['id_op_rp'],$g[$s]);
         $id_proceso_rp = $_POST['id_proceso_rp'];
+
+        if($_POST['id_rd'][$s] != ""){
+          $insertSQLd = sprintf(
+            "UPDATE `tbl_reg_desperdicio` SET `id_rpd_rd`= %s,`valor_desp_rd`= %s,`op_rd`= %s,`int_rollo_rd`= %s,`id_proceso_rd`= %s,`fecha_rd`= %s,`cod_ref_rd`= %s WHERE id_rd = %s", 
+            GetSQLValueString($f[$s], "int"),
+            GetSQLValueString($g[$s], "double"),
+            GetSQLValueString($_POST['id_op_rp'], "int"),
+            GetSQLValueString($_POST['rollo_rp'], "int"),
+            GetSQLValueString($id_proceso_rp, "int"),
+            GetSQLValueString($_POST['fecha_ini_rp'], "date"),
+            GetSQLValueString($_POST['int_cod_ref_rp'], "text"),
+            GetSQLValueString($_POST['id_rd'][$s], "int")
+          );
+        } else {
         $insertSQLd = sprintf(
           "INSERT INTO Tbl_reg_desperdicio (id_rpd_rd,valor_desp_rd,op_rd,int_rollo_rd,id_proceso_rd,fecha_rd,cod_ref_rd) VALUES (%s,%s, %s, %s, %s, %s, %s)",
           GetSQLValueString($f[$s], "int"),
@@ -464,8 +476,10 @@ WHERE a.tipo_empleado IN(7,9) AND b.fecha BETWEEN DATE_FORMAT('$FECHA_NOVEDAD_SE
           GetSQLValueString($_POST['fecha_ini_rp'], "date"),
           GetSQLValueString($_POST['int_cod_ref_rp'], "text")
         );
+      }
         mysql_select_db($database_conexion1, $conexion1);
         $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
+
       }
     }
   }
@@ -627,6 +641,7 @@ $query_desperdicios = "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE Tbl_reg_tipo
 $desperdicios = mysql_query($query_desperdicios, $conexion1) or die(mysql_error());
 $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
+
 
 //EL ID_REF ES ENVIADO DESDE VISTA DE REFERENCIA
 

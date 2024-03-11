@@ -102,19 +102,58 @@ $sql="SELECT * FROM Tbl_cotiza_bolsa WHERE Tbl_cotiza_bolsa.N_cotizacion='$n_cn'
 $result=mysql_query($sql);
 while ($row=mysql_fetch_array($result)) {
 //FUNCION PARA GUARDAR EL PESO MILLAR EN LA REFERENCIA
-/*0-N_cotizacion	1-N_referencia_c	2-Str_nit	3-N_ancho	4-N_alto	5-B_fuelle	6-N_calibre	7-B_troquel	
-8-B_precorte 9-B_bolsillo	10-N_tamano_bolsillo	11-N_solapa	12-Str_moneda	13-N_precio	14-Str_unidad_vta	
-15-Str_plazo 16-Str_incoterms	17Str_tipo_coextrusion	18-Str_capa_ext_coext	19-Str_capa_inter_coext	
-20-N_cant_impresion	21-B_impresion	22-N_colores_impresion	23-B_cyreles	24-B_sellado_seguridad	25-B_sellado_permanente	
-26-B_sellado_resellable	27-B_sellado_hotm	28-Str_sellado_lateral	29-B_fondo	30-B_codigo_b	31-B_numeracion	
-32-fecha_creacion	33-Str_usuario	34-N_comision	35-B_estado	 36-B_generica*/
+/*
+0 N_cotizacion
+1 N_referencia_c
+2 Str_nit
+3 N_ancho
+4 N_alto
+5 B_fuelle
+6 N_calibre
+7 B_troquel
+8 B_precorte
+9 B_bolsillo
+10  N_tamano_bolsillo
+11  N_solapa
+12  Str_moneda
+13  N_precio
+14  Str_unidad_vta
+15  Str_plazo
+16  Str_incoterms
+17  Str_tipo_coextrusion
+18  Str_capa_ext_coext
+19  Str_capa_inter_coext
+20  N_cant_impresion
+21  B_impresion
+22  N_colores_impresion
+23  B_cyreles
+24  B_sellado_seguridad
+25  B_sellado_permanente
+26  B_sellado_resellable
+27  B_sellado_hotm
+28  Str_sellado_lateral
+29  B_fondo
+30  B_codigo_b
+31  B_numeracion
+32  fecha_creacion
+33  Str_usuario
+34  N_comision
+35  B_estado
+36  B_generica
+37  tipo_bolsa
+38  tiposolapa
+39  N_precio_old
+40  impuesto
+41  pdf_impuesto
+42  valor_impuesto
+*/
 $ancho=$row[3];	
 $alto=$row[4];
 $fuelle=$row[5];
 $calibre=$row[6];
 $solapaT=$row[11];
 $solapa=($solapaT/$Tiposolapa);
-$constan= $tipo_bolsa=="COMPOSTABLE" ? 0.00665 : 0.00467;
+$constan= $tipo_bolsa=="COMPOSTABLE" ? 0.00665 : 0.00467;//hay q preguntar cual es la compostable en la nueva formula
  
 $subm=($ancho * ($alto+$fuelle+$solapa)*$calibre*$constan);//en js es var subm=ancho*(larg+fuelle+dsolapa)*calibre*cons;
 $var5=($subm*100)/100;
@@ -134,10 +173,10 @@ $adhesivo=$seg.$per.$res.$hot;
 //ESTAS SON LAS COLUMNAS DE LA TABLA BOLSAS
 /*	REFERENCIA  */
  
-$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, 
+$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, tipo_formula, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, 
 N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, largo_ref, solapa_ref, b_solapa_caract_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p, B_troquel, 
 B_precorte, N_fuelle, B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref, registro2_ref, fecha_registro2_ref, B_generica, valor_impuesto
-) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','','$row[41]')";
+) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$tipo_bolsa','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','','$row[42]')";
  
 $result1=mysql_query($sql1); 
 //INSERTA EGP
@@ -180,9 +219,9 @@ $psm= number_format($ps,2);
 /*0N_cotizacion	1N_referencia_c	2Str_nit	3N_ancho	4N_alto	5N_cantidad	6N_calibre	7Str_incoterms	8Str_moneda	
 9N_precio_vnta	10Str_boca_entrada	11B_impresion	12N_colores_impresion	13B_cyreles	14Str_ubica_entrada	
 15Str_lam1	16Str_lam2	17Str_unidad_vta	18Str_plazo	19fecha_creacion	20Str_usuario	21N_comision	22B_estado	23B_generica*/
-$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, 
+$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, tipo_formula, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, 
 largo_ref, solapa_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,N_fuelle,B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica, valor_impuesto
-) VALUES ('$row[1]','00','$row[1]','$row[0]','PACKING LIST','PACKING LIST','$presen2','$trata2','$row[3]','','','','','','','','$row[4]','','','$row[6]','$psm','$row[10]','$row[14]','$row[15]','$row[16]','0','0','0','$row[12]','0','0','N.A','1','$registro','$fecha','','','0','$row[27]')";
+) VALUES ('$row[1]','00','$row[1]','$row[0]','PACKING LIST','PACKING LIST','PACKING LIST','$presen2','$trata2','$row[3]','','','','','','','','$row[4]','','','$row[6]','$psm','$row[10]','$row[14]','$row[15]','$row[16]','0','0','0','$row[12]','0','0','N.A','1','$registro','$fecha','','','0','$row[27]')";
 $result1=mysql_query($sql1);
 //INSERTA EGP
 //ESTAS SON LAS COLUMNAS DE LA TABLA EGP
@@ -218,8 +257,8 @@ $psm= number_format($ps,2);
 //ESTAS SON LAS COLUMNAS DE LA TABLA LAMINAS
 /*0N_cotizacion	1N_referencia_c	2Str_nit	3N_ancho	4N_repeticion	5N_calibre	6Str_tipo_coextrusion	7Str_capa_ext_coext	8Str_capa_inter_coext	9N_embobinado	10Str_plazo	11N_cantidad_metros_r	12Str_incoterms	13B_impresion	14N_colores_impresion	15B_cyreles	16N_cantidad	17N_peso_max	18N_diametro_max	19Str_moneda	20N_precio_k  21Str_unidad_vta	 22fecha_creacion	23Str_usuario	24N_comision	25B_estado	26B_generica*/
 
-$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, material_ref,Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l,	N_diametro_max_l, N_peso_max_l, N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, largo_ref, solapa_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,N_fuelle,B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica, valor_impuesto
-) VALUES ('$row[1]','00','$row[1]','$row[0]','LAMINA','$row[6]','$presen3','$trata3','$row[3]','$row[4]','$row[18]','$row[17]','$row[11]','$row[9]','0','0','0','0','0','$row[5]','$psm','0','0','0','0','0','0','0','$row[14]','0','0','N.A','1','$registro','$fecha','','','0','$row[30]')";
+$sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, tipo_formula, material_ref,Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l,	N_diametro_max_l, N_peso_max_l, N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, largo_ref, solapa_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,N_fuelle,B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica, valor_impuesto
+) VALUES ('$row[1]','00','$row[1]','$row[0]','LAMINA','LAMINA','$row[6]','$presen3','$trata3','$row[3]','$row[4]','$row[18]','$row[17]','$row[11]','$row[9]','0','0','0','0','0','$row[5]','$psm','0','0','0','0','0','0','0','$row[14]','0','0','N.A','1','$registro','$fecha','','','0','$row[30]')";
 
 $result1=mysql_query($sql1);
 //INSERTA EGP

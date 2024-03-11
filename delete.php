@@ -43,7 +43,7 @@ $egl=$_GET['egl'];
 $n_egl=$_GET['n_egl'];
 $id_color=$_GET['id_color'];
 $id_archivo=$_GET['id_archivo'];
-/*----GESTION DISEÑO Y DESARROLLO--BOLSAS--*/
+/*----GESTION DISEï¿½O Y DESARROLLO--BOLSAS--*/
 $id_refcliente=$_GET['id_refcliente'];
 $id_ref=$_GET['id_ref'];
 $id_rev=$_GET['id_rev'];
@@ -53,7 +53,7 @@ $id_cm=$_GET['id_cm'];
 $id_ref_cm=$_GET['id_ref_cm'];
 $id_val=$_GET['id_val'];
 $n_ft=$_GET['n_ft'];
-/*----GESTION DISEÑO Y DESARROLLO LAMINAS-*/
+/*----GESTION DISEï¿½O Y DESARROLLO LAMINAS-*/
 $id_rev_l=$_GET['id_rev_l'];
 $id_verif_l=$_GET['id_verif_l'];
 $id_val_l=$_GET['id_val_l'];
@@ -102,6 +102,8 @@ $id_rts=$_GET['id_rts'];//ELIMINAR EN DELETE2
 $id_rps=$_GET['id_rps'];//ELIMINAR EN DELETE2
 $id_rds=$_GET['id_rds'];//ELIMINAR EN DELETE2 
 $id_regpro=$_GET['id_regpro'];
+$id_desperdicio=$_GET['id_desperdicio']; //ELIMINAR DESPERDICIO EN ROLLO ADD SELLADO
+$id_orden=$_GET['id_orden']; //ELIMINAR DESPERDICIO EN ROLLO ADD SELLADO
 
 /*----------SELLADO PARCIAL-------*/
 $id_reRSp=$_GET['id_rsp']; //VARIABLE DE ROLLO PARA EDIT
@@ -485,7 +487,7 @@ if($n_egp!='') {
 											header("location:egp_lamina_archivos.php?n_egl=$n_egl");
 										}
 										/*----------------------------------------------------------------------*/
-										/*----------------------GESTION DE DISEÑO Y DESARROLLO------------------*/
+										/*----------------------GESTION DE DISEï¿½O Y DESARROLLO------------------*/
 										/*DELETE REFERENCIA-CLIENTE*/
 										if($id_refcliente!='') {
 											$sqlref="SELECT * FROM Tbl_cliente_referencia,Tbl_referencia WHERE Tbl_cliente_referencia.id_refcliente='$id_refcliente' and Tbl_cliente_referencia.N_referencia=Tbl_referencia.cod_ref ";
@@ -1689,6 +1691,12 @@ if($id_rds!='') {
 	$resulrd=mysql_query($sqlrd);
 	header("location:produccion_registro_sellado_edit.php?id_r=$id_reRS");
 }
+}
+
+if($id_desperdicio!=""){
+	$sqlrd="DELETE FROM Tbl_reg_desperdicio WHERE id_rd='$id_desperdicio'";
+	$resulrd=mysql_query($sqlrd);
+	header("location:produccion_registro_sellado_add.php?id_op=$id_orden");
 }
 
 

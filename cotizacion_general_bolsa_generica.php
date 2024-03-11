@@ -224,6 +224,9 @@ $row_referencias2 = $conexion->llenaListas("Tbl_cliente_referencia, Tbl_referenc
 $row_referencias3 = $conexion->llenaListas('Tbl_referencia',"","WHERE Tbl_referencia.tipo_bolsa_ref <> 'LAMINA' and Tbl_referencia.tipo_bolsa_ref <> 'PACKING LIST' AND B_generica='2' ORDER BY CONVERT( cod_ref, SIGNED INTEGER) DESC",'DISTINCT  id_ref, cod_ref, n_cotiz_ref '); 
 
 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*'); 
+
+
 //TRAE EL NUMERO DE REFERENCIA +1 PARA GUARDARLO SI NO ESCOGE GENERICA
 mysql_select_db($database_conexion1, $conexion1);
 $query_ref= "SELECT N_referencia FROM Tbl_cliente_referencia ORDER BY N_referencia DESC";
@@ -531,14 +534,25 @@ swal({
                       </tr>
                       <tr>
                         <td id="fuente1">Ancho (cms)</td>
-                        <td colspan="2" id="fuente1">Alto (cms)</td>
+                        <td id="fuente1">Alto (cms)</td>
+                        <td id="fuente1">Sello Superior</td>
                         <td id="fuente1">Solapa (cms)</td>
                         <td id="fuente1">Sencilla/Doble</td>
                         <td id="fuente1">Fuelle (cms)</td>
                       </tr>
                       <tr>
-                        <td id="dato1"><input name="N_ancho" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_ancho" value="<?php echo $row_bolsa['ancho_ref']?>" /></td>
-                        <td colspan="2" id="dato1"><input name="N_alto" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_alto" value="<?php echo $row_bolsa['largo_ref']?>"/></td>
+                        <td id="dato1"><input name="N_ancho" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_ancho" value="<?php echo $row_bolsa['ancho_ref']?>" />
+                        </td>
+                        <td id="dato1"><input name="N_alto" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_alto" value="<?php echo $row_bolsa['largo_ref']?>"/>
+                        </td>
+                        <td id="dato1">
+                         <select name="sello_superior" id="sello_superior" style="width:100px" >
+                           <option value="" >N/A</option>
+                           <option value="Sencilla" >Sencilla</option>
+                           <option value="Doble" >Doble</option>
+                           <option value="Refuerzo" >Refuerzo</option>
+                         </select>
+                        </td>  
                         <td colspan="2" id="dato1"><input name="N_solapa" type="number" style=" width:70px" min="0" step="0.01" id="N_solapa" required="required" value="<?php echo $row_bolsa['solapa_ref']=$row_bolsa['solapa_ref']=='' ? 0 : $row_bolsa['solapa_ref'];?>"/>
                           <select name="tiposolapa" id="tiposolapa" style="width:100px" >
                             <option value="0" >N/A</option>
@@ -546,7 +560,7 @@ swal({
                             <option value="1" >Doble</option>
                           </select>
                         </td>
-                        <td id="dato1"><input name="B_fuelle" type="number" style=" width:70px" min="0" step="0.01" id="B_fuelle" value="<?php echo $row_bolsa['N_fuelle']?>"/></td>
+                        <td id="dato1"><input name="B_fuelle" type="number" style=" width:70px" min="0" step="0.01" id="B_fuelle" value="<?php echo $row_bolsa['N_fuelle']=='' ? 0 : $row_bolsa['N_fuelle'];?>"/></td>
                       </tr>
                       <tr>
                         <td id="fuente1">Calibre (micras)</td>
@@ -554,10 +568,16 @@ swal({
                         <td colspan="2" id="fuente1"> Bolsillo canguro</td>
                         <td id="fuente1">Tama&ntilde;o</td>
                       </tr>
-                      <tr>
+                      <tr> 
                         <td id="dato1"><input name="N_calibre" type="number" style=" width:70px" min="0" step="0.01" required="required" id="N_calibre" value="<?php echo $row_bolsa['calibre_ref']?>" size="3" /></td>
                         <td colspan="2" id="dato1">
-                          <select name="tipo_bolsa" id="tipo_bolsa" style="width:100px" required >
+                          <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required >
+                              <option value="">Seleccione...</option>
+                                 <?php  foreach($row_formulas as $row_formulas ) { ?>
+                              <option value="<?php echo $row_formulas['formulacion']?>"><?php echo $row_formulas['formulacion']?></option>
+                          <?php } ?>
+                          </select> 
+                          <!-- <select name="tipo_bolsa" id="tipo_bolsa" style="width:100px" required >
                             <option value="">Seleccione...</option> 
                             <option value="SEGURIDAD" >SEGURIDAD</option>
                             <option value="CURRIER" >CURRIER</option>
@@ -565,48 +585,55 @@ swal({
                             <option value="BOLSA MONEDA" >BOLSA MONEDA</option>
                             <option value="COMPOSTABLE" >COMPOSTABLE</option>
                             <option value="BOLSA TROQUELADA" >BOLSA TROQUELADA</option>
-                          </select>
+                            <option value="AGUA" >AGUA</option>
+                            <option value="SIKA" >SIKA</option>
+                          </select> -->
                         </td>
                         <td colspan="2" id="dato1"><select name="B_bolsillo" id="B_bolsillo" onchange="mostrarBolsillo(this)">
-                          <option value="0"  selected="selected"  >NO</option>
+                          <option value="0" selected="selected" >NO</option>
                           <option value="1" >SI</option>
 
                         </select></td>
                         <td id="dato1"><input name="N_tamano_bolsillo"  type="number" style=" width:70px" min="0" step="0.01" value="<?php echo $row_bolsa['bolsillo_guia_ref']=='' ? 0 :$row_bolsa['bolsillo_guia_ref'] ?>" id="N_tamano_bolsillo"/></td>
-                      </tr>
-                      <tr>
-                        <td colspan="7" id="titulo3">&nbsp;</td>
-                      </tr>
-                      <tr id="tr1">
+                      </tr> 
+                      <!--<tr id="tr1">
                         <td colspan="7" id="titulo1">MATERIAL COEXTRUSION</td>
                       </tr>
                       <tr>
-                        <td id="fuente1">Material</td>
+                         <td id="fuente1">Material</td>
                         <td colspan="2" id="fuente7">&nbsp;</td>
-                        <td colspan="3" id="fuente1">Color:</td>
+                        <td colspan="3" id="fuente1">Color:</td> 
                       </tr>
-                      <tr>
-                        <td id="fuente1"><select name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" onChange="mostrarCapa(this)">
+                      <tr>-->
+                        <td id="fuente1">
+                          <input type="hidden" name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" value="" />
+                          <input type="hidden" name="Str_capa_ext_coext" id="Str_capa_ext_coext" value="" />
+                          <input type="hidden" name="Str_capa_inter_coext" id="Str_capa_inter_coext" value="" />
+                          <!-- <select name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" onChange="mostrarCapa(this)">
                           <option value="TRANSPARENTE"<?php if (!(strcmp("TRANSPARENTE", $row_bolsa['material_ref']))) {echo "selected=\"selected\"";} ?>>TRANSPARENTE</option>
                           <option value="PIGMENTADO B/N"<?php if (!(strcmp("PIGMENTADO B/N", $row_bolsa['material_ref']))) {echo "selected=\"selected\"";} ?>>PIGMENTADO B/N</option>
-                          <option value="PIGMENTADO B/B"<?php if (!(strcmp("PIGMENTADO B/B", $row_bolsa['material_ref']))) {echo "selected=\"selected\"";} ?>>PIGMENTADO B/B</option>
-
-                        </select></td>
-                        <td colspan="2" id="fuente3">Capa Externa:</td>
-                        <td colspan="3" id="fuente1"><select name="Str_capa_ext_coext" id="Str_capa_ext_coext">
+                          <option value="PIGMENTADO B/B"<?php if (!(strcmp("PIGMENTADO B/B", $row_bolsa['material_ref']))) {echo "selected=\"selected\"";} ?>>PIGMENTADO B/B</option> 
+                        </select> -->
+                      </td>
+                        <!-- <td colspan="2" id="fuente3">Capa Externa:</td>
+                        <td colspan="3" id="fuente1">
+                          <select name="Str_capa_ext_coext" id="Str_capa_ext_coext">
                           <option value="TRANSPARENTE"<?php if (!(strcmp("TRANSPARENTE", $row_bolsa['pigm_ext_egp']))) {echo "selected=\"selected\"";} ?>>TRANSP</option>
                           <option value="BLANCO"<?php if (!(strcmp("BLANCO", $row_bolsa['pigm_ext_egp']))) {echo "selected=\"selected\"";} ?>>BLANCO</option>
                           <option value="NEGRO"<?php if (!(strcmp("NEGRO", $row_bolsa['pigm_ext_egp']))) {echo "selected=\"selected\"";} ?>>NEGRO</option>
-                        </select></td>
+                        </select> -->
+                      </td>
                       </tr>
                       <tr>
                         <td id="fuente1">&nbsp;</td>
-                        <td colspan="2" id="fuente3">Capa Interna:</td>
-                        <td colspan="3" id="fuente1"><select name="Str_capa_inter_coext" id="Str_capa_inter_coext">
+                         <!-- <td colspan="2" id="fuente3">Capa Interna:</td>
+                        <td colspan="3" id="fuente1">
+                         <select name="Str_capa_inter_coext" id="Str_capa_inter_coext">
                           <option value="TRANSPARENTE"<?php if (!(strcmp("TRANSPARENTE", $row_bolsa['pigm_int_egp']))) {echo "selected=\"selected\"";} ?>>TRANSP</option>
                           <option value="BLANCO"<?php if (!(strcmp("BLANCO", $row_bolsa['pigm_int_epg']))) {echo "selected=\"selected\"";} ?>>BLANCO</option>
                           <option value="NEGRO"<?php if (!(strcmp("NEGRO", $row_bolsa['pigm_int_epg']))) {echo "selected=\"selected\"";} ?>>NEGRO</option>
-                        </select></td>
+                        </select> -->
+                      </td>
                       </tr>
                       <tr>
                         <td id="fuente1">&nbsp;</td>
@@ -985,11 +1012,12 @@ swal({
                 $("#tiposolapa").val("2"); //2 es sencilla por defecto
            }
    
-   }); 
+   });
+
   $('#calculaformula').on('change', function() { 
-      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio_old").val()!='' ) {   
+      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio").val()!='') {   
      
-      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio_old").val() );
+      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio").val()  );
     }
  });
 
@@ -1002,7 +1030,54 @@ swal({
         }
     });  
 
-
+       $('#tipo_bolsa').on('change', function() { 
+               if($("#tipo_bolsa").val() == 'Sika'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'Pigmentada Tratada Doble Cara'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado B/N'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado Blanca'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'Currier Pigmentado oxobiodegradable B/N'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO");  
+               }else if($("#tipo_bolsa").val() == 'Currier Pigmentado B/N'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'Pigmentada Blanca'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'Seguridad transparente y monedas'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }else if($("#tipo_bolsa").val() == 'Currier transparente'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE");
+               }else if($("#tipo_bolsa").val() == 'Alta Densidad'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE");  
+               }else if($("#tipo_bolsa").val() == 'Formulacion Agua'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }
+       
+       });
 
 
 

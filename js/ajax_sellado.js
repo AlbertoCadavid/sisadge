@@ -1,69 +1,114 @@
 // JavaScript Document
 
+function getClientData() {
+  var clientId = document.getElementById("idrollo").value;
+  var numRollo =
+    document.getElementById("idrollo").options[
+      document.getElementById("idrollo").selectedIndex
+    ].innerText;
 
- function getClientData(){
- 
- var clientId=document.getElementById("idrollo").value;
- 
-  $.ajax({ 
-    type:  'get',
-    url: 'consulta_registro_sellado.php',
-    data:{
-     "getClientId": clientId
+  $.ajax({
+    type: "get",
+    url: "consulta_registro_sellado.php",
+    data: {
+      getClientId: clientId,
+      rollo_r: numRollo,
     },
-   dataType: 'json',//define las variables a mostrar 
- }).done(function( data, textStatus, jqXHR ) {
+    dataType: "json", //define las variables a mostrar
+  })
+    .done(function (data, textStatus, jqXHR) {
+		
+      if (data) {
+        var html = "";
+        var i;
+        for (i = 0; i < data.length; i++) {
+          document.getElementById("bolsa_rp").readOnly = false;
 
-   if(data) {
-    var html = '';
-      var i;
-           for (i = 0; i < data.length; i++) {
-      
-              document.getElementById("bolsa_rp").readOnly = false;
-             
-              $("#placa_rp").val(data[i].placa_rp);
-              $("#kiloInicial").val(data[i].kilos);
-              $("#int_kilos_prod_rp").val(data[i].kilos);
-              $("#int_total_kilos_rp").val(data[i].kilos);
-              $("#str_maquina_rp").val(data[i].str_maquina_rp); 
-              $("#fecha_ini_rp").val(data[i].fecha_ini_rp);
-              $("#rollo_rp").val(data[i].rollo);
-              $("#metroInicial").val(data[i].metros);
-              $("#metro_r").val(data[i].metros);
-              $("#metroIni_r").val(data[i].metros);
-              $("#metro_r2").val(data[i].metros); 
-              $("#n_ini_rp").val(data[i].n_ini_rp);    
-              $("#numInicioControl").val(data[i].n_ini_rp);
-              $("#int_cod_empleado_rp").val(data[i].int_cod_empleado_rp);
-              $("#int_cod_liquida_rp").val(data[i].int_cod_liquida_rp);
+          $("#placa_rp").val(data[i].placa_rp);
+          $("#kiloInicial").val(data[i].kilos);
+          $("#int_kilos_prod_rp").val(data[i].kilos);
+          $("#int_total_kilos_rp").val(data[i].kilos);
+          $("#str_maquina_rp").val(data[i].str_maquina_rp);
+          $("#fecha_ini_rp").val(data[i].fecha_ini_rp);
+          $("#rollo_rp").val(data[i].rollo);
+          $("#metroInicial").val(data[i].metros);
+          $("#metro_r").val(data[i].metros);
+          $("#metroIni_r").val(data[i].metros);
+          $("#metro_r2").val(data[i].metros);
+          $("#n_ini_rp").val(data[i].n_ini_rp);
+          $("#numInicioControl").val(data[i].n_ini_rp);
+          $("#int_cod_empleado_rp").val(data[i].int_cod_empleado_rp);
+          $("#int_cod_liquida_rp").val(data[i].int_cod_liquida_rp);
         }
 
-      } 
- }).fail(function( jqXHR, textStatus, errorThrown ) {
-        
-        document.getElementById("bolsa_rp").readOnly = true;
+        var i = 0;
+        data[0].desperdicios.forEach((element) => {
+          var f = document.createElement("div");
+          var file0 = document.createElement("select");
+          file0.setAttribute("name", "id_rpd[]");
+          file0.options[i] = new Option(element.nombre_rtp, element.id_rpd_rd );
+          file0.setAttribute("style", "width:150px");
+          f.appendChild(file0);
 
- 		$("#placa_rp").val('');
- 		$("#kiloInicial").val('');
- 		$("#int_kilos_prod_rp").val('');
- 		$("#int_total_kilos_rp").val('');
- 		$("#str_maquina_rp").val(''); 
- 		$("#fecha_ini_rp").val('');
- 		$("#rollo_rp").val('');
- 		$("#metroInicial").val('');
- 		$("#metro_r").val('');
- 		$("#metroIni_r").val('');
- 		$("#metro_r2").val(''); 
- 		$("#n_ini_rp").val('');
- 		$("#numInicioControl").val('');
- 		$("#int_cod_empleado_rp").val('');
- 		$("#int_cod_liquida_rp").val(''); 
-   if ( console && console.log ) {
-     console.log( "La solicitud a fallado: " +  textStatus);
-   }
- });  
+          var file = document.createElement("input");
+          file.setAttribute("type", "number");
+          file.setAttribute("name", "valor_desp_rd[]");
+          file.setAttribute("min", "0");
+          file.setAttribute("value", element.valor_desp_rd);
+          file.setAttribute("step", "0.01");
+          file.setAttribute("placeholder", "Kilos");
+          file.setAttribute("style", "width:60px");
+          file.setAttribute("onChange", "restakilosD();kiloComparativoSell()");
+          f.appendChild(file);
 
-} 
+		  var a = document.createElement("a");
+		  a.href = `javascript:eliminar_varias('id_desperdicio', ${element.id_rd}, 'id_orden', ${element.op_rd})`
+
+		  var img = document.createElement("img");
+		  img.setAttribute("src", "images/por.gif");
+		  img.setAttribute("style", "cursor:hand");
+		  img.setAttribute("alt", "ELIMINAR");
+		  img.setAttribute("title", "ELIMINAR");
+		  img.setAttribute("border", "0");
+		  a.appendChild(img)
+		  f.appendChild(a);
+
+		  var file2 = document.createElement("input");
+		  file2.setAttribute("type", "hidden");
+		  file2.setAttribute("name", "id_rd[]");
+		  file2.setAttribute("value", element.id_rd);
+		  file2.setAttribute("readonly", true);
+		  file2.setAttribute("id", "id_rd");
+		  f.appendChild(file2);
+          document.getElementById("moreUploads3").appendChild(f);
+          upload_number++;
+        });
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      document.getElementById("bolsa_rp").readOnly = true;
+
+      $("#placa_rp").val("");
+      $("#kiloInicial").val("");
+      $("#int_kilos_prod_rp").val("");
+      $("#int_total_kilos_rp").val("");
+      $("#str_maquina_rp").val("");
+      $("#fecha_ini_rp").val("");
+      $("#rollo_rp").val("");
+      $("#metroInicial").val("");
+      $("#metro_r").val("");
+      $("#metroIni_r").val("");
+      $("#metro_r2").val("");
+      $("#n_ini_rp").val("");
+      $("#numInicioControl").val("");
+      $("#int_cod_empleado_rp").val("");
+      $("#int_cod_liquida_rp").val("");
+      $("#moreUploads3").html("");
+      if (console && console.log) {
+        console.log("La solicitud a fallado: " + textStatus);
+      }
+    });
+}
 
 /*	var ajax = new sack();
 	var currentClientID=false;
@@ -293,4 +338,3 @@ function sack(file) {
 	this.reset();
 	this.createAJAX();
 }*/
- 

@@ -114,7 +114,7 @@ class oFormulacion{
                 $array_deco = UtilHelper::arrayDecode($array_codificado); 
                 $arrayPHP =  ($array_deco); 
                    
-                   $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['nombre'] ."','". $arrayPHP['formulacion'] ."' );"); 
+                   $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['nombre'] ."','". $arrayPHP['formulacion'] ."','". $arrayPHP['proceso'] ."','". $arrayPHP['material'] ."' );"); 
              
 
 
