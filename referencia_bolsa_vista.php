@@ -7,7 +7,7 @@ require (ROOT_BBDD);
 
 $conexion = new ApptivaDB();
 
-$colname_usuario = "-1";
+$colname_usuario = "-1"; 
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
@@ -52,15 +52,14 @@ $ref_verif = mysql_query($query_ref_verif, $conexion1) or die(mysql_error());
 $row_ref_verif = mysql_fetch_assoc($ref_verif);
 $totalRows_ref_verif = mysql_num_rows($ref_verif);
 
-/*$colname_refs_clientes = "-1";
-if (isset($_GET['cod_ref'])) {
-  $colname_refs_clientes = (get_magic_quotes_gpc()) ? $_GET['cod_ref'] : addslashes($_GET['cod_ref']);
-}
+$ref_cotiz = $row_referencia_egp['cod_ref'];
+
 mysql_select_db($database_conexion1, $conexion1);
-$query_refs_clientes = sprintf("SELECT * FROM Tbl_cliente_referencia, cliente WHERE Tbl_cliente_referencia.N_referencia = %s AND Tbl_cliente_referencia.Str_nit=cliente.nit_c ORDER BY cliente.nombre_c Asc", $colname_refs_clientes);
-$refs_clientes = mysql_query($query_refs_clientes, $conexion1) or die(mysql_error());
-$row_refs_clientes = mysql_fetch_assoc($refs_clientes);
-$totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
+$query_cotiza = "SELECT tipo_bolsa,sello_superior FROM tbl_cotiza_bolsa WHERE N_referencia_c= '$ref_cotiz'" ;
+$cotiza = mysql_query($query_cotiza, $conexion1) or die(mysql_error());
+$row_cotiza = mysql_fetch_assoc($cotiza);
+$totalRows_cotiza = mysql_num_rows($cotiza);
+ 
 ?>
 <html>
 <head>
@@ -260,6 +259,7 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
   <tr>
     <td id="subppal2">ANCHO</td>
     <td id="subppal2">LARGO</td>
+    <td id="subppal2">SELLO SUPERIOR</td>
     <td colspan="2" id="subppal2">SOLAPA</td>
     <td colspan="2" id="subppal2">Doble/Sencilla</td>
     <td colspan="4" id="subppal2">BOLSILLO PORTAGUIA</td>
@@ -267,6 +267,7 @@ $totalRows_refs_clientes = mysql_num_rows($refs_clientes);*/
   <tr>
     <td id="fuente2"><?php echo $row_referencia_egp['ancho_ref']; ?></td>
     <td id="fuente2"><?php echo $row_referencia_egp['largo_ref']; ?></td>
+    <td id="fuente2"><?php echo $row_referencia_egp['sello_superior']==''?$row_cotiza['sello_superior']:$row_referencia_egp['sello_superior']; ?></td>
     <td colspan="2" id="fuente2"><?php echo $row_referencia_egp['solapa_ref']; ?></td>
     <td colspan="2" id="fuente2"><?php if (!(strcmp($row_referencia_egp['b_solapa_caract_ref'],2))) {echo "Sencilla";} ?>
     <?php if (!(strcmp($row_referencia_egp['b_solapa_caract_ref'],1))) {echo "Doble";} ?>

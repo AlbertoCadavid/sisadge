@@ -8,7 +8,7 @@ require(ROOT_BBDD);
 if (!isset($_SESSION)) {
   session_start();
 }
-
+ 
 // ** Logout the current user. **
 $logoutAction = $_SERVER['PHP_SELF'] . "?doLogout=true";
 if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")) {
@@ -212,7 +212,7 @@ $conexion = new ApptivaDB(); //consultas
 //ORDEN DE PRODUCCION
 $row_orden_produccion = $conexion->buscarId("tbl_orden_produccion", "id_op");
 //CARGA REF
-$row_ref = $conexion->llenaSelect("tbl_referencia", "WHERE estado_ref='1' ", "ORDER BY n_egp_ref  DESC");
+$row_ref = $conexion->llenaSelect("tbl_referencia", "WHERE estado_ref='1' ", "ORDER BY CONVERT(cod_ref, SIGNED INTEGER) DESC");
 
 //CARGA O.C INTERNA
 if ($_GET['int_cod_ref_op'] != '')
@@ -224,7 +224,7 @@ if ($_GET['int_cod_ref_op'] != '')
 
 //CARGA CON O.C
 if ($_GET['int_cod_ref_op'] != '')
-  $row_datos_oc = $conexion->llenarCampos("Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
+  $row_datos_oc = $conexion->llenarCampos("Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", " ORDER BY CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) DESC ", " * ");
 
 //LLAMA LAS MEZCLAS DE IMPRESION UNIDAD 1
 $id_ref = $row_datos_oc['id_ref'];
@@ -237,7 +237,7 @@ if ($id_ref != '')
 
 //PARA SUMAR CANTIDAD YA INGRESADOS DE LA O.C Y SU ITEM
 if ($_GET['int_cod_ref_op'] != '')
-  $row_margenes = $conexion->llenarCampos("tbl_referencia,tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.cod_ref=Tbl_egp.n_egp  ", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
+  $row_margenes = $conexion->llenarCampos("tbl_referencia,tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.cod_ref=Tbl_egp.n_egp  ", " ORDER BY CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) DESC ", " * ");
 
 $row_clientes = $conexion->llenaSelect('cliente', " ", "ORDER BY nombre_c ASC");
 
@@ -253,7 +253,7 @@ $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('30','33
 
 $refop = $_GET['int_cod_ref_op'] == '' ? 0 : $_GET['int_cod_ref_op'];
 if ($refop != ''){
-  $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $refop . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref");
+  $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $refop . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref,ref.tipo_bolsa_ref,ref.sello_superior");
 }
 
 //arte
@@ -346,6 +346,9 @@ $query_unidad_ocho = sprintf("select * from insumo,Tbl_mezclas, Tbl_produccion_m
 $unidad_ocho = mysql_query($query_unidad_ocho, $conexion1) or die(mysql_error());
 $row_unidad_ocho = mysql_fetch_assoc($unidad_ocho);
 $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
+
+
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -560,36 +563,26 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                 </tr>
                                 <tr>
                                   <td id="fuente1">
-                                    <select id='opciones2' name='int_cliente_op' style="width:220px" onchange="if(form1.int_cod_ref_op.value) { consulta_ref_op_interna(); } else{ alert('Debe Seleccionar una REFERENCIA'); }">
-                                      <option value='0' <?php if (!(strcmp(0, $_GET['int_cliente_op']))) {
-                                                          echo "selected=\"selected\"";
-                                                        } ?>>- CLIENTE -</option>
+                                    <select id='opciones2' name='int_cliente_op' style="width:220px" onchange=" consulta_ref_op_interna(); ">
+                                      <option value='0' <?php if (!(strcmp(0, $_GET['int_cliente_op']))) { echo "selected=\"selected\""; } ?>>- CLIENTE -</option>
                                       <?php foreach ($row_clientes as $row_clientes) { ?>
-                                        <option value="<?php echo $row_clientes['id_c'] ?>" <?php if (!(strcmp($row_clientes['id_c'], $_GET['int_cliente_op']))) {
-                                                                                              echo "selected=\"selected\"";
-                                                                                            } ?>><?php echo $row_clientes['nombre_c']; ?> </option>
+                                        <option value="<?php echo $row_clientes['id_c'] ?>" <?php if (!(strcmp($row_clientes['id_c'], $_GET['int_cliente_op']))) { echo "selected=\"selected\""; } ?>><?php echo $row_clientes['nombre_c']; ?> </option>
                                       <?php } ?>
                                     </select>
 
                                     <input type="hidden" name="str_nit_op" id="str_nit_op" value="<?php echo $row_nit['nit_c']; ?>" />
                                   </td>
                                   <td colspan="2" id="fuente1"><?php $numocI = $row_oc['id'] + 1; ?>
-                                    <input name="str_numero_oc_op" onfocus="onfocus" type="number" style="width:80px" readonly="readonly" value="<?php echo $numocI; ?>" />
-
-
+                                    <input name="str_numero_oc_op" onfocus="onfocus" type="number" style="width:80px" readonly="readonly" value="<?php echo $numocI; ?>" /> 
                                   </td>
                                   <td nowrap="nowrap" id="fuente1">
 
                                     <a href="javascript:verFoto('referencia_bolsa_edit.php?id_ref=<?php echo $row_referencia['id_ref']; ?>&n_egp=<?php echo  $row_referencia['n_egp_ref']; ?>','1100','850')"><em><?php echo $_GET['int_cod_ref_op']; ?></em></a>
 
-                                    <select name="int_cod_ref_op" id="int_cod_ref_op" class="selectsMini" onchange="if(form1.int_cod_ref_op.value) { consulta_ref_op_interna(); } else{ alert('Debe Seleccionar una REFERENCIA'); }">
-                                      <option value="" <?php if (!(strcmp("", $_GET['int_cod_ref_op']))) {
-                                                          echo "selected=\"selected\"";
-                                                        } ?>>Referencia</option>
+                                    <select name="int_cod_ref_op" id="int_cod_ref_op" class="selectsMini" onchange="consulta_ref_op_interna(); ">
+                                      <option value="" <?php if (!(strcmp("", $_GET['int_cod_ref_op']))) { echo "selected=\"selected\""; } ?>>Referencia</option>
                                       <?php foreach ($row_ref as $row_ref) { ?>
-                                        <option value="<?php echo $row_ref['cod_ref'] ?>" <?php if (!(strcmp($row_ref['cod_ref'], $_GET['int_cod_ref_op']))) {
-                                                                                            echo "selected=\"selected\"";
-                                                                                          } ?>><?php echo $row_ref['cod_ref'] ?></option>
+                                        <option value="<?php echo $row_ref['cod_ref'] ?>" <?php if (!(strcmp($row_ref['cod_ref'], $_GET['int_cod_ref_op']))) { echo "selected=\"selected\""; } ?>><?php echo $row_ref['cod_ref'] ?></option>
                                       <?php } ?>
                                     </select>
                                     -
@@ -624,8 +617,8 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                                               } ?></td>
                                   <td colspan="2" id="talla1">TIPO DE BOLSA</td>
                                   <td colspan="2" nowrap="nowrap" id="talla1"><strong>EXTRUSION</strong></td> 
-                                  <td colspan="2" id="talla1">PESO MILLAR</td>
-                                  <td colspan="2" id="talla1">METROS LINEAL</td>
+                                  <td nowrap="nowrap" id="talla1">PESO MILLAR-</td>
+                                  <td nowrap="nowrap" id="talla1">METROS LINEAL</td>
                                 </tr>
                                 <tr>
                                   <td nowrap="nowrap" id="talla1">
@@ -639,7 +632,8 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   <td colspan="2" id="fuente1"><strong>
                                       <input type="number" name="int_cantidad_op" id="int_cantidad_op" value="" style="width:80px" onBlur="calcular_op()" step="0.01" required="required" />
                                     </strong></td>
-                                  <td colspan="2" id="fuente1"><select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
+                                  <td colspan="2" id="fuente1">
+                                   <!--  <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
                                       <option value="N.A." <?php if (!(strcmp("N.A.", $row_datos_oc['tipo_bolsa_ref']))) {
                                                               echo "selected=\"selected\"";
                                                             } ?>>N.A.</option>
@@ -662,6 +656,13 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                                                 echo "selected=\"selected\"";
                                                               } ?>>LAMINA</option>
                                       <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['tipo_bolsa_ref']))) { echo "selected=\"selected\""; } ?>>BOLSA TROQUELADA</option>
+                                    </select> -->
+
+                                       <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  style="width:200px" >
+                                        <option value="">Seleccione...</option>
+                                           <?php  foreach($row_formulas as $row_formulas ) { ?>
+                                        <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                                    <?php } ?>
                                     </select>
                                   </td>
                                     <td  id="talla1">
@@ -715,7 +716,8 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                   <td colspan="2" id="fuente1">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                  <td colspan="3" id="fuente1">&nbsp;</td>
+                                  <td colspan="3" id="fuente1"><strong style=" color: red;" >SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior'];?>" onblur="calcular_op()" readonly />  /  SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref']==2) {echo "Sencilla";}else if ($row_datos_oc['b_solapa_caract_ref']==1){echo "Doble";}else {echo "";} ?>
+                                   </td>
                                   <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                                   <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
                                       <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_tratamiento']))) {
@@ -2695,32 +2697,25 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
                                                                 echo "selected=\"selected\"";
                                                               } ?>>SELECCIONE</option>
                                             <?php foreach ($row_insumo as $row_insumo) { ?>
-                                              <option value="<?php echo $row_insumo['id_insumo'] ?>" <?php if (!(strcmp($row_insumo['id_insumo'], $row_datos_oc['marca_cajas_egp']))) {
-                                                                                                        echo "selected=\"selected\"";
-                                                                                                      } ?>><?php echo $row_insumo['descripcion_insumo'] ?></option>
+                                              <option value="<?php echo $row_insumo['id_insumo'] ?>" <?php if (!(strcmp($row_insumo['id_insumo'], $row_datos_oc['marca_cajas_egp']))) { echo "selected=\"selected\""; } ?>><?php echo $row_insumo['descripcion_insumo'] ?></option>
                                             <?php } ?>
                                           </select>
                                         </td>
-                                        <td id="talla1"><?php if ($row_datos_oc['B_troque'] == '1') {
-                                                          echo "SI";
-                                                        } else {
-                                                          echo "NO";
-                                                        }; ?></td>
+                                        <td id="talla1"><?php if ($row_datos_oc['B_troque'] == '1') { echo "SI"; } else { echo "NO"; }; ?></td>
                                         <td id="talla1"><input name="lote" style="width:70px" type="text" id="lote" value="<?php echo $op_numero; ?>" placeholder="Lote" /></td>
                                         <td id="talla1">
                                           <input name="numInicio_op" type="text" id="numInicio_op" style="width:80px" min="0" step="1" value="<?php echo $row_numeraciones['int_hasta_tn'] != '' ? $row_numeraciones['int_hasta_tn'] : "0"; ?>" onBlur="hastaordenP();" /><input class="charfin" style=" width:40px" type="text" name="charfin" autofocus id="charfin" value="" onchange="conMayusculas(this)">
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="8" id="talla3">Faltantes:
+                                        <td colspan="6" id="talla4">&nbsp;<div id="resultado_generador"></div>
+                                         <td colspan="2" id="talla3">Faltantes:
                                           <select name="imprimiop" id="imprimiop" required="required">
                                             <option value="" <?php if (!(strcmp('', $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option> 
-                                            <option value="0" <?php if (!(strcmp(0, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI TIENE FALTANTES</option>
-                                            <option value="1" <?php if (!(strcmp(1, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO TIENE FALTANTES</option>
+                                            <option value="0" <?php if (!(strcmp(0, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>CON FALTANTES</option>
+                                            <option value="1" <?php if (!(strcmp(1, $row_datos_oc['imprimiop']))) { echo "selected=\"selected\""; } ?>>SIN FALTANTES</option>
                                           </select>
-                                        </td>
-                                        <td colspan="7" id="talla1">&nbsp;<div id="resultado_generador"></div>
-                                        </td>
+                                        </td> 
                                       </tr>
                                       <tr>
                                         <td colspan="2" id="talla1"><strong>POSICION</strong></td>
@@ -2874,12 +2869,21 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
     if ($("#int_cod_ref_op").val() != '') {
       consultaPorcentajesOp($("#int_cod_ref_op").val());
     }
+ 
+  });
 
-
+  
+  $('#int_cod_ref_op').on('change', function(){
+      if($("#opciones2").val()=='0' ){
+        swal("Debe seleccionar un cliente!");
+      }
   });
 </script>
 <script>
+
   $(document).ready(function() {
+
+    //calcular_op(); 
 
     $('#opciones2').select2({
       ajax: {
@@ -2907,12 +2911,14 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
       }
     });
 
+
+
     $('#int_cod_ref_op').select2({
       ajax: {
         url: "select3/proceso.php",
         type: "post",
         dataType: 'json',
-        delay: 250,
+        delay: 100,
         data: function(params) {
           return {
             palabraClave: params.term, // search term

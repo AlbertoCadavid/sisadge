@@ -1,5 +1,7 @@
 <?php
-require_once 'Models/Msellado.php';
+/* require_once 'Models/Msellado.php'; */
+include_once './funciones/funciones_php.php';
+
 
 class oMsellado
 {
@@ -145,8 +147,9 @@ class oMsellado
             $array_codificado = UtilHelper::arrayEncode($data);
             $array_deco = UtilHelper::arrayDecode($array_codificado);
             $arrayPHP =  ($array_deco);
-
-            $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES (  '" . $_POST['int_op_tn'] . "','" . $_POST['fecha_ingreso_tn'] . "','" . $_POST['hora_tn'] . "','" . $_POST['int_bolsas_tn'] . "','" . $_POST['int_undxpaq_tn'] . "','" . $_POST['int_undxcaja_tn'] . "','" . $_POST['int_desde_tn'] . "','" . $_POST['int_hasta_tn'] . "','" . $_POST['int_cod_empleado_tn'] . "','" . $_POST['int_cod_rev_tn'] . "','" . $_POST['contador_tn'] . "','" . $_POST['int_paquete_tn'] . "','" . $_POST['int_caja_tn'] . "','" . $_POST['pesot'] . "','" . $_POST['ref_tn'] . "','" . $_POST['tienefaltantes'] . "' );");
+            $hora_tn = horaActual();
+            $fecha_ingreso_tn = fechaActual();
+            $stmt = $this->conexion->query("INSERT INTO $tabla ($columna) VALUES (  '" . $_POST['int_op_tn'] . "','" . $fecha_ingreso_tn . "','" . $hora_tn . "','" . $_POST['int_bolsas_tn'] . "','" . $_POST['int_undxpaq_tn'] . "','" . $_POST['int_undxcaja_tn'] . "','" . $_POST['int_desde_tn'] . "','" . $_POST['int_hasta_tn'] . "','" . $_POST['int_cod_empleado_tn'] . "','" . $_POST['int_cod_rev_tn'] . "','" . $_POST['contador_tn'] . "','" . $_POST['int_paquete_tn'] . "','" . $_POST['int_caja_tn'] . "','" . $_POST['pesot'] . "','" . $_POST['ref_tn'] . "','" . $_POST['tienefaltantes'] . "' );");
         } catch (Exception $e) {
             die($e->getMessage());
         }
@@ -373,7 +376,6 @@ class oMsellado
     {
         
         $result = $this->conexion->query("SELECT $mostrar1 FROM $tabla1 WHERE $where1");
-
         $data = [self::getResultados($result), true];
 
         if ($data[0][0]['rollo_r'] == null) {

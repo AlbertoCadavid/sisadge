@@ -69,38 +69,54 @@ $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
-$colname_orden_compra = "-1";
-if (isset($_GET['str_numero_oc'])) {
-  $colname_orden_compra = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
+
+if (isset($_GET['id_oc'])) {
+  $id_oc = (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);
 }
+
+$colname_orden_compra = "-1";
+if (isset($_GET['id_pedido'])) {
+  $colname_orden_compra = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
+}
+
 mysql_select_db($database_conexion1, $conexion1);
-$query_orden_compra = sprintf("SELECT * FROM Tbl_orden_compra WHERE str_numero_oc = '%s' AND b_borrado_oc='0'", $colname_orden_compra);
+$query_orden_compra = sprintf("SELECT * FROM Tbl_orden_compra WHERE id_pedido = '%s' AND b_borrado_oc='0'", $colname_orden_compra);
 $orden_compra = mysql_query($query_orden_compra, $conexion1) or die(mysql_error());
 $row_orden_compra = mysql_fetch_assoc($orden_compra);
 $totalRows_orden_compra = mysql_num_rows($orden_compra);
 
 $colname_cliente_oc = "-1";
-if (isset($_GET['str_numero_oc'])) {
-  $colname_cliente_oc = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
+if (isset($_GET['id_pedido'])) {
+  $colname_cliente_oc = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_cliente_oc = sprintf("SELECT * FROM Tbl_orden_compra, cliente WHERE Tbl_orden_compra.str_numero_oc = '%s' AND Tbl_orden_compra.str_nit_oc = cliente.nit_c AND Tbl_orden_compra.b_borrado_oc='0'", $colname_cliente_oc);
+$query_cliente_oc = sprintf("SELECT * FROM Tbl_orden_compra, cliente WHERE Tbl_orden_compra.id_pedido = '%s' AND Tbl_orden_compra.str_nit_oc = cliente.nit_c AND Tbl_orden_compra.b_borrado_oc='0'", $colname_cliente_oc);
 $cliente_oc = mysql_query($query_cliente_oc, $conexion1) or die(mysql_error());
 $row_cliente_oc = mysql_fetch_assoc($cliente_oc);
 $totalRows_cliente_oc = mysql_num_rows($cliente_oc);
 
 $colname_detalle = "-1";
-if (isset($_GET['str_numero_oc'])) {
-  $colname_detalle = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
+if (isset($_GET['id_pedido'])) {
+  $colname_detalle = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_detalle = sprintf("SELECT * FROM Tbl_items_ordenc WHERE str_numero_io = '%s' ORDER BY id_items ASC", $colname_detalle);
+$query_detalle = sprintf("SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io = '%s' ORDER BY id_items ASC", $colname_detalle); 
 $detalle = mysql_query($query_detalle, $conexion1) or die(mysql_error());
 $row_detalle = mysql_fetch_assoc($detalle);
 $totalRows_detalle = mysql_num_rows($detalle);
 //REMISIONES X ITEMS
 $colname_remision = "-1";
-if (isset($_GET['str_numero_oc'])) {
+if (isset($_GET['id_pedido'])) {
+  $colname_remision = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_remision = sprintf("SELECT * FROM Tbl_orden_compra,Tbl_remision_detalle,Tbl_remisiones,Tbl_items_ordenc WHERE Tbl_orden_compra.id_pedido = '%s' AND Tbl_orden_compra.b_borrado_oc='0' AND tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND Tbl_items_ordenc.id_items = Tbl_remision_detalle.int_item_io_rd ORDER BY  Tbl_items_ordenc.id_items ASC", $colname_remision);
+ 
+$remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
+$row_remision = mysql_fetch_assoc($remision);
+$totalRows_remision = mysql_num_rows($remision);
+
+/*if (isset($_GET['str_numero_oc'])) {
   $colname_remision = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
 }
 mysql_select_db($database_conexion1, $conexion1);
@@ -108,6 +124,7 @@ $query_remision = sprintf("SELECT * FROM Tbl_orden_compra,Tbl_remision_detalle,T
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);
 $totalRows_remision = mysql_num_rows($remision);
+*/
 //IMRPIME EL NOMBRE DEL VENDEDOR
 mysql_select_db($database_conexion1, $conexion1);
 $query_vendedores = "SELECT * FROM vendedor ORDER BY nombre_vendedor ASC";
@@ -118,11 +135,11 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
 
 //ASIGNA NUMERO CONSECUTIVO DE REMISION
 $colname_remision = "-1";
-if (isset($_GET['str_numero_oc'])) {
-  $colname_remision = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
+if (isset($_GET['id_pedido'])) {
+  $colname_remision = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_remadjunto = sprintf("SELECT * FROM tbl_remisiones WHERE str_numero_oc_r='%s'", $colname_remision);
+$query_remadjunto = sprintf("SELECT * FROM tbl_orden_compra,tbl_remisiones WHERE tbl_orden_compra.id_pedido = '%s' AND tbl_orden_compra.str_numero_oc= tbl_remisiones.str_numero_oc_r  ORDER BY tbl_remisiones.id_r DESC ", $colname_remision);
 $remadjunto = mysql_query($query_remadjunto, $conexion1) or die(mysql_error());
 $row_remadjunto = mysql_fetch_assoc($remadjunto);
 $totalRows_remadjunto = mysql_num_rows($remadjunto);
@@ -161,7 +178,7 @@ $totalRows_remadjunto = mysql_num_rows($remadjunto);
     </table>
     <table id="tabla1">
       <tr>
-        <td align="center">
+        <td align="center">  
           <table id="tabla3">
             <tr>
               <td rowspan="4" id="fondo2"><img src="images/logoacyc.jpg"></td>

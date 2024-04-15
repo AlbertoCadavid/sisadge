@@ -23,7 +23,7 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) {
     $arrGroups = Explode(",", $strGroups); 
     if (in_array($UserName, $arrUsers)) { 
       $isValid = true; 
-    } 
+    }  
     // Or, you may restrict access to only certain users based on their username. 
     if (in_array($UserGroup, $arrGroups)) { 
       $isValid = true; 
@@ -60,6 +60,7 @@ if (isset($_GET['int_remision'])) {
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_cliente_r = sprintf("SELECT * FROM Tbl_remisiones,Tbl_orden_compra, cliente WHERE Tbl_remisiones.int_remision = %s AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.str_nit_oc = cliente.nit_c AND Tbl_orden_compra.b_borrado_oc='0'", $colname_cliente_r);
+ 
 $cliente_r = mysql_query($query_cliente_r, $conexion1) or die(mysql_error());
 $row_cliente_r = mysql_fetch_assoc($cliente_r);
  $totalRows_cliente_r = mysql_num_rows($cliente_r);
@@ -71,7 +72,7 @@ if (isset($_GET['int_remision'])) {
   $colname_remision = (get_magic_quotes_gpc()) ? $_GET['int_remision'] : addslashes($_GET['int_remision']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_remision = sprintf("SELECT * FROM Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc WHERE Tbl_remisiones.int_remision = %s AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items ORDER BY Tbl_remision_detalle.id_rd ASC", $colname_remision);
+$query_remision = sprintf("SELECT * FROM Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc WHERE Tbl_remisiones.int_remision = %s AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items ORDER BY Tbl_remision_detalle.id_rd ASC", $colname_remision); 
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);
 $totalRows_remision = mysql_num_rows($remision);
@@ -139,6 +140,7 @@ $query_vendedores = "SELECT * FROM vendedor ORDER BY nombre_vendedor ASC";
 $vendedores = mysql_query($query_vendedores, $conexion1) or die(mysql_error());
 $row_vendedores = mysql_fetch_assoc($vendedores);
 $totalRows_vendedores = mysql_num_rows($vendedores);
+ 
 ?>
 <html>
 <head>
@@ -156,9 +158,9 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
 </head>
 <body>
   <div align="center">
-    <table id="tabla3">
+    <table id="tabla3"> 
       <tr>
-        <td id="noprint" align="right"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()"/><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" border="0" /><?php if($row_cliente_r['str_nit_oc']=='') { ?><a href="despacho_items_oc_edit.php?int_remision=<?php echo $row_cliente_r['int_remision']; ?>&str_numero_r<?php echo $row_cliente_r['str_numero_oc_r']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><?php } else { ?><a href="despacho_items_oc_edit.php?int_remision=<?php echo $row_cliente_r['int_remision']; ?>&str_numero_r=<?php echo $row_cliente_r['str_numero_oc_r']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><a href="despacho_oc.php"><img src="images/r.gif" style="cursor:hand;" alt="LISTADO DE REMISIONES" title="LISTADO DE REMISIONES" border="0" /></a><?php } ?> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0"/></a><a href="menu.php"><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" title="SALIR" onClick="window.close() "/></a></td>
+        <td id="noprint" align="right"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()"/><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" border="0" /><?php if($row_cliente_r['str_nit_oc']=='') { ?><a href="despacho_items_oc_edit.php?int_remision=<?php echo $row_cliente_r['int_remision']; ?>&str_numero_r<?php echo $row_cliente_r['str_numero_oc_r']; ?>&id_pedido=<?php echo $row_cliente_r['id_pedido']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><?php } else { ?><a href="despacho_items_oc_edit.php?int_remision=<?php echo $row_cliente_r['int_remision']; ?>&str_numero_r=<?php echo $row_cliente_r['str_numero_oc_r']; ?>&id_pedido=<?php echo $row_cliente_r['id_pedido']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><a href="despacho_oc.php"><img src="images/r.gif" style="cursor:hand;" alt="LISTADO DE REMISIONES" title="LISTADO DE REMISIONES" border="0" /></a><?php } ?> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0"/></a><a href="menu.php"><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" title="SALIR" onClick="window.close() "/></a></td>
       </tr>
     </table>
     <table id="tabla1"><tr><td align="center">
@@ -197,9 +199,9 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
         <tr>
           <td id="dato1"><strong>CONTACTO COMERCIAL : </strong><?php echo $row_cliente_r['contacto_c']; ?></td>
           <td   id="dato1"><strong>FAX : </strong><?php echo $row_cliente_r['fax_c']; ?></td>
-          <td id="dato1"><strong>ORDEN.C:</strong> <a href="orden_compra_cl_vista.php?str_numero_oc=<?php echo $row_cliente_r['str_numero_oc'] ?>&id_oc=<?php echo $row_cliente_r['id_c_oc'] ?>" target="_blank" ><?php echo $row_remision3['str_numero_io']; ?></a></td>
+          <td id="dato1"><strong>ORDEN.C:</strong> <a href="orden_compra_cl_vista.php?str_numero_oc=<?php echo $row_cliente_r['str_numero_oc'];?>&id_oc=<?php echo $row_cliente_r['id_c_oc'] ?>&id_pedido=<?php echo $row_cliente_r['id_pedido'] ?>" target="_blank" ><?php echo $row_remision3['str_numero_io']; ?></a></td>
         </tr>
-        <tr>
+        <tr> 
           <td id="dato1"><strong>EMAIL COMERCIAL: </strong><?php echo $row_cliente_r['email_comercial_c']; ?></td>
           <td  colspan="2" id="dato1"><strong>CONDICIONES DE PAGO : </strong><?php echo $row_cliente_r['str_condicion_pago_oc']; ?></td>
         </tr>

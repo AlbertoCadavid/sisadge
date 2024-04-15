@@ -199,7 +199,7 @@ $totalRows_refer = mysql_num_rows($refer);
   <script type="text/javascript" src="js/delete.js"></script>
   <script type="text/javascript" src="js/adjuntos.js"></script>
   <script type="text/javascript" src="js/validacion_numerico.js"></script>
-    <script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
+  <script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
 
   <link rel="stylesheet" type="text/css" href="css/general.css"/>
   <link rel="stylesheet" type="text/css" href="css/formato.css"/>
@@ -427,7 +427,7 @@ function MM_popupMsg(msg) { //v1.0
                       <td colspan="7" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
                     </tr>
                     <tr>
-                      <td colspan="7">
+                      <td colspan="3">
                         <br>
                         <span style="color: red;" >IMPUESTO PLASTICO</span> <input type="checkbox" name="impuesto" id="impuesto"   value="1"<?php if (!(strcmp($row_packing['impuesto'],1))) {echo "checked=\"checked\"";} ?>> <label for="impuesto"> &nbsp;&nbsp;<!-- Adjunto PDF: <input name="pdf_impuesto" type="file" size="20" maxlength="60"class="botones_file"> -->
                         <?php if($row_cliente['pdf_impuesto']): ?>
@@ -437,10 +437,15 @@ function MM_popupMsg(msg) { //v1.0
                                         </a>
                         <?php endif; ?>
                       </td>
+                      <td colspan="4">
+                        <div name="formular" id="formular"  >
+                            <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
+                        </div>
+                      </td>
                     </tr>
                    <tr>
                     <td id="fuente1">Moneda</td>
-                    <td id="fuente1">Precio Anterior</td>
+                    <td id="fuente1">Precio sin Impuesto</td>
                     <td id="fuente1">Impuesto</td>
                     <td id="fuente1">Precio Impuesto</td>
                       <td colspan="2" id="fuente1">Plazo de pago</td>
@@ -459,6 +464,7 @@ function MM_popupMsg(msg) { //v1.0
                       
                     </td>
                     <td id="fuente5">
+                         <input name="valor_impuesto_backup" id="valor_impuesto_backup" style="width:50px" type="hidden" value="<?php echo $row_packing['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> /> 
                          <input name="valor_impuesto" type="text" style="width:80px" min="0" step="0.01" id="valor_impuesto" value="<?php echo $row_packing['valor_impuesto']=='0'?$row_refer['valor_impuesto'] : $row_packing['valor_impuesto'] ;?>"/> 
                        </td>
                     <td id="fuente1">
@@ -560,8 +566,15 @@ function MM_popupMsg(msg) { //v1.0
 </body>
 </html>
 <script>
- 
-
+ $(document).ready(function(){
+   
+   if($("#calculaformula").val()==1){
+      $("#calculaformula").prop("checked", true);
+   }else{
+    $("#calculaformula").prop("checked", false);
+   } 
+   
+  });
     $('#impuesto').on('change', function() { 
            sumaImpuestoPacking($("#N_precio_p").val(),$("#valor_impuesto").val());
     
@@ -577,6 +590,17 @@ function MM_popupMsg(msg) { //v1.0
           sumaImpuestoPacking($("#N_precio_p").val(),$("#valor_impuesto").val());
    
    });
+
+     $('#calculaformula').on('change', function() { 
+   
+      if( $("#N_ancho_p").val()!='' && $("#N_alto_p").val()!='' && $("#N_calibre_p").val()!=''  && $("#N_precio_p").val()!='' ) 
+    {   
+    
+      pesoMillarFormulaCotizPak($("#N_ancho_p").val(),$("#N_alto_p").val(),$("#N_calibre_p").val(),$("#N_precio_p").val(),$("#valor_impuesto_backup").val());
+    }else{
+      pesoMillarFormulaCotizNuevaPak($("#N_ancho_p").val(),$("#N_alto_p").val(),$("#N_calibre_p").val(),$("#N_precio_old").val(),$("#valor_impuesto_backup").val()  );
+    }
+ }); 
 </script>
 <?php
 mysql_free_result($usuario);

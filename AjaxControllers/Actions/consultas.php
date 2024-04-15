@@ -219,21 +219,23 @@ if (isset($_GET['prefijo']) && $_GET['prefijo'] != '') {
 
 
 if (isset($_GET['num_orden_compra']) && $_GET['num_orden_compra'] != '') {
-  $resp = array();
+  $resp = array();  
+  
+   //$clientes = $conexion->llenarCampos("cliente", "WHERE id_c_oc='" . $_GET["id_c_oc"] . "' ", "", " * ")
 
   if (!(ereg("^[a-zA-Z0-9\-]{1,100}$", $_GET['num_orden_compra']))) {
     $array = array(
       "mns" => "Caracteres no permitidos, verifique!",
       "valor" => 1,
     );
-  } else
-    if ($sqlogs = $conexion->llenarCampos("tbl_orden_compra", "WHERE str_numero_oc='" . $_GET["num_orden_compra"] . "' ", "", "str_numero_oc")) {
+  } else if ($sqlogs = $conexion->llenarCampos("tbl_orden_compra", "WHERE str_numero_oc='" . $_GET["num_orden_compra"] . "' AND id_c_oc='" . $_GET["id_c_oc"] . "' ", "", "str_numero_oc")) {
     $existe = $sqlogs['str_numero_oc'];
     if ($existe) {
 
       $array = array(
         "mns" => "La orden de compra ya existe, revise.",
         "valor" => 1,
+        
       );
     }
   } else {
@@ -242,6 +244,8 @@ if (isset($_GET['num_orden_compra']) && $_GET['num_orden_compra'] != '') {
       "valor" => 2,
     );
   }
+
+  //$array=$clientes;
   echo  json_encode($array);
 }
 

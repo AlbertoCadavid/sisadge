@@ -11,7 +11,7 @@ catch (e) {
 	}
 // --- Si no se pudo crear... intentar este ultimo metodo ---
 if (!objeto && typeof XMLHttpRequest!='undefined') {
-	objeto = new XMLHttpRequest();
+	objeto = new XMLHttpRequest(); 
 }
 } 
 // ------------------------------ADMINISTRADOR consulta.php  -----------
@@ -483,10 +483,11 @@ document.form1.int_pesom_op.value=millar_t;// millar para o.p sin bolsillo en ex
 
 function calcular_op()
 {
-	var tipo_lamina=document.form1.str_tipo_bolsa_op.value;
-	//si es bolsa o lamina
+
+	var tipo_lamina=document.form1.str_tipo_bolsa_op.value;//define si es bolsa, lamina o packin
+	//	TIPO DE BOLSA 
 	if(tipo_lamina!='LAMINA'){
-		
+		 
 		$peso=(25.4*(parseFloat(document.form1.int_calibre_op.value)));	
 		document.form1.int_micras_op.value= $peso.toFixed(2);	 
 		
@@ -497,39 +498,53 @@ function calcular_op()
 		$total=$cant+$porc;
 		$kiloRequerido=parseFloat($total);
 		document.form1.int_kilos_op.value=Math.round($kiloRequerido*100)/100;
-		
 	//ancho del rollo
+	var multiplo= document.form1.sello_superior.value=='refuerzo' ? 3 : 1;
 	var largo=parseFloat(document.form1.largo.value);
-	var solapa=parseFloat(document.form1.solapa.value);
-	var v_solapa= parseInt(document.form1.valor_s.value);
+	var solapa=parseFloat(document.form1.solapa.value)=='' ? 0 : parseInt(document.form1.solapa.value);
+	var v_solapa= parseInt(document.form1.valor_s.value)=='' ? 0 : parseInt(document.form1.valor_s.value);//valor del radio solapa
 	var fuell=parseFloat(document.form1.fuelle.value);
-	var fuelle=(fuell*2); 
+	var fuelle=(fuell*2);//siempre es x 2 
 	var pres=document.form1.str_presentacion_op.value;//presentacion
+	
 	//SI ES PRESENTACION LAMINA
-	if (pres=='LAMINA' && tipo_lamina!='LAMINA'){
-		
-		if(v_solapa=='1'){
-			var v_sol='2';
-	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=((largo*2)+dsolapa+fuelle);
-	  document.form1.int_ancho_rollo_op.value=aRext;
-	}else
-	if(v_solapa=='2'){
-		var v_sol='1';
-	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=((largo*2)+dsolapa+fuelle);
-	  document.form1.int_ancho_rollo_op.value=aRext;
-	}else
-	if(v_solapa=='0'){
-		var v_sol='0';
-	  var dsolapa=(solapa*v_sol)//para ancho de rollo se multiplica
-	  var aRext=((largo*2)+dsolapa+fuelle);
-	  document.form1.int_ancho_rollo_op.value=aRext;
-	}
-}else {
-	var aRext=(largo+solapa+fuelle); 	
-	document.form1.int_ancho_rollo_op.value=aRext;
-}
+    if(pres=="LAMINA"){
+    	   var largo = parseFloat(document.form1.largo.value)*parseInt(2);  
+    } 
+ 
+ 	 
+    if(v_solapa=='1'){ 
+      	  var solapa=parseFloat(solapa*2)//para ancho de rollo se multiplica  
+     }
+
+ 
+     if(multiplo=='3'){
+     	 var solapa =  parseFloat(document.form1.solapa.value) * parseInt(multiplo);//vale x 3
+     } 
+
+    var sellosuperior =  document.form1.sello_superior.value;//*parseInt(2); Str_sellosuperioracion  
+     if(sellosuperior=='tubular' && v_solapa=='1'){
+           sumatoriaDoble = (largo)+(solapa)+2;//+2 son centimetros ya definidos de la pestaña interna
+     }else if(sellosuperior=='tubular' && v_solapa=='0'){
+           sumatoriaDoble = (largo)+2;//+2 son centimetros ya definidos de la pestaña interna
+     }else if(sellosuperior=='tubular/tubular' && v_solapa=='0'){
+           sumatoriaDoble = (largo);//no suma los 2 cm
+     }else if(sellosuperior=='plano' && v_solapa=='1'){ 
+           sumatoriaDoble = (largo)+(solapa);
+     }else if(sellosuperior=='plano' && v_solapa=='2'){
+           sumatoriaDoble = (largo)+(solapa);
+     }else if(sellosuperior=='refuerzo' && v_solapa=='1'){
+           sumatoriaDoble = (largo)+(parseFloat(document.form1.solapa.value)*parseInt(3))+2;//solapa vale 3
+     }else if(sellosuperior=='' && v_solapa=='0'){
+           sumatoriaDoble = (largo);//no tiene solapa
+     }else if(sellosuperior=='' && v_solapa=='1'){
+           sumatoriaDoble = (largo)+(solapa);  
+     }else if(sellosuperior=='' && v_solapa=='2'){
+           sumatoriaDoble = (largo)+(solapa); 
+     }
+	    var aRext=(sumatoriaDoble+fuelle); 	
+	    document.form1.int_ancho_rollo_op.value=aRext;
+
 	//sellado metros cinta y metros lineales
 	//operaciones
 	var metrosCinta=((document.form1.ancho.value*document.form1.int_cantidad_op.value)/100);
@@ -539,7 +554,7 @@ function calcular_op()
 	var BolsaConPorcent=Math.round(($kiloRequerido*1000)/document.form1.int_pesom_op.value);
 	//EXTRUDER LINEAL
 	var metroslinealExtruder=((document.form1.ancho.value*BolsaConPorcent)/100);	
-	
+	 
 	//impresiones en campos
 	document.form1.metroLineal_op.value=metroslinealExtruder.toFixed(2);
 	document.form1.mts_cinta_sellado_op.value=Math.round(metrosCint*100)/100;
@@ -548,7 +563,10 @@ function calcular_op()
 	document.form1.mts_req_imp_op.value=Math.round(metrosCint);
 
 
-	}else{//FIN SI ES DIFERENTE DE LAMINA
+}else{
+
+    //FIN SI ES DIFERENTE DE LAMINA
+
     //CUANDO ES LAMINA	
     var kilos_op=parseFloat(document.form1.int_cantidad_op.value)
     var porcen_op=parseFloat(document.form1.int_desperdicio_op.value);
@@ -568,38 +586,84 @@ function calcular_op()
 	document.form1.kls_req_imp_op.value=Math.round(kiloRequerido_op*100)/100;
 	document.form1.kls_sellado_op.value=Math.round(kiloRequerido_op*100)/100;
 	document.form1.und_prod_sellado_op.value=Math.round(bolsasT);	 
-
+ 
 }
 
 }//FIN
 
+  //ancho del rollo desde ref
+/*function anchodelRollo(){
+ 
+   var largo = parseFloat($('#largo_ref').val());
+   var solapa = parseFloat($('#solapa_ref').val());
+   var fuelle = parseFloat($('#B_fuelle').val())*parseInt(2);//siempre es x 2
+    
+   var present =  ($('#opciones2').val())//*parseInt(2); Str_presentacion  
+   if(present=="LAMINA"){
+   	   var largo = parseFloat($('#largo_ref').val())*parseInt(2);  
+   } 
+
+   var solaparadio = $('input:radio[name=valora]:checked').val(); 
+   if(solaparadio==1){
+       //vale doble la solapa
+      var solapa = parseFloat(solapa) * parseInt(2) ;
+   }
+   
+   var multiplo=$('#sello_superior').val()=='refuerzo' ? 3 : 1;
+   if(multiplo=='3'){
+   	 var solapa =  parseFloat($('#solapa_ref').val()) * parseInt(multiplo);//vale x 3
+   } 
+
+     var anchoRollo=((largo)+solapa+fuelle);
+      $('#ancho_rollo').val(anchoRollo);
+
+}*/
 
 function anchodelRollo(){
 
+  var largo = parseFloat($('#largo_ref').val());
+  var solapa = parseFloat($('#solapa_ref').val());
+  var fuelle = parseFloat($('#B_fuelle').val())*parseInt(2);//siempre es x 2
    
-   var present = parseFloat($('#Str_presentacion').val())*parseInt(2); 
-   /*var tipo = $('#tipo_bolsa_ref').val()*/
-   
-   if(present=="LAMINA"){
-   	   var largo = parseFloat($('#largo_ref').val())*parseInt(2);
-       var fuelle = parseFloat($('#B_fuelle').val())*parseInt(2); 
-   }else{
-   	   var largo = parseFloat($('#largo_ref').val());
-   	   var fuelle = parseFloat($('#B_fuelle').val())*parseInt(2); 
+   var present =  ($('#opciones2').val())//*parseInt(2); Str_presentacion  
+   if(present!="LAMINA"){
+   	   var largo = parseFloat($('#largo_ref').val());  
+   } 
+
+   var sellosuperior =  ($('#sello_superior').val())//*parseInt(2); Str_sellosuperioracion  
+   if(sellosuperior!="tubular/tubular" && present=="LAMINA"){
+       var largo = parseFloat($('#largo_ref').val())*parseInt(2);  
+   }  
+ 
+   //vale doble la solapa
+   var solaparadio = $('input:radio[name=valora]:checked').val(); 
+   if(solaparadio==1){
+      var solapa = parseFloat(solapa) * parseInt(2);
+   } 
+
+   if(sellosuperior=='tubular' && solaparadio=='1'){
+         sumatoriaDoble = (largo)+(solapa)+2;//+2 son centimetros ya definidos de la pestaña interna
+   }else if(sellosuperior=='tubular' && solaparadio=='0'){
+         sumatoriaDoble = (largo)+2;//+2 son centimetros ya definidos de la pestaña interna
+   }else if(sellosuperior=='tubular/tubular' && solaparadio=='0'){
+         sumatoriaDoble = (largo);//no suma los 2 cm
+   }else if(sellosuperior=='plano' && solaparadio=='1'){
+         sumatoriaDoble = (largo)+(solapa);
+   }else if(sellosuperior=='plano' && solaparadio=='2'){
+         sumatoriaDoble = (largo)+(solapa);
+   }else if(sellosuperior=='refuerzo' && solaparadio=='1'){
+         sumatoriaDoble = (largo)+(parseFloat($('#solapa_ref').val())*parseInt(3))+2;//solapa vale 3
+   }else if(sellosuperior=='' && solaparadio=='0'){
+         sumatoriaDoble = (largo);//no tiene solapa 
+   }else if(sellosuperior=='' && solaparadio=='1'){
+           sumatoriaDoble = (largo)+(solapa);  
+   }else if(sellosuperior=='' && solaparadio=='2'){
+           sumatoriaDoble = (largo)+(solapa); 
    }
 
-   var solapdoble = $('input:radio[name=valora]:checked').val(); 
-   if(solapdoble==2){
-      var solapa = parseFloat($('#solapa_ref').val()) ; 
-   }else if(solapdoble==1){
-    var solapa = parseFloat($('#solapa_ref').val()) * parseInt(solapdoble) ;
-   }else{
-     solapa=0;
-   }
-   anchoRollo = (largo+fuelle+solapa);
-   anchoRollo=anchoRollo.toFixed(2)
-   $('#ancho_rollo').val(anchoRollo);
-
+     var anchoRollo=(sumatoriaDoble+fuelle); 
+     
+     $('#ancho_rollo').val(anchoRollo); 
 
 }
 
@@ -1106,12 +1170,12 @@ function fechasDesp(){
 			return false; 
 		  }//FIN
   		    sum1 += parseFloat(ups[i].value, 10);//suma todo el acumulado de desperdicio
-			  //regla de tres para metros
-			  var totalDesp=parseFloat(sum1)-parseFloat(reproceso);
-			  var kilosTotales=parseFloat(kilos)-parseFloat(totalDesp);
-			  var nuevosMetros = Math.round(kilosTotales * metros / kilos);
-			  
-  		    console.log(kilosTotales+"*"+metros+"/"+kilos)
+  		    
+ 			//regla de tres para metros
+ 			var totalDesp=parseFloat(sum1)-parseFloat(reproceso);
+ 			var kilosTotales=parseFloat(kilos)-parseFloat(totalDesp);
+ 			var nuevosMetros = Math.round(kilosTotales * metros / kilos);
+ 			
  			document.form1.metro_r2.value = nuevosMetros;
  			document.form1.int_total_kilos_rp.value=kilosTotales;
  			document.form1.int_kilos_desp_rp.value=totalDesp.toFixed(2); 
@@ -1503,6 +1567,8 @@ function consultagenerica2(selec)
 {
 	window.location ='referencia_bolsa_generica2.php?id_ref='+document.form1.ref.value+'&cod_refe='+document.form1.cod_gen.value+'&n_cotiz_ref='+document.form1.n_cotiz_ref.value+'&Str_nit='+document.form1.Str_nit.value;
 }
+
+
 function consultagenerica3(selec) 
 {
 	window.location ='cotizacion_general_bolsa_generica.php?id_ref='+document.form1.ref.value+'&N_cotizacion='+document.form1.N_cotizacion.value+'&Str_nit='+document.form1.Str_nit.value+'&generica=1';
@@ -3484,7 +3550,8 @@ function hastaordenTiq() {
 }
 
 //FUNCION DE METROSLINEAL A KILOS BOLSILLO
-function metrosAkilos() {  
+function metrosAkilos() { 
+
 	if(document.form1.metroLineal_op.value != "") { 		
 		var lam1=parseFloat(document.form1.lam1.value);  			
 		var lam2=parseFloat(document.form1.lam2.value);
@@ -3888,4 +3955,3 @@ function nobackbutton(){
  function EnvioBoton(pag,name,valor,name2,valor2){
  	window.location.href = pag+"?"+name+"="+valor+"&"+name2+"="+valor2;
  }
-

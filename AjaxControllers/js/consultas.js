@@ -868,7 +868,7 @@ function consultasPlanchas(codref) {
     });
 }
 
-function consultaNumeroOrden(id, campo, pagina) {
+function consultaNumeroOrden(id, campo, pagina,id_c_oc='') {
   $.ajax({
     dataType: "json",
     url:
@@ -877,8 +877,10 @@ function consultaNumeroOrden(id, campo, pagina) {
       "=" +
       campo +
       "&pagina=" +
-      pagina,
-    type: "POST",
+      pagina +
+      "&id_c_oc=" +
+      id_c_oc,
+    type: "POST", 
     data: {
       id: id,
       campo: campo,

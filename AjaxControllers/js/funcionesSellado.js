@@ -1658,22 +1658,32 @@ function cargaInfoRollos(id_op) {
   })
     .done(function (data, textStatus, jqXHR) {
       document.querySelector("#id_rollo").innerHTML = ""; //Borra todo lo que tenga el select
-      if (data != "0") {
-        $("#id_rollo").append(
-          $("<option>", {
-            value: "",
-            text: "Rollos",
-          })
-        );
-        data.forEach((element) => {
+        if (data[0].length != 1 || data[1] == false) {
           $("#id_rollo").append(
             $("<option>", {
-              value: element.rollo_r,
-              text: element.rollo_r,
+              value: "",
+              text: "Rollos",
             })
           );
-        });
-      }
+          data[0].forEach((element) => {
+            $("#id_rollo").append(
+              $("<option>", {
+                value: element.rollo_r,
+                text: element.rollo_r,
+              })
+            );
+          });
+          resolve(false);
+        } else {
+          $("#id_rollo").append(
+            $("<option>", {
+              value: data[0][0].rollo_r,
+              text: data[0][0].rollo_r,
+            })
+          );
+          $("#rollo_r").val(data[0][0].rollo_r);
+          resolve(true);
+        }
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
       document.querySelector("#id_rollo").innerHTML = ""; //Borra todo lo que tenga el select
@@ -1702,12 +1712,24 @@ function cargaInfoRolloSellado(id_op, rollo_r) {
   })
     .done(function (data, textStatus, jqXHR) {
       var anchoBolsa = $("#anchoRef").val();
-      var metros = parseInt( //cantidad de metros que se van sellando, incrementa cada vez que guardan numeracion
+      var metros = parseInt(
+        //cantidad de metros que se van sellando, incrementa cada vez que guardan numeracion
         (data[0].num_final - data[0].num_inicial + 1) * (anchoBolsa / 100)
       );
       $("#cant_metros").val(metros);
       $("#desperdicio_inicial").val(data[0].mts_desperdicio);
-      console.log( "anchobolsa:" + anchoBolsa +"cm cantBolsas:" +(data[0].num_final - data[0].num_inicial + 1) + "--" +"metros:" +metros+" desperdicio:"+data[0].mts_desperdicio+"mts");
+      console.log(
+        "anchobolsa:" +
+          anchoBolsa +
+          "cm cantBolsas:" +
+          (data[0].num_final - data[0].num_inicial + 1) +
+          "--" +
+          "metros:" +
+          metros +
+          " desperdicio:" +
+          data[0].mts_desperdicio +
+          "mts"
+      );
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
       console.log(
@@ -1786,7 +1808,6 @@ async function verificarRollo(id_op) {
           $("#rollo_r").val(data[0][0].rollo_r);
           resolve(true);
         }
-
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
         reject("La solicitud a fallado: " + textStatus + " -- " + errorThrown);
@@ -1892,3 +1913,4 @@ function guardarRolloSeleccionado(id_op, numRollo, desde, hasta) {
 }
 
 /* ++++++++++FIN NUEVAS FUNCIONES PARA EL MANEJO DE LAS BANDERAS +++++++++*/
+

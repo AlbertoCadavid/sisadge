@@ -133,7 +133,7 @@ $totalRows_lista_op = mysql_num_rows($lista_op);
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
   $insertSQL = sprintf(
-    "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, str_maquina_ext, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 
     GetSQLValueString($_POST['id_r'], "int"),
     GetSQLValueString($_POST['rollo_r'], "int"),
@@ -148,6 +148,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     GetSQLValueString($_POST['presentacion_r'], "text"),
     GetSQLValueString($_POST['cod_empleado_r'], "int"),
     GetSQLValueString($_POST['turno_r'], "int"),
+    GetSQLValueString($_POST['str_maquina_rp'], "text"),
     GetSQLValueString($_POST['fechaI_r'], "date"),
     GetSQLValueString($_POST['fechaF_r'], "date"),
     GetSQLValueString($_POST['metro_r'], "int"),
@@ -388,6 +389,12 @@ $desperdicios = mysql_query($query_desperdicios, $conexion1) or die(mysql_error(
 $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
 
+//MAQUINAS
+mysql_select_db($database_conexion1, $conexion1);
+$query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='1' ORDER BY id_maquina DESC";
+$maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
+$row_maquinas = mysql_fetch_assoc($maquinas);
+$totalRows_maquinas = mysql_num_rows($maquinas);
 ?>
 <html>
 
@@ -578,8 +585,22 @@ $totalRows_desperdicios = mysql_num_rows($desperdicios);
       <tr>
         <td id="fuente1">TURNO</td>
         <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="7" style="width:40px" required value="<?php echo $row_rollo['turno_r']; ?>"></td>
-        <td id="fuente1">&nbsp;</td>
-        <td id="fuente1">&nbsp;</td>
+        <td id="fuente1">MAQUINA</td>
+        <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
+            <option value="">Seleccione</option>
+            <?php
+            do {
+            ?>
+              <option value="<?php echo $row_maquinas['id_maquina'] ?>"><?php echo $row_maquinas['nombre_maquina'] ?></option>
+            <?php
+            } while ($row_maquinas = mysql_fetch_assoc($maquinas));
+            $rows = mysql_num_rows($maquinas);
+            if ($rows > 0) {
+              mysql_data_seek($maquinas, 0);
+              $row_maquinas = mysql_fetch_assoc($maquinas);
+            }
+            ?>
+          </select></td>
       </tr>
       <tr>
         <td id="fuente1">FECHA INICIO ROLLO</td>

@@ -13,7 +13,7 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
   //to fully log out a visitor we need to clear the session varialbles
   session_unregister('MM_Username');
   session_unregister('MM_UserGroup');
-	
+	 
   $logoutGoTo = "usuario.php";
   if ($logoutGoTo) {
     header("Location: $logoutGoTo");
@@ -105,8 +105,9 @@ $totalRows_ver_menu = mysql_num_rows($ver_menu);
          <div class="row">
            <div class="col-md-4">
               <!--INICIA MENU-->
-	                 <div class="navbar"><ul><?php $i=0; do { ?>
-                    <li><?php 
+	                 <div class="navbar">
+                    <ul>  <?php $i=0; do { ?>
+                      <li><?php 
                         $tipo=$row_usuario['tipo_usuario'];
                         $id_menu=$row_ver_menu['id_menu'];
                         $sql="select * from permisos where menu='$id_menu' and usuario='$tipo'";
@@ -115,7 +116,9 @@ $totalRows_ver_menu = mysql_num_rows($ver_menu);
                         if ($id_menu==$menu) { $url=$row_ver_menu['url'];
                         echo "<a href=$url>".$row_ver_menu['nombre_menu']."</a>"; }
                         else { echo $row_ver_menu['nombre_menu']; } ?>
-                        </li><?php } while ($row_ver_menu = mysql_fetch_assoc($ver_menu)); ?>  
+                        </li>
+                      <?php } while ($row_ver_menu = mysql_fetch_assoc($ver_menu)); ?>
+                      <li><a href="/acycia/referencia_precio.php">Referencias por precio</a></li>  
                    </ul>  
               </div>
            </div>          

@@ -152,7 +152,7 @@ if (isset($_SESSION['MM_Username'])) {
 }
 $row_usuario = $conexion->buscar('usuario','usuario',$colname_usuario); 
 $row_exste = $conexion->llenarCampos("maquina", "WHERE codigo_maquina <>'' ", "ORDER BY codigo_maquina ASC", "*");
-$row_ver_maquinas = $conexion->llenaListas('maquina','','ORDER BY codigo_maquina ASC','*'); 
+$row_ver_maquinas = $conexion->llenaListas('maquina','WHERE activo = 1','ORDER BY codigo_maquina ASC','*'); 
 
 $colname_editar_maquina = "-1";
 if (isset($_GET['id_maquina'])) {

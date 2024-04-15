@@ -708,15 +708,15 @@ if($n_egp!='') {
 																											$resultoc=mysql_query($sqloc);
 																											header("location:orden_compra.php");
 																										}
-																										/*DELETE O.C. DEL VENTAS*/
-																										if($id_pedido_oc!='')
-																										{
-																											$sqlorden="SELECT id_pedido,str_numero_oc,id_c_oc FROM tbl_orden_compra WHERE id_pedido='$id_pedido_oc'";
-																											$resultorden= mysql_query($sqlorden);
-																											$numorden= mysql_num_rows($resultorden);	
-																											$str_numero_oc = mysql_result($resultorden, 0, 'str_numero_oc');
-																											$id_c_oc = mysql_result($resultorden, 0, 'id_c_oc');
-																											$id_pedido = mysql_result($resultorden, 0, 'id_pedido');
+ /*DELETE O.C. DEL VENTAS*/
+	if($id_pedido_oc!='')
+	{
+		$sqlorden="SELECT id_pedido,str_numero_oc,id_c_oc FROM tbl_orden_compra WHERE id_pedido='$id_pedido_oc'";
+		$resultorden= mysql_query($sqlorden);
+		$numorden= mysql_num_rows($resultorden);	
+		$str_numero_oc = mysql_result($resultorden, 0, 'str_numero_oc');
+		$id_c_oc = mysql_result($resultorden, 0, 'id_c_oc');
+		$id_pedido = mysql_result($resultorden, 0, 'id_pedido');
 //QUE NO TENGA ITEMS
 /*$sqlordenc="SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io='$id_pedido' ORDER BY id_pedido_io DESC";
 $resultordenc = mysql_query($sqlordenc);
@@ -746,12 +746,13 @@ $id=1;
 header("location:orden_compra_cl2.php?id=$id");
 }else{
 	$id=2;	
-	header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_oc&id_oc=$id_c_oc&id=$id");
+	header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_oc&id_oc=$id_c_oc&id=$id&id_pedido=$id_pedido_oc");
 }
 }
 /*DELETE ITEMS DE ORDEN DE COMPRA DEL CLIENTE O PEDIDO DEL CLIENTE*/
 if($id_items!='')
 {
+	   
 //SI EXISTE O.P
 	$sqlexistop="SELECT Tbl_items_ordenc.id_items AS id
 	FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_items='$id_items' AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
@@ -766,21 +767,22 @@ if($id_items!='')
 //NO SE PUEDE ELIMINAR SI ESTA EN PRODUCCION
 	if(($numexistop =="" || $numrem==""))
 	{
-		$sqlitems="SELECT * FROM Tbl_items_ordenc, Tbl_orden_compra,cliente WHERE Tbl_items_ordenc.id_items='$id_items' AND Tbl_items_ordenc.str_numero_io=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.str_nit_oc=cliente.nit_c";
+		$sqlitems="SELECT * FROM Tbl_items_ordenc, Tbl_orden_compra,cliente WHERE Tbl_items_ordenc.id_items='$id_items' AND Tbl_items_ordenc.id_pedido_io=Tbl_orden_compra.id_pedido AND Tbl_orden_compra.str_nit_oc=cliente.nit_c";
 		$resultitems= mysql_query($sqlitems);
 		$numitems= mysql_num_rows($resultitems);
 		if($numitems >='1')
 		{
-			$str_numero_io = mysql_result($resultitems, 0, 'str_numero_io');
-$id_oc = mysql_result($resultitems, 0, 'id_c');//para retornar al edit
+		 $id_pedido = mysql_result($resultitems, 0, 'id_pedido');
+		 $str_numero_io = mysql_result($resultitems, 0, 'str_numero_io');
+         $id_oc = mysql_result($resultitems, 0, 'id_c');//para retornar al edit
 }
 $sqlitems2="DELETE FROM Tbl_items_ordenc WHERE id_items='$id_items'";
 $resultitems2=mysql_query($sqlitems2);
 $id=1;
-header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_io&id_oc=$id_oc&id=$id");
+header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_io&id_oc=$id_oc&id=$id&id_pedido=$id_pedido");
 }else{
 	$id=0;
-	header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_io&id_oc=$id_oc&id=$id");	
+	header("location:orden_compra_cl_edit.php?str_numero_oc=$str_numero_io&id_oc=$id_oc&id=$id&id_pedido=$id_pedido");	
 }
 }
 

@@ -82,10 +82,12 @@ function sumaImpuesto( precio='',vimpuesto='' ){
          $('#valor').val(precio);//campo de la oc detalle
          $('#N_precio_old').val(precio);
          $('#int_precio_io').val(precio);//campo de la oc detalle 
-         $('#valor_impuesto').val(vimpuesto);
+         $('#valor_impuesto').val(0);
          $('#precioreal').val(precio);//campo de la oc detalle 
          $("#impuesto").val(0); 
          $("#adjuntos" ).hide();
+         $("#calculaformula").prop("checked", false)
+         $("#calculaformula").val(0);
      }
  
   
@@ -120,7 +122,7 @@ function sumaImpuestoPacking( precio='',vimpuesto='' ){
       $('#N_precio_old').val(precio);
       $('#precioreal').val(precio);//campo de la oc detalle 
       $('#int_precio_io').val(precio);//campo de la oc detalle
-      $('#valor_impuesto').val(vimpuesto);
+      $('#valor_impuesto').val(0);
       $("#impuesto").val(0); 
       $( "#adjuntos" ).hide();
   }
@@ -154,7 +156,7 @@ function sumaImpuestoLamina( precio='',vimpuesto='' ){
       $('#N_precio_old').val(precio);
       $('#precioreal').val(precio);//campo de la oc detalle 
       $('#int_precio_io').val(precio);//campo de la oc detalle
-      $('#valor_impuesto').val(vimpuesto);
+      $('#valor_impuesto').val(0);
       $("#impuesto").val(0); 
       $( "#adjuntos" ).show();
   }
@@ -203,8 +205,8 @@ function pesoMillarPacking( precio='',millar='',millarBols=''){
   
     
     if(!this.checked) {
-        bolsa= ((parseFloat(millar)+parseFloat(millarBols) )*2.12);
-        sumaimpuesto = ((parseFloat(millar)+parseFloat(millarBols) )*2.12);
+        bolsa= ((parseFloat(millar)+parseFloat(millarBols) )*2.35);
+        sumaimpuesto = ((parseFloat(millar)+parseFloat(millarBols) )*2.35);
         sumaimpuesto = sumaimpuesto.toFixed(2);
         bolsa = parseFloat(precio)+parseFloat(bolsa);
         bolsa = bolsa.toFixed(2);
@@ -230,13 +232,112 @@ function pesoMillarPacking( precio='',millar='',millarBols=''){
  
 }
 
-function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio =''){    
+ 
+function pesoMillarFormulaCotiz(tiposolapa,N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precioactual='' ){    
+
+        const precioingresado=precioactual; 
+        
+        if(B_fuelle==''){
+          B_fuelle=0;
+        }else{
+            B_fuelle=B_fuelle*2;//siempre es por 2
+        }  
+
+        var cons= $("#tipo_bolsa").val()=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
+
+        nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+
+        pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons)
+        pesoBolsillo=((parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*parseFloat(cons))/parseFloat(2));
+        pesoMillar=(parseFloat(pesoBolsa)+parseFloat(pesoBolsillo));
+        impuesto = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+       
+        precio_new = parseFloat(precioactual)+parseFloat(impuesto);
+ 
+        pesoMillar = pesoMillar.toFixed(2);
+        precio_new = precio_new.toFixed(2);
+        impuesto = impuesto.toFixed(2);
+ 
+    if( $('#calculaformula').prop('checked') ) {
+
+        $('#N_precio').val(precioactual);
+        $('#valor_impuesto').val(impuesto); 
+        $('#N_precio_old').val(precio_new);  
+        $("#calculaformula").val(1);
+        $("#impuesto").prop("checked", true);
+        $("#impuesto").val(1); 
+     }else{ 
+ 
+        $('#N_precio').val(precioingresado);
+        $('#valor_impuesto').val(0); 
+        $('#N_precio_old').val(precioingresado); 
+        $("#calculaformula").val(0);
+        $("#impuesto").prop("checked", false);
+        $("#impuesto").val(0); 
+     }
  
   
+ 
+}
+
+
+function pesoMillarFormulaCotizNueva(tiposolapa,N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precioconimp='' ){    
+
+        const precioingresado=precioconimp; 
+        
+        if(B_fuelle==''){
+          B_fuelle=0;
+        }else{
+            B_fuelle=B_fuelle*2;//siempre es por 2
+        }  
+
+        var cons= $("#tipo_bolsa").val()=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
+
+        nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+
+        pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons)
+        pesoBolsillo=((parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*parseFloat(cons))/parseFloat(2));
+        pesoMillar=(parseFloat(pesoBolsa)+parseFloat(pesoBolsillo));
+        impuesto = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+       
+        precio_new = parseFloat(precioingresado)+parseFloat(impuesto);
+ 
+        pesoMillar = pesoMillar.toFixed(2);
+        precio_new = precio_new.toFixed(2);
+        impuesto = impuesto.toFixed(2);
+ 
+    if( $('#calculaformula').prop('checked') ) {
+
+        $('#N_precio').val(precioconimp);
+        $('#valor_impuesto').val(impuesto); 
+        $('#N_precio_old').val(precio_new);  
+        $("#calculaformula").val(1);
+        $("#impuesto").prop("checked", true);
+        $("#impuesto").val(1); 
+     }else{ 
+ 
+        $('#N_precio').val(precioingresado);
+        $('#valor_impuesto').val(0); 
+        $('#N_precio_old').val(precioingresado); 
+        $("#calculaformula").val(0);
+        $("#impuesto").prop("checked", false);
+        $("#impuesto").val(0); 
+     }
+ 
+  
+ 
+}
+/*function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio =''){    
+ 
+    
     
     if(!this.checked) {
-        bolsa=((parseFloat(N_ancho)*parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(N_solapa)) * parseFloat(N_calibre)*parseFloat(0.00467))+(parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*(parseFloat(0.00467)/parseFloat(2)));
-        bolsa = bolsa*parseFloat(2.12);
+        bolsa=(parseFloat(N_ancho)*(parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(N_solapa)) * parseFloat(N_calibre)*parseFloat(0.00467))
+        pesoBolsillo=(parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*(parseFloat(0.00467)/parseFloat(2)));
+        pesoMillar=(parseFloat(pesoBolsa)+parseFloat(pesoBolsillo));
+        bolsa = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+
+        //bolsa = bolsa*parseFloat(2.35);
         bolsa = parseFloat(precio)+parseFloat(bolsa);
         bolsa = bolsa.toFixed(2);
        $('#N_precio').val(bolsa);
@@ -258,47 +359,6 @@ function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_ta
  
   
  
-}
+}*/
 
-function pesoMillarFormulaCotiz(tiposolapa,N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio=''){    
-
-        precioingresado=precio; 
-         
-        nuevasolapa = N_solapa >0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : 0;
-        pesoMillar=((parseFloat(N_ancho)*parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(0.00467))+(parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*(parseFloat(0.00467)/parseFloat(2)));
-        
-        impuesto = pesoMillar*parseFloat(2.12);
-       
-        precio_old = parseFloat(precio)-parseFloat(impuesto);
-
-        precio_new = parseFloat(precio);
-
-        precio_old = precio_old.toFixed(2);
-        pesoMillar = pesoMillar.toFixed(2);
-        precio_new = precio_new.toFixed(2);
-        impuesto = impuesto.toFixed(2);
-
-/*    if(!this.checked) { 
-       $('#N_precio').val(precioingresado);
-       $('#valor_impuesto').val(impuesto); 
-       $('#N_precio_old').val(precio_new); 
-       $("#calculaformula").val(0);   
-
-    }*/ 
-    if( $('#calculaformula').prop('checked') ) {
-
-        $('#N_precio').val(precio_old);
-        $('#valor_impuesto').val(impuesto); 
-        $('#N_precio_old').val(precio_new);  
-        $("#calculaformula").val(1);
-     }else{ 
-          precioingresado=parseFloat(precio)+parseFloat(impuesto);; 
-        $('#N_precio').val(precioingresado);
-        $('#valor_impuesto').val(0); 
-        $('#N_precio_old').val(precioingresado); 
-        $("#calculaformula").val(0); 
-     }
  
-  
- 
-}

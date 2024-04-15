@@ -108,7 +108,7 @@ $vende=$_GET['vende'];
 
 //TODOS VACIOS
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0' && $autorizado=='0' && $vende=='0')
-{
+{ 
   $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
 }
 //ESTADO LLENO
@@ -273,6 +273,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
   <script type="text/javascript" src="js/usuario.js"></script>
   <script type="text/javascript" src="js/formato.js"></script>
   <script type="text/javascript" src="AjaxControllers/updateAutorizar.js"></script>
+  <script type="text/javascript" src="AjaxControllers/js/consultas.js"></script>
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
@@ -450,9 +451,9 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                $restante = $conexion->llenarCampos('tbl_items_ordenc'," WHERE id_pedido_io='$id_pedido' ", "", "SUM(int_cantidad_rest_io) AS restante");
 
                   if($row_ordenes_compra['autorizado']=='SI' &&  ($row_ordenes_compra['b_estado_oc'] > 1 || $restante['restante'] > 0.00) ){  
-                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_ordenes_compra['str_numero_oc']." target=_top  style=text-decoration:none; color:#000000 >"; 
+                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_ordenes_compra['str_numero_oc']. "&id_pedido=".$row_ordenes_compra['id_pedido']. " target=_top  style=text-decoration:none; color:#000000 >"; 
                   }else{
-                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_ordenes_compra['str_numero_oc']." target=_top  style=text-decoration:none; color:#000000 >"; 
+                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_ordenes_compra['str_numero_oc']. "&id_pedido=".$row_ordenes_compra['id_pedido']. " target=_top  style=text-decoration:none; color:#000000 >"; 
                   }
               ?>
 
@@ -503,7 +504,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                else if($estado=='1'){ ?><?php echo $urls;?><img src="images/falta.gif" alt="INGRESADA O.C."title="INGRESADA O.C." border="0" style="cursor:hand;"/></a><?php } 
                $id_oc=$row_ordenes_compra['str_numero_oc'];
                $sqlmp="SELECT Tbl_items_ordenc.str_numero_io,Tbl_orden_produccion.str_numero_oc_op,Tbl_items_ordenc.int_cod_ref_io,Tbl_orden_produccion.int_cod_ref_op AS existe_op, Tbl_orden_produccion.b_borrado_op 
-               FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.str_numero_io=$id_oc AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+               FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_pedido_io=$id_pedido AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
                AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
                $resultmp= mysql_query($sqlmp);
                $nump = mysql_num_rows($resultmp);
@@ -519,7 +520,8 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                ?></p>
               </div>
               <div class="col" id="fondo_2">
-                <p> <?php echo substr($row_ordenes_compra['fecha_autoriza'],0,10);?> </p>
+                <a href="javascript:verConsulta('historico','<?php echo $row_ordenes_compra['id_pedido']; ?>','orden_compra_cl2.php')" ><?php echo substr($row_ordenes_compra['fecha_autoriza'],0,10); ?></a>
+                <!-- <p> <?php echo substr($row_ordenes_compra['fecha_autoriza'],0,10);?> </p> -->
               </div>
               <div class="col" id="fondo_2">
                 <p><?php if($row_ordenes_compra['autorizado']=='SI'): ?>

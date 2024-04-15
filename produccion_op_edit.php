@@ -11,7 +11,7 @@ include('funciones/funciones_php.php'); //SISTEMA RUW PARA LA BASE DE DATOS
 if (!isset($_SESSION)) {
   session_start();
 }
-
+ 
 // ** Logout the current user. **
 $logoutAction = $_SERVER['PHP_SELF'] . "?doLogout=true";
 if ((isset($_SERVER['QUERY_STRING'])) && ($_SERVER['QUERY_STRING'] != "")) {
@@ -569,7 +569,7 @@ $row_orden_produccion = $conexion->llenarCampos("tbl_orden_produccion ", "WHERE 
 $_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
 
 
-$row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $_GET['int_cod_ref_op'] . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref");
+$row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $_GET['int_cod_ref_op'] . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref,ref.tipo_bolsa_ref,ref.sello_superior");
 
 //CARGA O.C INTERNA
 $row_oc = $conexion->llenaSelect("Tbl_orden_compra_interna", " ", "ORDER BY Tbl_orden_compra_interna.numero_ocI DESC");
@@ -714,7 +714,7 @@ $fech_oc = $resultoc['fecha_ingreso_oc'];
 $nit_oc = $resultoc['str_nit_oc']; 
 
 
- 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*');  
 /*$ref_io = $row_orden_produccion['int_cod_ref_op'];
 $resultio = $conexion->llenarCampos("Tbl_items_ordenc tmi ", " WHERE tmi.str_numero_io= '" . $numer_oc . "'  AND int_cod_ref_io='" .$ref_io. "'  ", "", "tmi.fecha_entrega_io");
 $fech_io = $resultio['fecha_entrega_io'];*/
@@ -1012,7 +1012,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                           <input type="number" name="int_cantidad_op" id="int_cantidad_op" value="<?php echo $row_orden_produccion['int_cantidad_op'] ?>" style="width:80px" onchange="calcular_op();" step="0.01" required="required" />
                                         </strong></td>
                                       <td colspan="2" id="fuente1">
-                                        <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
+                                        <!-- <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op" onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}">
                                           <option value="N.A." <?php if (!(strcmp("N.A.", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>N.A.</option>
                                           <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>SEGURIDAD</option>
                                           <option value="CURRIER" <?php if (!(strcmp("CURRIER", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>CURRIER</option>
@@ -1021,6 +1021,13 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                           <option value="PACKING LIST" <?php if (!(strcmp("PACKING LIST", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>PACKING LIST</option>
                                           <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>LAMINA</option>
                                           <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['str_tipo_bolsa_op']))) { echo "selected=\"selected\""; } ?>>BOLSA TROQUELADA</option>
+                                        </select> -->
+
+                                           <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  style="width:200px" >
+                                            <option value="">Seleccione...</option>
+                                               <?php  foreach($row_formulas as $row_formulas ) { ?>
+                                            <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                                        <?php } ?>
                                         </select>
                                       </td>
                                       <td colspan="2" nowrap="nowrap" id="talla1">
@@ -1066,7 +1073,8 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="fuente1">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                      <td colspan="3" id="fuente1">&nbsp;</td>
+                                      <td colspan="3" id="fuente1"><strong style=" color: red;" >SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior'];?>" onblur="calcular_op()" readonly />   /  SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref']==2) {echo "Sencilla";}else if ($row_datos_oc['b_solapa_caract_ref']==1){echo "Doble";}else {echo "";} ?>
+                                       </td>
                                       <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                                       <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
                                           <option value="N.A" <?php if (!(strcmp('N.A', $row_datos_oc['Str_tratamiento']))) { echo "selected=\"selected\""; } ?>>N.A</option>
@@ -1572,15 +1580,14 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                     </td>
                                   </tr> 
                                   <tr>
-                                    <td colspan="8" id="talla3">Faltantes: 
+                                    <td colspan="6" id="talla4">&nbsp;<div id="resultado_generador"></div>
+                                     <td colspan="2" id="talla3">Faltantes: 
                                       <select name="imprimiop" id="imprimiop" required="required">
-                                        <option value="" <?php if (!(strcmp("", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option> 
-                                        <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>SI TIENE FALTANTES</option>
-                                        <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>NO SI TIENE FALTANTES</option>
+                                        <option value="" <?php if (!(strcmp("", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>Selecione</option>                
+                                        <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>CON FALTANTES</option>
+                                        <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['imprimiop']))) { echo "selected=\"selected\""; } ?>>SIN FALTANTES</option>
                                       </select>
-                                    </td>
-                                    <td colspan="7" id="talla1">&nbsp;<div id="resultado_generador"></div>
-                                    </td>
+                                    </td> 
                                   </tr>
                                   <tr>
                                     <td colspan="2" id="talla1"><strong>POSICION</strong></td>

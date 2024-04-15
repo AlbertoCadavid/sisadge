@@ -97,7 +97,7 @@ $row_refac = $conexion->llenarCampos('tbl_orden_produccion p', 'WHERE p.id_op=' 
 //$row_refac_refcl= $conexion->llenarCampos("tbl_refcliente r JOIN tbl_orden_produccion p ON r.int_ref_ac_rc=p.int_cod_ref_op  "," WHERE p.id_op= '".$_GET['id_op']."' AND p.int_cliente_op=r.id_c_rc ","","p.id_op,p.int_cod_ref_op,p.str_numero_oc_op,p.int_cliente_op,p.version_ref_op,r.int_ref_ac_rc,r.str_descripcion_rc,r.str_ref_cl_rc");
 
 
-$row_vista_paquete = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='" . $_GET['id_op'] . "' " . " AND int_caja_tn='" . $_GET['int_caja_tn'] . "' ", 'ORDER BY int_paquete_tn ASC LIMIT 1', 'int_op_tn, int_caja_tn, int_caja_tn, fecha_ingreso_tn, int_desde_tn, int_undxcaja_tn, int_undxpaq_tn int_cod_empleado_tn, int_cod_rev_tn,imprime');
+$row_numeracion_paquetes = $conexion->llenaListas('tbl_tiquete_numeracion', "WHERE int_op_tn='" . $_GET['id_op'] . "' " . " AND int_caja_tn='" . $_GET['int_caja_tn'] . "' ", 'ORDER BY int_paquete_tn ASC ', 'int_op_tn, int_caja_tn, int_undxpaq_tn, fecha_ingreso_tn, int_desde_tn, int_undxcaja_tn, int_undxpaq_tn int_cod_empleado_tn, int_cod_rev_tn,imprime, int_hasta_tn');
 
 $row_vista_MAX = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='" . $_GET['id_op'] . "' " . " AND int_caja_tn='" . $_GET['int_caja_tn'] . "' ", 'ORDER BY int_paquete_tn DESC LIMIT 1', 'int_hasta_tn');
 
@@ -113,6 +113,52 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
 } else {
     $varControl = 0;
 }
+
+/* SCRIPT PARA SABER SI ALGUNOS PAQUETES DE LA MISMA CAJA TIENEN UNA NUMERACION CON UNA CANT DE DIFERENCIA DE ALMENOS UNA CAJA */
+$num1 = separarNumLetras($row_numeracion_paquetes[0]['int_desde_tn']);
+$numRepeticiones = 0;
+$numdesde2 = 0;
+$numhasta = 0;
+$actnumhasta1 = $row_numeracion_paquetes[0]['int_hasta_tn'];
+$arrayRangos = [$row_numeracion_paquetes[0]['int_desde_tn']]; //ARRAY PARA LLENARLO CON LA NUMERACION DESDE-HASTA DE VARIOS RANGOS, SE LLENA LA POS 0 CON EL INICIO DEL NUM DEL PAQUETE
+$arrayTotales = []; //ARRAY PARA CONTAR CUANTA CANTIDAD DE BOLSAS HAY EN CADA INTERVALO DE NUMERACION
+$total = 1;
+$posTotales = 0;
+$pos = 1;
+foreach ($row_numeracion_paquetes as $value) {
+    
+    $num2 = separarNumLetras($value['int_desde_tn']);
+    $actnumhasta2 = $value['int_hasta_tn'];
+    $diferencia = $num2 - $num1;
+    
+    if ($diferencia > ($row_cantidad['cantidades'])) { //DIFERENCIA DE UNA CAJA
+        $numRepeticiones += 1;
+        $arrayRangos[$pos] =   $actnumhasta1; 
+        $arrayRangos[$pos + 1] = $value['int_desde_tn']; 
+        $pos = $pos + 2;
+        $posTotales += 1;
+        $total = 1;
+    }
+    $actnumhasta1 =  $actnumhasta2;
+    $num1 = $num2;
+    $arrayTotales[$posTotales] = $total*$row_numeracion_paquetes[0]['int_undxpaq_tn'];
+    $total++;
+}
+array_push($arrayRangos, $row_numeracion_paquetes[sizeof($row_numeracion_paquetes) - 1]['int_hasta_tn']); //AGREGO A LA ULTIMA POS DEL ARRAY, EL ULTIMO NUMERO DEL ULTIMO PAQUETE
+
+function separarNumLetras($txt) //Funcion para separar las letras de los numeros
+{
+    if (preg_match('/([a-zA-Z]+)(\d+)/', $txt, $coincidencias)) {
+        $letra = $coincidencias[1]; // Obtener la letra
+        $numero = $coincidencias[2]; // Obtener el número
+        $num2 = $numero;
+    } else {
+        $num2 = $txt;
+    }
+    return $num2;
+}
+
+/* FIN SCRIPT */
 
 ?>
 <html>
@@ -143,7 +189,7 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
     <!--IMPRIME CODIGO DE BARRAS-->
     <script type="text/javascript">
         $(document).ready(function() {
-            var codigo = "<?php $var = $row_vista_paquete['int_op_tn'] . "-" . $row_vista_paquete['int_caja_tn'];
+            var codigo = "<?php $var = $row_numeracion_paquetes[0]['int_op_tn'] . "-" . $row_numeracion_paquetes[0]['int_caja_tn'];
                             echo $var; ?>";
             var codigo2 = "770-771-1-<?php echo $row_refac['int_cod_ref_op']; ?>-1";
             $("#bcTarget").barcode(codigo2, "code128", {
@@ -198,7 +244,7 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
         .text {
             /*"Impact", Garamond, 'Comic Sans';*/
             font-family: Roboto;
-            font-weight:800;
+            font-weight: 800;
             line-height: 95%;
             /*espacio entre palabras arriba y abajo*/
         }
@@ -206,7 +252,8 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
 </head>
 
 <body onLoad="self.print();"><!--self.close();-->
-    <div style="width:100%" align="center" id="seleccion" onClick="cerrar('seleccion');"><!--onClick="javascript:imprSelec('seleccion')"-->
+    
+        <div style="width:100%" align="center" id="seleccion" onClick="cerrar('seleccion');"><!--onClick="javascript:imprSelec('seleccion')"-->
         <div>
             <table style="width:100%" border="4">
                 <tr><!-- rowspan="2"  -->
@@ -219,7 +266,7 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
                         <img style="width:75%; height: 75%;" src="images/logoacyc2.jpg" />
                     </td>
                 </tr>
-                
+
                 <tr nowrap="nowrap">
                     <td colspan="6">&nbsp;<b style="font-size:20px;" class="text">SHIP TO:</b>
                         &nbsp;&nbsp;<samp style="font-size:20px;" class="text">
@@ -314,14 +361,14 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
                                 }
 
                                 */
-                               //si es imprime se imprime completo la caja
-                                if($row_vista_paquete['imprime']==1){
-                                     echo $cantidad = $row_vista_paquete['int_undxcaja_tn']; 
-                                }else{
-                                     echo $cantidad = $row_cantidad['registros'] == 1 && $row_cantidad['int_paquete_tn'] == $cantidaddepaq ? $row_vista_paquete['int_undxcaja_tn'] : $row_cantidad['cantidades'];  
+                                //si es imprime se imprime completo la caja
+                                if ($row_numeracion_paquetes[0]['imprime'] == 1) {
+                                    echo $cantidad = $row_numeracion_paquetes[0]['int_undxcaja_tn'];
+                                } else {
+                                    echo $cantidad = $row_cantidad['registros'] == 1 && $row_cantidad['int_paquete_tn'] == $cantidaddepaq ? $row_numeracion_paquetes[0]['int_undxcaja_tn'] : $row_cantidad['cantidades'];
                                 }
                             } else {
-                                     echo $cantidad = $row_cantidad['registros'] == 1 && $row_cantidad['int_paquete_tn'] == $cantidaddepaq ? $row_vista_paquete['int_undxcaja_tn'] : $row_cantidad['cantidades']; 
+                                echo $cantidad = $row_cantidad['registros'] == 1 && $row_cantidad['int_paquete_tn'] == $cantidaddepaq ? $row_numeracion_paquetes[0]['int_undxcaja_tn'] : $row_cantidad['cantidades'];
                             }
                             ?>
                         </b>
@@ -354,22 +401,55 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
                     <td colspan="6"><b style="font-size:20px;" class="text">&nbsp;NUMERACION:&nbsp;</b>
                     </td>
                 </tr>
-                <tr style="margin-left:10px">
-                <td colspan="6">
-                        <b style="font-size:50px;" class="text">
-                            <span style="font-size:25px; margin-left:10px">DESDE:<br></span>
-                            <span style="margin-left:10px"> <?php echo $row_vista_paquete['int_desde_tn'] . $row_refac['charfin'] ?></span>
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">
-                        <b style="font-size:50px;" class="text">
-                            <span style="font-size:25px; margin-left:10px">HASTA:<br></span>
-                            <span style="margin-left:10px"> <?php echo $row_vista_MAX['int_hasta_tn'] . $row_refac['charfin']; ?> </span>
-                        </b>
-                    </td>
-                </tr>
+                <?php if ($numRepeticiones > 0) { //condicional por si hay que mostrar varios "desde-hasta" en el tiquete
+                    /* inicio numeracion por repeticiones */
+                    $indice = 0;
+                    for ($i = 0; $i <= $numRepeticiones; $i++) { ?>
+
+                        <tr style="margin-left:10px">
+                            <td colspan="1">
+                                <b style="font-size:45px;" class="text">
+                                    <span style="font-size:25px; margin-left:10px">DESDE:<br></span>
+                                    <span style="margin-left:10px"> <?php echo $arrayRangos[$indice]; ?></span>
+                                </b>
+                            </td>
+                            <td colspan="2">
+                                <b style="font-size:45px;" class="text">
+                                    <span style="font-size:25px; margin-left:10px">HASTA:<br></span>
+                                    <span style="margin-left:10px"> <?php echo $arrayRangos[$indice + 1]; ?> </span>
+                                </b>
+                            </td>
+                            <td colspan="1">
+                                <b style="font-size:35px;" class="text">
+                                    <span style="font-size:25px; margin-left:10px">TOTAL:<br></span>
+                                    <span style="margin-left:10px"> <?php echo  $arrayTotales[$i]; ?> </span>
+                                </b>
+                            </td>
+                        </tr>
+                        <?php $indice += 2;
+                        /* fin numeracion por repeticiones */
+                    }
+                } else { ?>
+                    <!-- inicio numeracion normal -->
+                    <tr style="margin-left:10px">
+                        <td colspan="6">
+                            <b style="font-size:50px;" class="text">
+                                <span style="font-size:25px; margin-left:10px">DESDE:<br></span>
+                                <span style="margin-left:10px"> <?php echo $row_numeracion_paquetes[0]['int_desde_tn'] . $row_refac['charfin'] ?></span>
+                            </b>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6">
+                            <b style="font-size:50px;" class="text">
+                                <span style="font-size:25px; margin-left:10px">HASTA:<br></span>
+                                <span style="margin-left:10px"> <?php echo $row_vista_MAX['int_hasta_tn'] . $row_refac['charfin']; ?> </span>
+                            </b>
+                        </td>
+                    </tr>
+                    <!-- fin numeracion normal -->
+                <?php } ?>
                 <tr>
                     <td colspan="6"><?php if ($row_refac['lote'] != '') : ?>
                             &nbsp;<b style="font-size:20px;" class="text">LOTE: <?php echo $row_refac['lote']; ?> </b>
@@ -377,7 +457,7 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
                     </td>
                 </tr>
                 <?php if ($row_cliente['id_c'] == '37') : ?>
-                    <?php $fechaActual =  $row_vista_paquete['fecha_ingreso_tn'];
+                    <?php $fechaActual =  $row_numeracion_paquetes[0]['fecha_ingreso_tn'];
 
                     $nuevafecha = strtotime('+2 year', strtotime($fechaActual));
                     $fechaVence = date('Y-m-d', $nuevafecha);    ?>
@@ -424,7 +504,7 @@ if ($row_refac['int_cod_ref_op'] == '1363' || $row_refac['int_cod_ref_op'] == '1
                     </td>
                     <td style="width:70%; text-align: right; ">
                         &nbsp;<b style="font-size:20px;" class="text">CARTON:&nbsp;&nbsp;</b><br>
-                        &nbsp;<samp style="font-size:50px; text-align:center; " class="text"><?php echo $row_vista_paquete['int_caja_tn']; ?></samp>&nbsp;&nbsp;&nbsp;
+                        &nbsp;<samp style="font-size:50px; text-align:center; " class="text"><?php echo $row_numeracion_paquetes[0]['int_caja_tn']; ?></samp>&nbsp;&nbsp;&nbsp;
                         <!--<div style="font-size:60px">2999</div>-->
                     </td>
                 </tr>

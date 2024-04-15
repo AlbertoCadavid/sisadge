@@ -7,7 +7,6 @@ require(ROOT_BBDD);
 //initialize the session
 require_once("db/db.php");
 require_once("Controller/Csellado.php");
-include("../funciones/funciones_php.php");
 
 session_start();
 ?>
@@ -59,7 +58,7 @@ if ((isset($_GET['doLogout'])) && ($_GET['doLogout'] == "true")) {
 ?>
 <?php
 //LLAMADO A FUNCIONES
-include('funciones/funciones_php.php'); //SISTEMA RUW PARA LA BASE DE DATOS 
+/* include('funciones/funciones_php.php'); */ //SISTEMA RUW PARA LA BASE DE DATOS 
 //FIN
 if (!function_exists("GetSQLValueString")) {
   function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")
@@ -210,6 +209,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 <body><!-- onLoad="sumaPaqSelladoEdit();" -->
   <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
+
       <table id="tabla1">
 
 
@@ -228,11 +228,14 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                       <li><?php echo $_SESSION['Usuario']; ?></li>
                     </ul>
                   </div>
+
                   <div class="panel-body">
-                    <br>
+
                     <div class="container">
                       <br>
-
+                      <div class="menu_dos">
+                        <div id="showFlags"></div>
+                      </div>
                       <form action="view_index.php?c=csellado&a=Guardar" method="POST" name="form1" id="form1">
                         <table align="center" id="tabla35">
                           <tr>
@@ -296,8 +299,8 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
                           <tr>
                             <td colspan="3" id="fuente1">FECHA</td>
-                            <td colspan="3" id="fuente1"><input class="form-control" name="fecha_ingreso_tn" type="date" min="2000-01-02" value="<?php echo fecha(); ?>" style="width:200" />
-                              <input name="hora_tn" type="hidden" id="hora_tn" value="<?php echo restoHoranew(2); ?>" size="8" readonly />
+                            <td colspan="3" id="fuente1"><input class="form-control" name="fecha_ingreso_tn" type="date" min="2000-01-02" value="<?php echo fechaActual(); ?>" style="width:200" />
+                              <input name="hora_tn" type="hidden" id="hora_tn" value="<?php echo horaActual(); ?>" size="8" readonly />
                             </td>
                           </tr>
                           <tr>
@@ -550,10 +553,10 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
               </tfoot>
               </tbody>
             </table>
-            <div><input type="hidden" id="cant_metros" value=""></div>
-            <div><input type="text" id="desperdicio_inicial" value=""></div>
           </div>
         </div>
+        <div><input type="hidden" id="cant_metros" value=""></div>
+        <div><input type="hidden" id="desperdicio_inicial" value=""></div>
       </form>
     </div> <!-- contenedor -->
 
@@ -570,7 +573,6 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
 </html>
 <script>
- 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('input[type=text]').forEach(node => node.addEventListener('keypress', e => {
       if (e.keyCode == 13) {
@@ -583,6 +585,10 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
         if (datos) {
           cargaInfoRolloSellado("<?php echo $idOp ?>", $('#rollo_r').val()) //consulta la cantidad de bolsas que han sellado de un rollo en especifico y lo convierte en metros
         }
+        consultaBanderas($('#int_op_tn').val(), $('#id_rollo').val())
+          .then(function(datosBanderas) {
+            calculoBanderas(datosBanderas);
+          });
       })
   });
 
@@ -822,7 +828,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
   //banderas
   function calculoBanderas(datosBanderas) {
-    metrosSellados = parseInt($("#cant_metros").val()); 
+    metrosSellados = parseInt($("#cant_metros").val());
     let metrosBanderas = 0;
     let banderaDesperdicio = 0;
     let metrosDesperdicio = 0;
@@ -832,35 +838,44 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
     datosBanderas.forEach(element => { //ciclo para saber cuantas banderas y cuantos mts de desperdicio salieron en impresion
       if (element.proceso === "2") {
         metrosDesperdicio = (parseInt(element.metros_extruder) - parseInt(element.metros_rollo)); //resta los mts del rollo que salio de extruder con los mts del rollo que salio de impresion para saber cuantos metros fueron de desperdicio y mover la posicion de la bandera de extrusion
-        mtsBandImpresion.push(parseInt(element.metros_extruder) - parseInt(element.metros)); // crea un array con los metros donde estan las banderas de impresion pero restando del metraje original del rollo para que en sellado quede en el orden correcto
-        arrayBanderasImpresion = mtsBandImpresion.sort((a, b) => a < b ? -1 : 1) //ordeno en forma ascendente el valor de los metros para saber a que valores de las banderas de extrusion le debo restar el desperdicio
         if (metrosDesperdicio > 0) {
           banderaDesperdicio = 1;
         }
       }
     });
 
+    //mostrar las banderas en la parte alta de la pag
+    if (datosBanderas.length > 0) {
+      let div = document.getElementById("showFlags");
+      div.innerHTML = '';
+      div.setAttribute("class", "alert-danger");
+      div.classList.add(`divScrollMini`);
+      div.classList.add(`menu_dos`);
+      let pTitulo = document.createElement("p");
+      pTitulo.textContent = `ESTE ROLLO TRAE ${datosBanderas.length} BANDERAS:`
+      pTitulo.setAttribute("class", "p");
+      div.appendChild(pTitulo);
+    }
+
     datosBanderas.forEach(element => {
       if (element.proceso === "2") { //condicional para saber si la bandera viene de impresion
-        metrosBanderas = parseInt(element.metros_extruder) - parseInt(element.metros) //el metraje de la bandera de impresion se resta del total del rollo de extrusion para ubicarlo bien
+        metrosBanderas = parseInt(element.metros_extruder) - parseInt(metrosDesperdicio) - parseInt(element.metros)//el metraje de la bandera de impresion se resta del total del rollo de extrusion para ubicarlo bien
       } else {
-        metrosBanderas = parseInt(element.metros)
+        metrosBanderas = parseInt(element.metros) - parseInt(metrosDesperdicio)
       }
 
       if (banderaDesperdicio == 1 && element.proceso !== "2" && parseInt(element.metros) > arrayBanderasImpresion[0]) {
         metrosBanderas = parseInt(element.metros) - metrosDesperdicio;
       }
 
-      if($("#desperdicio_inicial").val() > 0){ //si existe desperdicio en sellado entonces adelanta las banderas la cantidad de metros que da el desperdicio
+      if ($("#desperdicio_inicial").val() > 0) { //si existe desperdicio en sellado entonces adelanta las banderas la cantidad de metros que da el desperdicio
         metrosBanderas = metrosBanderas - parseInt($("#desperdicio_inicial").val());
       }
 
       metrosBanderas = metrosBanderas - 20; //adelanto la bandera 20 metros para que la alerta salga cuando la bandera aun este en el rollo y no en el area de mesa de recoleccion
-
+      metrosBanderas = (metrosBanderas < 0) ? 0 : metrosBanderas;
       if (parseInt(metrosSellados) >= metrosBanderas) {
-
         var resultado = window.confirm(`Advertencia, viene una bandera de ${element.nombre}`);
-
         let operario = $("#int_cod_empleado_tn").val();
         let fecha = "<?php echo fechahoraActual(); ?>"
         let estado = true;
@@ -872,7 +887,20 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
           actualizaBandera(operario, fecha, estado, id_op, id_bandera);
         }
       }
-      console.log("sellados " + metrosSellados + "mts" + ">=" + metrosBanderas + "mts " + "ubic/bandera")
+      console.log("sellados " + parseInt(metrosSellados) + "mts" + ">=" + metrosBanderas + "mts " + "ubic/bandera")
+
+    //mostrar las banderas en la parte alta de la pag
+      let pband = document.createElement("p");
+      pband.textContent = `Bandera de ${element.nombre} a ${metrosBanderas}mts`;
+      pband.setAttribute("class", "p");
+      document.getElementById("showFlags").appendChild(pband);
+
     });
   }
 </script>
+
+<style>
+  .p {
+    margin-bottom: 0;
+  }
+</style>

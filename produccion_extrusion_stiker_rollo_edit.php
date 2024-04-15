@@ -123,7 +123,7 @@ $conexion = new ApptivaDB();
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
 
   $updateSQL = sprintf(
-    "UPDATE TblExtruderRollo SET rollo_r=%s, id_op_r=%s, ref_r=%s, id_c_r=%s, tratInter_r=%s, tratExt_r=%s, pigmInt_r=%s, pigmExt_r=%s, calibre_r=%s, presentacion_r=%s, cod_empleado_r=%s, turno_r=%s, fechaI_r=%s, fechaF_r=%s, metro_r=%s, kilos_r=%s, reven_r=%s, medid_r=%s, corte_r=%s, desca_r=%s, calib_r=%s, trata_r=%s, arrug_r=%s, bandera_r=%s,montaje_r=%s, apagon_r=%s, observ_r=%s, reven2_r=%s,medid2_r=%s,corte2_r=%s,desca2_r=%s,calib2_r=%s,trata2_r=%s,arrug2_r=%s,apagon2_r=%s,montaje2_r=%s WHERE id_r=%s",
+    "UPDATE TblExtruderRollo SET rollo_r=%s, id_op_r=%s, ref_r=%s, id_c_r=%s, tratInter_r=%s, tratExt_r=%s, pigmInt_r=%s, pigmExt_r=%s, calibre_r=%s, presentacion_r=%s, cod_empleado_r=%s, turno_r=%s, str_maquina_ext=%s,fechaI_r=%s, fechaF_r=%s, metro_r=%s, kilos_r=%s, reven_r=%s, medid_r=%s, corte_r=%s, desca_r=%s, calib_r=%s, trata_r=%s, arrug_r=%s, bandera_r=%s,montaje_r=%s, apagon_r=%s, observ_r=%s, reven2_r=%s,medid2_r=%s,corte2_r=%s,desca2_r=%s,calib2_r=%s,trata2_r=%s,arrug2_r=%s,apagon2_r=%s,montaje2_r=%s WHERE id_r=%s",
     GetSQLValueString($_POST['rollo_r'], "int"),
     GetSQLValueString($_POST['id_op_r'], "int"),
     GetSQLValueString($_POST['ref_r'], "text"),
@@ -136,6 +136,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     GetSQLValueString($_POST['presentacion_r'], "text"),
     GetSQLValueString($_POST['cod_empleado_r'], "int"),
     GetSQLValueString($_POST['turno_r'], "int"),
+    GetSQLValueString($_POST['str_maquina_rp'], "text"),
     GetSQLValueString($_POST['fechaI_r'], "date"),
     GetSQLValueString($_POST['fechaF_r'], "date"),
     GetSQLValueString($_POST['metro_r'], "int"),
@@ -377,6 +378,13 @@ $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error())
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
 
+//MAQUINAS
+mysql_select_db($database_conexion1, $conexion1);
+$query_maquinas = "SELECT * FROM maquina WHERE proceso_maquina='1' ORDER BY id_maquina DESC";
+$maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
+$row_maquinas = mysql_fetch_assoc($maquinas);
+$totalRows_maquinas = mysql_num_rows($maquinas);
+
 /* obtener banderas */
 $banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_estrusion_edit[id_op_r] AND rollo_r = $row_rollo_estrusion_edit[rollo_r] AND proceso = 1", "ORDER BY nombre ASC", "*");
 $num_banderas = sizeof($banderas);
@@ -555,8 +563,26 @@ $num_banderas = sizeof($banderas);
           </select>
 
         </td>
-        <td id="fuente1">&nbsp;</td>
-        <td id="fuente1">&nbsp;</td>
+        <td id="fuente1">MAQUINA</td>
+        <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
+            <option value="" <?php if (!(strcmp("", $row_rollo_estrusion_edit['str_maquina_ext']))) {
+                                echo "selected=\"selected\"";
+                              } ?>>Seleccione</option>
+            <?php
+            do {
+            ?>
+              <option value="<?php echo $row_maquinas['id_maquina'] ?>" <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo_estrusion_edit['str_maquina_ext']))) {
+                                                                          echo "selected=\"selected\"";
+                                                                        } ?>><?php echo $row_maquinas['nombre_maquina'] ?></option>
+            <?php
+            } while ($row_maquinas = mysql_fetch_assoc($maquinas));
+            $rows = mysql_num_rows($maquinas);
+            if ($rows > 0) {
+              mysql_data_seek($maquinas, 0);
+              $row_maquinas = mysql_fetch_assoc($maquinas);
+            }
+            ?>
+          </select></td>
       </tr>
       <tr>
         <td id="fuente1">TURNO</td>

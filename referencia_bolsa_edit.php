@@ -246,7 +246,7 @@ $error = "Error al enviar el Archivo";
   $Result1 = mysql_query($updateSQL, $conexion1) or die(mysql_error());
  
  
-  $updateSQL2 = sprintf("UPDATE Tbl_referencia SET cod_ref=%s, version_ref=%s, n_egp_ref=%s, n_cotiz_ref=%s, tipo_bolsa_ref=%s, material_ref=%s, Str_presentacion=%s,Str_tratamiento=%s, ancho_ref=%s, largo_ref=%s, solapa_ref=%s, b_solapa_caract_ref=%s, bolsillo_guia_ref=%s, str_bols_ub_ref=%s, str_bols_fo_ref=%s, B_cantforma=%s, bol_lamina_1_ref=%s, bol_lamina_2_ref=%s, calibre_ref=%s, peso_millar_ref=%s, B_troquel=%s, B_precorte=%s, N_fuelle=%s, B_fondo=%s, impresion_ref=%s, num_pos_ref=%s, cod_form_ref=%s, adhesivo_ref=%s, estado_ref=%s, registro1_ref=%s, fecha_registro1_ref=%s, registro2_ref=%s, fecha_registro2_ref=%s, B_generica=%s, ancho_rollo=%s, calibreBols_ref=%s, peso_millar_bols=%s,precorte_cuerpo=%s, precorte_solapa=%s, tipoLamina_ref=%s,tipoCinta_ref=%s,valor_impuesto=%s WHERE id_ref='%s'",
+  $updateSQL2 = sprintf("UPDATE Tbl_referencia SET cod_ref=%s, version_ref=%s, n_egp_ref=%s, n_cotiz_ref=%s, tipo_bolsa_ref=%s, material_ref=%s, Str_presentacion=%s,Str_tratamiento=%s, ancho_ref=%s, largo_ref=%s, solapa_ref=%s, b_solapa_caract_ref=%s, bolsillo_guia_ref=%s, str_bols_ub_ref=%s, str_bols_fo_ref=%s, B_cantforma=%s, bol_lamina_1_ref=%s, bol_lamina_2_ref=%s, calibre_ref=%s, peso_millar_ref=%s, B_troquel=%s, B_precorte=%s, N_fuelle=%s, B_fondo=%s, impresion_ref=%s, num_pos_ref=%s, cod_form_ref=%s, adhesivo_ref=%s, estado_ref=%s, registro1_ref=%s, fecha_registro1_ref=%s, registro2_ref=%s, fecha_registro2_ref=%s, B_generica=%s, ancho_rollo=%s, calibreBols_ref=%s, peso_millar_bols=%s,precorte_cuerpo=%s, precorte_solapa=%s, tipoLamina_ref=%s,tipoCinta_ref=%s,valor_impuesto=%s,sello_superior=%s WHERE id_ref='%s'",
                        /*GetSQLValueString($_POST['id_ref'], "int"),*/
                        GetSQLValueString($_POST['cod_ref'], "text"),
                        GetSQLValueString($_POST['version_ref'], "text"),
@@ -290,6 +290,7 @@ $error = "Error al enviar el Archivo";
              GetSQLValueString($_POST['tipoLamina_ref'], "int"),
              GetSQLValueString($_POST['tipoCinta_ref'], "int"),
              GetSQLValueString($_POST['valor_impuesto'], "text"),
+             GetSQLValueString($_POST['sello_superior'], "text"),
              GetSQLValueString($_POST['id_ref'], "int"));
   mysql_select_db($database_conexion1, $conexion1);
   $Result2 = mysql_query($updateSQL2, $conexion1) or die(mysql_error());      
@@ -331,6 +332,7 @@ $query_referencia_editar = sprintf("SELECT * FROM Tbl_referencia,Tbl_egp WHERE T
 $referencia_editar = mysql_query($query_referencia_editar, $conexion1) or die(mysql_error());
 $row_referencia_editar = mysql_fetch_assoc($referencia_editar);
 $totalRows_referencia_editar = mysql_num_rows($referencia_editar);
+
 //ARTE
 $colname_ref_verif = "-1";
 if (isset($_GET['id_ref'])) {
@@ -375,7 +377,7 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
 $ref_cotiz = $row_referencia_editar['cod_ref'];
 
 mysql_select_db($database_conexion1, $conexion1);
-$query_cotiza = "SELECT tipo_bolsa FROM tbl_cotiza_bolsa WHERE N_referencia_c= '$ref_cotiz'" ;
+$query_cotiza = "SELECT N_precio,tipo_bolsa,sello_superior FROM tbl_cotiza_bolsa WHERE N_referencia_c= '$ref_cotiz' ORDER BY N_cotizacion DESC limit 0,1 " ; 
 $cotiza = mysql_query($query_cotiza, $conexion1) or die(mysql_error());
 $row_cotiza = mysql_fetch_assoc($cotiza);
 $totalRows_cotiza = mysql_num_rows($cotiza);
@@ -383,7 +385,7 @@ $totalRows_cotiza = mysql_num_rows($cotiza);
 
 //EL ID_REF ES ENVIADO DESDE VISTA DE REFERENCIA
 $colname_ref_cirel = "-1";
-if (isset($_GET['id_ref'])) {
+if (isset($_GET['id_ref'])) { 
   $colname_ref_cirel = (get_magic_quotes_gpc()) ? $_GET['id_ref'] : addslashes($_GET['id_ref']);
 }
 mysql_select_db($database_conexion1, $conexion1);
@@ -399,7 +401,7 @@ $totalRows_ref_cirel = mysql_num_rows($ref_cirel);
 
 $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_bolsa'] : $row_referencia_editar['tipo_bolsa_ref'];
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*');
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -414,6 +416,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
 <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
 
 <link href="css/formato.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-1.11.2.min.js"></script>
@@ -553,19 +556,32 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
       <tr id="tr1">
         <td id="fuente1">ANCHO (cms)</td>
         <td id="fuente1">LARGO (cms)</td>
+        <td id="fuente1">SELLO SUPERIOR </td>
         <td colspan="3" id="fuente1">SOLAPA  (cms)</td>
-        <td colspan="3" id="fuente1">BOLSILLO PORTAGUIA </td>
+        <td colspan="2" id="fuente1">BOLSILLO PORTAGUIA </td>
       </tr>
       <tr>
         <td id="dato1"><input name="ancho_ref" id="ancho_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['ancho_ref']; ?>"/></td>
         <td id="dato1"><input name="largo_ref" id="largo_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['largo_ref']; ?>" onChange="anchodelRollo()" /></td>
+        <td  id="dato1"> 
+         <select name="sello_superior" id="sello_superior" style="width:100px" onchange="return anchodelRollo();" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>N/A</option> 
+           <option value="plano"<?php if (!(strcmp("plano", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Plano</option>
+           <option value="tubular"<?php if (!(strcmp("tubular", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular</option>
+           <option value="tubular/tubular"<?php if (!(strcmp("tubular/tubular", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular/Tubular</option>
+           <option value="refuerzo"<?php if (!(strcmp("refuerzo", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Con Refuerzo</option> 
+
+
+         </select>
+        </td>
         <td colspan="2" id="dato1">
-        <p><input type="radio" name="valora" id="ocultar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],0))) {echo "checked=\"checked\"";} ?> value="0" onClick="return validarRadio(),calcular_pesom();" />N/A<br/>
-        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" onClick="return validarRadio(),calcular_pesom();"/>Sencilla<br/>
-        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onClick="return validarRadio(),calcular_pesom();"/>Doble<br /></p></td>
+        <p><input type="radio" name="valora" id="ocultar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],0))) {echo "checked=\"checked\"";} ?> value="0" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();" />N/A<br/>
+        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();"/>Sencilla<br/>
+        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();"/>Doble<br /></p>
+      </td>
         <td id="dato1">Solapa valor
           <input name="solapa_ref" id="solapa_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['solapa_ref']=='' ? 0 :$row_referencia_editar['solapa_ref']; ?>" onblur="calcular_pesom()" onChange="anchodelRollo()"/></td>
-        <td colspan="3" id="dato1"><input name="bolsillo_guia_ref" id="bolsillo_guia_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['bolsillo_guia_ref']; ?>" onChange="mostrarBols(this)"/></td>
+        <td colspan="2" id="dato1"><input name="bolsillo_guia_ref" id="bolsillo_guia_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['bolsillo_guia_ref']; ?>" onChange="mostrarBols(this)"/></td>
       </tr>
       <tr id="tr1">
         <td id="fuente1">CALIBRE (mills)</td>
@@ -621,9 +637,9 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
           <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
           <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $tippobolsa))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
           <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option> -->
-          <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:220px" onChange="calcular_pesom();" onblur="anchoRolloRef();" > 
+          <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" class="materia" style="width:220px" onChange="calcular_pesom();" > 
                  <?php  foreach($row_formulas as $row_formulas ) { ?>
-              <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+              <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
           <?php } ?>
           </select> 
         </select>
@@ -683,7 +699,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
        <option value="SEMITUBULAR" <?php if (!(strcmp('SEMITUBULAR', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>SEMITUBULAR</option>
         </select>
         <br>
-         <input name="ancho_rollo" id="ancho_rollo" style="width:100px" type="text" value=""  />Ancho Rollo 
+         <input name="ancho_rollo" id="ancho_rollo" style="width:100px" type="text" value="" <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ) { ?> required <?php } ?>  />Ancho Rollo 
       </td>
         <td id="fuente1"><select name="Str_tratamiento" id="Str_tratamiento" style="width:100px">
           <option value="N.A"<?php if (!(strcmp('N.A', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>N.A</option>
@@ -755,8 +771,18 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
       <tr  id="tr1">
         <td id="fuente1">&nbsp;</td>
         <td id="fuente1"><strong>Z</strong></td>
-        <td id="fuente1"><input name="margen_z_imp_egp" id="margen_z_imp_egp" style="width:50px" type="number" min="0" step="0.01" value="<?php echo $row_referencia_editar['margen_z_imp_egp']?>"/></td>
-        <td colspan="5" id="fuente1">IMPUESTO $  <strong><input name="valor_impuesto" id="valor_impuesto" style="width:50px" type="text" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> /></strong>
+        <td id="fuente1"><input name="margen_z_imp_egp" id="margen_z_imp_egp" style="width:50px" type="number" min="0" step="0.01" value="<?php echo $row_referencia_editar['margen_z_imp_egp']?>"/>
+        </td>
+        <td colspan="5" id="fuente1">IMPUESTO $  <strong>
+          <input name="valor_impuesto_backup" id="valor_impuesto_backup" style="width:50px" type="hidden" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> />
+          <input name="valor_impuesto" id="valor_impuesto" style="width:50px" type="text" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> /></strong>
+              
+                <input name="N_precio" type="hidden" style="width:100px" min="0" step="0.01" id="N_precio" value="<?php echo $row_cotiza['N_precio']==''?0:$row_cotiza['N_precio']; ?>"/> 
+          
+                <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
+             
+          
+
         </td>
         </tr>        
         
@@ -1276,7 +1302,16 @@ do {
   $(document).ready(function(){
     verLaminas();
     anchodelRollo();
+    validaRadiosolapa();
+
 });
+
+  //valida radio solapa 
+  $('input:radio[name=valora]:checked').click(function () {
+             if ($("input[name='valora']:checked").val() > '0') {
+                 validaRadiosolapa()
+             } 
+         });
 
 $('#tipolam').on('change', function() { 
     verLaminas()
@@ -1309,56 +1344,80 @@ $('#tipolam').on('change', function() {
               //swal("No Autorizado", "Sin permisos para editar :)", "error"); 
    }
  });
+ 
 
- $('#tipo_bolsa_ref').on('change', function() { 
-          if($("#tipo_bolsa_ref").val() == 'Sika'){
-               $("#material_ref").val("PIGMENTADO B/B");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("BLANCO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Pigmentada Tratada Doble Cara'){
-               $("#material_ref").val("PIGMENTADO B/N");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("NEGRO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Seguridad pigmentado B/N'){
-               $("#material_ref").val("PIGMENTADO B/N");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("NEGRO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Seguridad pigmentado Blanca'){
-               $("#material_ref").val("PIGMENTADO B/B");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("BLANCO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Currier Pigmentado oxobiodegradable B/N'){
-               $("#material_ref").val("PIGMENTADO B/N");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("NEGRO");  
-          }else if($("#tipo_bolsa_ref").val() == 'Currier Pigmentado B/N'){
-               $("#material_ref").val("PIGMENTADO B/N");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("NEGRO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Pigmentada Blanca'){
-               $("#material_ref").val("PIGMENTADO B/B");
-               $("#pigm_ext_egp").val("BLANCO");
-               $("#pigm_int_epg").val("BLANCO"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Seguridad transparente y monedas'){
-               $("#material_ref").val("TRANSPARENTE");
-               $("#pigm_ext_egp").val("TRANSPARENTE");
-               $("#pigm_int_epg").val("TRANSPARENTE"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Currier transparente'){
-               $("#material_ref").val("TRANSPARENTE");
-               $("#pigm_ext_egp").val("TRANSPARENTE");
-               $("#pigm_int_epg").val("TRANSPARENTE");
-          }else if($("#tipo_bolsa_ref").val() == 'Alta Densidad'){
-               $("#material_ref").val("TRANSPARENTE"); 
-               $("#pigm_ext_egp").val("TRANSPARENTE");
-               $("#pigm_int_epg").val("TRANSPARENTE"); 
-          }else if($("#tipo_bolsa_ref").val() == 'Formulacion Agua'){
-               $("#material_ref").val("TRANSPARENTE");
-               $("#pigm_ext_egp").val("TRANSPARENTE");
-               $("#pigm_int_epg").val("TRANSPARENTE"); 
-          }
+ $('.materia').on('change', function() { 
   
-  });
+    tipoMaterial();
+});
+$(document).ready(function(){
+      
+            tipoMaterial();
+  });      
+  function tipoMaterial(){
+    if($("#tipo_bolsa_ref").val() == 'KO-01'){
+         $("#material_ref").val("PIGMENTADO B/B");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("BLANCO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'K0-02'){
+         $("#material_ref").val("PIGMENTADO B/N");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("NEGRO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-03'){
+         $("#material_ref").val("PIGMENTADO B/N");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("NEGRO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-04'){
+         $("#material_ref").val("PIGMENTADO B/B");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("BLANCO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-05'){
+         $("#material_ref").val("PIGMENTADO B/N");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("NEGRO");  
+    }else if($("#tipo_bolsa_ref").val() == 'KO-06'){
+         $("#material_ref").val("PIGMENTADO B/N");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("NEGRO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-07'){
+         $("#material_ref").val("PIGMENTADO B/B");
+         $("#pigm_ext_egp").val("BLANCO");
+         $("#pigm_int_epg").val("BLANCO"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-08'){
+         $("#material_ref").val("TRANSPARENTE");
+         $("#pigm_ext_egp").val("TRANSPARENTE");
+         $("#pigm_int_epg").val("TRANSPARENTE"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-09'){
+         $("#material_ref").val("TRANSPARENTE");
+         $("#pigm_ext_egp").val("TRANSPARENTE");
+         $("#pigm_int_epg").val("TRANSPARENTE");
+    }else if($("#tipo_bolsa_ref").val() == 'KO-10'){
+         $("#material_ref").val("TRANSPARENTE");
+         $("#pigm_ext_egp").val("TRANSPARENTE");
+         $("#pigm_int_epg").val("TRANSPARENTE");  
+    }else if($("#tipo_bolsa_ref").val() == 'KO-11'){
+         $("#material_ref").val("TRANSPARENTE");
+         $("#pigm_ext_egp").val("TRANSPARENTE");
+         $("#pigm_int_epg").val("TRANSPARENTE"); 
+    }else if($("#tipo_bolsa_ref").val() == 'KO-12'){
+         $("#material_ref").val("TRANSPARENTE");
+         $("#pigm_ext_egp").val("TRANSPARENTE");
+         $("#pigm_int_epg").val("TRANSPARENTE"); 
+    }
+  
+  } 
    
+
+
+    $('#calculaformula').on('change', function() { 
+     
+        if( $("#ancho_ref").val()!='' && $("#largo_ref").val()!='' && $("#B_fuelle").val()!='' && $("#solapa_ref").val()!='' && $("#calibre_ref").val()!='' && $("#bolsillo_guia_ref").val()!='' && $("#N_precio").val()!='' ) 
+      {   
+    
+        pesoMillarFormulaCotizRef($("#mostrar").val(),$("#ancho_ref").val(),$("#largo_ref").val(),$("#B_fuelle").val(),$("#solapa_ref").val(),$("#calibre_ref").val(),$("#bolsillo_guia_ref").val(),$("#N_precio").val(),$("#valor_impuesto_backup").val() );
+      } 
+   });
+
 
 </script>
 <?php

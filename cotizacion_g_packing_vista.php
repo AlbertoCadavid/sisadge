@@ -242,7 +242,7 @@ $ref=mysql_num_rows($ver_ref);
 		  <?php $var=mysql_result($ver_nueva,$j,Str_incoterms);	echo $var; ?>		  </td><?php }?>
         </tr>
         <tr>
-          <td id="subppal4">PRECIO UNIDAD + IMPUESTO</td>
+          <td id="subppal4">PRECIO + IMPUESTO</td>
           <?php  for ($j=0;$j<=$num1-1;$j++) { ?>
           <td id="fuente2">
 		  <?php $var=mysql_result($ver_nueva,$j,Str_moneda); echo $var; ?>/<?php $var=mysql_result($ver_nueva,$j,N_precio_old); echo $var; ?></td><?php }?>
@@ -289,9 +289,9 @@ $ref=mysql_num_rows($ver_ref);
           <td id="fuente2"><?php $var=mysql_result($ver_nueva,$j,Str_plazo); echo $var; ?>		  </td><?php }?>
         </tr>
         <tr>
-          <td id="subppal4">PRECIO</td>
+          <td id="subppal4">PRECIO + IMPUESTO</td>
           <?php  for ($j=0;$j<=$num1-1;$j++) { ?>
-          <td id="fuente2"><?php $var=mysql_result($ver_nueva,$j,N_precio_vnta); echo $var; ?>      </td><?php }?>
+          <td id="fuente2"><?php $var=mysql_result($ver_nueva,$j,N_precio_old); echo $var; ?>      </td><?php }?>
         </tr> 
           <tr>
           <td id="subppal4">ESTADO</td>
@@ -396,9 +396,9 @@ $ref=mysql_num_rows($ver_ref);
           <td id="fuente2"><?php $var=mysql_result($ver_existente,$i,Str_plazo); echo $var; ?>		  </td><?php }?>
         </tr>
         <tr>
-          <td id="subppal4">PRECIO</td>
+          <td id="subppal4">PRECIO + IMPUESTO</td>
           <?php  for ($i=0;$i<=$num2-1;$i++) { ?>
-          <td id="fuente2"><?php $var6=mysql_result($ver_existente,$i,N_precio_vnta); echo $var6; ?>      </td><?php }?>
+          <td id="fuente2"><?php $var6=mysql_result($ver_existente,$i,N_precio_old); echo $var6; ?>      </td><?php }?>
         </tr> 
           <tr>
           <td id="subppal4">ESTADO</td>

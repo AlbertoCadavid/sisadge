@@ -385,8 +385,8 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                       <td nowrap id="dato2"><a href="despacho_items_oc_vista.php?int_remision=<?php echo $row_remision['int_remision']; ?>" target="_blank" style="text-decoration:none; color:#000000"><strong><?php echo $row_remision['str_numero_oc_r']; ?></strong></a></td>
                       <td nowrap id="dato1"><a href="despacho_items_oc_vista.php?int_remision=<?php echo $row_remision['int_remision']; ?>" target="_blank" style="text-decoration:none; color:#000000">
                         <?php 
-                             $str_numero_oc_r=$row_remision['str_numero_oc_r'];
-                             $sqln = $conexion->llenarCampos('cliente,tbl_orden_compra', "WHERE tbl_orden_compra.id_c_oc = cliente.id_c and tbl_orden_compra.str_numero_oc='$str_numero_oc_r' ", '','cliente.nombre_c,cliente.ciudad_c' );
+                            $str_numero_oc_r=$row_remision['id_pedido_oc'];
+                             $sqln = $conexion->llenarCampos('cliente,tbl_orden_compra', "WHERE tbl_orden_compra.id_c_oc = cliente.id_c and tbl_orden_compra.id_pedido='$str_numero_oc_r' ", '','cliente.nombre_c,cliente.ciudad_c' );
                              
                              $cliente_c=$sqln['nombre_c']; echo  ($cliente_c);
                              $ciudad_c=$sqln['ciudad_c'];  

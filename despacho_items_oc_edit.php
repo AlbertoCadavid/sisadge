@@ -166,7 +166,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")&&($_POST['r
 
  
  $updateSQL = sprintf("UPDATE Tbl_remisiones SET str_numero_oc_r=%s,fecha_r=%s,str_encargado_r=%s,str_transportador_r=%s,str_guia_r=%s,
-                      str_elaboro_r=%s,str_aprobo_r=%s,str_observacion_r=%s, factura_r=%s, b_borrado_r=%s, ciudad_pais=%s, comprobante_file=%s  WHERE int_remision=%s",
+                      str_elaboro_r=%s,str_aprobo_r=%s,str_observacion_r=%s, factura_r=%s, b_borrado_r=%s, ciudad_pais=%s, comprobante_file=%s, id_pedido_oc=%s  WHERE int_remision=%s",
 
                       GetSQLValueString($_POST['str_numero_oc_r'], "text"),
                       GetSQLValueString($_POST['fecha_r'], "date"),
@@ -180,6 +180,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")&&($_POST['r
                       GetSQLValueString($_POST['b_borrado_r'], "int"),
                       GetSQLValueString($_POST['ciudad_pais'], "text"),
                       GetSQLValueString($tieneadjunto1, "text"),
+                      GetSQLValueString($_POST['id_pedido_oc'], "text"),
                       GetSQLValueString($_POST['int_remision'], "int"));
 
  mysql_select_db($database_conexion1, $conexion1);
@@ -271,28 +272,28 @@ if(isset($_POST['int_remision']) && $historico){
   if (isset($_GET['int_remision'])) {
     $colname_rc = (get_magic_quotes_gpc()) ? $_GET['int_remision'] : addslashes($_GET['int_remision']);
   }
-  mysql_select_db($database_conexion1, $conexion1);
+  mysql_select_db($database_conexion1, $conexion1); 
   $query_rc = sprintf("SELECT * FROM Tbl_remision_detalle,Tbl_refcliente WHERE Tbl_remision_detalle.int_remision_r_rd = %s AND Tbl_remision_detalle.int_ref_io_rd=Tbl_refcliente.int_ref_ac_rc", $colname_rc);
   $remision_rc = mysql_query($query_rc, $conexion1) or die(mysql_error());
   $row_remision_rc = mysql_fetch_assoc($remision_rc);
   $totalRows_remision_rc = mysql_num_rows($remision_rc);
 //TODA LA INFO DE ORDEN CON ITEMS
   $colname_orden_r = "-1";
-  if (isset($_GET['str_numero_r'])) {
-    $colname_orden_r = (get_magic_quotes_gpc()) ? $_GET['str_numero_r'] : addslashes($_GET['str_numero_r']);
+  if (isset($_GET['id_pedido'])) { 
+    $colname_orden_r = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
   }
   mysql_select_db($database_conexion1, $conexion1);
-  $query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra,cliente WHERE Tbl_orden_compra.str_numero_oc='%s' AND Tbl_orden_compra.id_c_oc=cliente.id_c ", $colname_orden_r);
+  $query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra,cliente WHERE Tbl_orden_compra.id_pedido='%s' AND Tbl_orden_compra.id_c_oc=cliente.id_c ", $colname_orden_r);
   $orden_compra = mysql_query($query_orden_compra, $conexion1) or die(mysql_error());
   $row_orden_compra = mysql_fetch_assoc($orden_compra);
   $totalRows_orden_compra = mysql_num_rows($orden_compra);
 //ITEMS O.C
   $colname_items = "-1";
-  if (isset($_GET['str_numero_r'])) {
-    $colname_items = (get_magic_quotes_gpc()) ? $_GET['str_numero_r'] : addslashes($_GET['str_numero_r']);
+  if (isset($_GET['id_pedido'])) {
+    $colname_items = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
   }
   mysql_select_db($database_conexion1, $conexion1);
-  $query_items = sprintf("SELECT * FROM Tbl_items_ordenc WHERE str_numero_io = '%s' ORDER BY id_items ASC ", $colname_items);
+  $query_items = sprintf("SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io = '%s' ORDER BY id_items ASC ", $colname_items);
   $items = mysql_query($query_items, $conexion1) or die(mysql_error());
   $row_items = mysql_fetch_assoc($items);
   $totalRows_items = mysql_num_rows($items);
@@ -716,7 +717,7 @@ if (statusConfirm == true)
                                       <input type="hidden" name="MM_update" value="form1">
                                       <input type="hidden" name="b_borrado_r" id="b_borrado_r" value="0">
                                       <input type="hidden" name="id_c_oc" id="id_c_oc" value="<?php echo $row_orden_compra['id_c_oc']; ?>">
-
+                                      <input type="hidden" name="id_pedido_oc" id="id_pedido_oc" value="<?php echo $row_orden_compra['id_pedido'] ?>">
                                       <input type="hidden" name="str_numero_oc_r" id="str_numero_oc_r" value="<?php echo $row_remision['str_numero_oc_r']; ?>">
                                       <!--<img src="images/salir.gif" style="cursor:hand;" alt="GUARDAR Y SALIR" title="GUARDAR Y SALIR" onClick="salir()"/>-->
                                       <input class="botonFinalizar" type="submit"  value="FINALIZAR"></td>

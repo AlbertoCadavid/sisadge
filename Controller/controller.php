@@ -99,7 +99,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
      //LLENA LISTADOS CON FOREACH
       public function llenaListas($tabla, $condicion, $orden='', $distinct=''){ 
-        //echo "SELECT $distinct FROM $tabla $condicion $orden";die;
+        //echo "SELECT $distinct FROM $tabla $condicion $orden";
         $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden") or die($this->conexion->error);
 
         if($resultado) 

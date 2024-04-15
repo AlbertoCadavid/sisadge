@@ -123,7 +123,7 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
         </tr>
         <tr>
          <td nowrap="nowrap" ><b>UNIDADES X CAJA</b></td>
-         <td nowrap="nowrap" ><?php echo $councajas;?></td>
+         <td nowrap="nowrap" ><?php echo $row_tiquete_num['int_undxcaja_tn'];//$councajas;?></td>
          <td nowrap="nowrap" ><b>CODIGO REV.</b></td>
          <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_rev_tn']; ?></td>
        </tr>

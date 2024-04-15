@@ -363,6 +363,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                     <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li> 
                     <li><a href="menu.php">MENU PRINCIPAL</a></li>
                     <li><a href="produccion_registro_impresion_listado.php">IMPRESION</a></li>
+                    <li><a href="view_index.php?c=Cstiker_tintas&a=viewStikerImprimir">PICTOGRAMA</a></li>
                   </ul>
                </div> 
                <div class="panel-body">

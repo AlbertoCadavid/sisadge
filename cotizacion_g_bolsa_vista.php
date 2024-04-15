@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-$colname_usuario = "-1";
+$colname_usuario = "-1"; 
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
 }
@@ -260,8 +260,14 @@ C22.style.display = tem_valor;
 </tr>-->
        <tr>
          <td id="subppal4">TIPO DE BOLSA</td>
-         <?php  for ($i=0;$i<=$num1-1;$i++) { ?>
-         <td id="fuente2"><?php $var=mysql_result($ver_nueva,$i,tipo_bolsa); echo $var; ?></td>
+         <?php  for ($i=0;$i<=$num1-1;$i++) {  
+          $tipo_bolsa=mysql_result($ver_nueva,$i,tipo_bolsa);
+          $query_formula = "SELECT formulacion FROM tbl_formulacion WHERE nombre='$tipo_bolsa' ";
+          $formula = mysql_query($query_formula, $conexion1) or die(mysql_error());
+          $row_formula = mysql_fetch_assoc($formula);//para el tipo de formula
+          $tipo_formula=$row_formula['formulacion']; 
+          ?>
+         <td id="fuente2"><?php  echo $tipo_formula; ?></td>
          <?php } ?>
         </tr>
        <tr>
@@ -469,13 +475,21 @@ C22.style.display = tem_valor;
         </tr>-->
           <tr>
            <td id="subppal4">TIPO DE BOLSA</td>
-           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
-           <td id="fuente2"><?php $var=mysql_result($ver_existente,$j,tipo_bolsa); echo $var; ?></td>
+           <?php  for ($j=0;$j<=$num2-1;$j++) {  
+             $tipo_bolsa=mysql_result($ver_existente,$j,tipo_bolsa);
+             $query_formula = "SELECT formulacion FROM tbl_formulacion WHERE nombre='$tipo_bolsa' ";
+             $formula = mysql_query($query_formula, $conexion1) or die(mysql_error());
+             $row_formula = mysql_fetch_assoc($formula);//para el tipo de formula
+             $tipo_formula=$row_formula['formulacion']; 
+             
+          ?>
+
+           <td id="fuente2"><?php echo $tipo_formula; ?></td>
            <?php } ?>
          </tr> 
         <tr>
            <td id="subppal4">SELLO SUPERIOR </td>
-           <?php  for ($j=0;$j<=$num1-1;$j++) { ?>
+           <?php  for ($j=0;$j<=$num2-1;$j++) { ?>
            <td id="fuente2"><?php $sell=mysql_result($ver_existente,$j,sello_superior); echo $sell; ?></td>
            <?php } ?>
          </tr> 

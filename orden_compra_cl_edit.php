@@ -218,7 +218,7 @@ if ($_POST['pago_pendiente']=='NO'){
 
   if(isset($_POST['id_pedido']) && $historico){
     $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
-}//FIN HISTORICO
+}//FIN HISTORICO    
 
 //CAMBIA EL ESTADO EN LAS O LA REMISIONES Q TENGA ESA O.C
 $remiupdate=$_POST['str_numero_oc'];             
@@ -235,7 +235,7 @@ mysql_select_db($database_conexion1, $conexion1);
 $Result3 = mysql_query($updateSQL2, $conexion1) ;
 
 //FIN ENVIO DE E-MAIL A FACTURACION
-$updatetGoTo = "orden_compra_cl_vista.php?str_numero_oc=" . $_POST['str_numero_oc'] . "";
+$updatetGoTo = "orden_compra_cl_vista.php?str_numero_oc=" . $_POST['str_numero_oc'] . "&id_pedido=".$_POST['id_pedido']." ";
 if (isset($_SERVER['QUERY_STRING'])) {
   $updatetGoTo .= (strpos($updatetGoTo, '?')) ? "&" : "?";
   $updatetGoTo .= $_SERVER['QUERY_STRING'];
@@ -272,18 +272,30 @@ $colname_orden_compra = "-1";
 if (isset($_GET['str_numero_oc'])) {
   $colname_orden_compra = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
 }
+
+if (isset($_GET['id_oc'])) {
+  $id_oc = (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);
+}
+
 mysql_select_db($database_conexion1, $conexion1);
-$query_orden_compra = sprintf("SELECT * FROM Tbl_orden_compra WHERE str_numero_oc ='%s'", $colname_orden_compra);
+$query_orden_compra = "SELECT * FROM Tbl_orden_compra WHERE id_c_oc='$id_oc' and str_numero_oc ='$colname_orden_compra' ORDER BY id_pedido DESC " ;
+ 
 $orden_compra = mysql_query($query_orden_compra, $conexion1) ;
 $row_orden_compra = mysql_fetch_assoc($orden_compra);
 $totalRows_orden_compra = mysql_num_rows($orden_compra);
-
 $colname_cliente = "-1";
 if (isset($_GET['id_oc'])) {
   $colname_cliente = (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);
 }
+
+
+
+
+ $idpedido=$row_orden_compra['id_pedido'];
+
+
 mysql_select_db($database_conexion1, $conexion1);
-$query_cliente = sprintf("SELECT * FROM cliente WHERE id_c = %s", $colname_cliente);
+$query_cliente = sprintf("SELECT * FROM cliente WHERE id_c = '%s'", $colname_cliente);
 $cliente = mysql_query($query_cliente, $conexion1) ;
 $row_cliente = mysql_fetch_assoc($cliente);
 $totalRows_cliente = mysql_num_rows($cliente);
@@ -294,7 +306,8 @@ if (isset($_GET['str_numero_oc'])) {
 }
 mysql_select_db($database_conexion1, $conexion1);
 
-$query_detalle = "SELECT * FROM tbl_items_ordenc WHERE str_numero_io =  '".$_GET['str_numero_oc']."' ORDER BY id_items ASC" ; 
+$query_detalle = "SELECT * FROM tbl_items_ordenc WHERE id_pedido_io =  '$idpedido' ORDER BY id_items ASC" ;// WHERE str_numero_io =  '".$_GET['str_numero_oc']."'  ORDER BY id_items ASC" ; 
+
 $detalle = mysql_query($query_detalle, $conexion1) ;
 $row_detalle = mysql_fetch_assoc($detalle);
 $totalRows_detalle = mysql_num_rows($detalle);
@@ -345,7 +358,7 @@ if( $_SESSION['superacceso']==1 ) {
              }else{
                echo 'Test-4';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido   
 
-               header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
+               header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']."&id_pedido=".$idpedido);
              }
 
          } else{
@@ -370,7 +383,7 @@ if( $_SESSION['superacceso']==1 ) {
                }else{
                  echo 'Test2-3';  //aqui no puede editar ya esta en proceso y que sea otro usuario no permitido
 
-                 header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']);
+                 header("Location: orden_compra_cl_vista.php?str_numero_oc=".$row_orden_compra['str_numero_oc']."&id_oc=".$_GET['id_oc']."&id_pedido=".$idpedido);
                }
 
               
@@ -399,7 +412,9 @@ if( $_SESSION['superacceso']==1 ) {
       <link rel="stylesheet" type="text/css" href="css/general.css"/>
 
       <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
-
+      <!-- sweetalert -->
+      <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+      <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">   
       <!-- jquery -->
       <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -412,41 +427,7 @@ if( $_SESSION['superacceso']==1 ) {
       <!-- css Bootstrap-->
       <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-      <script type="text/javascript">
-        function confirActivo() {
 
-          swal({
-            title: "Cliente Inactivo",
-            text: "Quiere activar el cliente",
-            type: "info",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true,
-          },
-          function(){
-            setTimeout(function(){
-              var url="cambio_estado_cliente.php?"; 
-              var campo1=<?php echo $_GET['str_numero_oc'];?>;
-              var campo2=<?php echo $_GET['id_oc']; ?>; 
-              var campo3="<?php echo $row_cliente['nit_c']; ?>"; 
-              var campo4="1"; 
-              var dato1="str_numero_oc";
-              var dato2="id_oc";
-              var dato3="Str_nit";
-              var dato4='id';
-
-              window.location.href=url+dato1+"="+campo1+"&"+dato2+"="+campo2+"&"+dato3+"="+campo3+"&"+dato4+"="+campo4;
-
-              swal("Proceso finalizado!");
-            }, 2000);
-
-          });
-        }
-//desactivar todo
-//$('#form1').find('input, textarea, button, select').attr('disabled','disabled');
-
-
-</script>
 </head>
 <body>
 <!--<body onload="verFoto('orden_compra_cl_add_detalle.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc'] ?>&id_oc=<?php echo $row_orden_compra['id_c_oc']; ?>&nit_c=<?php echo $row_cliente['nit_c']; ?>','1300','550')">
@@ -497,7 +478,7 @@ if( $_SESSION['superacceso']==1 ) {
                           <?php else:?>
                             <img src="images/por.gif" alt="ELIMINAR O.C." title="ELIMINAR O.C." border="0" style="cursor:hand;" onClick="enProduccion();" /> 
                           <?php endif; ?>
-                            <a href="orden_compra_cl_vista.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>&id_oc=<?php echo $_GET['id_oc']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" title="VISTA IMPRESION" border="0" style="cursor:hand;"/></a><a href="orden_compra_cl2.php"><img src="images/o.gif" alt="ORDENES DE COMPRA" title="ORDENES DE COMPRA" border="0" style="cursor:hand;"/></a><a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0"/></a></td>
+                            <a href="orden_compra_cl_vista.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>&id_oc=<?php echo $_GET['id_oc'];?>&id_pedido=<?php echo $row_orden_compra['id_pedido']; ?>"><img src="images/hoja.gif" alt="VISTA IMPRESION" title="VISTA IMPRESION" border="0" style="cursor:hand;"/></a><a href="orden_compra_cl2.php"><img src="images/o.gif" alt="ORDENES DE COMPRA" title="ORDENES DE COMPRA" border="0" style="cursor:hand;"/></a><a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0"/></a></td>
                         </tr>
                         <tr>
                           <td id="numero1">N&deg;
@@ -608,13 +589,18 @@ if( $_SESSION['superacceso']==1 ) {
                                   <tr>
                                     <td colspan="4" id="dato2">
                                       <br>
-                                      <?php  if($_GET['str_numero_oc']!='' && $_GET['id_oc']!=''&& $_GET['id_oc']!='0'&& $row_cliente['estado_c']!="INACTIVO"){ ?><strong>
-                                        <a href="javascript:verFoto('orden_compra_cl_add_detalle.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc'] ?>&id_oc=<?php echo $row_orden_compra['id_c_oc']; ?>&nit_c=<?php echo $row_cliente['nit_c']; ?>','1300','550')"><img src="images/mas.gif" alt="<?php echo $muestra;?>" title="ADD ITEM" border="0" style="cursor:hand;"/> AGREGAR ITEM</a></strong><?php }else { ?><a href="#" onClick="confirActivo()"><img src="images/por.gif" alt="ELIMINAR O.C." title="ELIMINAR O.C." border="0" style="cursor:hand;"/><strong>ACTIVAR CLIENTE</strong></a>
+                                      <?php if($_GET['str_numero_oc']!='' && ($_GET['id_oc']!='' || $_GET['id_oc']!='0')&& $row_cliente['estado_c']!="INACTIVO"){ ?><strong>
+                                        <a href="javascript:verFoto('orden_compra_cl_add_detalle.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc'] ?>&id_oc=<?php echo $row_orden_compra['id_c_oc']; ?>&nit_c=<?php echo $row_cliente['nit_c']; ?>&id_pedido=<?php echo $row_orden_compra['id_pedido']; ?>','1300','550')"><img src="images/mas.gif" alt="<?php echo $muestra;?>" title="ADD ITEM" border="0" style="cursor:hand;"/> AGREGAR ITEM</a></strong>
+                                       <?php }else if($_GET['str_numero_oc']==''){ ?>
+                                           <strong style="color:red" > NO LE AGREGO NUMERO DE ORDEN</strong>
+                                       <?php }else{ ?>
+                                          <input onClick="confirActivo()" class="botonGeneral" type="button" value="ACTIVAR CLIENTE"  >
+                                         <!--  <a href="#" onClick="confirActivo()"><img src="images/por.gif" onClick="confirActivo()" alt="ELIMINAR O.C." title="ELIMINAR O.C." border="0" style="cursor:hand;"/><strong>ACTIVAR CLIENTE</strong></a> -->
                                       <?php }?>
                                       <br><br>
                                       <!--<a href="orden_compra_add_detalle.php?n_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>&id_p=<?php echo $row_cliente['id_p']; ?>">* ADD POS *</a></strong>--></td>
                                     
-                                     <td  id="dato1"> TRM: <div id="IndEcoBasico"><a href="http://dolar.wilkinsonpc.com.co/" target="_blank" ></a></div><script type="text/javascript" src="http://dolar.wilkinsonpc.com.co/js/ind-eco-basico.js?ancho=170&alto=85&fsize=10&ffamily=sans-serif"></script> </td>
+                                     <td  id="dato1"><!--  TRM: <div id="IndEcoBasico"><a href="http://dolar.wilkinsonpc.com.co/" target="_blank" ></a></div><script type="text/javascript" src="http://dolar.wilkinsonpc.com.co/js/ind-eco-basico.js?ancho=170&alto=85&fsize=10&ffamily=sans-serif"></script>  --></td>
                                    </tr>
                                    <tr>
                                      <td id="dato1"> 
@@ -1041,7 +1027,42 @@ if( $_SESSION['superacceso']==1 ) {
               //swal("No Autorizado", "Sin permisos para editar :)", "error"); 
    }
  });
-</script> 
+  
+        function confirActivo() {
+ 
+             var url="cambio_estado_cliente.php?";
+             var campo2=<?php echo $_GET['id_oc']; ?>;   
+             var campo3="<?php echo $row_cliente['nit_c']; ?>";
+             var campo4="1"; 
+             var dato1="str_numero_oc";
+             var dato2="id_oc";
+             var dato3="Str_nit";
+             var dato4='id'; 
+          
+          swal({   
+           title: "Cliente Inactivo",   
+           text: "Quiere activar el cliente",   
+           type: "warning",   
+           showCancelButton: true,   
+           confirmButtonColor: "#DD6B55",   
+           confirmButtonText: "Si, Actualizar!",   
+           cancelButtonText: "No, Actualizar!",   
+           closeOnConfirm: false,   
+           closeOnCancel: false }, 
+           function(isConfirm){   
+             if (isConfirm) {
+                window.location.href=url+"id_oc="+campo2+"&Str_nit="+campo3+"&id="+campo4;
+             } else {     
+               swal("Cancelado", "has cancelado :)", "error"); 
+             } 
+           }); 
+ 
+        }
+//desactivar todo
+//$('#form1').find('input, textarea, button, select').attr('disabled','disabled');
+
+
+</script>
 <?php
 mysql_free_result($usuario); 
 mysql_free_result($Result1);

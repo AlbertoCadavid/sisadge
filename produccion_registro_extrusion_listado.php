@@ -316,11 +316,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                         </table>
                         <?php if ($row_prioridad['id_op'] != '') { ?>
 
-                        <?php } ?>
-
-
-
-
+                        <?php } ?> 
                         <fieldset>
                           <legend id="dato1">LISTADO ORDENES DE PRODUCCION</legend>
                           <table class="table table-bordered table-sm">
@@ -340,14 +336,12 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <td nowrap="nowrap" id="titulo4">ESTADO O.P</td>
                               <td nowrap="nowrap" id="titulo4">ROLLOS</td>
                               <td nowrap="nowrap" id="titulo4">MEZCLA</td>
-                              <td nowrap="nowrap" id="titulo1"><?php if ($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == 'sistemas') {
-                                                                  echo "CONSUMOS";
-                                                                } ?></td>
+                              <td nowrap="nowrap" id="titulo1">
+                            <?php if($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == ' sistemas') { echo "CONSUMOS"; } ?>
+                            </td>
                               <td nowrap="nowrap" id="titulo4">PROCESO</td>
                             </tr>
-                            <?php foreach ($row_orden_producciones as $row_orden_produccion) { ?>
-
-
+                            <?php foreach ($row_orden_producciones as $row_orden_produccion) { ?> 
                               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
                                 <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
                                 <td id="dato1"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000">
@@ -366,11 +360,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_kilos_op']; ?></a></td>
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
-                                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {
-                                                                                                                                                                                                echo "ACTIVA";
-                                                                                                                                                                                              } else if ($row_orden_produccion['b_borrado_op'] == '1') {
-                                                                                                                                                                                                echo "INACTIVA";
-                                                                                                                                                                                              } ?></a>
+                                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {echo "ACTIVA";} else if ($row_orden_produccion['b_borrado_op'] == '1') { echo "INACTIVA"; } ?></a>
                                 </td>
                                 <td id="dato2">
                                   <?php

@@ -172,7 +172,7 @@ $colname_ver_idrefcliente2 = (get_magic_quotes_gpc()) ? $_GET['N_cotizacion'] : 
 }
 $colname_ver_nit = "1";
 if (isset($_GET['Str_nit'])) 
-{
+{ 
   $colname_ver_nit= (get_magic_quotes_gpc()) ? $_GET['Str_nit'] : addslashes($_GET['Str_nit']);
 }
 mysql_select_db($database_conexion1, $conexion1);
@@ -189,13 +189,13 @@ if (isset($_GET['cod_ref']))
 } 
 
 mysql_select_db($database_conexion1, $conexion1);
-$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols,b_solapa_caract_ref FROM Tbl_referencia WHERE CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) ='%s'  ",$colname_refer);
+$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols,b_solapa_caract_ref,tipo_bolsa_ref FROM Tbl_referencia WHERE CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) ='%s'  ",$colname_refer);
 $refer = mysql_query($query_refer, $conexion1) or die(mysql_error());
 $row_refer = mysql_fetch_assoc($refer);
 $totalRows_refer = mysql_num_rows($refer);
 
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*'); 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
  
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -221,13 +221,19 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-  <!-- select2 -->
-  <link href="select2/css/select2.min.css" rel="stylesheet"/>
-  <script src="select2/js/select2.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/general.css"/>
+  <!-- Select3 Nuevo -->
+  <meta charset="UTF-8">
+  <!-- jQuery -->
+  <script src='select3/assets/js/jquery-3.4.1.min.js' type='text/javascript'></script>
 
-  <!-- css Bootstrap hace mas grande el formato-->
-  <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- select2 css -->
+  <link href='select3/assets/plugin/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+  <!-- select2 script -->
+  <script src='select3/assets/plugin/select2/dist/js/select2.min.js'></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="select3/assets/css/style.css">
+  <!-- Fin Select3 Nuevo -->
 
 <script type="text/javascript">
 function MM_popupMsg(msg) { //v1.0
@@ -348,17 +354,18 @@ function MM_popupMsg(msg) { //v1.0
                             <td id="dato1"><input name="N_alto" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_alto" value="<?php echo $row_bolsa['N_alto']?>"/>
                             </td>
                             <td id="dato1">
-                             <select name="sello_superior" id="sello_superior" style="width:100px" >
-                               <option value=""<?php if (!(strcmp("", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>N/A</option>
-                               <option value="Sencilla"<?php if (!(strcmp("Sencilla", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?> >Sencilla</option>
-                               <option value="Doble"<?php if (!(strcmp("Doble", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?> >Doble</option>
-                               <option value="Refuerzo"<?php if (!(strcmp("Refuerzo", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?> >Refuerzo</option>
+                             <select name="sello_superior" id="sello_superior" style="width:100px" onchange="validaSupresello();">
+                               <option value=""<?php if (!(strcmp("", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>N/A</option> 
+                               <option value="plano"<?php if (!(strcmp("plano", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>Plano</option>
+                               <option value="tubular"<?php if (!(strcmp("tubular", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular</option>
+                               <option value="tubular/tubular"<?php if (!(strcmp("tubular/tubular", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular/Tubular</option>
+                               <option value="refuerzo"<?php if (!(strcmp("refuerzo", $row_bolsa['sello_superior']))) {echo "selected=\"selected\"";} ?>>Con Refuerzo</option> 
                              </select>
                             </td>
                             <td colspan="2" id="dato1">
                               <input name="N_solapa" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_solapa" value="<?php echo $row_bolsa['N_solapa']?>"/>
 
-                              <select name="tiposolapa" id="tiposolapa" style="width:100px" >
+                              <select name="tiposolapa" id="tiposolapa" style="width:100px" onchange="validaSupresello();">
                                 <option value="0"<?php if (!(strcmp("0", $row_bolsa['tiposolapa']=='' ? $row_refer['b_solapa_caract_ref']:$row_bolsa['tiposolapa']))) {echo "selected=\"selected\"";} ?> >N/A</option>
                                 <option value="2"<?php if (!(strcmp("2", $row_bolsa['tiposolapa']=='' ? $row_refer['b_solapa_caract_ref']:$row_bolsa['tiposolapa']))) {echo "selected=\"selected\"";} ?>  >Sencilla</option>
                                 <option value="1"<?php if (!(strcmp("1", $row_bolsa['tiposolapa']=='' ? $row_refer['b_solapa_caract_ref']:$row_bolsa['tiposolapa']))) {echo "selected=\"selected\"";} ?>  >Doble</option>
@@ -383,19 +390,26 @@ function MM_popupMsg(msg) { //v1.0
                                 <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $row_bolsa['tipo_bolsa']))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
                                 <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $row_bolsa['tipo_bolsa']))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
                                 <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_bolsa['tipo_bolsa']))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option>
-                              </select> -->
-                              <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required>
+                              </select> --> 
+                              <?php $tippobolsa = $row_bolsa['tipo_bolsa']=='' ? $row_refer['tipo_bolsa_ref'] : $row_bolsa['tipo_bolsa']; ?>
+
+                              <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required onChange="tipoMaterial();" >
                                <option value="">Seleccione...</option>
-                                  <?php  foreach($row_formulas as $row_formulas ) { ?>
-                               <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_bolsa['tipo_bolsa']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                                  <?php foreach($row_formulas as $row_formulas ) { ?>
+                               <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
                            <?php } ?>
                            </select>
                             </td>
-                            <td colspan="2" id="dato1"><select name="B_bolsillo" id="B_bolsillo" onchange="mostrarBolsillo(this)">
+                            <td colspan="2" id="dato1"><select name="B_bolsillo" id="B_bolsillo" onchange="mostrarvalorBolsillo()">
                               <option value="0"<?php if (!(strcmp("0",$row_bolsa['B_bolsillo']))) {echo "selected=\"selected\"";} ?>>NO</option>
                               <option value="1"<?php if (!(strcmp("1", $row_bolsa['B_bolsillo']))) {echo "selected=\"selected\"";} ?>>SI</option>
                             </select></td>
-                            <td id="dato1"><input name="N_tamano_bolsillo" required="required" type="number" style=" width:70px" min="0" step="0.01" value="<?php echo $row_bolsa['N_tamano_bolsillo']?>" id="N_tamano_bolsillo"/></td>
+                            <td id="dato1"><input name="N_tamano_bolsillo" required="required" type="number" style=" width:70px;display: none;" min="0" step="0.01" value="<?php echo $row_bolsa['N_tamano_bolsillo']?>" id="N_tamano_bolsillo"/>
+
+                              <input type="hidden" name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" value="<?php echo $row_bolsa['Str_tipo_coextrusion']?>" />
+                              <input type="hidden" name="Str_capa_ext_coext" id="Str_capa_ext_coext" value="<?php echo $row_bolsa['Str_capa_ext_coext']?>" />
+                              <input type="hidden" name="Str_capa_inter_coext" id="Str_capa_inter_coext" value="<?php echo $row_bolsa['Str_capa_inter_coext']?>" />
+                            </td>
                           </tr> 
                           <!-- <tr id="tr1">
                             <td colspan="7" id="titulo1">MATERIAL COEXTRUSION</td>
@@ -407,9 +421,7 @@ function MM_popupMsg(msg) { //v1.0
                           </tr>
                           <tr>
                             <td id="fuente1">-->
-                              <input type="hidden" name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" value="<?php echo $row_bolsa['Str_tipo_coextrusion']?>" />
-                              <input type="hidden" name="Str_capa_ext_coext" id="Str_capa_ext_coext" value="<?php echo $row_bolsa['Str_capa_ext_coext']?>" />
-                              <input type="hidden" name="Str_capa_inter_coext" id="Str_capa_inter_coext" value="<?php echo $row_bolsa['Str_capa_inter_coext']?>" />
+                              
                            <!-- <select name="Str_tipo_coextrusion" id="Str_tipo_coextrusion" onchange="mostrarCapa(this)">
                               <option value="TRANSPARENTE"<?php if (!(strcmp("TRANSPARENTE", $row_bolsa['Str_tipo_coextrusion']))) {echo "selected=\"selected\"";} ?>>TRANSPARENTE</option>
                               <option value="PIGMENTADO B/N"<?php if (!(strcmp("PIGMENTADO B/N", $row_bolsa['Str_tipo_coextrusion']))) {echo "selected=\"selected\"";} ?>>PIGMENTADO B/N</option>
@@ -646,7 +658,9 @@ function MM_popupMsg(msg) { //v1.0
                                   <option value="DDP"<?php if (!(strcmp("DDP", $row_bolsa['Str_incoterms']))) {echo "selected=\"selected\"";} ?>>DDP</option>
                                 </select> <a href="javascript:verFoto('archivosc/CuadroIncoterms.pdf','610','490')" >Ver Cuadro</a>
                               </td>
-                              <td colspan="2" id="fuente1"><select name="vendedor" id="vendedor" required>
+                              <td colspan="2" id="fuente1">
+                                <select name="vendedor" id="vendedor" required>
+                                <?php  echo 'usu: '. $row_bolsa['Str_usuario'];?>
                                 <option value="" <?php if (!(strcmp("", $row_bolsa['Str_usuario']))) {echo "selected=\"selected\"";} ?>>Seleccione</option>
                                 <?php
                                 do {  
@@ -748,60 +762,103 @@ function MM_popupMsg(msg) { //v1.0
    }); 
    
    
-   $('#tipo_bolsa').on('change', function() { 
-            if($("#tipo_bolsa").val() == 'Sika'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("BLANCO"); 
-            }else if($("#tipo_bolsa").val() == 'Pigmentada Tratada Doble Cara'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("NEGRO"); 
-            }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado B/N'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("NEGRO"); 
-            }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado Blanca'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("BLANCO"); 
-            }else if($("#tipo_bolsa").val() == 'Currier Pigmentado oxobiodegradable B/N'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("NEGRO");  
-            }else if($("#tipo_bolsa").val() == 'Currier Pigmentado B/N'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("NEGRO"); 
-            }else if($("#tipo_bolsa").val() == 'Pigmentada Blanca'){
-                 $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
-                 $("#Str_capa_ext_coext").val("BLANCO");
-                 $("#Str_capa_inter_coext").val("BLANCO"); 
-            }else if($("#tipo_bolsa").val() == 'Seguridad transparente y monedas'){
-                 $("#Str_tipo_coextrusion").val("TRANSPARENTE");
-                 $("#Str_capa_ext_coext").val("TRANSPARENTE");
-                 $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
-            }else if($("#tipo_bolsa").val() == 'Currier transparente'){
-                 $("#Str_tipo_coextrusion").val("TRANSPARENTE");
-                 $("#Str_capa_ext_coext").val("TRANSPARENTE");
-                 $("#Str_capa_inter_coext").val("TRANSPARENTE");
-            }else if($("#tipo_bolsa").val() == 'Alta Densidad'){
-                 $("#Str_tipo_coextrusion").val("TRANSPARENTE");
-                 $("#Str_capa_ext_coext").val("TRANSPARENTE");
-                 $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
-            }else if($("#tipo_bolsa").val() == 'Formulacion Agua'){
-                 $("#Str_tipo_coextrusion").val("TRANSPARENTE");
-                 $("#Str_capa_ext_coext").val("TRANSPARENTE");
-                 $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
-            }
+$(document).ready(function(){
+      
+            tipoMaterial();
+            mostrarvalorBolsillo();
+  });      
+  function tipoMaterial(){
+               if($("#tipo_bolsa").val() == 'KO-01'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'K0-02'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'KO-03'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'KO-04'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'KO-05'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO");  
+               }else if($("#tipo_bolsa").val() == 'KO-06'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("NEGRO"); 
+               }else if($("#tipo_bolsa").val() == 'KO-07'){
+                    $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
+                    $("#Str_capa_ext_coext").val("BLANCO");
+                    $("#Str_capa_inter_coext").val("BLANCO"); 
+               }else if($("#tipo_bolsa").val() == 'KO-08'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }else if($("#tipo_bolsa").val() == 'KO-09'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE");
+               }else if($("#tipo_bolsa").val() == 'KO-10'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE");  
+               }else if($("#tipo_bolsa").val() == 'KO-11'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }else if($("#tipo_bolsa").val() == 'KO-12'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }
     
-    });
+   }
 
+
+   function validaSupresello(){
+
+       if($("#sello_superior").val()=="tubular" ){
+           $("#tiposolapa").val('1') 
+       } else if($("#sello_superior").val()=="refuerzo" ){
+           $("#tiposolapa").val('1') 
+       } else if($("#sello_superior").val()=="tubular/tubular" ){
+           $("#tiposolapa").val('0') 
+       } else if($("#sello_superior").val()=="" ){
+           $("#tiposolapa").val('0') 
+       } 
+
+   }
  
+ function mostrarvalorBolsillo(){
+      if($("#B_bolsillo").val()=='1' ){
+       $("#N_tamano_bolsillo").show(100);
+      }else{
+       $("#N_tamano_bolsillo").hide(100);
+      }
+
+ }
+
+
+ $(document).ready(function(){
+   
+   if($("#calculaformula").val()==1){
+      $("#calculaformula").prop("checked", true);
+   }else{
+    $("#calculaformula").prop("checked", false);
+   } 
+   
+  });
+
   $('#calculaformula').on('change', function() { 
-      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio_old").val()!='' ) {   
+      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio").val()!='' ) {   
      
-      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio_old").val() );
+      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio").val() );
     }
  });
 

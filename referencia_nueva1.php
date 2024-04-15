@@ -7,7 +7,7 @@
 //initialize the session
 if (!isset($_SESSION)) {
   session_start();
-}
+} 
 
 // ** Logout the current user. **
 $logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
@@ -122,6 +122,17 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
   <script type="text/javascript" src="js/listado.js"></script>
   <link rel="stylesheet" type="text/css" href="css/general.css"/>
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
+  <script type="text/javascript" src="js/consulta.js"></script>
+
+  <!-- sweetalert -->
+  <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+  <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
 </head>
 <body>
   <div class="spiffy_content">  
@@ -130,7 +141,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
         <tr>
          <td align="center">
            <div class="row-fluid">
-             <div class="span8 offset2"> <!--span8 offset2   esto da el tama�o peque�o -->
+             <div class="span8 offset2"> <!--span8 offset2   esto da el tamaño pequeño -->
                <div class="panel panel-primary">
                 <div class="panel-heading" align="left" ></div><!--color azul-->
                 <div class="row" >
@@ -207,6 +218,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
  
                </td> 
         <td nowrap="nowrap" id="dato1"> 
+
       <?php if($row_referencianueva['N_solapa'] > 0){?>
           <input type="radio" name="Tiposolapa" id="ocultar" value="0"<?php if (!(strcmp($row_referencianueva['tiposolapa'],0))) {echo "checked=\"checked\"";} ?> required/>N/A<br/> 
           <input type="radio" name="Tiposolapa" id="mostrar" value="2"<?php if (!(strcmp($row_referencianueva['tiposolapa'],2))) {echo "checked=\"checked\"";} ?>/>Sencilla<br/>
@@ -220,8 +232,8 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
             <select name="presen" id="presen" style="width:95px" required="required">
               <option value=""></option>
               <option value="N.A">N.A</option>
-              <option value="LAMINA">LAMINA</option>
-              <option value="TUBULAR">TUBULAR</option>
+              <option value="LAMINA"<?php if ((strcmp("tubular/tubular", $row_referencianueva['sello_superior']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
+              <option value="TUBULAR"<?php if (!(strcmp("tubular/tubular", $row_referencianueva['sello_superior']))) {echo "selected=\"selected\"";} ?>>TUBULAR</option>
               <option value="SEMITUBULAR">SEMITUBULAR</option>
             </select>
             <select name="trata" id="trata" style="width:85px">
@@ -230,17 +242,26 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
               <option value="UNA CARA"<?php if (!(strcmp('UNA CARA', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>UNA CARA</option>
               <option value="DOBLE CARA"<?php if (!(strcmp('DOBLE CARA', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>DOBLE CARA</option>
             </select>
-            <input name="Submit" type="submit" id="Submit" class="botonGMini" value="ADD" />
+            <input name="Submit" type="submit" id="Submit" class="botonGMini" value="ADD" onclick="anchodelRolloCreacion()"/>
             <input name="n_cn" type="hidden" id="n_cn" value="<?php echo $row_referencianueva['N_cotizacion']; ?>" />
             <input name="cod_ref" type="hidden" id="cod_ref" value="<?php echo $row_referencianueva['N_referencia_c']; ?>" />
             <input name="Str_nit" type="hidden" id="Str_nit" value="<?php echo $row_referencianueva['Str_nit']; ?>" />
             <input name="valor_ref" type="hidden" id="valor_ref" value="<?php echo $row_referencianueva['N_precio']; ?>" />
             <input name="id" type="hidden" id="id" value="1" />
             <input name="Str_unidad_vta" type="hidden" id="Str_unidad_vta" value="<?php echo $row_referencianueva['Str_unidad_vta']; ?>" />
+
+            <input name="N_alto" type="hidden" id="N_alto" value="<?php echo $row_referencianueva['N_alto']; ?>" />
+            <input name="sello_superior" type="hidden" id="sello_superior" value="<?php echo $row_referencianueva['sello_superior']; ?>" />
+            <input name="N_solapa" type="hidden" id="N_solapa" value="<?php echo $row_referencianueva['N_solapa']; ?>" /> 
+            <input name="B_fuelle" type="hidden" id="B_fuelle" value="<?php echo $row_referencianueva['B_fuelle']; ?>" /> 
+            <input name="tiposolapa" type="hidden" id="tiposolapa" value="<?php echo $row_referencianueva['tiposolapa']; ?>" />
+            <input name="ancho_rollo" type="text" id="ancho_rollo" value="" readonly style="width:50px"/>Ancho del Rollo 
+
             <input name="id" type="hidden" id="id" value="1" />
           </td>
         </form> 
-        <td id="dato2"><form name="form2" method="post" action="referencia_nueva2.php" enctype="multipart/form-data">	  
+        <td id="dato2">
+          <form name="form2" method="post" action="referencia_nueva2.php" enctype="multipart/form-data">	  
           <input type="submit" class="botonDel" name="Submit" value="DEL">
           <input name="n_cn" type="hidden" id="n_cn" value="<?php echo $row_referencianueva['N_cotizacion']; ?>">
           <input name="cod_ref" type="hidden" id="cod_ref" value="<?php echo $row_referencianueva['N_referencia_c']; ?>">
@@ -318,7 +339,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
               <option value="UNA CARA"<?php if (!(strcmp('UNA CARA', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>UNA CARA</option>
               <option value="DOBLE CARA"<?php if (!(strcmp('DOBLE CARA', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>DOBLE CARA</option>
       </select>        	  
-      <input type="submit" name="Submit" class="botonGMini" value="ADD">
+      <input type="submit" name="Submit" class="botonGMini" value="ADD" >
       <input name="n_cn2" type="hidden" id="n_cn2" value="<?php echo $row_referencianueva2['N_cotizacion']; ?>"><input name="cod_ref2" type="hidden" id="cod_ref2" value="<?php echo $row_referencianueva2['N_referencia_c']; ?>">
       <input name="Str_nit2" type="hidden" id="Str_nit2" value="<?php echo $row_referencianueva2['Str_nit']; ?>">
       <input name="valor_ref2" type="hidden" id="valor_ref2" value="<?php echo $row_referencianueva2['N_precio_vnta']; ?>" />
@@ -455,6 +476,54 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
 </div>
 </body>
 </html>
+<script>
+  
+  $(document).ready(function(){
+        
+              anchodelRolloCreacion();
+    });
+
+  //ancho del rollo desde listado referencia_nueva1 listado ref
+  function anchodelRolloCreacion(){
+  
+    var largo = parseFloat($('#N_alto').val());
+    var solapa = parseFloat($('#N_solapa').val());
+    var fuelle = parseFloat($('#B_fuelle').val())*parseInt(2);//siempre es x 2
+      
+     var sellosuperior =  ($('#sello_superior').val())//*parseInt(2); Str_sellosuperioracion  
+     if(sellosuperior!="tubular/tubular"){
+         var largo = parseFloat($('#N_alto').val())*parseInt(2);  
+     } 
+
+     //vale doble la solapa
+     var solaparadio = $('#tiposolapa').val(); 
+     if(solaparadio==1){
+        var solapa = parseFloat(solapa) * parseInt(2);
+     } 
+
+     if(sellosuperior=='tubular' && solaparadio=='1'){
+           sumatoriaDoble = (largo)+(solapa)+2;//+2 son centimetros ya definidos de la pestaña interna
+     }else if(sellosuperior=='tubular' && solaparadio=='0'){
+           sumatoriaDoble = (largo)+2;//+2 son centimetros ya definidos de la pestaña interna
+     }else if(sellosuperior=='tubular/tubular' && solaparadio=='0'){
+           sumatoriaDoble = (largo);//no suma los 2 cm
+     }else if(sellosuperior=='plano' && solaparadio=='1'){
+           sumatoriaDoble = (largo)+(solapa);
+     }else if(sellosuperior=='plano' && solaparadio=='2'){
+           sumatoriaDoble = (largo)+(solapa);
+     }else if(sellosuperior=='refuerzo' && solaparadio=='1'){
+           sumatoriaDoble = (largo)+(parseFloat($('#N_solapa').val())*parseInt(3))+2;//solapa vale 3
+     }else if(sellosuperior=='' && solaparadio=='0'){ 
+           sumatoriaDoble = (largo);//no tiene solapa
+     }
+ 
+       var anchoRollo=(sumatoriaDoble+fuelle); 
+       
+       $('#ancho_rollo').val(anchoRollo); 
+
+  }
+
+</script>
 <?php
 mysql_free_result($usuario);
 mysql_free_result($referencianueva);

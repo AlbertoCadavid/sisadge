@@ -886,5 +886,15 @@ function fechahoraActual(){
 	// Mostrar la hora actual en Bogotá, Colombia
 	return $hora_actual;
 }
+function fechaActual(){
+	// Establecer la zona horaria para America/Bogota
+	date_default_timezone_set('America/Bogota');
+
+	// Obtener la hora actual
+	$hora_actual = date('Y-m-d');
+
+	// Mostrar la hora actual en Bogotá, Colombia
+	return $hora_actual;
+}
 
 ?>

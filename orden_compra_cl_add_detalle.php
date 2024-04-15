@@ -135,6 +135,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
   $fech=$_POST['fecha_entrega_io'];
   $ref=$_POST['int_cod_ref_io'];
 //ORDEN COMPRA
+ 
   if ($id_pedido!=''&&$ref!=''&&$fech!='')
   {
 /*  $resultado = mysql_query("SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io = '$id_pedido' AND int_cod_ref_io='$ref' AND fecha_entrega_io='$fech'");    
@@ -181,6 +182,9 @@ if (mysql_num_rows($resultado) > 0)
    GetSQLValueString($_POST['N_precio_old'], "text"),
    GetSQLValueString($_POST['valor_impuesto'], "text"),
    GetSQLValueString($_POST['cotiz'], "text") );
+
+   
+
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($insertSQL, $conexion1) ;
   
@@ -251,25 +255,22 @@ if ($id_mp!='')
 
 
 
+
+ if (isset($_GET['id_pedido'])) {
+   $id_pedido = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
+ }
+
  //CONSECUTIVO
      $colname_ver_consecutivo = "-1";   
-     if (isset($_GET['str_numero_oc'])){
-       $colname_ver_consecutivo= (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);}
+     if (isset($_GET['id_pedido'])){
+       $colname_ver_consecutivo= (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);}
        mysql_select_db($database_conexion1, $conexion1);
-       $query_consecutivo =sprintf("SELECT * FROM Tbl_items_ordenc  WHERE str_numero_io= '%s' ORDER BY int_consecutivo_io DESC",$colname_ver_consecutivo);
+       $query_consecutivo =sprintf("SELECT * FROM Tbl_items_ordenc  WHERE id_pedido_io= '%s' ORDER BY int_consecutivo_io DESC",$colname_ver_consecutivo);
        $consecutivo = mysql_query($query_consecutivo, $conexion1) ;
        $row_consecutivo = mysql_fetch_assoc($consecutivo);
        $totalRows_consecutivo = mysql_num_rows($consecutivo);
 
-
-
-
-
-
-
-
-
-
+ 
 $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = (get_magic_quotes_gpc()) ? $_SESSION['MM_Username'] : addslashes($_SESSION['MM_Username']);
@@ -298,25 +299,32 @@ $refer = mysql_query($query_refer, $conexion1) or die(mysql_error());
 $row_refer = mysql_fetch_assoc($refer);
 $totalRows_refer = mysql_num_rows($refer);
 
-
+ 
 //CONSULTA ORDEN COMPRA
   $colname_orden_compra = "-1";   
-  if (isset($_GET['str_numero_oc'])){
-    $colname_orden_compra= (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);}
+  if (isset($_GET['id_pedido'])){
+
+
+    $colname_orden_compra= (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
+  }
+    if (isset($_GET['id_oc'])) {
+      $id_oc = (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);
+    }  
     mysql_select_db($database_conexion1, $conexion1);
-    $query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra WHERE str_numero_oc='%s'",$colname_orden_compra);
+    $query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra WHERE id_pedido='%s' ",$colname_orden_compra);
     $orden_compra = mysql_query($query_orden_compra, $conexion1) ;
     $row_orden_compra = mysql_fetch_assoc($orden_compra);
     $totalRows_orden_compra = mysql_num_rows($orden_compra);
 //CONSECUTIVO
     $colname_ver_consecutivo = "-1";   
-    if (isset($_GET['str_numero_oc'])){
-      $colname_ver_consecutivo= (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);}
+    if (isset($_GET['id_pedido'])){
+      $colname_ver_consecutivo= (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);}
       mysql_select_db($database_conexion1, $conexion1);
-      $query_consecutivo =sprintf("SELECT * FROM Tbl_items_ordenc  WHERE str_numero_io= '%s' ORDER BY int_consecutivo_io DESC",$colname_ver_consecutivo);
+      $query_consecutivo =sprintf("SELECT * FROM Tbl_items_ordenc  WHERE id_pedido_io= '%s' ORDER BY int_consecutivo_io DESC",$colname_ver_consecutivo);
       $consecutivo = mysql_query($query_consecutivo, $conexion1) ;
       $row_consecutivo = mysql_fetch_assoc($consecutivo);
       $totalRows_consecutivo = mysql_num_rows($consecutivo);
+
 //REFERENCIAS ACYCIA SE TRAE REF DEL CLIENTE
       $colname_ref_cliente= "-1";   
       if (isset($_GET['id_oc'])){
@@ -389,9 +397,7 @@ $totalRows_refer = mysql_num_rows($refer);
              $bolsa = mysql_query($query_bolsa, $conexion1) or die(mysql_error());
              $row_bolsa = mysql_fetch_assoc($bolsa);
              $totalRows_bolsa = mysql_num_rows($bolsa);
-            
-
-
+         
 
              }
  
@@ -494,7 +500,7 @@ $totalRows_refer = mysql_num_rows($refer);
     <div align="center">
       <table id="tabla1"><!-- id="tabla1" -->
         <tr>
-         <td align="center">
+         <td align="center">  
            <div class="row-fluid">
              <div class="span8 offset2"> <!--span8 offset2   esto da el tamaño pequeño -->
                <div class="panel panel-primary">

@@ -1,0 +1,215 @@
+body{
+    font-family: Arial, sans-serif;
+    padding:0px;
+    margin: 0px;
+    background-color: #D6D6D6;
+    width:100%;
+    height:100vh;
+}
+
+.search{
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #D6D6D6;
+    text-align: center;
+}
+ 
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0 rgba(124, 57, 57, 0.4);
+}
+
+label {
+    font-weight: bold;
+}
+
+.ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.div {
+    margin: 3px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.event-entrada {
+    background-color: #d4edda;
+}
+
+.event-salida {
+    background-color: #f8d7da;
+}
+
+.event-procesamiento {
+    background-color: #fff3cd;
+}
+
+.unavailable{
+    background-color: gray;
+}
+
+.wrapper{
+    /* position: absolute; */
+    top:50%;
+    left:50%;
+    /* transform: translate(-50%, -50%); */
+    width: fit-content;
+    height:auto;
+}
+
+.flex{
+    display: flex;
+}
+
+.wrapRollos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.containerRollo{
+    width: 65px;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.titulo{
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button{
+    width:150px;
+    height:50px;
+    border-radius: 10px;
+    background: linear-gradient(to left top, #0a07ca 50%, #090ba1 50%);
+    border-style: none;
+    color:#fff;
+    font-size: 23px;
+    letter-spacing: 3px;
+    font-family: 'Lato';
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0px;
+    overflow: hidden;
+    transition: all .5s;
+    box-shadow: 0px 1px 2px rgba(0,0,0,.2);
+    text-shadow: 0px 0px 10px #5cfaff,
+                0px 0px 20px #5cfaff, 
+                0px 0px 40px #5cfaff,
+                0px 0px 80px #5cfaff;
+}
+button span{
+    position: absolute;
+    display: block;
+}
+button span:nth-child(1){
+    height: 3px;
+    width:200px;
+    top:0px;
+    left:-200px;
+    background: linear-gradient(to right, rgba(204, 22, 22, 0), #1281ad);
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span1 2s linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes span1{
+    0%{
+        left:-200px
+    }
+    100%{
+        left:200px;
+    }
+}
+button span:nth-child(2){
+    height: 70px;
+    width: 3px;
+    top:-70px;
+    right:0px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), #1281ad);
+    border-bottom-left-radius: 1px;
+    border-bottom-right-radius: 1px;
+    animation: span2 2s linear infinite;
+    animation-delay: 2s;
+}
+@keyframes span2{
+    0%{
+        top:-70px;
+    }
+    100%{
+        top:70px;
+    }
+}
+button span:nth-child(3){
+    height:3px;
+    width:200px;
+    right:-200px;
+    bottom: 0px;
+    background: linear-gradient(to left, rgba(0,0,0,0), #1281ad);
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    animation: span3 2s linear infinite;
+    animation-delay: 3s;
+}
+@keyframes span3{
+    0%{
+        right:-200px;
+    }
+    100%{
+        right: 200px;
+    }
+}
+
+button span:nth-child(4){
+    height:70px;
+    width:3px;
+    bottom:-70px;
+    left:0px;
+    background: linear-gradient(to top, rgba(0,0,0,0), #1281ad);
+    border-top-right-radius: 1px;
+    border-top-left-radius: 1px;
+    animation: span4 2s linear infinite;
+    animation-delay: 4s;
+}
+@keyframes span4{
+    0%{
+        bottom: -70px;
+    }
+    100%{
+        bottom:70px;
+    }
+}
+
+button:hover{
+    transition: all .5s;
+    transform: rotate(-3deg) scale(1.1);
+    box-shadow: 0px 3px 5px rgba(0,0,0,.4);
+}
+button:hover span{
+    animation-play-state: paused;
+}
+
+

@@ -153,10 +153,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
      $existeremision=$myObject->Obtener('tbl_remisiones','int_remision', " '".$_POST['int_remision']."'  " );
    } 
    if(isset($_POST['int_remision']) && !$existeremision){
-  $insertSQL = sprintf("INSERT INTO Tbl_remisiones(int_remision,str_numero_oc_r,fecha_r,str_encargado_r,str_transportador_r,str_guia_r,str_elaboro_r,str_aprobo_r,str_observacion_r,factura_r,b_borrado_r,ciudad_pais, comprobante_file) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO Tbl_remisiones(int_remision,str_numero_oc_r,fecha_r,str_encargado_r,str_transportador_r,str_guia_r,str_elaboro_r,str_aprobo_r,str_observacion_r,factura_r,b_borrado_r,ciudad_pais, comprobante_file,id_pedido_oc) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
    GetSQLValueString($_POST['int_remision'], "int"),
    GetSQLValueString($_POST['str_numero_oc_r'], "text"),
-   GetSQLValueString($_POST['fecha_r'], "date"),
+   GetSQLValueString($_POST['fecha_r'], "date"), 
    GetSQLValueString($_POST['str_encargado_r'], "text"),
    GetSQLValueString($_POST['str_transportador_r'], "text"),
    GetSQLValueString($_POST['str_guia_r'], "text"),
@@ -166,7 +166,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
    GetSQLValueString($_POST['factura_r'], "text"),                     
    GetSQLValueString($_POST['b_borrado_r'], "int"),
    GetSQLValueString($_POST['ciudad_pais'], "text"),
-   GetSQLValueString($tieneadjunto1, "text"));
+   GetSQLValueString($tieneadjunto1, "text"),
+   GetSQLValueString($_POST['id_pedido_oc'], "text"));
 
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($insertSQL, $conexion1) or die(mysql_error());
@@ -212,36 +213,36 @@ $totalRows_remision = mysql_num_rows($remision);
 
 
 //codigo para controlar si ya tiene remision 2023-05-03
-if (isset($_GET['str_numero_r'])) {
+if (isset($_GET['id_pedido'])) {
  
     $myObject = new oRemision();
-     $existeremision=$myObject->Obtener('tbl_remisiones','str_numero_oc_r', " '".$_GET['str_numero_r']."'  " ); 
+     $existeremision=$myObject->Obtener('tbl_remisiones','id_pedido_oc', " '".$_GET['id_pedido']."'  " ); 
      
      $numeroRemision=$existeremision[0]['int_remision'];
-     $yaexisteremi = $existeremision[0]['str_numero_oc_r'];//para que imprima los items y info de O.C
+     $yaexisteremi = $existeremision[0]['id_pedido_oc'];//$existeremision[0]['str_numero_oc_r'];//para que imprima los items y info de O.C
    
    
 }
  
- $_GET['str_numero_r'] = $_GET['str_numero_r'] == '' ? $yaexisteremi : $_GET['str_numero_r'];//si no existe remision asociada toma el $_GET['str_numero_r']
+ $_GET['id_pedido'] = $_GET['id_pedido'] == '' ? $yaexisteremi : $_GET['id_pedido'];//si no existe remision asociada toma el $_GET['id_pedido']
  
  
 $colname_orden_r = "-1";
-if (isset($_GET['str_numero_r'])) {
-  $colname_orden_r = (get_magic_quotes_gpc()) ? $_GET['str_numero_r'] : addslashes($_GET['str_numero_r']);
+if (isset($_GET['id_pedido'])) {
+  $colname_orden_r = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra,cliente WHERE Tbl_orden_compra.str_numero_oc='%s' AND Tbl_orden_compra.id_c_oc=cliente.id_c", $colname_orden_r);
+$query_orden_compra =sprintf("SELECT * FROM Tbl_orden_compra,cliente WHERE Tbl_orden_compra.id_pedido='%s' AND Tbl_orden_compra.id_c_oc=cliente.id_c", $colname_orden_r);
 $orden_compra = mysql_query($query_orden_compra, $conexion1) or die(mysql_error());
 $row_orden_compra = mysql_fetch_assoc($orden_compra);
 $totalRows_orden_compra = mysql_num_rows($orden_compra);
 
 $colname_items = "-1";
-if (isset($_GET['str_numero_r'])) {
-  $colname_items = (get_magic_quotes_gpc()) ? $_GET['str_numero_r'] : addslashes($_GET['str_numero_r']);
+if (isset($_GET['id_pedido'])) { 
+  $colname_items = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_items = sprintf("SELECT * FROM Tbl_items_ordenc WHERE str_numero_io = '%s' ORDER BY id_items ASC", $colname_items);
+$query_items = sprintf("SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io = '%s' ORDER BY id_items ASC", $colname_items);
 $items = mysql_query($query_items, $conexion1) or die(mysql_error());
 $row_items = mysql_fetch_assoc($items);
 $totalRows_items = mysql_num_rows($items);
@@ -582,6 +583,7 @@ $totalRows_items = mysql_num_rows($items);
                                 <td colspan="3" id="fuente2"><input type="hidden" name="MM_insert" value="form1">
                                   <input type="hidden" name="b_borrado_r" id="b_borrado_r" value="0">
                                   <input type="hidden" name="remisionar" id="remisionar" value="remisionar">
+                                  <input type="hidden" name="id_pedido_oc" id="id_pedido_oc" value="<?php echo $row_orden_compra['id_pedido'] ?>">
                                   <input type="hidden" name="str_numero_oc_r" id="str_numero_oc_r" value="<?php echo $row_orden_compra['str_numero_oc'] ?>">
                                   <img src="images/salir.gif" style="cursor:hand;" alt="SALIR" title="SALIR" onClick="salir()"/></td>
                                 </tr>

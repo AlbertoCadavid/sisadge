@@ -187,7 +187,7 @@ $_SESSION['usuariosarray']=$restriUsuarios;//para validar en otras vistas
 $_SESSION['usuariosarrayMenu']=array(4, 23, 26, 76);//4 es alvaro Menu de Administradores
 $_SESSION['usuariosarrayrRHH']=array(15,23);//15 es recursos humanos
 $_SESSION['usuariosarrayOrdenes']=array(4, 23, 26, 37, 64, 66, 76);//37 es Mauricio R
-$_SESSION['usuariosarraySicoq']=array(23, 72, 76);// 48 = este es andres 
+$_SESSION['usuariosarraySicoq']=array(23, 72, 76);// 48 = este es Jesus 72 AuxAuditor 
 
 $_SESSION['restriUsuarios'] = 1;
 for ($i=0; $i < count($restriUsuarios); $i++) {  

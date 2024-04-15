@@ -5,7 +5,7 @@ if (!isset($_SESSION)) {
 }
 $MM_authorizedUsers = "";
 $MM_donotCheckaccess = "true";
-
+ 
 // *** Restrict Access To Page: Grant or deny access to this page
 function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) { 
   // For security, start by assuming the visitor is NOT authorized. 
@@ -72,6 +72,7 @@ $registro=$row_usuario['nombre_usuario'];
 $codigo=$row_usuario['codigo_usuario'];
 $fecha= date("Y-m-d");
 $hora= date("g:i a");
+$anchoRollo=$_POST['ancho_rollo'];
 //PACKING
 $n_cn2=$_POST['n_cn2'];
 $cod_ref2=$_POST['cod_ref2'];
@@ -113,39 +114,40 @@ while ($row=mysql_fetch_array($result)) {
 7 B_troquel
 8 B_precorte
 9 B_bolsillo
-10  N_tamano_bolsillo
-11  N_solapa
-12  Str_moneda
-13  N_precio
-14  Str_unidad_vta
-15  Str_plazo
-16  Str_incoterms
-17  Str_tipo_coextrusion
-18  Str_capa_ext_coext
-19  Str_capa_inter_coext
-20  N_cant_impresion
-21  B_impresion
-22  N_colores_impresion
-23  B_cyreles
-24  B_sellado_seguridad
-25  B_sellado_permanente
-26  B_sellado_resellable
-27  B_sellado_hotm
-28  Str_sellado_lateral
-29  B_fondo
-30  B_codigo_b
-31  B_numeracion
-32  fecha_creacion
-33  Str_usuario
-34  N_comision
-35  B_estado
-36  B_generica
-37  tipo_bolsa
-38  tiposolapa
-39  N_precio_old
-40  impuesto
-41  pdf_impuesto
-42  valor_impuesto
+10 N_tamano_bolsillo
+11 N_solapa
+12 Str_moneda
+13 N_precio
+14 Str_unidad_vta
+15 Str_plazo
+16 Str_incoterms
+17 Str_tipo_coextrusion
+18 Str_capa_ext_coext
+19 Str_capa_inter_coext
+20 N_cant_impresion
+21 B_impresion
+22 N_colores_impresion
+23 B_cyreles
+24 B_sellado_seguridad
+25 B_sellado_permanente
+26 B_sellado_resellable
+27 B_sellado_hotm
+28 Str_sellado_lateral
+29 B_fondo
+30 B_codigo_b
+31 B_numeracion
+32 fecha_creacion
+33 Str_usuario
+34 N_comision
+35 B_estado
+36 B_generica
+37 tipo_bolsa
+38 tiposolapa
+39 sello_superior
+40 N_precio_old
+41 impuesto
+42 pdf_impuesto
+43 valor_impuesto 
 */
 $ancho=$row[3];	
 $alto=$row[4];
@@ -153,7 +155,7 @@ $fuelle=$row[5];
 $calibre=$row[6];
 $solapaT=$row[11];
 $solapa=($solapaT/$Tiposolapa);
-$constan= $tipo_bolsa=="COMPOSTABLE" ? 0.00665 : 0.00467;//hay q preguntar cual es la compostable en la nueva formula
+$constan= $tipo_bolsa=="Compostable" ? 0.00665 : 0.00467;//hay q preguntar cual es la compostable en la nueva formula
  
 $subm=($ancho * ($alto+$fuelle+$solapa)*$calibre*$constan);//en js es var subm=ancho*(larg+fuelle+dsolapa)*calibre*cons;
 $var5=($subm*100)/100;
@@ -169,14 +171,18 @@ if($row[26]=='1'){$res="CINTA RESELLABLE";}
 if($row[27]=='1'){$hot="HOT MELT";}
 $adhesivo=$seg.$per.$res.$hot;
 
+
+
+
+
 //INSERTA REFERENCIA
 //ESTAS SON LAS COLUMNAS DE LA TABLA BOLSAS
 /*	REFERENCIA  */
- 
+  
 $sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, tipo_formula, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, 
 N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, largo_ref, solapa_ref, b_solapa_caract_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p, B_troquel, 
-B_precorte, N_fuelle, B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref, registro2_ref, fecha_registro2_ref, B_generica, valor_impuesto
-) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$tipo_bolsa','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','','$row[42]')";
+B_precorte, N_fuelle, B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref, registro2_ref, fecha_registro2_ref, B_generica, ancho_rollo,valor_impuesto,peso_paquete,sello_superior
+) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$tipo_bolsa','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','',$anchoRollo,'$row[43]','','$row[39]')";
  
 $result1=mysql_query($sql1); 
 //INSERTA EGP

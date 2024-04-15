@@ -185,7 +185,7 @@ class CselladoController
     $this->tiquetes = new oMsellado();
     $this->proforma = $_REQUEST;
     $row_control_paquete = new oMsellado();
-
+    
 
     $row_control_paquete = $this->proformas->buscarTres('tbl_tiquete_numeracion', "id_tn,int_op_tn,int_bolsas_tn,int_undxpaq_tn,int_undxcaja_tn,int_desde_tn,int_hasta_tn,int_cod_empleado_tn,int_cod_rev_tn,contador_tn,int_paquete_tn,int_caja_tn,ref_tn", "  WHERE int_op_tn= '" . $_REQUEST['int_op_tn'] . "'  AND int_caja_tn='" . $_REQUEST['int_caja_tn'] . "' AND  int_paquete_tn= '" . $_REQUEST['int_paquete_tn'] . "' ", "ORDER BY int_caja_tn DESC, int_paquete_tn DESC LIMIT 1");
     //si no exit el paquete pues lo registra
@@ -478,8 +478,9 @@ class CselladoController
   {
     $this->rollos = new oMsellado();
     /* consulta cuantos rollos se extrulleron o imprimieron */
-    $this->rollos->consultaRollos2tablas("TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "TblImpresionRollo", "TblExtruderRollo", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
-    //$this->rollos->consultaRollos2tablas("TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "TblImpresionRollo", "TblExtruderRollo", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn]");
+    //$this->rollos->consultaRollos2tablas("TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "TblImpresionRollo", "TblExtruderRollo", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+    $this->rollos->consultaRollos3tablas("rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tblselladorollo", "TblImpresionRollo", "TblExtruderRollo", "rolloParcial_r = 1 AND id_op_r = $_REQUEST[int_op_tn]", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+    
   }
 
   /* consulta la info del rollo que se esta sellando para saber cuantas bolsas han sellado y convertirlas en metros */
@@ -533,11 +534,11 @@ class CselladoController
     $this->bandera = new oMsellado();
     if ($_SERVER["REQUEST_METHOD"] === "POST" && $_POST["id_op"] != "" && $_POST["id_bandera"] != "") {
       $operario = $_POST['operario_verificacion'];
-      $fecha = $_POST['fecha_verificacion'];
+      $fecha_verificacion = fechahoraActual();
       $estado = $_POST['estado'];
       $id_bandera = $_POST['id_bandera'];
       $id_op = $_POST['id_op'];
-      $this->bandera->actualizarRegistro("tbl_banderas", "operario_verificacion = $operario, fecha_verificacion = '$fecha', visto = $estado", "WHERE id_bandera = $id_bandera AND id_op = $id_op");
+      $this->bandera->actualizarRegistro("tbl_banderas", "operario_verificacion = $operario, fecha_verificacion = '$fecha_verificacion', visto = $estado", "WHERE id_bandera = $id_bandera AND id_op = $id_op");
     }
   }
 

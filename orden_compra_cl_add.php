@@ -145,7 +145,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
   $myObject = new oComercial();
    $existeorden=$myObject->Obtener('tbl_orden_compra','str_numero_oc', " '".$_POST['str_numero_oc']."'  " );
  } 
- if(isset($_POST['str_numero_oc']) && !$existeorden){
+ if(isset($_POST['str_numero_oc']))// && !$existeorden
+ {
 
  $insertSQL = sprintf("INSERT INTO tbl_orden_compra ( str_numero_oc, id_c_oc, str_nit_oc, fecha_ingreso_oc,fecha_entrega_oc, str_condicion_pago_oc, str_observacion_oc, int_total_oc, b_facturas_oc, b_num_remision_oc, b_factura_cirel_oc, str_dir_entrega_oc, str_archivo_oc, adjunto2, adjunto3, str_elaboro_oc, str_aprobo_oc, b_estado_oc, str_responsable_oc, b_borrado_oc, salida_oc, b_oc_interno,vta_web_oc,expo_oc,autorizado, entrega_fac, fecha_cierre_fac, comprobante_ent,pago_pendiente,cobra_flete,precio_flete,tipo_despacho )VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s )",  
    GetSQLValueString($_POST['str_numero_oc'], "text"),
@@ -353,12 +354,87 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                 <td nowrap id="codigo">VERSION : 0</td>
                               </tr>
                               <tr>
-                                <td rowspan="10" id="dato2" ><img src="images/logoacyc.jpg"></td>
+                                <td rowspan="9" id="dato2" ><img src="images/logoacyc.jpg"></td>
                                 <td id="subtitulo">&nbsp;</td>
                                 <td id="dato2"> <img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()"/><a href="orden_compra_cl2.php"><img src="images/o.gif" alt="ORDENES DE COMPRA" title="ORDENES DE COMPRA" border="0" style="cursor:hand;"/></a><a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0"/></a></td>
                               </tr>
+
                               <tr>
-                                <td id="numero1">PREFIJO
+                                <td id="fuente1">CLIENTE</td> 
+                              </tr>
+                              <tr>
+                                <td colspan="2" id="dato1"> 
+                                  <select class="elcliente"  name="id_oc" id="cliente" onChange=" consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') " style="width:280px">
+                                       <option value='0'>SELECCIONE CLIENTE</option>
+                                     </select>
+                                   </select>
+
+                                  <!--  <select class="elcliente" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) {consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') } else { swal('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
+                                     <option value="0">SELECCIONE CLIENTE</option>
+                                     <?php  foreach($row_nombres as $row_nombres ) { ?>
+                                       <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'],$row_nombres['id_oc']))){echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
+                                     <?php } ?>
+                                   </select> -->
+
+                                   
+
+                                  <!-- <select class="combos" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) { consultaclienteadd_oc(form1.id_oc.value); } else { alert('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
+                                    <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE CLIENTE</option>
+                                    <?php
+                                    do {  
+                                      ?>
+                                      <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
+                                      <?php
+                                    } while ($row_nombres = mysql_fetch_assoc($clientes));
+                                    $rows = mysql_num_rows($clientes);
+                                    if($rows > 0) {
+                                      mysql_data_seek($clientes, 0);
+                                      $row_nombres = mysql_fetch_assoc($clientes);
+                                    }
+                                    ?>
+                                  </select> -->
+                                </td> 
+                              </tr>
+                              <tr>
+                                <td colspan="2" id="dato1">NIT</td>
+                              </tr>
+                              <tr>
+                                <td colspan="2" id="dato4">
+                                   
+
+                                   <select class="elnit" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:280px">
+                                     <option value="0">SELECCIONE NIT</option> 
+                                   </select>
+
+                                   <!-- <select class="elcliente" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { swal('DEBE SELECCIONAR NIT '); }" style="width:250px">
+                                     <option value="0">SELECCIONE NIT</option>
+                                     <?php  foreach($row_nit as $row_nit ) { ?>
+                                       <option value="<?php echo $row_nit['id_c']?>"<?php if (!(strcmp($row_nit['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nit['nit_c']?></option>
+                                     <?php } ?>
+                                   </select>  -->
+
+                                    
+
+                                  <!-- <select class="combos" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:250px">
+                                    <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE NIT</option>
+                                    <?php 
+                                    do {  
+                                      ?>
+                                      <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nombres['nit_c']?></option>
+                                      <?php
+                                    } while ($row_nombres = mysql_fetch_assoc($clientes));
+                                    $rows = mysql_num_rows($clientes);
+                                    if($rows > 0) {
+                                      mysql_data_seek($clientes, 0);
+                                      $row_nombres = mysql_fetch_assoc($clientes);
+                                    }
+                                    ?>
+                                  </select> -->
+                                </td>
+                              </tr>
+ 
+                              <tr>
+                                <td colspan="2" id="numero1">PREFIJO
                                 <select   name="prefijo" id="prefijo"  style="width:82px">
                                  <option value="">PREFIJO</option>
                                  <option value="AC">AC</option>
@@ -368,10 +444,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                  <option value="PP">PP</option>
                                </select>
                               
-                           </td> 
-                             </tr>
-                             <tr>
-                              <td id="numero1" nowrap>N&deg; 
+                            N&deg; 
                                 <input name="str_numero_oc" type="text" class="rojo_inteso" id="str_numero_oc" size="10" onChange="return limpiaEspacios(this);" required  ><!--  onBlur="if (form1.str_numero_oc.value) { DatosGestiones('5','str_numero_oc',form1.str_numero_oc.value);}" -->              
                                 <!-- onClick="addoc();"  --> <div style="display: none;" > <input  name="b_oc_interno" type="checkbox"  value="" id="b_oc_interno" ></div>
                                 <span style="display: none;" id="oc_internas"  class="centrado1">O.C INTERNA</span> <br>
@@ -397,80 +470,8 @@ if(isset($_POST['str_numero_oc']) && $historico){
                               </td>
                               <td rowspan="5" id="dato1"> <!-- TRM: <div id="IndEcoBasico"><a href="http://dolar.wilkinsonpc.com.co/" target="_blank" ></a></div><script type="text/javascript" src="http://dolar.wilkinsonpc.com.co/js/ind-eco-basico.js?ancho=170&alto=85&fsize=10&ffamily=sans-serif"></script>  --></td>
                             </tr>
-                            <tr>
-                              <td id="fuente1">CLIENTE</td> 
-                            </tr>
-                            <tr>
-                              <td colspan="2" id="dato1"> 
-                                <select class="elcliente"  name="id_oc" id="cliente" onChange="if (form1.id_oc.value) {consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') } else { swal('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
-                                     <option value='0'>SELECCIONE CLIENTE</option>
-                                   </select>
-                                 </select>
-
-                                <!--  <select class="elcliente" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) {consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') } else { swal('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
-                                   <option value="0">SELECCIONE CLIENTE</option>
-                                   <?php  foreach($row_nombres as $row_nombres ) { ?>
-                                     <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'],$row_nombres['id_oc']))){echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
-                                   <?php } ?>
-                                 </select> -->
-
-                                 
-
-                                <!-- <select class="combos" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) { consultaclienteadd_oc(form1.id_oc.value); } else { alert('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
-                                  <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE CLIENTE</option>
-                                  <?php
-                                  do {  
-                                    ?>
-                                    <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
-                                    <?php
-                                  } while ($row_nombres = mysql_fetch_assoc($clientes));
-                                  $rows = mysql_num_rows($clientes);
-                                  if($rows > 0) {
-                                    mysql_data_seek($clientes, 0);
-                                    $row_nombres = mysql_fetch_assoc($clientes);
-                                  }
-                                  ?>
-                                </select> -->
-                              </td>
-                            </tr>
-                            <tr>
-                              <td colspan="2" id="dato1">NIT</td>
-                            </tr>
-                            <tr>
-                              <td colspan="2" id="dato4">
-                                 
-
-                                 <select class="elnit" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:250px">
-                                   <option value="0">SELECCIONE NIT</option> 
-                                 </select>
-
-                                 <!-- <select class="elcliente" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { swal('DEBE SELECCIONAR NIT '); }" style="width:250px">
-                                   <option value="0">SELECCIONE NIT</option>
-                                   <?php  foreach($row_nit as $row_nit ) { ?>
-                                     <option value="<?php echo $row_nit['id_c']?>"<?php if (!(strcmp($row_nit['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nit['nit_c']?></option>
-                                   <?php } ?>
-                                 </select>  -->
-
-                                  
-
-                                <!-- <select class="combos" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:250px">
-                                  <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE NIT</option>
-                                  <?php 
-                                  do {  
-                                    ?>
-                                    <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nombres['nit_c']?></option>
-                                    <?php
-                                  } while ($row_nombres = mysql_fetch_assoc($clientes));
-                                  $rows = mysql_num_rows($clientes);
-                                  if($rows > 0) {
-                                    mysql_data_seek($clientes, 0);
-                                    $row_nombres = mysql_fetch_assoc($clientes);
-                                  }
-                                  ?>
-                                </select> -->
-                              </td>
-                            </tr>
-                            <tr>
+                              
+                            <tr> 
                               <td colspan="3" id="detalle2">
                                 <div id="definicion_oc">
                                   <table id="tabla"><!--se cambio tabla2 x tabla1-->
@@ -511,7 +512,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                           <?php $dir_limpia = $row_cliente['direccion_envio_factura_c'];?>
                                           <textarea cols="40" name="str_dir_entrega_oc" id="str_dir_entrega_oc" onKeyUp="conMayusculas(this)" rows="2"><?php echo ($dir_limpia); ?></textarea>
                                         </td>
-                                        <td id="dato1"><?php if ($row_cliente['id_c']!='') { ?>
+                                        <td colspan="2" id="dato1"><?php if ($row_cliente['id_c']!='') { ?>
                                           <a href="perfil_cliente_edit.php?id_c=<?php echo $row_cliente['id_c'] ?>" target="_blank">ACTUALIZAR PERFIL CLIENTE</a>
                                           <?php }?></td>
                                         </tr>
@@ -523,7 +524,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                               <option value="">Seleccione...</option>
                                             </select>
                                           </td>
-                                          <td id="dato1"><strong>Fecha Cierre Facturacion:</strong>
+                                          <td colspan="2" id="dato1"><strong>Fecha Cierre Facturacion:</strong>
                                             <input type="date" name="fecha_cierre_fac" id="fecha_cierre_fac" value="" size="10">
                                           </td> 
                                         </tr>
@@ -536,18 +537,17 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                           </select>
 
                                         </td>
-                                        <td id="dato1"> 
+                                        <td colspan="2" id="dato1"> 
                                           <strong>Tipo de O.C </strong>
                                            <select name="tipo_despacho" id="tipo_despacho" required="required" >
                                             <option value="">Seleccione...</option> 
                                             <option value="despacho">Para despacho</option> 
                                             <option value="inventario">Para inventario</option>
                                           </select>
-                                        </td>
-
+                                        </td> 
                                       </tr>
                                       <tr>
-                                       <td colspan="2" id="dato2">
+                                       <td colspan="4" id="dato2">
                                         <span id="alertG" style="color: red;" > </span>
                                         <strong><?php  if ($row_cliente['id_c']!=''){ ?>
                                         <input id="additem" class="botonGeneral" onclick="guardaRegistro()" value="ADD ITEM"><!-- type="submit"  -->
@@ -559,7 +559,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                              </td>
                            </tr>         
                             <tr>
-                             <td id="dato1"> <br>
+                             <td colspan="4" id="dato1"> <br>
                                <strong>Tipo de O.C </strong>
                                 <select name="tipo_despacho" id="tipo_despacho" required="required" >
                                  <option value="">Seleccione...</option> 
@@ -567,37 +567,39 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                  <option value="inventario">Para inventario</option>
                                </select>
                              </td>
+                              <tr id="tr2">
+                               <td colspan="4" id="dato2">&nbsp;
+                               </td>
+                             </tr>
                            </tr>
                            <tr>
-                            <td  id="detalle1">
+                            <td  id="dato1">
                               Cobra Flete: 
                               <input type="checkbox" name="cobra_flete" id="cobra_flete" value="1" onClick="flete(); " > <span style="display: none;" id="recuadro" class="recuadro"><input name="precio_flete" type="text" id="precio_flete"  min="0"  style="width:100px" value=""  /></span>
                             </td>
-                            <td  id="dato1"><strong>Proforma Pendiente de Pago? </strong>
+                            <td colspan="2" id="dato1"><strong>Proforma Pendiente de Pago? </strong>
                              <select name="pago_pendiente" id="pago_pendiente" required="required" >
                               <option value="">Seleccione...</option> 
                               <option value="NO">NO</option> 
                               <option value="SI">SI</option>
                             </select>
-                          </td>
-                          <td colspan="2" id="dato1"> <strong>Autoriza Despacho? </strong>
+                           Autoriza Despacho?  
                            <select name="autorizado" id="autorizado"> 
                              <option value="NO">NO</option> 
                              <option value="SI">SI</option>
                            </select> 
-                         </td>
-                         <td><p> <br> &nbsp;&nbsp;&nbsp;&nbsp;</p></td>
+                         </td> 
                        </tr>  
                        <tr id="tr2">
-                        <td colspan="4" id="dato2">
+                        <td colspan="4" id="dato2">&nbsp;
                         </td>
                       </tr> 
 
                       <tr>
-                        <td  colspan="4"><div class="alert alert-danger verAlert" style="display: none;" ></div></td>
+                        <td colspan="4"><div class="alert alert-danger verAlert" style="display: none;" ></div></td>
                       </tr> 
                       <tr>
-                        <td colspan="2" id="fuente1">OBSERVACIONES:</td>            
+                        <td colspan="4" id="fuente1">OBSERVACIONES:</td>            
                         <td id="fuente3">&nbsp;</td>
                       </tr>
                       <tr>
@@ -610,7 +612,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                           <input name="int_total_oc" type="text" id="int_total_oc" value="<?php echo $subtotal; ?>" size="10" onBlur="puntos(this,this.value.charAt(this.value.length-1))" readonly></td>
                         </tr>
                         <tr>
-                          <td colspan="3" id="fuente8">&nbsp;</td>
+                          <td colspan="4" id="fuente8">&nbsp;</td>
                         </tr>
                         <tr>
                           <td id="detalle3"><strong>ENVIAR FACTURAS TRAS:</strong>
@@ -677,13 +679,13 @@ if(isset($_POST['str_numero_oc']) && $historico){
                                           <td colspan="3" id="detalle">&nbsp;</td>
                                         </tr>
                                         <tr>
-                                          <td id="dato1"><strong>ELABORA</strong></td>
+                                          <td id="dato1"><strong>ELABORA/VENDE</strong></td>
                                           <td id="dato1"><strong>APROBADO POR</strong></td>
                                           <td id="dato1"><strong>ESTADO DE LA ORDEN DE COMPRA</strong></td>
                                         </tr>
                                         <tr>
                                           <td id="dato1"><strong>
-                                            <input name="str_elaboro_oc" type="text" required id="str_elaboro_oc" value="<?php $nom= $_SESSION['Usuario'];echo $nom; ?>" size="30" readonly>
+                                            <input name="str_elaboro_oc" type="text" required id="str_elaboro_oc" value="<?php $nom= $_SESSION['Usuario'];echo $nom; ?>" size="30">
                                           </strong></td>
                                           <td id="dato1"><input onBlur='copiar_oc();' name="str_aprobo_oc" type="text" id="str_aprobo_oc" value="<?php echo $nom; ?>" onKeyUp="conMayusculas(this)" size="30"></td>
                                           <td id="dato1"><select name="b_estado_oc" id="b_estado_oc">
@@ -722,6 +724,8 @@ if(isset($_POST['str_numero_oc']) && $historico){
                             }
                           }))
                         });
+                      
+
 
                       $("#prefijo").on( "change", function() {
                         cambioPrefijo(); 
@@ -731,13 +735,21 @@ if(isset($_POST['str_numero_oc']) && $historico){
                          verConsultaSencillo("prefijo",$("#prefijo").val(),"orden_compra_cl_add.php");  
                        }  
 
+                      $(".elcliente").on( "change", function() {  
+                        consultaNumeroOrden("num_orden_compra",$("#str_numero_oc").val(),"orden_compra_cl_add.php",$("#cliente").val());  
+                      });
+                      $(".elnit").on( "change", function() {  
+                        consultaNumeroOrden("num_orden_compra",$("#str_numero_oc").val(),"orden_compra_cl_add.php",$("#cliente").val());  
+                      });
                        $("#str_numero_oc").on( "blur", function() {
-                         cambiostr_numero_oc(); 
+                         consultaNumeroOrden("num_orden_compra",$("#str_numero_oc").val(),"orden_compra_cl_add.php",$("#cliente").val());  
                        });
-
-                        function cambiostr_numero_oc(){ 
-                          consultaNumeroOrden("num_orden_compra",$("#str_numero_oc").val(),"orden_compra_cl_add.php");  
-                        }   
+                       
+ 
+                        /*function cambiostr_numero_oc(){  
+                               
+                          consultaNumeroOrden("num_orden_compra",$("#str_numero_oc").val(),"orden_compra_cl_add.php",$("#id_c_oc").val());  
+                        }   */
 
 
                        
@@ -782,6 +794,10 @@ if(isset($_POST['str_numero_oc']) && $historico){
                            }
                            if($("#cliente").val()==''){
                             swal("Seleccione Nit")
+                              return false;   
+                           } 
+                           if($("#str_numero_oc").val()==''){
+                            swal("Seleccione numero oc")
                               return false;   
                            } 
                           

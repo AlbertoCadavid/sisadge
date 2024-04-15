@@ -96,12 +96,12 @@ $startRow_registros = $pageNum_registros * $maxRows_registros;
  
      
   }
-
+ 
 $colname_busqueda= "-1";
 
 //$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY id_pedido DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );
 
-$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY fecha_autoriza DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//  , id_pedido  DESC
+$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY fecha_autoriza DESC "," ",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//GROUP BY str_numero_oc  DESC
  
 
 if (isset($_GET['totalRows_registros'])) {
@@ -140,6 +140,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
   <script type="text/javascript" src="js/usuario.js"></script>
   <script type="text/javascript" src="js/formato.js"></script>
   <script type="text/javascript" src="AjaxControllers/updateAutorizar.js"></script>
+  <script type="text/javascript" src="AjaxControllers/js/consultas.js"></script>
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
@@ -317,9 +318,9 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
 
                   if($row_registros['autorizado']=='SI' &&  ($row_registros['b_estado_oc'] > 1 || $restante['restante'] > 0.00) ){
                 
-                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_registros['str_numero_oc']." target=_top  style=text-decoration:none; color:#000000 >"; 
+                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_registros['str_numero_oc']. "&id_pedido=".$row_registros['id_pedido']. " target=_top  style=text-decoration:none; color:#000000 >"; 
                   }else{
-                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_registros['str_numero_oc']." target=_top  style=text-decoration:none; color:#000000 >"; 
+                    $urls = "<a href=despacho_items_oc.php?str_numero_r=".$row_registros['str_numero_oc']. "&id_pedido=".$row_registros['id_pedido']. " target=_top  style=text-decoration:none; color:#000000 >"; 
                   }
               ?>
               
@@ -370,7 +371,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                else if($estado=='1'){ ?><?php echo $urls;?><img src="images/falta.gif" alt="INGRESADA O.C."title="INGRESADA O.C." border="0" style="cursor:hand;"/></a><?php } 
                $id_oc=$row_registros['str_numero_oc'];
                $sqlmp="SELECT Tbl_items_ordenc.str_numero_io,Tbl_orden_produccion.str_numero_oc_op,Tbl_items_ordenc.int_cod_ref_io,Tbl_orden_produccion.int_cod_ref_op AS existe_op, Tbl_orden_produccion.b_borrado_op 
-               FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.str_numero_io=$id_oc AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+               FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_pedido_io=$id_pedido AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
                AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
                $resultmp= mysql_query($sqlmp);
                $nump = mysql_num_rows($resultmp);
@@ -386,7 +387,10 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                ?></p>
               </div>
               <div class="col" id="fondo_2">
-                <p> <?php echo substr($row_registros['fecha_autoriza'],0,10);?> </p>
+
+               <a href="javascript:verConsulta('historico','<?php echo $row_registros['id_pedido']; ?>','orden_compra_cl2.php')" ><?php echo substr($row_registros['fecha_autoriza'],0,10); ?></a>
+               
+                <!-- <p> <?php echo substr($row_registros['fecha_autoriza'],0,10);?> </p> -->
               </div>
               <div class="col" id="fondo_2">
                 <p><?php if($row_registros['autorizado']=='SI'): ?>

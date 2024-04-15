@@ -127,9 +127,8 @@ mysql_select_db($database_conexion1, $conexion1);
 $query_clientes = sprintf("SELECT * FROM cliente WHERE nit_c = '%s'", $colname_cliente);
 $clientes = mysql_query($query_clientes, $conexion1) or die(mysql_error());
 $row_clientes = mysql_fetch_assoc($clientes);
-$totalRows_clientes = mysql_num_rows($clientes);
- 
- 
+$totalRows_clientes = mysql_num_rows($clientes); 
+  
 
  /*if(isset($_GET['Str_nit']) && $_GET['Str_nit']!='' ){
 
@@ -219,12 +218,15 @@ $totalRows_referencias2 = mysql_num_rows($referencias2);*/
 //EXISTENTES
 $row_referencias2 = $conexion->llenaListas("Tbl_cliente_referencia, Tbl_referencia","","WHERE Tbl_cliente_referencia.Str_nit ='$colname_nit2' AND Tbl_cliente_referencia.N_referencia = Tbl_referencia.cod_ref AND Tbl_referencia.tipo_bolsa_ref <> 'LAMINA' and Tbl_referencia.tipo_bolsa_ref <> 'PACKING LIST' AND Tbl_cliente_referencia.N_referencia NOT IN(SELECT Tbl_cotiza_bolsa.N_referencia_c FROM Tbl_cotiza_bolsa WHERE Tbl_cotiza_bolsa.N_cotizacion = '$colname_cotiz2' and Tbl_cotiza_bolsa.B_generica='0') ORDER BY CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) DESC","DISTINCT Tbl_referencia.id_ref,Tbl_referencia.cod_ref");
 
-
 //OTROS CLIENTES
 $row_referencias3 = $conexion->llenaListas('Tbl_referencia',"","WHERE Tbl_referencia.tipo_bolsa_ref <> 'LAMINA' and Tbl_referencia.tipo_bolsa_ref <> 'PACKING LIST' AND B_generica='2' ORDER BY CONVERT( cod_ref, SIGNED INTEGER) DESC",'DISTINCT  id_ref, cod_ref, n_cotiz_ref '); 
+ 
+//ARTE
+ 
+$row_ref_verif = $conexion->llenarCampos('verificacion',"WHERE id_ref_verif='$colname_obs' ","","userfile,estado_arte_verif"); 
+ 
 
-
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY CONVERT(nombre, SIGNED INTEGER) ASC",'*'); 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
 
 
 //TRAE EL NUMERO DE REFERENCIA +1 PARA GUARDARLO SI NO ESCOGE GENERICA
@@ -242,7 +244,7 @@ if (isset($_GET['id_ref']))
 } 
 
 mysql_select_db($database_conexion1, $conexion1);
-$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols FROM Tbl_referencia WHERE Tbl_referencia.id_ref ='%s'  ",$colname_refer);
+$query_refer = sprintf("SELECT valor_impuesto,peso_millar_ref,peso_millar_bols,tipo_bolsa_ref FROM Tbl_referencia WHERE Tbl_referencia.id_ref ='%s'  ",$colname_refer);
 $refer = mysql_query($query_refer, $conexion1) or die(mysql_error());
 $row_refer = mysql_fetch_assoc($refer);
 $totalRows_refer = mysql_num_rows($refer);
@@ -277,13 +279,19 @@ $totalRows_refer = mysql_num_rows($refer);
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-  <!-- select2 -->
-  <link href="select2/css/select2.min.css" rel="stylesheet"/>
-  <script src="select2/js/select2.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/general.css"/>
+  <!-- Select3 Nuevo -->
+  <meta charset="UTF-8">
+  <!-- jQuery -->
+  <script src='select3/assets/js/jquery-3.4.1.min.js' type='text/javascript'></script>
 
-  <!-- css Bootstrap hace mas grande el formato-->
-  <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- select2 css -->
+  <link href='select3/assets/plugin/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+  <!-- select2 script -->
+  <script src='select3/assets/plugin/select2/dist/js/select2.min.js'></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="select3/assets/css/style.css">
+  <!-- Fin Select3 Nuevo -->
 
 <script type="text/javascript">
 function MM_popupMsg(msg) { //v1.0
@@ -446,11 +454,12 @@ swal({
                         </tr>
                         <tr>
                           <td colspan="4" id="fuente1">Nombre del Cliente</td>
+                          <td >Arte</td>
                         </tr>
                         <tr>
-                          <td colspan="5" id="fuente1">
+                          <td colspan="4" id="fuente1">
                             <!-- debo dejar este filtro porq al cargar por get carga mas rapido -->
-                          <select  name="clientes" id="clientes" onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px">
+                          <select name="clientes" id="clientes" onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px" class="" >
                                    <?php
                            do {  
                            ?>
@@ -465,7 +474,9 @@ swal({
                               $row_clientes = mysql_fetch_assoc($clientes);
                              }
                            ?>
-                          </select> 
+                          </select>  
+                          
+
                           <!-- <select  name="clientes" id="clientes"onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px" class="selectsGrande" >
                              <?php  foreach($row_clientes as $row_clientes ) { ?>
                                  <option value="<?php echo $row_clientes['nit_c']?>"<?php if (!(strcmp($row_clientes['nit_c'], $_GET['Str_nit']))) {echo "selected=\"selected\"";} ?>>
@@ -473,35 +484,7 @@ swal({
                                </option>
                              <?php } ?>
                            </select>  -->
-
-                           <!-- <select  name="clientes" id="clientes"onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px" class="selectsGrande" >
-                             <option value=''>Seleccione el Cliente</option>
-                           </select> -->
-
-                            <!-- <select  name="clientes" id="clientes"onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px" class="busqueda selectsGrande" >
-                                   <?php  foreach($row_clientes as $row_clientes ) { ?>
-                                <option value="<?php echo $row_clientes['nit_c']?>"<?php if (!(strcmp($row_clientes['nit_c'], $_GET['Str_nit']))) {echo "selected=\"selected\"";} ?>>
-                                <?php $nombre_cl= ($row_clientes['nombre_c']); echo $nombre_cl;?>
-                              </option>
-                            <?php } ?>
-                            </select> -->
-
-                            <!-- <select  name="clientes" id="clientes"onblur="Javascript:document.form1.Str_nit.value=this.value;confirActivo();" onchange="if(form1.clientes.value) { consultanit();} else{ alert('Debe Seleccionar un CLIENTE'); }" style="width:250px" class="busqueda selectsMedio">
-                            <?php
-                            do {  
-                              ?>
-                              <option value="<?php echo $row_clientes['nit_c']?>"<?php if (!(strcmp($row_clientes['nit_c'], $_GET['Str_nit']))) {echo "selected=\"selected\"";} ?>>
-                                <?php $nombre_cl= ($row_clientes['nombre_c']); echo $nombre_cl;?>
-                              </option>
-                              <?php
-                            } while ($row_clientes = mysql_fetch_assoc($clientes));
-                            $rows = mysql_num_rows($clientes);
-                            if($rows > 0) {
-                              mysql_data_seek($clientes, 0);
-                              $row_clientes = mysql_fetch_assoc($clientes);
-                            }
-                            ?>
-                          </select> -->
+ 
 
                           <?php  
                           $activo=$row_cliente['estado_c'];
@@ -510,6 +493,7 @@ swal({
                           }
                           ?>
                         </td>
+                        <td><a href="javascript:verFoto('archivo/<?php echo $row_ref_verif['userfile'];?>','610','490')"> <?php echo $row_ref_verif['userfile']; ?> </a></td>
                       </tr>
                       <tr>
                         <td id="cabezamenu"><ul id="menuhorizontal">
@@ -546,15 +530,16 @@ swal({
                         <td id="dato1"><input name="N_alto" required="required" type="number" style=" width:70px" min="0" step="0.01" id="N_alto" value="<?php echo $row_bolsa['largo_ref']?>"/>
                         </td>
                         <td id="dato1">
-                         <select name="sello_superior" id="sello_superior" style="width:100px" >
+                         <select name="sello_superior" id="sello_superior" style="width:100px" onchange="validaSupresello();" >
                            <option value="" >N/A</option>
-                           <option value="Sencilla" >Sencilla</option>
-                           <option value="Doble" >Doble</option>
-                           <option value="Refuerzo" >Refuerzo</option>
+                           <option value="plano">Plano</option>
+                           <option value="tubular">Tubular</option>
+                           <option value="tubular/tubular">Tubular/Tubular</option>
+                           <option value="refuerzo">Con Refuerzo</option>
                          </select>
                         </td>  
                         <td colspan="2" id="dato1"><input name="N_solapa" type="number" style=" width:70px" min="0" step="0.01" id="N_solapa" required="required" value="<?php echo $row_bolsa['solapa_ref']=$row_bolsa['solapa_ref']=='' ? 0 : $row_bolsa['solapa_ref'];?>"/>
-                          <select name="tiposolapa" id="tiposolapa" style="width:100px" >
+                          <select name="tiposolapa" id="tiposolapa" style="width:100px" onchange="validaSupresello();">
                             <option value="0" >N/A</option>
                             <option value="2" >Sencilla</option>
                             <option value="1" >Doble</option>
@@ -562,7 +547,7 @@ swal({
                         </td>
                         <td id="dato1"><input name="B_fuelle" type="number" style=" width:70px" min="0" step="0.01" id="B_fuelle" value="<?php echo $row_bolsa['N_fuelle']=='' ? 0 : $row_bolsa['N_fuelle'];?>"/></td>
                       </tr>
-                      <tr>
+                      <tr> 
                         <td id="fuente1">Calibre (micras)</td>
                         <td colspan="2" id="fuente1">Tipo Bolsa</td>
                         <td colspan="2" id="fuente1"> Bolsillo canguro</td>
@@ -571,10 +556,10 @@ swal({
                       <tr> 
                         <td id="dato1"><input name="N_calibre" type="number" style=" width:70px" min="0" step="0.01" required="required" id="N_calibre" value="<?php echo $row_bolsa['calibre_ref']?>" size="3" /></td>
                         <td colspan="2" id="dato1">
-                          <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required >
+                          <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required onChange="tipoMaterial();" >
                               <option value="">Seleccione...</option>
                                  <?php  foreach($row_formulas as $row_formulas ) { ?>
-                              <option value="<?php echo $row_formulas['formulacion']?>"><?php echo $row_formulas['formulacion']?></option>
+                              <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $row_refer['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
                           <?php } ?>
                           </select> 
                           <!-- <select name="tipo_bolsa" id="tipo_bolsa" style="width:100px" required >
@@ -589,12 +574,12 @@ swal({
                             <option value="SIKA" >SIKA</option>
                           </select> -->
                         </td>
-                        <td colspan="2" id="dato1"><select name="B_bolsillo" id="B_bolsillo" onchange="mostrarBolsillo(this)">
-                          <option value="0" selected="selected" >NO</option>
-                          <option value="1" >SI</option>
+                        <td colspan="2" id="dato1"><select name="B_bolsillo" id="B_bolsillo" onchange="mostrarvalorBolsillo()" >
+                          <option value="0" <?php if(!(strcmp("0", $row_bolsa['N_tamano_bolsillo']))) {echo "selected=\"selected\"";} ?>>NO</option>
+                          <option value="1" <?php if($row_bolsa['N_tamano_bolsillo']>0) {echo "selected=\"selected\"";} ?>>SI</option>
 
                         </select></td>
-                        <td id="dato1"><input name="N_tamano_bolsillo"  type="number" style=" width:70px" min="0" step="0.01" value="<?php echo $row_bolsa['bolsillo_guia_ref']=='' ? 0 :$row_bolsa['bolsillo_guia_ref'] ?>" id="N_tamano_bolsillo"/></td>
+                        <td id="dato1"><input name="N_tamano_bolsillo"  type="number" style=" width:70px;display: none;" min="0" step="0.01" value="<?php echo $row_bolsa['bolsillo_guia_ref']=='' ? 0 :$row_bolsa['bolsillo_guia_ref'] ?>" id="N_tamano_bolsillo"/></td>
                       </tr> 
                       <!--<tr id="tr1">
                         <td colspan="7" id="titulo1">MATERIAL COEXTRUSION</td>
@@ -763,16 +748,16 @@ swal({
                             <?php endif; ?>
                           </td>
                           <td colspan="4">
-                            <div name="formular" id="formular" style="display: none;" >
+                            <div name="formular" id="formular"  >
                                 <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
                             </div>
                           </td>
                         </tr>
                         <tr>
                           <td id="fuente1">Moneda</td>
-                          <td id="fuente1">Precio Anterior</td>
+                          <td id="fuente1">Precio Sin Impuesto</td>
                           <td id="fuente1">Impuesto</td>
-                          <td id="fuente1">Precio con Impuesto</td>
+                          <td id="fuente1">Precio con Impuesto / final</td>
                           <td id="fuente1">Unidad</td>
                           <td id="fuente1">Plazo de pago</td>
                           <td id="fuente1">Cantidad Solicitada</td>
@@ -946,7 +931,7 @@ swal({
   
 
     $(document).ready(function(){
-
+ 
             var ref=$("#ref").val();
             var ref2=$("#ref2").val();
             var ref3=$("#ref3").val();
@@ -1000,8 +985,11 @@ swal({
    
     
    $(document).ready(function(){
-     if( $("#ref").val()=='0' && $("#ref2").val()=='0'  && $("#ref3").val()=='0') 
-        $("#formular").show(200);
+     if( $("#ref").val()=='0' && $("#ref2").val()=='0'  && $("#ref3").val()=='0'){
+
+         
+
+     } 
    }); 
    
    
@@ -1014,10 +1002,23 @@ swal({
    
    });
 
+
+/*   $('#N_precio_old').on('change', function() { 
+           if ($("#N_precio_old").val() > 0 && $("#N_precio").val()==0 ){
+               pesoMillarFormulaCotizNueva($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio_old").val()  );
+           }
+   
+   });*/
+
+
   $('#calculaformula').on('change', function() { 
-      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio").val()!='') {   
+   
+      if( $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#B_fuelle").val()!='' && $("#N_solapa").val()!='' && $("#N_calibre").val()!='' && $("#N_tamano_bolsillo").val()!='' && $("#N_precio").val()!='' && ( $("#ref").val()!='0' || $("#ref2").val()!='0'  || $("#ref3").val()!='0'))/* && $("#N_precio").val() > 0 */ 
+    {   
      
-      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio").val()  );
+      pesoMillarFormulaCotiz($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio").val() );
+    }else{
+      pesoMillarFormulaCotizNueva($("#tiposolapa").val(),$("#N_ancho").val(),$("#N_alto").val(),$("#B_fuelle").val(),$("#N_solapa").val(),$("#N_calibre").val(),$("#N_tamano_bolsillo").val(),$("#N_precio_old").val()  );
     }
  });
 
@@ -1030,58 +1031,97 @@ swal({
         }
     });  
 
-       $('#tipo_bolsa').on('change', function() { 
-               if($("#tipo_bolsa").val() == 'Sika'){
+
+$(document).ready(function(){
+      
+            tipoMaterial();
+            //mostrarBolsillo();
+            mostrarvalorBolsillo();
+  });      
+  function tipoMaterial(){
+
+               if($("#tipo_bolsa").val() == 'KO-01'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("BLANCO"); 
-               }else if($("#tipo_bolsa").val() == 'Pigmentada Tratada Doble Cara'){
+               }else if($("#tipo_bolsa").val() == 'K0-02'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("NEGRO"); 
-               }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado B/N'){
+               }else if($("#tipo_bolsa").val() == 'KO-03'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("NEGRO"); 
-               }else if($("#tipo_bolsa").val() == 'Seguridad pigmentado Blanca'){
+               }else if($("#tipo_bolsa").val() == 'KO-04'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("BLANCO"); 
-               }else if($("#tipo_bolsa").val() == 'Currier Pigmentado oxobiodegradable B/N'){
+               }else if($("#tipo_bolsa").val() == 'KO-05'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("NEGRO");  
-               }else if($("#tipo_bolsa").val() == 'Currier Pigmentado B/N'){
+               }else if($("#tipo_bolsa").val() == 'KO-06'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/N");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("NEGRO"); 
-               }else if($("#tipo_bolsa").val() == 'Pigmentada Blanca'){
+               }else if($("#tipo_bolsa").val() == 'KO-07'){
                     $("#Str_tipo_coextrusion").val("PIGMENTADO B/B");
                     $("#Str_capa_ext_coext").val("BLANCO");
                     $("#Str_capa_inter_coext").val("BLANCO"); 
-               }else if($("#tipo_bolsa").val() == 'Seguridad transparente y monedas'){
+               }else if($("#tipo_bolsa").val() == 'KO-08'){
                     $("#Str_tipo_coextrusion").val("TRANSPARENTE");
                     $("#Str_capa_ext_coext").val("TRANSPARENTE");
                     $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
-               }else if($("#tipo_bolsa").val() == 'Currier transparente'){
+               }else if($("#tipo_bolsa").val() == 'KO-09'){
                     $("#Str_tipo_coextrusion").val("TRANSPARENTE");
                     $("#Str_capa_ext_coext").val("TRANSPARENTE");
                     $("#Str_capa_inter_coext").val("TRANSPARENTE");
-               }else if($("#tipo_bolsa").val() == 'Alta Densidad'){
+               }else if($("#tipo_bolsa").val() == 'KO-10'){
                     $("#Str_tipo_coextrusion").val("TRANSPARENTE");
                     $("#Str_capa_ext_coext").val("TRANSPARENTE");
                     $("#Str_capa_inter_coext").val("TRANSPARENTE");  
-               }else if($("#tipo_bolsa").val() == 'Formulacion Agua'){
+               }else if($("#tipo_bolsa").val() == 'KO-11'){
+                    $("#Str_tipo_coextrusion").val("TRANSPARENTE");
+                    $("#Str_capa_ext_coext").val("TRANSPARENTE");
+                    $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
+               }else if($("#tipo_bolsa").val() == 'KO-12'){
                     $("#Str_tipo_coextrusion").val("TRANSPARENTE");
                     $("#Str_capa_ext_coext").val("TRANSPARENTE");
                     $("#Str_capa_inter_coext").val("TRANSPARENTE"); 
                }
        
-       });
+      }
+
+ 
+ function validaSupresello(){
+
+     if($("#sello_superior").val()=="tubular" ){
+         $("#tiposolapa").val('1') 
+     } else if($("#sello_superior").val()=="refuerzo" ){
+         $("#tiposolapa").val('1') 
+     } else if($("#sello_superior").val()=="tubular/tubular" ){
+         $("#tiposolapa").val('0') 
+     } else if($("#sello_superior").val()=="" ){
+         $("#tiposolapa").val('0')
+         $("#N_solapa").val('0')  
+     } 
+
+ }
 
 
+function mostrarvalorBolsillo(){
+     if($("#B_bolsillo").val()=='1' ){
+      $("#N_tamano_bolsillo").show(100);
+     }else{
+      $("#N_tamano_bolsillo").hide(100);
+     }
 
+     if($("#N_tamano_bolsillo").val() > '0' ){
+        $("#N_tamano_bolsillo").show(100);
+     }  
 
+}
+ 
 //FILTROS
        $(document).ready(function(){  
              $('#clientes').select2({ 

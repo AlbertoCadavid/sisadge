@@ -17,7 +17,7 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
   $_SESSION['MM_UserGroup'] = NULL;
   $_SESSION['PrevUrl'] = NULL;
   unset($_SESSION['MM_Username']);
-  unset($_SESSION['MM_UserGroup']);
+  unset($_SESSION['MM_UserGroup']); 
   unset($_SESSION['PrevUrl']);
 	
   $logoutGoTo = "usuario.php";
@@ -217,7 +217,7 @@ if (isset($_GET['idc'])) {
   $colname_idc = (get_magic_quotes_gpc()) ? $_GET['idc'] : addslashes($_GET['idc']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_opref = sprintf("SELECT Tbl_orden_produccion.id_op,Tbl_orden_produccion.id_ref_op,Tbl_orden_produccion.str_numero_oc_op FROM Tbl_orden_produccion WHERE Tbl_orden_produccion.id_ref_op = '%s' AND Tbl_orden_produccion.int_cliente_op = '%s' ORDER BY Tbl_orden_produccion.id_op ASC",$colname_opref,$colname_idc);
+$query_opref = sprintf("SELECT Tbl_orden_produccion.id_op,Tbl_orden_produccion.id_ref_op,Tbl_orden_produccion.str_numero_oc_op FROM Tbl_orden_produccion WHERE Tbl_orden_produccion.id_ref_op = '%s'  ORDER BY Tbl_orden_produccion.id_op ASC",$colname_opref,$colname_idc);
 $opref = mysql_query($query_opref, $conexion1) or die(mysql_error());
 $row_opref = mysql_fetch_assoc($opref);
 $totalRows_opref = mysql_num_rows($opref);

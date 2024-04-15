@@ -84,9 +84,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
 }
 ?>
 <?php
-//LLAMADO A FUNCIONES
-include('funciones/funciones_php.php'); //SISTEMA RUW PARA LA BASE DE DATOS 
-//FIN
+
 if (!function_exists("GetSQLValueString")) {
   function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "")
   {
@@ -287,8 +285,8 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
 
                           <tr>
                             <td colspan="3" id="fuente1">FECHA</td>
-                            <td id="fuente1"><input class="form-control" name="fecha_ingreso_tn" type="date" min="2000-01-02" value="<?php echo date("Y-m-d"); ?>" style="width:200px;" />
-                              <input class="form-control" name="hora_tn" type="hidden" id="hora_tn" value="<?php echo restoHoranew(2); ?>" size="8" readonly />
+                            <td id="fuente1"><input class="form-control" name="fecha_ingreso_tn" type="date" min="2000-01-02" value="<?php echo fechaActual(); ?>" style="width:200px;" />
+                              <input class="form-control" name="hora_tn" type="hidden" id="hora_tn" value="<?php echo horaActual(); ?>" size="8" readonly />
                             </td>
                             <td colspan="3"><em> Consecutivo Orden Actual? </em>
                               <select style="width:100px;" class="form-control" name="selladonum" id="selladonum">

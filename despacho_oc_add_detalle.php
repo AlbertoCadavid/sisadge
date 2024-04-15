@@ -130,7 +130,7 @@ if (isset($_GET['id_items'])){
   $row_items = mysql_fetch_assoc($items);
   $totalRows_items = mysql_num_rows($items);
 
-  $colname_orden_compra = "-1";
+  $colname_orden_compra = "-1"; 
   if (isset($_GET['id_items'])) {
     $colname_orden_compra = (get_magic_quotes_gpc()) ? $_GET['id_items'] : addslashes($_GET['id_items']);
   }

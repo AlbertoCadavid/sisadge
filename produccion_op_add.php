@@ -7,7 +7,7 @@ require (ROOT_BBDD);
 //initialize the session
 if (!isset($_SESSION)) {
   session_start();
-}
+} 
 
 // ** Logout the current user. **
 $logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";
@@ -271,7 +271,7 @@ $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('30','33
 $refop = $_GET['int_cod_ref_op'] == '' ? 0 : $_GET['int_cod_ref_op'];
 
 if($refop!=''){
-   $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='".$refop."' ", '',"ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref" );
+   $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='".$refop."' ", '',"ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref,ref.tipo_bolsa_ref,ref.sello_superior" );
 
 }
 
@@ -352,7 +352,7 @@ $unidad_ocho = mysql_query($query_unidad_ocho, $conexion1) or die(mysql_error())
 $row_unidad_ocho = mysql_fetch_assoc($unidad_ocho);
 $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
-
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
 ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -586,7 +586,8 @@ function alerta(){
                              <td colspan="2" id="dato1"></td>
                            </tr>
                            <tr>
-                   <td id="fuente1"><input type="hidden" name="str_nit_op" id="str_nit_op"  value="<?php echo $row_ref_items['str_nit_oc']; ?>"/>
+                   <td id="fuente1">
+                    <input type="hidden" name="str_nit_op" id="str_nit_op"  value="<?php echo $row_ref_items['str_nit_oc']; ?>"/>
                                <input type="hidden" name="int_cliente_op" id="int_cliente_op"  value="<?php echo $row_ref_items['id_c_oc']; ?>"/>
                                <?php $id_c=$row_ref_items['id_c_oc'];
                        $sqln="SELECT * FROM cliente WHERE id_c='$id_c'"; 
@@ -645,7 +646,7 @@ function alerta(){
                              <td colspan="2" id="talla1">TIPO DE BOLSA</td> 
                              <td colspan="2" nowrap="nowrap" id="talla1"><strong>EXTRUSION</strong></td> 
                              <td colspan="2" id="talla1">PESO MILLAR</td>
-                             <td colspan="2" id="talla1">METROS LINEAL</td>
+                             <td  id="talla1">METROS LINEAL</td>
                            </tr>
                            <tr>
                              <td nowrap="nowrap" id="talla1">
@@ -660,7 +661,7 @@ function alerta(){
                                <input type="number" name="int_cantidad_op" id="int_cantidad_op" value="<?php echo $row_datos_oc['int_cantidad_rest_io']?>" style="width:80px" onBlur="calcular_op()" step="0.01" required="required"/>
                              </strong></td>
                              <td colspan="2" id="fuente1">
-                              <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  >
+                              <!-- <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  >
                                <option value="N.A." <?php if (!(strcmp("N.A.", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
                                <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
                                <option value="CURRIER" <?php if (!(strcmp("CURRIER", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>CURRIER</option>
@@ -669,6 +670,13 @@ function alerta(){
                                <option value="PACKING LIST" <?php if (!(strcmp("PACKING LIST", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>PACKING LIST</option>
                                <option value="LAMINA" <?php if (!(strcmp("LAMINA", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
                                <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $row_datos_oc['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option>
+                             </select> -->
+                              
+                                <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  style="width:200px" >
+                                 <option value="">Seleccione...</option>
+                                    <?php  foreach($row_formulas as $row_formulas ) { ?>
+                                 <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                             <?php } ?>
                              </select>
                            </td>
                            <td id="talla1">
@@ -689,7 +697,8 @@ function alerta(){
                              </tr>
                            <tr>
                              <td id="fuente1"><input type="text" name="str_matrial_op" id="str_matrial_op" size="14" value="<?php echo $row_datos_oc['material_ref']; ?>" /></td>
-                             <td colspan="2" id="fuente1"><select name="str_presentacion_op" id="str_presentacion_op" onchange="calcular_op();" >
+                             <td colspan="2" id="fuente1">
+                              <select name="str_presentacion_op" id="str_presentacion_op" onchange="calcular_op();" >
                                <option value="N.A"<?php if (!(strcmp('N.A', $row_datos_oc['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>N.A</option>
                                <option value="LAMINA" <?php if (!(strcmp('LAMINA', $row_datos_oc['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
                                <option value="TUBULAR" <?php if (!(strcmp('TUBULAR', $row_datos_oc['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>TUBULAR</option>
@@ -714,7 +723,9 @@ function alerta(){
                              <td colspan="2" id="fuente1">&nbsp;</td>
                            </tr>
                            <tr>
-                             <td colspan="3" id="fuente1">&nbsp;</td>
+                             <td colspan="3" id="fuente1"><strong style=" color: red;" >SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior'];?>" onblur="calcular_op()" readonly />  /  SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref']==2) {echo "Sencilla";}else if ($row_datos_oc['b_solapa_caract_ref']==1){echo "Doble";}else {echo "";} ?>
+
+                             </td>
                              <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                              <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
                                <option value="N.A"<?php if (!(strcmp('N.A', $row_datos_oc['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>N.A</option>
@@ -2492,15 +2503,15 @@ function alerta(){
                           
                        </tr> 
                        <tr>
-                         <td colspan="8" id="talla3">Faltantes: 
+                        <td colspan="6" id="talla4">&nbsp;<div id="resultado_generador"></div>
+                         <td colspan="2" id="talla3">Faltantes: 
                          <select name="imprimiop" id="imprimiop" required="required" >
                             <option value="">Selecione</option> 
-                            <option value="0">SI TIENE FALTANTES</option>
-                            <option value="1">NO TIENE FALTANTES</option> 
+                            <option value="0">CON FALTANTES</option>
+                            <option value="1">SIN FALTANTES</option> 
                          </select>
                          </td>
-                         <td colspan="6" id="talla4">&nbsp;<div id="resultado_generador"></div></td>
-                         </tr>
+                         </tr> 
                        <tr>
                          <td colspan="2" id="talla1"><strong>POSICION</strong></td>
                          <td colspan="4" id="talla1"><strong>TIPO DE NUMERACION </strong></td>

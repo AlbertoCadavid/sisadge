@@ -538,6 +538,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Tiempos Muertos- Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Tiempos Muertos- Minutos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
 
                                       </tr>
@@ -557,7 +558,11 @@ foreach ($rollos_en_liquidacion as $value) {
                                           </td>
                                           <td id="fuente1"><?php $var = mysql_result($tiempoMuerto, $x, valor_tiem_rt);
                                                             echo $var;
-                                                            $TM = $TM + $var; ?></td>
+                                                            $TM = $TM + $var; ?>
+                                          </td>
+                                          <td id="fuente1"><?php $var = mysql_result($tiempoMuerto, $x, int_rollo_rt);
+                                                            echo $var; ?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte('id_rte',<?php $delrt = mysql_result($tiempoMuerto, $x, id_rt);
                                                                                                       echo $delrt; ?>,'produccion_registro_extrusion_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a>
                                           </td>
@@ -574,6 +579,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Tiempos Preparacion - Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Tiempos Preparacion - Minutos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
 
                                       </tr>
@@ -582,6 +588,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                           <td id="fuente1">
                                             <?php $id2 = mysql_result($tiempoPreparacion, $o, id_rpt_rtp);
                                             $id_rtp = $id2;
+                                            
                                             $sqlrtp = "SELECT nombre_rtp FROM Tbl_reg_tipo_desperdicio WHERE id_rtp='$id_rtp'";
                                             $resultrtp = mysql_query($sqlrtp);
                                             $numrtp = mysql_num_rows($resultrtp);
@@ -593,7 +600,11 @@ foreach ($rollos_en_liquidacion as $value) {
                                           </td>
                                           <td id="fuente1"> <?php $var2 = mysql_result($tiempoPreparacion, $o, valor_prep_rtp);
                                                             echo $var2;
-                                                            $TP += $var2; ?></td>
+                                                            $TP += $var2; ?>
+                                          </td>
+                                          <td id="fuente1"> <?php $var2 = mysql_result($tiempoPreparacion, $o, int_rollo_rtp);
+                                                            echo $var2;?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte('id_rpe',<?php $delrp = mysql_result($tiempoPreparacion, $o, id_rt);
                                                                                                       echo $delrp; ?>,'produccion_registro_extrusion_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                                         </tr>
@@ -608,6 +619,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Desperdicios - Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Desperdicios - Kilos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
                                       </tr>
                                       <!-- ++++++++++++ -->
@@ -628,7 +640,11 @@ foreach ($rollos_en_liquidacion as $value) {
                                           </td>
                                           <td id="fuente1"><?php $var3 = mysql_result($desperdicio, $m, valor_desp_rd);
                                                             echo $var3;
-                                                            $TD = $TD + $var3; ?></td>
+                                                            $TD = $TD + $var3; ?>
+                                          </td>
+                                          <td id="fuente1"><?php $var3 = mysql_result($desperdicio, $m, int_rollo_rd);
+                                                            echo $var3;?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte('id_rde',<?php $delrd = mysql_result($desperdicio, $m, id_rd);
                                                                                                       echo $delrd; ?>,'produccion_registro_extrusion_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                                         </tr>

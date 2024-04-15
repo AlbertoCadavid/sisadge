@@ -118,7 +118,7 @@ if (isset($_GET['id_r'])) {
   $colname_rollo_estrusion = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_rollo_estrusion = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_r=%s", $colname_rollo_estrusion);
+$query_rollo_estrusion = sprintf("SELECT *, maquina.nombre_maquina FROM TblExtruderRollo LEFT JOIN maquina ON (maquina.id_maquina = tblExtruderRollo.str_maquina_ext) WHERE TblExtruderRollo.id_r=%s", $colname_rollo_estrusion);
 $rollo_estrusion = mysql_query($query_rollo_estrusion, $conexion1) or die(mysql_error());
 $row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion);
 $totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
@@ -340,6 +340,10 @@ if ($modulo == 0) {
         <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['turno_r']; ?></td>
       </tr>
       <tr>
+        <td nowrap="nowrap" id="stikersC_fuentN">MAQUINA:</td>
+        <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['nombre_maquina']; ?></td>
+      </tr>
+      <tr>
         <td nowrap="nowrap" id="stikersC_fuentN" style="border-bottom: 3px solid #000000;"> METROS: </td>
         <td nowrap="nowrap" id="stikers_fuentN" style="border-bottom: 3px solid #000000;"><?php echo $row_rollo_estrusion['metro_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN" style="border-bottom: 3px solid #000000;"> ANCH R: </td>
@@ -353,6 +357,7 @@ if ($modulo == 0) {
                                                                                                       }
                                                                                                       ?></td>
       </tr>
+      
 
 
       <!--<tr>

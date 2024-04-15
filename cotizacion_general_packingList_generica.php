@@ -604,7 +604,7 @@ swal({
                       <td colspan="7" id="titulo1">PRECIO Y CONDICIONES COMERCIALES</td>
                     </tr>
                     <tr>
-                      <td colspan="7">
+                      <td colspan="3">
                         <br>
                         <span style="color: red;" >IMPUESTO PLASTICO</span> <input type="checkbox" name="impuesto" id="impuesto" checked value="1"> <label for="impuesto"> &nbsp;&nbsp;<!-- Adjunto PDF: <input name="pdf_impuesto" type="file" size="20" maxlength="60"class="botones_file"> -->
                         <?php if($row_cliente['pdf_impuesto']): ?>
@@ -614,10 +614,15 @@ swal({
                                         </a>
                         <?php endif; ?>
                       </td>
+                      <td colspan="4">
+                        <div name="formular" id="formular"  >
+                            <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                     <td id="fuente1">Moneda</td>
-                    <td id="fuente1">Precio Anterior</td>
+                    <td id="fuente1">Precio sin Impuesto</td>
                     <td id="fuente1">Impuesto</td>
                     <td id="fuente1">Precio Impuesto</td>
                       <td colspan="2" id="fuente1">Plazo de pago</td>
@@ -648,6 +653,7 @@ swal({
                       <input name="N_precio_p" type="text" style="width: 100px" min="0"  id="N_precio_p" value="<?php echo $row_packing['N_precio_vnta']==''?0:$row_packing['N_precio_vnta'];  ?>"/>
                       
                       <td id="fuente5">
+                           <input name="valor_impuesto_backup" id="valor_impuesto_backup" style="width:50px" type="hidden" value="<?php echo $row_packing['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> />
                            <input name="valor_impuesto" title="Valor de la ultima cotiz" type="text" style="width:80px" min="0" step="0.01" id="valor_impuesto" value="<?php echo $row_packing['valor_impuesto']=='0'?$row_refer['valor_impuesto']:$row_packing['valor_impuesto'];?>"/> 
                          </td>
                        <td id="fuente5">
@@ -804,13 +810,18 @@ swal({
    
    });
 
-  /*    $('.botonGeneral').on('click', function(){
-       if($("#Str_nit").val()!='' && $("#B_estado").val()!='' && $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#N_calibre").val()!='' && $("#tipo_bolsa").val()!=''  && $("#N_precio").val()!='' && $("#valor_impuesto").val()!='' && $("#N_precio_old").val()!='' && $("#N_cant_impresion").val()!='' && $("#vendedor").val()!='' && $("#N_comision").val()!='' ){
 
-          $('#content').html('<div class="loader"></div>'); setTimeout(function() { $(".loader").fadeOut("slow");},3000); 
 
-       }
-   }); */
+  $('#calculaformula').on('change', function() { 
+   
+      if( $("#N_ancho_p").val()!='' && $("#N_alto_p").val()!='' && $("#N_calibre_p").val()!=''  && $("#N_precio_p").val()!='' ) 
+    {   
+     
+      pesoMillarFormulaCotizPak($("#N_ancho_p").val(),$("#N_alto_p").val(),$("#N_calibre_p").val(),$("#N_precio_p").val(),$("#valor_impuesto_backup").val());
+    }else{
+      pesoMillarFormulaCotizNuevaPak($("#N_ancho_p").val(),$("#N_alto_p").val(),$("#N_calibre_p").val(),$("#N_precio_old").val(),$("#valor_impuesto_backup").val()  );
+    }
+ });
 
    //FILTROS
        $(document).ready(function(){  

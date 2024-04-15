@@ -116,7 +116,7 @@ $totalRows_cotizacion = mysql_num_rows($cotizacion);
     <td nowrap="nowrap" id="titulo4">Solapa</td>
     <td nowrap="nowrap" id="titulo4">Bolsillo</td>
     <td nowrap="nowrap" id="titulo4">Calibre</td>
-    <td nowrap="nowrap" id="titulo4">Peso</td>
+    <td nowrap="nowrap" id="titulo4">Peso millares</td>
   </tr>
   <?php do { ?>
   <tr>
@@ -140,7 +140,7 @@ $totalRows_cotizacion = mysql_num_rows($cotizacion);
       <td id="dato2"><?php echo $row_cotizacion['solapa_ref']; ?></td>
       <td id="dato2"><?php echo $row_cotizacion['bolsillo_guia_ref']; ?></td>
       <td id="dato2"><?php echo $row_cotizacion['calibre_ref']; ?></td>
-      <td id="dato1"><?php echo $row_cotizacion['peso_millar_ref']; ?></td>
+      <td id="dato1"><?php echo $row_cotizacion['peso_millar_ref']+$row_cotizacion['peso_millar_bols']; ?></td>
     </tr>
     <?php } while ($row_cotizacion = mysql_fetch_assoc($cotizacion));?>
 </table>

@@ -225,7 +225,7 @@ session_start();
                                   <td nowrap="nowrap" id="titulo4">Bolsillo</td>
                                   <td nowrap="nowrap" id="titulo4">Calibre</td>
                                   <td nowrap="nowrap" id="titulo4">Impuesto $</td>
-                                  <td nowrap="nowrap" id="titulo4">Peso M.</td>
+                                  <td nowrap="nowrap" id="titulo4">Peso M + Peso Bol.</td>
                                 </tr>
                                 <?php do { ?>
                                   <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
@@ -241,7 +241,7 @@ session_start();
                                     <td id="dato2"><a href="control_tablas.php?cod_ref= <?php echo $row_cotizacion['cod_ref']; ?>&amp;n_cotiz= <?php echo $row_cotizacion['n_cotiz_ref']; ?>&amp;id_ref= <?php echo $row_cotizacion['id_ref']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>&amp;case=<?php echo "5"; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_cotizacion['bolsillo_guia_ref']; ?></a></td>
                                     <td id="dato2"><a href="control_tablas.php?cod_ref= <?php echo $row_cotizacion['cod_ref']; ?>&amp;n_cotiz= <?php echo $row_cotizacion['n_cotiz_ref']; ?>&amp;id_ref= <?php echo $row_cotizacion['id_ref']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>&amp;case=<?php echo "5"; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_cotizacion['calibre_ref']; ?></a></td>
                                     <td id="dato2"><a href="control_tablas.php?cod_ref= <?php echo $row_cotizacion['cod_ref']; ?>&amp;n_cotiz= <?php echo $row_cotizacion['n_cotiz_ref']; ?>&amp;id_ref= <?php echo $row_cotizacion['id_ref']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>&amp;case=<?php echo "5"; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_cotizacion['valor_impuesto']; ?></a></td>
-                                    <td id="dato1"><a href="control_tablas.php?cod_ref= <?php echo $row_cotizacion['cod_ref']; ?>&amp;n_cotiz= <?php echo $row_cotizacion['n_cotiz_ref']; ?>&amp;id_ref= <?php echo $row_cotizacion['id_ref']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>&amp;case=<?php echo "5"; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_cotizacion['peso_millar_ref']; ?></a></td>
+                                    <td id="dato2"><a href="control_tablas.php?cod_ref= <?php echo $row_cotizacion['cod_ref']; ?>&amp;n_cotiz= <?php echo $row_cotizacion['n_cotiz_ref']; ?>&amp;id_ref= <?php echo $row_cotizacion['id_ref']; ?>&amp;tipo=<?php echo $row_usuario['tipo_usuario']; ?>&amp;case=<?php echo "5"; ?>" target="new" style="text-decoration:none; color:#000000"><?php  $pesoBolsa = $row_cotizacion['peso_millar_ref']; echo $pesoBolsa+$row_cotizacion['peso_millar_bols']; ?></a></td>
                                   </tr>
                                 <?php } while ($row_cotizacion = mysql_fetch_assoc($cotizacion)); ?>
                               </table>

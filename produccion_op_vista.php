@@ -5,7 +5,7 @@ require(ROOT_BBDD);
 <?php require_once('Connections/conexion1.php'); ?><?php
                                                     if (!isset($_SESSION)) {
                                                       session_start();
-                                                    }
+                                                    } 
                                                     $MM_authorizedUsers = "";
                                                     $MM_donotCheckaccess = "true";
 
@@ -352,6 +352,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
         <td colspan="2" id="detalle1">TRATAMIENTO CORONA</td>
         <td id="detalle1"><?php echo $row_orden_produccion['str_tratamiento_op']; ?></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_ancho_rollo_op']; ?></td>
+      </tr>
+      <tr>
+        <td colspan="2" id="detalle1">SELLO SUPERIOR:<?php echo $row_ref_op['sello_superior'];?></td>
+        <td colspan="7" id="detalle1"> SOLAPA REF:  <?php if ($row_ref_op['b_solapa_caract_ref']==2) {echo "Sencilla";}else if ($row_ref_op['b_solapa_caract_ref']==1){echo "Doble";} else {echo "";} ?></td>
       </tr>
       <tr>
         <td colspan="9" id="subppal2">Observacion en Extrusion</td>
