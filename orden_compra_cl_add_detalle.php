@@ -376,11 +376,11 @@ $totalRows_refer = mysql_num_rows($refer);
                } */
                
              
-             
-              $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
+              //OJO SE AGREGA AND B_estado='1'   
+              $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
           
               $cotiz = mysql_query($query_cotiz, $conexion1) ;
               $row_cotiz = mysql_fetch_assoc($cotiz);

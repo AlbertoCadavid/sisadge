@@ -363,7 +363,8 @@ class CselladoController
     $consulta = $this->opes->buscarTres("tbl_orden_produccion", "int_cod_ref_op", "  WHERE id_op= '" . $_REQUEST['int_op_tn'] . "' ", "ORDER BY id_op DESC "); //consulto paquetes
 
     $ref = $consulta["int_cod_ref_op"];
-    $this->tiquetes->ConsultaPaquetes("tbl_orden_produccion op LEFT JOIN tbl_tiquete_numeracion tn  ON tn.ref_tn = op.int_cod_ref_op ", "tn.ref_tn", $ref, "", "", "ORDER BY CONVERT(tn.int_hasta_tn, SIGNED INTEGER) DESC LIMIT 1 "); //consulto paquetes desde ADD sellado
+    $this->tiquetes->ConsultaPaquetes("tbl_orden_produccion op LEFT JOIN tbl_numeracion tn  ON tn.cod_ref_n = op.int_cod_ref_op ", "CONVERT(tn.cod_ref_n, SIGNED INTEGER)", $ref, "", "", "ORDER BY tn.id_numeracion DESC LIMIT 1 "); //consulto paquetes desde ADD sellado
+    //$this->tiquetes->ConsultaPaquetes("tbl_orden_produccion op LEFT JOIN tbl_tiquete_numeracion tn  ON tn.ref_tn = op.int_cod_ref_op ", "tn.ref_tn", $ref, "", "", "ORDER BY CONVERT(tn.int_hasta_tn, SIGNED INTEGER) DESC LIMIT 1 "); //consulto paquetes desde ADD sellado
 
   }
 

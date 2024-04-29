@@ -93,11 +93,11 @@ $fechaTomorrow = '2024-04-10'; */
 //$desperdicios = $conexion->llenaListas("tbl_reg_desperdicio as td", "INNER JOIN tblextruderrollo as te on (td.id_rollo = te.id_r) INNER JOIN empleado on (te.cod_empleado_r = empleado.codigo_empleado) WHERE id_proceso_rd = 1 AND fecha_rd BETWEEN '2024-03-14' AND '2024-03-15'" , "", "td.*, te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado");
 $desperdicios = $conexion->llenaListas(
     "tbl_reg_desperdicio as td",
-    "INNER JOIN tblextruderrollo AS te ON (td.id_rollo = te.id_r) 
+    "INNER JOIN tblextruderrollo AS te ON (td.op_rd = te.id_op_r) 
     INNER JOIN empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
     WHERE td.id_proceso_rd = 1 AND DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
-    GROUP BY empleado.nombre_empleado, empleado.apellido_empleado, te.str_maquina_ext",
+    GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina "
 );
@@ -106,32 +106,32 @@ $produccion = $conexion->llenaListas(
     "INNER JOIN empleado ON (te.cod_empleado_r = empleado.codigo_empleado)
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina) 
     WHERE DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
-    GROUP BY empleado.nombre_empleado, empleado.apellido_empleado, te.str_maquina_ext",
+    GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
     "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina,maquina.nombre_maquina as maquina"
 );
 
 $tmuertos = $conexion->llenaListas(
     "tbl_reg_tiempo as tt",
-    "INNER JOIN tblextruderrollo AS te ON (tt.id_rollo = te.id_r) 
+    "INNER JOIN tblextruderrollo AS te ON (tt.op_rt = te.id_op_r) 
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
     INNER JOIN empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
     WHERE tt.id_proceso_rt = 1 AND DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
-    GROUP BY empleado.nombre_empleado, empleado.apellido_empleado",
+    GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(tt.valor_tiem_rt) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $desperdiciosWeek = $conexion->llenaListas(
     "tbl_reg_desperdicio as td",
-    "INNER JOIN tblextruderrollo AS te ON (td.id_rollo = te.id_r) 
+    "INNER JOIN tblextruderrollo AS te ON (td.op_rd = te.id_op_r) 
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
     INNER JOIN 
     empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
     WHERE 
     td.id_proceso_rd = 1 
     AND DATE(te.fechaF_r) >= '$fechaWeekInit' AND DATE(te.fechaF_r) <= '$fechaWeekFin'
-    GROUP BY empleado.nombre_empleado, empleado.apellido_empleado",
+    GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
@@ -141,7 +141,7 @@ $produccionWeek = $conexion->llenaListas(
     "INNER JOIN empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
     WHERE DATE(te.fechaF_r) >= '$fechaWeekInit' AND DATE(te.fechaF_r) <= '$fechaWeekFin'
-    GROUP BY empleado.nombre_empleado, empleado.apellido_empleado",
+    GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
     "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
@@ -149,7 +149,7 @@ $produccionWeek = $conexion->llenaListas(
 $tmuertosWeek = $conexion->llenaListas(
     "tbl_reg_tiempo as tt",
     "INNER JOIN 
-    tblextruderrollo AS te ON (tt.id_rollo = te.id_r) 
+    tblextruderrollo AS te ON (tt.op_rt = te.id_op_r) 
     INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
     INNER JOIN 
     empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
@@ -157,7 +157,7 @@ $tmuertosWeek = $conexion->llenaListas(
     tt.id_proceso_rt = 1 
     AND DATE(te.fechaF_r) >= '$fechaWeekInit' AND DATE(te.fechaF_r) <= '$fechaWeekFin'
     GROUP BY 
-    empleado.nombre_empleado, empleado.apellido_empleado",
+    maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     " te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(tt.valor_tiem_rt) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
@@ -170,21 +170,19 @@ $produccionMonth = $conexion->llenaListas(
     WHERE 
     DATE(te.fechaF_r) >= '$fechaMonth' AND DATE(te.fechaF_r) <= '$fechaFinMonth'
     GROUP BY 
-    empleado.nombre_empleado, empleado.apellido_empleado",
+    maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
     "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $desperdiciosMonth = $conexion->llenaListas(
     "tbl_reg_desperdicio as td",
-    "INNER JOIN tblextruderrollo AS te ON (td.id_rollo = te.id_r) 
+    "INNER JOIN tblextruderrollo AS te ON (td.op_rd = te.id_op_r) 
         INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
-        INNER JOIN 
-        empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
-        WHERE 
-        td.id_proceso_rd = 1 
+        INNER JOIN empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
+        WHERE td.id_proceso_rd = 1 
         AND DATE(te.fechaF_r) >= '$fechaMonth' AND DATE(te.fechaF_r) <= '$fechaFinMonth'
-        GROUP BY empleado.nombre_empleado, empleado.apellido_empleado",
+        GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
@@ -192,7 +190,7 @@ $desperdiciosMonth = $conexion->llenaListas(
 $tmuertosMonth = $conexion->llenaListas(
     "tbl_reg_tiempo as tt",
     "INNER JOIN 
-        tblextruderrollo AS te ON (tt.id_rollo = te.id_r) 
+        tblextruderrollo AS te ON (tt.op_rt = te.id_op_r) 
         INNER JOIN maquina ON (te.str_maquina_ext = maquina.id_maquina)
         INNER JOIN 
         empleado ON (te.cod_empleado_r = empleado.codigo_empleado) 
@@ -200,7 +198,7 @@ $tmuertosMonth = $conexion->llenaListas(
         tt.id_proceso_rt = 1 
         AND DATE(te.fechaF_r) >= '$fechaMonth' AND DATE(te.fechaF_r) <= '$fechaFinMonth'
         GROUP BY 
-        empleado.nombre_empleado, empleado.apellido_empleado",
+        maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
     " te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(tt.valor_tiem_rt) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );

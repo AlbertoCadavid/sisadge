@@ -443,7 +443,7 @@ class oMsellado
         } else {
             $otracolumna = "";
         }
-        //echo "SELECT * FROM $tabla WHERE $columna = '{$id}' $otracolumna $order" ; die;
+        //echo "SELECT * FROM $tabla WHERE  $columna = '{$id}' $otracolumna  $order " ; die;
         $resultado = $this->conexion->query("SELECT * FROM $tabla WHERE  $columna = '{$id}' $otracolumna  $order ") or die($this->conexion->error);
         if ($resultado)
 

@@ -3955,3 +3955,14 @@ function nobackbutton(){
  function EnvioBoton(pag,name,valor,name2,valor2){
  	window.location.href = pag+"?"+name+"="+valor+"&"+name2+"="+valor2;
  }
+
+ /* CONVERTIR METROS A KILOS */
+ function metrosakilosExtrusion(ancho_cm,calibre_milesimas,longitud_metros){
+	//OPERACION 			
+	let calibre=(calibre_milesimas/100);  			
+	let cm=100;//centimetros de un metro 
+	let cons=0.000467;//constante en kg/cm3		
+	let result = (cm * calibre * cons * ancho_cm); //peso de un metro cuadrado
+	let toKilos = (result * longitud_metros);			
+	return  (toKilos); 
+}

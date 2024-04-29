@@ -162,7 +162,13 @@ $query_rollo_estrusion = sprintf("SELECT count(rollo_r) as total_rollos , sum(ki
 $rollo_estrusion = mysql_query($query_rollo_estrusion, $conexion1) or die(mysql_error());
 $row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion);
 $totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
+echo $row_rollo_estrusion['total_rollos'];
 
+mysql_select_db($database_conexion1, $conexion1);
+$query_rollo_estrusion_total = "SELECT id_r, rollo_r, id_op_r, ref_r, MIN(fechaI_r) as fechaI_r, MAX(fechaF_r) as fechaF_r, MAX(fechaV_r) as fechaV_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r= $colname_rollo_cola AND rolloParcial_r = 0 GROUP BY rollo_r";
+$rollo_estrusion_total = mysql_query($query_rollo_estrusion_total, $conexion1) or die(mysql_error());
+$row_rollo_estrusion_total = mysql_fetch_assoc($rollo_estrusion_total);
+$totalRows_rollo_estrusion_total = mysql_num_rows($rollo_estrusion_total);
 ?>
 <html>
 
@@ -499,7 +505,7 @@ $totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
             <td id="fuente2">&nbsp;</td>
             <td id="fuente2"><strong><?php echo redondear_decimal($totalkp - $desperdicios); ?></strong></td>
             <td id="fuente2"><strong><?php echo $totalL; ?></strong></td>
-            <td id="fuente2"><strong><?php echo $trollos; ?></strong></td>
+            <td id="fuente2"><strong><?php echo $totalRows_rollo_estrusion_total; ?></strong></td>
           </tr>
           <tr>
             <td colspan="9" id="subppal"><strong>RPM - %</strong></td>

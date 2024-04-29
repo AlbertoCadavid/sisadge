@@ -128,18 +128,18 @@ function metroaKilos($valor1,$valor2,$valor3,$valor4){
 		    return round($Kilost);
 }
 //PARA CONVERTIR DE METROS A KILOS
-function metroaKilos2($ancho,$calibre,$metro){
+function metroaKilos2($ancho_cm,$calibre_milesimas,$longitud_metros){
 			//OPERACION
-            $anchor=$ancho; 			
- 			$calibr=($calibre);  
-			$metros=$metro;			
-			$mt=0.01;//centimetros de un metro 
-            $cons=0.00467;//constante			
-			$multip = ($mt * $calibr * $cons);
+            $anchor=$ancho_cm; 			
+ 			$calibr=($calibre_milesimas/100);  
+			$metros=$longitud_metros;			
+			$cm=100;//centimetros de un metro 
+            $cons=0.000467;//constante en kg/cm3		
+			$multip = ($cm * $calibr * $cons);
 			$subKilos = ($anchor * $multip);
 			$toKilos = ($subKilos * $metros);
-			$Kilost = ($toKilos/1000);			
-		    return  ($Kilost); 
+			$Kilost = ($toKilos);			
+		    return  ($Kilost);  
 }
 function metroaKilos3($ancho,$calibre,$metro){
 			//OPERACION

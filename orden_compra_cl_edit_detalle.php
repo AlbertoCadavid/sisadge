@@ -339,10 +339,10 @@ if (isset($_GET['id_oc'])){
           
       } */
 
-      $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)
-      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
+      $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+      UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
       
   
       $cotiz = mysql_query($query_cotiz, $conexion1) ;
@@ -581,7 +581,7 @@ if (isset($_GET['id_oc'])){
         }else {$existe_op="0";} */
      
         ?> 
-        <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled onClick="existeop();"<?php }?> >
+        <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }else{  ?> disabled  <?php }  ?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled onClick="existeop();"<?php } ?> >
           <option value="" <?php if (!(strcmp(0, $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
           <?php
           do {  
@@ -650,14 +650,12 @@ if (isset($_GET['id_oc'])){
       </td>                       
         <td id="fuente5">
 
-          <input name="valor" style="width:70px" type="number" step="0.01" id="valor" onBlur="itemsoc()" value="<?php 
-        if($row_items['int_precio_trm']=='0'){echo $row_cotiz['N_precio'];}else{echo $row_items['int_precio_trm'];} ?>" <?php if($_SESSION['superacceso']){?> required onChange="return itemsoc(),valores();" <?php } ?> readonly >
+          <input name="valor" style="width:70px" type="number" step="0.01" id="valor" onBlur="itemsoc()" value="<?php echo $row_cotiz['N_precio']; ?>" <?php if($_SESSION['superacceso']){?> required onChange="return itemsoc(),valores();" <?php } ?> readonly >
          </td>
         <td colspan="2" id="fuente5">
-            <input name="N_precio_old" readonly type="text" style="width:60px" min="0" step="0.01" id="N_precio_old" value="<?php echo $row_items['N_precio_old'];?>"/>
+        <input name="N_precio_old" readonly type="text" style="width:60px" min="0" step="0.01" id="N_precio_old" value="<?php echo $row_items['N_precio_old'];?>"/>
         <input name="id_c_oc" id="id_c_oc" type="hidden" style="width:70px" value="<?php echo $row_orden_compra['id_c_oc']?>">
-        <input name="precioreal" id="precioreal" type="hidden" style="width:70px" value="<?php  if($row_cotiz['N_precio']!=''){echo $row_cotiz['N_precio'];}else
-        if($row_items['int_precio_trm']=='0'){echo $row_items['int_precio_io'];}else{echo $row_items['int_precio_trm'];}?>">
+        <input name="precioreal" id="precioreal" type="hidden" style="width:70px" value="<?php if($row_cotiz['N_precio']!=''){echo $row_cotiz['N_precio'];}else if($row_items['int_precio_trm']=='0'){echo $row_items['int_precio_io'];}else{echo $row_items['int_precio_trm'];}?>">
         <input style="width:70px" name="int_precio_trm" type="hidden" value="<?php echo $row_items['int_precio_trm']?>">
         <input style="width:70px" name="int_precio_io" type="hidden" value="<?php echo $row_items['int_precio_io']?>">
       </td>

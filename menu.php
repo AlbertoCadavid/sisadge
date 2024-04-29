@@ -181,7 +181,7 @@ function acceso_usuarios($permitidos=''){
 
 //usuarios con algunos permisos especiales y delicados adicionales al superacceso y acceso como en cambio de la ref en o.c y andres martines en o.c materias primas
 $_SESSION['id_usuario'] = $row_usuario['id_usuario'];//para usarse en alguna pantalla
-$restriUsuarios = array(23, 26, 64, 76);//aqui se agregan los id_usuario para ciertos permisos cambio de ref en o.c detalle o en o.c materias primas ciertos privilegios ubicados en la tabla usuario 26 Edilson y 23 sistemas
+$restriUsuarios = array(23, 26, 64, 76 );//aqui se agregan los id_usuario para ciertos permisos cambio de ref en o.c detalle o en o.c materias primas ciertos privilegios ubicados en la tabla usuario 26 Edilson y 23 sistemas
 //Sesiones de permisos especiales 
 $_SESSION['usuariosarray']=$restriUsuarios;//para validar en otras vistas
 $_SESSION['usuariosarrayMenu']=array(4, 23, 26, 76);//4 es alvaro Menu de Administradores

@@ -328,7 +328,7 @@ $row_revisor = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado 
 // AND fechaI_r BETWEEN '$fechaR' AND '$fechaF' AND fechaF_r  BETWEEN '$fechaR' AND '$fechaF' 
 $id_op = $row_rp_edit['id_op_rp'];
 mysql_select_db($database_conexion1, $conexion1);
-$query_sql = "SELECT SUM(kilos_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$id_op'  AND  fechaI_r  >= '$fechaR' AND  fechaF_r <= '$fechaF'";
+$query_sql = "SELECT SUM(kilos_parcial_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$id_op'  AND  fechaI_r  >= '$fechaR' AND  fechaF_r <= '$fechaF' AND rolloParcial_r=0";
 $res = mysql_query($query_sql, $conexion1) or die(mysql_error());
 if ($inf = mysql_fetch_array($res)) {
   $kilosDRollos = dosDecimalesSinMiles($inf["kilos"]);
@@ -695,7 +695,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                             </strong>
                                           </td>
                                           <td id="fuente1">
-                                            <?php if ($_SESSION['superacceso']) : ?>
+                                            <?php if ($_SESSION['superacceso'] || $_SESSION['acceso']) : ?>
                                               <a href="javascript:eliminar_rte('id_ipe',<?php $delip = mysql_result($producido, $z, id_rkp);
                                                                                         echo $delip; ?>,'produccion_registro_extrusion_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a>
                                             <?php else : ?>

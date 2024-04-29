@@ -201,7 +201,7 @@ if (isset($_GET['id_op'])) {
 }
 mysql_select_db($database_conexion1, $conexion1);
 //$query_rp = sprintf("SELECT rollo_rp FROM Tbl_reg_produccion WHERE id_op_rp=%s AND id_proceso_rp='1' ORDER BY rollo_rp DESC",$colname_rp);
-$query_rp = "SELECT MIN(rollo_r)-1 as rollo_rp FROM `tblextruderrollo` WHERE `id_op_r`= $colname_rp and id_rp=0";
+$query_rp = "SELECT MIN(rollo_r)-1 as rollo_rp FROM `tblextruderrollo` WHERE `id_op_r`= $colname_rp AND id_rp=0 AND rolloParcial_r=0";
 
 $rp_edit = mysql_query($query_rp, $conexion1) or die(mysql_error());
 $row_rp_edit = mysql_fetch_assoc($rp_edit);
@@ -223,7 +223,7 @@ if (isset($_GET['id_op'])) {
   $colname_totalKilos = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' ORDER BY fechaI_r ASC LIMIT 900", $colname_totalKilos);
+$query_totalKilos = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' AND rolloParcial_r=0 ORDER BY fechaI_r ASC LIMIT 900", $colname_totalKilos);
 $totalKilos = mysql_query($query_totalKilos, $conexion1) or die(mysql_error()); //  AND rollo_r > $row_parcial
 $row_totalKilos = mysql_fetch_assoc($totalKilos);
 $totalRows_totalKilos = mysql_num_rows($totalKilos);
@@ -289,9 +289,9 @@ $totalRows_ultimo_parcial = mysql_num_rows($ultimo_parcial);
 
 
 //consulta para saber la fecha del primer y ultimo rollo
-$rollosMaxMin = $conexion->buscarTres("TblExtruderRollo","MIN(rollo_r) as min, MAX(rollo_r) as max", "WHERE id_op_r= $colname_totalKilos" );
+$rollosMaxMin = $conexion->buscarTres("TblExtruderRollo","MIN(rollo_r) as min, MAX(rollo_r) as max", "WHERE id_op_r= $colname_totalKilos AND rolloParcial_r=0" );
 
-$verificacionFechas = $conexion->llenaListas("TblExtruderRollo","WHERE id_op_r = $colname_totalKilos AND (rollo_r = $rollosMaxMin[min] OR rollo_r = $rollosMaxMin[max])" , "","rollo_r, fechaI_r, fechaF_r"); 
+$verificacionFechas = $conexion->llenaListas("TblExtruderRollo","WHERE id_op_r = $colname_totalKilos AND (rollo_r = $rollosMaxMin[min] OR rollo_r = $rollosMaxMin[max]) AND rolloParcial_r=0" , "","rollo_r, fechaI_r, fechaF_r"); 
 $diaInicio = $verificacionFechas[0]['fechaI_r'];
 $diaFin = $verificacionFechas[1]['fechaF_r'];
 
@@ -478,7 +478,8 @@ $diaFin = $verificacionFechas[1]['fechaF_r'];
         <td colspan="5" id="fuente1"><input name="fecha_ini_rp" id="fecha_ini_rp" type="datetime-local" min="2000-01-02" size="10" required="required" onchange="kilosxHora2();" readonly="readonly" /></td>
         <td colspan="5" id="fuente1"><input type="hidden" name="horas_rp" id="horas_rp" readonly="readonly" size="7" />
           <?php $id_r = $_GET['id_op'];
-          $sqlr = "SELECT COUNT(rollo_r) AS rollo, SUM(metro_r) AS metros FROM TblExtruderRollo WHERE id_op_r=$id_r";
+          $sqlr = "SELECT MAX(rollo_r) AS rollo, SUM(metro_parcial_r) AS metros FROM TblExtruderRollo WHERE id_op_r=$id_r AND rolloParcial_r=0 ";
+          /* $sqlr = "SELECT COUNT(rollo_r) AS rollo, SUM(metro_parcial_r) AS metros FROM TblExtruderRollo WHERE id_op_r=$id_r"; */
           $resultr = mysql_query($sqlr);
           $numr = mysql_num_rows($resultr);
           if ($numr >= '1') {
@@ -564,10 +565,10 @@ $diaFin = $verificacionFechas[1]['fechaF_r'];
         <td colspan="12" id="fuente1">
           <?php do { ?>
       <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-        <td id="fuente1"><?php $metrosT += $row_totalKilos['metro_r'];
-                          echo $row_totalKilos['metro_r']; ?></td>
-        <td id="fuente1"><?php $kilosT += $row_totalKilos['kilos_r'];
-                          echo $row_totalKilos['kilos_r']; ?></td>
+        <td id="fuente1"><?php $metrosT += $row_totalKilos['metro_parcial_r'];
+                          echo $row_totalKilos['metro_parcial_r']; ?></td>
+        <td id="fuente1"><?php $kilosT += $row_totalKilos['kilos_parcial_r'];
+                          echo $row_totalKilos['kilos_parcial_r']; ?></td>
                          
         <td id="fuente2"  <?php if($row_totalKilos['fechaI_r'] >= $diaInicio &&$row_totalKilos['fechaF_r'] <= $diaFin ){}else{echo "style=background:#F03312 ";}?> ><?php echo $row_totalKilos['rollo_r']; ?></td>
 

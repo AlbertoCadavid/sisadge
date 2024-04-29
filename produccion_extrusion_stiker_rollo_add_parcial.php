@@ -2,7 +2,9 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
 ?>
-<?php require_once('Connections/conexion1.php'); ?>
+<?php require_once('Connections/conexion1.php');
+?>
+
 <?php
 //initialize the session
 if (!isset($_SESSION)) {
@@ -111,31 +113,49 @@ if (!function_exists("GetSQLValueString")) {
     return $theValue;
   }
 }
-
 $editFormAction = $_SERVER['PHP_SELF'];
 if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 }
 
+
 $conexion = new ApptivaDB();
 
+$row_orden = $conexion->llenarCampos("tbl_orden_produccion ", "WHERE id_op='" . $_GET['id_op_r'] . "' AND b_borrado_op='0' ", "ORDER BY id_op DESC", " * ");
 
-if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
+
+//ORDENES DE PRODUCCION
+mysql_select_db($database_conexion1, $conexion1);
+$query_lista_op = "SELECT id_op,metroLineal_op FROM Tbl_orden_produccion ORDER BY Tbl_orden_produccion.id_op DESC";
+$lista_op = mysql_query($query_lista_op, $conexion1) or die(mysql_error());
+$row_lista_op = mysql_fetch_assoc($lista_op);
+$totalRows_lista_op = mysql_num_rows($lista_op);
+
+
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
   if ($_POST['rolloParcial_r'] === "1") {
     $parcial = 1;
+    $kilo_parcial = $_POST['kg_parcial_actual']; //si el rollo es parciar se deja con los kilos calculados
   } else {
     $parcial = 0;
-    $updateParcialRollosSQL = sprintf(
-      "UPDATE tblextruderrollo SET rolloParcial_r = %s WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]",
-      GetSQLValueString($parcial, "int")
-    );
-    mysql_select_db($database_conexion1, $conexion1);
-    $Resultt = mysql_query($updateParcialRollosSQL, $conexion1) or die(mysql_error());
+    /* busco los rollos existentes y le cambio los kilos calculados por los kilos reales y le cambio el estado de parcial a 0 */
+    $row_info_kilos_rollos = $conexion->llenaListas("tblextruderrollo", "WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]", "", "*");
+    if ($row_info_kilos_rollos) {
+      foreach ($row_info_kilos_rollos as $dato) {
+        $nuevokg = ($_POST['kilos_r'] * $dato['metro_r']) / $_POST['metro_r']; // regla de 3 a los kilos totales de los rollos anteriores
+        $nuevokg_parcial = ($_POST['kilos_r'] * $dato['metro_parcial_r']) / $_POST['metro_r']; // regla de 3 a los kilos parciales de los rollos anteriores
+        $conexion->actualizar("tblextruderrollo", "kilos_r = '$nuevokg', rolloParcial_r = '0', kilos_parcial_r = '$nuevokg_parcial'", "id_r = $dato[id_r] AND id_op_r = $_POST[id_op_r]");
+      }
+    }
+   $kilo_parcial = ($_POST['kilos_r'] * $_POST['mts_parcial_actual']) / $_POST['metro_r']; //si el rollo ya es el final, se realiza la regla de 3 para colocar los kilos reales 
   }
 
-  $updateSQL = sprintf(
-    "UPDATE TblExtruderRollo SET rollo_r=%s, id_op_r=%s, ref_r=%s, id_c_r=%s, tratInter_r=%s, tratExt_r=%s, pigmInt_r=%s, pigmExt_r=%s, calibre_r=%s, presentacion_r=%s, cod_empleado_r=%s, turno_r=%s, str_maquina_ext=%s,fechaI_r=%s, fechaF_r=%s, metro_r=%s, kilos_r=%s, reven_r=%s, medid_r=%s, corte_r=%s, desca_r=%s, calib_r=%s, trata_r=%s, arrug_r=%s, bandera_r=%s,montaje_r=%s, apagon_r=%s, observ_r=%s, reven2_r=%s,medid2_r=%s,corte2_r=%s,desca2_r=%s,calib2_r=%s,trata2_r=%s,arrug2_r=%s,apagon2_r=%s,montaje2_r=%s, rolloParcial_r=%s, metro_parcial_r=%s, kilos_parcial_r=%s WHERE id_r=%s",
+
+  $insertSQL = sprintf(
+    "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, str_maquina_ext, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r, rolloParcial_r, metro_parcial_r, kilos_parcial_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+
+    GetSQLValueString($_POST['id_r'], "int"),
     GetSQLValueString($_POST['rollo_r'], "int"),
     GetSQLValueString($_POST['id_op_r'], "int"),
     GetSQLValueString($_POST['ref_r'], "text"),
@@ -173,16 +193,14 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     GetSQLValueString($_POST['arrug2_r'],  "text"),
     GetSQLValueString($_POST['apagon2_r'],  "text"),
     GetSQLValueString($_POST['montaje2_r'],  "text"),
-    GetSQLValueString($parcial, "int"),
+    GetSQLValueString($parcial,  "int"),
     GetSQLValueString($_POST['mts_parcial_actual'], "int"),
-    GetSQLValueString($_POST['kg_parcial_actual'], "double"),
-    GetSQLValueString($_POST['id_r'], "int")
+    GetSQLValueString($kilo_parcial, "double")
   );
 
-  mysql_select_db($database_conexion1, $conexion1);
-  $Result1 = mysql_query($updateSQL, $conexion1) or die(mysql_error());
 
-  
+  $idRollo = $conexion->insertarQuery($insertSQL); //devuelve el id del nuevo rollo que se guardo para ingresarlo a los desperdicios
+
   /* Registro de las Banderas */
   if (!empty($_POST['banderas'])) {
 
@@ -195,7 +213,6 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     }
   }
 
-  $id_proceso = 1;
   /* inicio Tiempos muertos */
   if (!empty($_POST['id_rpt']) && !empty($_POST['valor_tiem_rt'])) {
 
@@ -203,18 +220,18 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
       $a[] = $v;
     foreach ($_POST['valor_tiem_rt'] as $key => $v)
       $b[] = $v;
-    $c = $_POST['id_op_r'];
+    $c = $_GET['id_op_r'];
 
     for ($i = 0; $i < count($a); $i++) {
       if (!empty($a[$i]) && !empty($b[$i])) { //no salga error con campos vacios
         $insertSQLt = sprintf(
           "INSERT INTO Tbl_reg_tiempo (id_rpt_rt,id_rollo,valor_tiem_rt,op_rt,int_rollo_rt,id_proceso_rt,fecha_rt) VALUES (%s, %s, %s, %s,%s, %s, %s)",
           GetSQLValueString($a[$i], "int"),
-          GetSQLValueString($_POST['id_r'], "int"),
+          GetSQLValueString($idRollo, "int"),
           GetSQLValueString($b[$i], "int"),
           GetSQLValueString($c, "int"),
           GetSQLValueString($_POST['rollo_r'], "text"),
-          GetSQLValueString($id_proceso, "int"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
           GetSQLValueString($_POST['fechaI_r'], "date")
         );
 
@@ -231,21 +248,20 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
       $h[] = $n;
     foreach ($_POST['valor_prep_rtp'] as $key => $n)
       $l[] = $n;
-    $c = $_POST['id_op_r'];
+    $c = $_GET['id_op_r'];
 
     for ($x = 0; $x < count($h); $x++) {
       if (!empty($h[$x]) && !empty($l[$x])) { //no salga error con campos vacios
         $insertSQLp = sprintf(
           "INSERT INTO Tbl_reg_tiempo_preparacion (id_rpt_rtp,id_rollo,valor_prep_rtp,op_rtp,int_rollo_rtp,id_proceso_rtp,fecha_rtp) VALUES (%s, %s, %s, %s,%s, %s, %s)",
           GetSQLValueString($h[$x], "int"),
-          GetSQLValueString($_POST['id_r'], "int"),
+          GetSQLValueString($idRollo, "int"),
           GetSQLValueString($l[$x], "int"),
           GetSQLValueString($c, "int"),
           GetSQLValueString($_POST['rollo_r'], "text"),
-          GetSQLValueString($id_proceso, "int"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
           GetSQLValueString($_POST['fechaI_r'], "date")
         );
-
         mysql_select_db($database_conexion1, $conexion1);
         $Resultp = mysql_query($insertSQLp, $conexion1) or die(mysql_error());
       }
@@ -265,57 +281,31 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
         $insertSQLd = sprintf(
           "INSERT INTO Tbl_reg_desperdicio (id_rpd_rd,id_rollo,valor_desp_rd,op_rd,int_rollo_rd,id_proceso_rd,fecha_rd,cod_ref_rd) VALUES (%s, %s, %s, %s, %s,%s, %s, %s)",
           GetSQLValueString($f[$s], "int"),
-          GetSQLValueString($_POST['id_r'], "int"),
+          GetSQLValueString($idRollo, "int"),
           GetSQLValueString($g[$s], "double"),
-          GetSQLValueString($_POST['id_op_r'], "int"),
+          GetSQLValueString($_GET['id_op_r'], "int"),
           GetSQLValueString($_POST['rollo_r'], "text"),
-          GetSQLValueString($id_proceso, "int"),
+          GetSQLValueString($_POST['id_proceso'], "int"),
           GetSQLValueString($_POST['fechaI_r'], "date"),
-          GetSQLValueString($_POST['cod_ref_rd'], "text")
+          GetSQLValueString($row_orden['int_cod_ref_op'], "text")
         );
-
         mysql_select_db($database_conexion1, $conexion1);
         $Resultd = mysql_query($insertSQLd, $conexion1) or die(mysql_error());
       }
     }
   }
   /* Fin Desperdicios */
-
-  $id_op = $_POST['id_op_r'];
-  $rollo_rd = $_POST['rollo_r'];
-  $queryExisteLiquidacion = "SELECT id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND rollo_r = $rollo_rd";
-  $existeLiquidacion = mysql_query($queryExisteLiquidacion);
-  $liquidacion = mysql_result($existeLiquidacion, 0, 'id_rp');
-
-  if ($liquidacion != 0 || $liquidacion != null) {
-    $sqlliq = "SELECT SUM(metro_r) AS metros, SUM(kilos_r) AS kilos, id_rp FROM  TblExtruderRollo WHERE id_op_r='$id_op' AND id_rp = $liquidacion";
-    $resultliq = mysql_query($sqlliq);
-    $kilos = mysql_result($resultliq, 0, 'kilos');
-    $metros = mysql_result($resultliq, 0, 'metros');
-
-    $sqlsuma = "UPDATE Tbl_reg_produccion SET int_total_kilos_rp=$kilos, int_metro_lineal_rp=$metros WHERE id_op_rp = $id_op AND id_proceso_rp='1' AND id_rp = $liquidacion ";
-    mysql_select_db($database_conexion1, $conexion1);
-    $Resultsuma = mysql_query($sqlsuma, $conexion1) or die(mysql_error());
-  }
-
   if ($_POST['rolloParcial_r'] === "1"){
-    $updateGoTo = "produccion_extrusion_listado_rollos.php?id_op_r=$_POST[id_op_r]";
+    $insertGoTo = "produccion_extrusion_listado_rollos.php?id_op_r=".$_POST['id_op_r'];
   } else {
-    $updateGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_op_r=$_POST[id_op_r] &rollo_r=$_POST[rollo_r]";
+    $insertGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_r=" . $_POST['id_r'] . "";
   }
-  
-/* 
-  $updateGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_r=" . $_POST['id_r'] . ""; */
-  /* if (isset($_SERVER['QUERY_STRING'])) {
-    $updateGoTo .= (strpos($updateGoTo, '?')) ? "&" : "?";
-    $updateGoTo .= $_SERVER['QUERY_STRING'];
-  } */
-  
-  header(sprintf("Location: %s", $updateGoTo));
+  if (isset($_SERVER['QUERY_STRING'])) {
+    $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
+    $insertGoTo .= $_SERVER['QUERY_STRING'];
+  }
+  header(sprintf("Location: %s", $insertGoTo));
 }
-
-
-
 $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
   $colname_usuario = $_SESSION['MM_Username'];
@@ -326,41 +316,84 @@ $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
-//ORDENES DE PRODUCCION
-$colname_orden_produccion = "-1";
-if (isset($_GET['id_r'])) {
-  $colname_orden_produccion = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
-}
-mysql_select_db($database_conexion1, $conexion1);
-$query_lista_op = sprintf("SELECT Tbl_orden_produccion.metroLineal_op FROM TblExtruderRollo,Tbl_orden_produccion WHERE TblExtruderRollo.id_r=%s and TblExtruderRollo.id_op_r=Tbl_orden_produccion.id_op ORDER BY Tbl_orden_produccion.id_op DESC", $colname_orden_produccion);
-$lista_op = mysql_query($query_lista_op, $conexion1) or die(mysql_error());
-$row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op);
+
 //CODIGO EMPLEADO
+$row_codigo_empleado = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado b ', 'ON a.codigo_empleado=b.codigo_empleado WHERE a.tipo_empleado IN(4) AND b.estado_empleado=1 ', 'ORDER BY a.nombre_empleado ASC');
 /*mysql_select_db($database_conexion1, $conexion1);
 $query_codigo_empleado = "SELECT codigo_empleado,nombre_empleado FROM empleado WHERE tipo_empleado='4' ORDER BY nombre_empleado ASC";
 $codigo_empleado = mysql_query($query_codigo_empleado, $conexion1) or die(mysql_error());
 $row_codigo_empleado = mysql_fetch_assoc($codigo_empleado);
 $totalRows_codigo_empleado = mysql_num_rows($codigo_empleado);*/
-$row_codigo_empleado = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado b ', 'ON a.codigo_empleado=b.codigo_empleado WHERE a.tipo_empleado IN(4) AND b.estado_empleado=1 ', 'ORDER BY a.nombre_empleado ASC');
 
+mysql_select_db($database_conexion1, $conexion1);
+$query_ultimo = "SELECT * FROM TblExtruderRollo  ORDER BY TblExtruderRollo.id_r DESC";
+$ultimo = mysql_query($query_ultimo, $conexion1) or die(mysql_error());
+$row_ultimo = mysql_fetch_assoc($ultimo);
+$totalRows_ultimo = mysql_num_rows($ultimo);
 
-$colname_rollo_estrusion_edit = "-1";
-if (isset($_GET['id_r'])) {
-  $colname_rollo_estrusion_edit = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
+//ULTIMO ROLLO
+$rollito = 0;
+$colname_rollo = "-1";
+if (isset($_GET['id_op_r'])) {
+  $colname_rollo = (get_magic_quotes_gpc()) ? $_GET['id_op_r'] : addslashes($_GET['id_op_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_rollo_estrusion_edit = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_r=%s", $colname_rollo_estrusion_edit);
-$rollo_estrusion_edit = mysql_query($query_rollo_estrusion_edit, $conexion1) or die(mysql_error());
-$row_rollo_estrusion_edit = mysql_fetch_assoc($rollo_estrusion_edit);
-$totalRows_rollo_estrusion_edit = mysql_num_rows($rollo_estrusion_edit);
+$query_rollo = sprintf("SELECT cod_empleado_r,turno_r,fechaI_r, fechaF_r,id_op_r,rollo_r, str_maquina_ext FROM TblExtruderRollo WHERE id_op_r=%s ORDER BY rollo_r DESC", $colname_rollo); //orden en rollo
+$rollo = mysql_query($query_rollo, $conexion1) or die(mysql_error());
+$row_rollo = mysql_fetch_assoc($rollo);
+$totalRows_rollo = mysql_num_rows($rollo);
+//INFORMACION OP
+$colname_op_carga = "-1";
+if (isset($_GET['id_op_r'])) {
+  $colname_op_carga = (get_magic_quotes_gpc()) ? $_GET['id_op_r'] : addslashes($_GET['id_op_r']);
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_op_carga = sprintf("SELECT id_op, int_cod_ref_op, version_ref_op, int_cliente_op,str_presentacion_op,int_calibre_op,metroLineal_op,str_interno_op,str_externo_op,str_tratamiento_op FROM Tbl_orden_produccion WHERE id_op=%s AND b_borrado_op='0'", $colname_op_carga);
+$op_carga = mysql_query($query_op_carga, $conexion1) or die(mysql_error());
+$row_op_carga = mysql_fetch_assoc($op_carga);
+$totalRows_op_carga = mysql_num_rows($op_carga);
 
-$idop = $row_rollo_estrusion_edit['id_op_r'];
-$elrollo = $row_rollo_estrusion_edit['rollo_r'];
-$fechaR = $row_rollo_estrusion_edit['fechaI_r'];
 
-$row_orden = $conexion->llenarCampos("tbl_orden_produccion ", "WHERE id_op='" . $idop . "' AND b_borrado_op='0' ", "ORDER BY id_op DESC", " * ");
+//CARGA LOS TIEMPOS MUERTOS 
+$colname_tiempoMuerto = "-1";
+if (isset($_GET['id_op_r'])) {
+  $colname_tiempoMuerto = (get_magic_quotes_gpc()) ? $_GET['id_op_r'] : addslashes($_GET['id_op_r']);
+}
 
+$rollito = $row_rollo['rollo_r'] + 1; //guardar el rollo en desperdicios y consultarlos en esta vista
+if ($rollito > '0') {
+
+  $mustraTiemposT =  "AND int_rollo_rt='$rollito' ";
+  $mustraTiemposP =  "AND int_rollo_rtp='$rollito' ";
+  $mustraTiemposD =  "AND int_rollo_rd='$rollito' ";
+}
+mysql_select_db($database_conexion1, $conexion1);
+$query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' $mustraTiemposT ORDER BY id_rpt_rt ASC", $colname_tiempoMuerto);
+$tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
+$row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
+$totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
+//CARGA LOS TIEMPOS PREPARACION 
+mysql_select_db($database_conexion1, $conexion1);
+$query_tiempoPreparacion = sprintf("SELECT * FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' $mustraTiemposP ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+$tiempoPreparacion  = mysql_query($query_tiempoPreparacion, $conexion1) or die(mysql_error());
+$row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion);
+$totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion);
+//CARGA LOS TIEMPOS  DESPERDICIOS
+mysql_select_db($database_conexion1, $conexion1);
+$query_desperdicio = sprintf("SELECT * FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' $mustraTiemposD ORDER BY id_rpd_rd ASC", $colname_tiempoMuerto);
+$desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
+$row_desperdicio = mysql_fetch_assoc($desperdicio);
+$totalRows_desperdicio = mysql_num_rows($desperdicio);
+
+if ($row_tiempoMuerto['fecha_rt'] != '' || $row_tiempoPreparacion['fecha_rtp'] != '' || $row_desperdicio['fecha_rd'] != '') {
+  if ($row_tiempoMuerto['fecha_rt'] != '') {
+    $fechaibloque = $row_tiempoMuerto['fecha_rt'];
+  } elseif ($row_tiempoPreparacion['fecha_rtp'] != '') {
+    $fechaibloque = $row_tiempoPreparacion['fecha_rtp'];
+  } elseif ($row_desperdicio['fecha_rd'] != '') {
+    $fechaibloque = $row_desperdicio['fecha_rd'];
+  }
+}
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_tiempo_muertos = "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE Tbl_reg_tipo_desperdicio.id_proceso_rtd='1' AND Tbl_reg_tipo_desperdicio.codigo_rtp='1' AND estado_rtp='0' ORDER BY Tbl_reg_tipo_desperdicio.nombre_rtp ASC";
@@ -380,39 +413,15 @@ $desperdicios = mysql_query($query_desperdicios, $conexion1) or die(mysql_error(
 $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
 
-
-mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoMuerto = sprintf("SELECT * FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' AND int_rollo_rt=$elrollo AND fecha_rt='$fechaR' ORDER BY id_rpt_rt ASC", $idop);
-$tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
-$row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
-$totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
-//CARGA LOS TIEMPOS PREPARACION 
-mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoPreparacion = sprintf("SELECT * FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' AND int_rollo_rtp=$elrollo AND fecha_rtp='$fechaR' ORDER BY id_rpt_rtp ASC", $idop);
-$tiempoPreparacion  = mysql_query($query_tiempoPreparacion, $conexion1) or die(mysql_error());
-$row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion);
-$totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion);
-//CARGA LOS TIEMPOS  DESPERDICIOS
-mysql_select_db($database_conexion1, $conexion1);
-$query_desperdicio = sprintf("SELECT * FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' AND int_rollo_rd=$elrollo AND fecha_rd='$fechaR' ORDER BY id_rpd_rd ASC", $idop);
-$desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
-$row_desperdicio = mysql_fetch_assoc($desperdicio);
-$totalRows_desperdicio = mysql_num_rows($desperdicio);
-
 //MAQUINAS
+$row_maquinas_ext = $conexion->llenaSelect("maquina","WHERE activo=0 AND proceso_maquina='1'", " ORDER BY id_maquina DESC");
+
+//INFO METROS ULTIMO PARCIAL
 mysql_select_db($database_conexion1, $conexion1);
-$query_maquinas = "SELECT * FROM maquina WHERE proceso_maquina='1' ORDER BY id_maquina DESC";
-$maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
-$row_maquinas = mysql_fetch_assoc($maquinas);
-$totalRows_maquinas = mysql_num_rows($maquinas);
-
-/* obtener banderas */
-$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_estrusion_edit[id_op_r] AND rollo_r = $row_rollo_estrusion_edit[rollo_r] AND proceso = 1", "ORDER BY nombre ASC", "*");
-$num_banderas = sizeof($banderas);
-
-/*if($row_tiempoMuerto['fecha_rt'] !='' || $row_tiempoPreparacion['fecha_rtp']!='' || $row_desperdicio['fecha_rd']!=''){
-  $fechaibloque = $row_tiempoMuerto['fecha_rt'] =='' ? $row_tiempoPreparacion['fecha_rtp'] : $row_desperdicio['fecha_rd'];
-}*/
+$query_mts = sprintf("SELECT metro_r FROM TblExtruderRollo WHERE id_op_r=%s AND rollo_r=%s AND rolloParcial_r=%s ORDER BY id_r DESC", $colname_rollo, $_GET['rollo_r'], 1); //orden en rollo
+$mts = mysql_query($query_mts, $conexion1) or die(mysql_error());
+$row_mts = mysql_fetch_assoc($mts);
+$totalRows_mts = mysql_num_rows($mts);
 ?>
 <html>
 
@@ -426,7 +435,7 @@ $num_banderas = sizeof($banderas);
   <script type="text/javascript" src="js/formato.js"></script>
   <script type="text/javascript" src="js/consulta.js"></script>
   <script type="text/javascript" src="js/validacion_numerico.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/general.css" />
+  <script type="text/javascript" src="js/general.js"></script>
 
   <!-- desde aqui para listados nuevos -->
   <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
@@ -441,13 +450,6 @@ $num_banderas = sizeof($banderas);
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-  <script type="text/javascript">
-    function alerta_ext() {
-      DatosGestiones3('13', 'id_r', document.form1.id_r.value, '&fechaI', document.form1.fechaI_r.value);
-
-      //alert('si cambia esta fecha, elimine primero los registros de tiempos, preparacion y desperdicios')
-    }
-  </script>
 </head>
 
 <body>
@@ -455,119 +457,122 @@ $num_banderas = sizeof($banderas);
   <form action="<?php echo $editFormAction; ?>" method="POST" name="form1" onSubmit="return(validacion_registro_rollo())">
     <table align="center" class="table table-bordered table-sm">
       <tr>
-        <td rowspan="3" id="fondo"><img src="images/logoacyc.jpg" width="97" height="71" /></td>
-        <td colspan="4" id="titulo2">IDENTIFICACION MATERIALES EXTRUIDOS
-          <?php $id_op = $row_rollo_estrusion_edit['id_op_r'];
-          $sqlr = "SELECT id_proceso_rp, SUM(int_total_rollos_rp) AS maxrollo FROM Tbl_reg_produccion WHERE id_op_rp=$id_op AND id_proceso_rp='1' ORDER BY int_total_rollos_rp DESC LIMIT 1";
-          $resultr = mysql_query($sqlr);
-          $numr = mysql_num_rows($resultr);
-          if ($numr >= '1') {
-            $max_rollo = mysql_result($resultr, 0, 'maxrollo');
-          } else {
-            $max_rollo = '0';
+        <td rowspan="4" id="fondo"><img src="images/logoacyc.jpg" width="97" height="71" /></td>
+        <td colspan="3" id="titulo2">IDENTIFICACION MATERIALES EXTRUIDOS
+          <?php $id_op = $_GET['id_op_r'];
+          $sqlre = "SELECT SUM(metro_r) as metro_r, SUM(kilos_r) as kilos_r FROM TblExtruderRollo WHERE id_op_r='$id_op'";
+          $resultre = mysql_query($sqlre);
+          $numre = mysql_num_rows($resultre);
+          if ($numre >= '1') {
+            $kilosR = mysql_result($resultre, 0, 'kilos_r');
+            $metrosE = mysql_result($resultre, 0, 'metro_r');
+          }
+          $sqlrE = "SELECT MAX(rollo_r) AS max_rolloE FROM TblExtruderRollo WHERE id_op_r='$id_op'";
+          $resultrE = mysql_query($sqlrE);
+          $numrE = mysql_num_rows($resultrE);
+          if ($numrE >= '1') {
+            $max_rollo = mysql_result($resultrE, 0, 'max_rolloE');
           } ?>
         </td>
       </tr>
       <tr>
-        <td colspan="4" id="numero2">ROLLO N&deg; <?php echo $row_rollo_estrusion_edit['rollo_r'];
-                                                  if ($max_rollo != '') {
-                                                    echo " de " . $max_rollo;
-                                                  } ?>
-          <input type="hidden" name="rollo_r" id="rollo_r" style="width:40px" value="<?php echo $row_rollo_estrusion_edit['rollo_r']; ?>">
-          <input type="hidden" name="id_r" id="id_r" value="<?php echo $row_rollo_estrusion_edit['id_r']; ?>">
+        <td colspan="3" id="numero2">PARCIAL DEL ROLLO N&deg; <?php echo  $num = $_GET['rollo_r']; ?>
+          <input type="hidden" name="rollo_r" id="rollo_r" style="width:40px" value="<?php echo $num ?>">
+          <input type="hidden" name="id_r" id="id_r" value="<?php echo $row_ultimo['id_r'] + 1; ?>">
         </td>
       </tr>
       <tr>
-        <td id="talla3">&nbsp;Rollos ingresados hasta el momento:</td>
-        <td colspan="2" id="numero"><?php
-                                    $id_op = $row_rollo_estrusion_edit['id_op_r'];
-                                    $result = mysql_query("SELECT rollo_r FROM TblExtruderRollo WHERE id_op_r='$id_op' ORDER BY rollo_r ASC");
-                                    if ($row = mysql_fetch_array($result)) {
-                                      do {
-                                        echo $row["rollo_r"] . ", " . "\n";
-                                      } while ($row = mysql_fetch_array($result));
-                                    } else {
-                                      echo "&iexcl; Aun no hay Rollos!";
-                                    }
-                                    ?></td>
+        <td id="talla3">&nbsp;</td>
       </tr>
       <tr>
-        <td id="titulo2">&nbsp;</td>
-        <td colspan="4" id="fuente3"><a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion_edit['id_r']; ?>"><img src="images/hoja.gif" alt="VISTA" title="VISTA" border="0" /></a><a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a>
-          <?php if ($row_usuario['tipo_usuario'] == 1) { ?><a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRESION TODOS LOS ROLLOS" title="IMPRESION TODOS LOS ROLLOS" border="0" /></a>
-            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion_edit['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php', <?php echo $row_rollo_estrusion_edit['id_op_r']; ?>, <?php echo $row_rollo_estrusion_edit['rollo_r']; ?>, 1)"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
-          <?php } ?><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a>
-        </td>
+        <td colspan="4" id="fuente3"><?php if ($row_rollo['id_op_r'] != '') { ?><a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_rollo['id_op_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a><?php } ?><a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" /></a></td>
       </tr>
       <tr>
         <td colspan="4" id="titulo1">INFORMACION GENERAL DE LA O.P.</td>
       </tr>
       <tr>
         <td id="fuente1">ORDEN P</td>
-        <td id="fuente1"><input name="id_op_r" type="text" id="id_op_r" value="<?php echo $row_rollo_estrusion_edit['id_op_r']; ?>" size="11" readonly /></td>
-        <td id="fuente1">REF.</td>
-        <td id="fuente1"><input type="number" name="ref_r" id="ref_r" min="0" max="20" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['ref_r']; ?>" readonly>
+        <td id="fuente1">
+          <input type="text" name="id_op_r" id="id_op_r" min="0" max="20" style=" width:100px" value="<?php echo $row_op_carga['id_op']; ?>" readonly="readonly">
+          <!-- <select name="id_op_r" id="id_op_r" style="width:100px" onchange="if(form1.id_op_r.value) { consulta_rollo_E(); }else { alert('Debe Seleccionar una O.P')}" autofocus>
+              <option value=""<?php if (!(strcmp("", $row_op_carga['id_op']))) {
+                                echo "selected=\"selected\"";
+                              } ?>>Seleccione</option>
+              <?php
+              do {
+              ?>
+             			 <option value="<?php echo $row_lista_op['id_op'] ?>"<?php if (!(strcmp($row_lista_op['id_op'], $row_op_carga['id_op']))) {
+                                                                          echo "selected=\"selected\"";
+                                                                        } ?>><?php echo $row_lista_op['id_op'] ?></option>
+             						  <?php
+                          } while ($row_lista_op = mysql_fetch_assoc($lista_op));
+                          $rows = mysql_num_rows($lista_op);
+                          if ($rows > 0) {
+                            mysql_data_seek($lista_op, 0);
+                            $row_lista_op = mysql_fetch_assoc($lista_op);
+                          }
+                            ?>
+            </select> -->
+
         </td>
+        <td id="fuente1">REF.</td>
+        <td id="fuente1"><input type="number" name="ref_r" id="ref_r" min="0" max="20" style=" width:100px" value="<?php echo $row_op_carga['int_cod_ref_op']; ?>" readonly></td>
       </tr>
       <tr>
         <td id="fuente1">CLIENTE</td>
-        <td colspan="3" id="fuente1">
-          <?php $id_c = $row_rollo_estrusion_edit['id_c_r'];
-          $sqln = "SELECT id_c,nombre_c FROM cliente WHERE id_c='$id_c'";
-          $resultn = mysql_query($sqln);
-          $numn = mysql_num_rows($resultn);
-          if ($numn >= '1') {
-            $id_co = mysql_result($resultn, 0, 'id_c');
-            $nombre_c = mysql_result($resultn, 0, 'nombre_c');
-            $cadenaN = htmlentities($nombre_c);
-            echo $cadenaN;
-          } ?><input type="hidden" name="id_c_r" id="id_c_r" value="<?php echo $id_co; ?>" size="11"></td>
+        <td colspan="3" id="fuente1"><?php $id_c = $row_op_carga['int_cliente_op'];
+                                      $sqln = "SELECT id_c,nombre_c FROM cliente WHERE id_c='$id_c'";
+                                      $resultn = mysql_query($sqln);
+                                      $numn = mysql_num_rows($resultn);
+                                      if ($numn >= '1') {
+                                        $id_co = mysql_result($resultn, 0, 'id_c');
+                                        $nombre_c = mysql_result($resultn, 0, 'nombre_c');
+                                        $cadenaN = htmlentities($nombre_c);
+                                        echo $cadenaN;
+                                      } ?><input type="hidden" name="id_c_r" id="id_c_r" value="<?php echo $id_co; ?>" size="11"></td>
       </tr>
       <tr>
         <td id="fuente1">TRATADO INTERNO</td>
         <td id="fuente1"><select name="tratInter_r" id="tratInter_r" style="width:100px">
-            <option value="N.A" <?php if (!(strcmp('N.A', $row_rollo_estrusion_edit['tratInter_r']))) {
+            <option value="N.A" <?php if (!(strcmp('N.A', $row_op_carga['str_tratamiento_op']))) {
                                   echo "selected=\"selected\"";
                                 } ?>>N.A</option>
-            <option value="UNA CARA" <?php if (!(strcmp('UNA CARA', $row_rollo_estrusion_edit['tratInter_r']))) {
+            <option value="UNA CARA" <?php if (!(strcmp('UNA CARA', $row_op_carga['str_tratamiento_op']))) {
                                         echo "selected=\"selected\"";
                                       } ?>>UNA CARA</option>
-            <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA', $row_rollo_estrusion_edit['tratInter_r']))) {
+            <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA', $row_op_carga['str_tratamiento_op']))) {
                                           echo "selected=\"selected\"";
                                         } ?>>DOBLE CARA</option>
           </select></td>
         <td id="fuente1">TRATADO EXTERNO</td>
         <td id="fuente1"><select name="tratExt_r" id="tratExt_r" style="width:100px">
-            <option value="N.A" <?php if (!(strcmp('N.A', $row_rollo_estrusion_edit['tratExt_r']))) {
+            <option value="N.A" <?php if (!(strcmp('N.A', $row_op_carga['str_tratamiento_op']))) {
                                   echo "selected=\"selected\"";
                                 } ?>>N.A</option>
-            <option value="UNA CARA" <?php if (!(strcmp('UNA CARA', $row_rollo_estrusion_edit['tratExt_r']))) {
+            <option value="UNA CARA" <?php if (!(strcmp('UNA CARA', $row_op_carga['str_tratamiento_op']))) {
                                         echo "selected=\"selected\"";
                                       } ?>>UNA CARA</option>
-            <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA', $row_rollo_estrusion_edit['tratExt_r']))) {
+            <option value="DOBLE CARA" <?php if (!(strcmp('DOBLE CARA', $row_op_carga['str_tratamiento_op']))) {
                                           echo "selected=\"selected\"";
                                         } ?>>DOBLE CARA</option>
           </select></td>
       </tr>
       <tr>
         <td id="fuente1">PIGMENTO INTERIOR</td>
-        <td id="fuente1"><input name="pigmInt_r" type="text" onKeyUp="conMayusculas(this)" value="<?php echo $row_rollo_estrusion_edit['pigmInt_r']; ?>" size="11" readonly /></td>
+        <td id="fuente1"><input name="pigmInt_r" type="text" onKeyUp="conMayusculas(this)" value="<?php echo $row_op_carga['str_interno_op']; ?>" size="11" readonly /></td>
         <td id="fuente1">PIGMENTO EXTERIOR</td>
-        <td id="fuente1"><input name="pigmExt_r" type="text" onKeyUp="conMayusculas(this)" value="<?php echo $row_rollo_estrusion_edit['pigmExt_r']; ?>" size="11" readonly /></td>
+        <td id="fuente1"><input name="pigmExt_r" type="text" onKeyUp="conMayusculas(this)" value="<?php echo $row_op_carga['str_externo_op']; ?>" size="11" readonly /></td>
       </tr>
       <tr>
         <td id="fuente1">CALIBRE MILS.</td>
-        <td id="fuente1"><input name="calibre_r" type="text" id="calibre_r" value="<?php echo $row_rollo_estrusion_edit['calibre_r']; ?>" size="11" readonly /></td>
+        <td id="fuente1"><input name="calibre_r" type="text" id="calibre_r" value="<?php echo $row_op_carga['int_calibre_op']; ?>" size="11" readonly /></td>
         <td id="fuente1">PRESENTACION</td>
-        <td id="fuente1"><input name="presentacion_r" type="text" value="<?php echo $row_rollo_estrusion_edit['presentacion_r']; ?>" size="11" readonly /></td>
+        <td id="fuente1"><input name="presentacion_r" type="text" value="<?php echo $row_op_carga['str_presentacion_op']; ?>" size="11" readonly /></td>
       </tr>
       <tr>
         <td colspan="4">
         </td>
       </tr>
-      <?php for ($i=0; $i < $totalRows_rollo_estrusion_edit; $i++) { ?>
-      
-        
       <tr>
         <td colspan="4" id="titulo1">INFORMACION DEL ROLLO</td>
       </tr>
@@ -575,108 +580,100 @@ $num_banderas = sizeof($banderas);
         <td id="fuente1"><input type="hidden" name="rolloParcial_r" id="rolloParcial_r" value="" />
       </tr>
       <tr>
+
         <td id="fuente1">OPERARIO</td>
         <td id="fuente1">
 
-          <select name="cod_empleado_r" id="montaje" onBlur="validacion_registro_rollo();" style="width:120px">
-            <option value="" <?php if (!(strcmp("", $row_rollo_estrusion_edit['cod_empleado_r']))) {
+          <select name="cod_empleado_r" id="montaje">
+            <option value="" <?php if (!(strcmp("", $row_rollo['cod_empleado_r']))) {
                                 echo "selected=\"selected\"";
-                              } ?>>Montaje</option>
-            <option value="0">Seleccione</option>
+                              } ?>>Seleccione</option>
             <?php foreach ($row_codigo_empleado as $row_codigo_empleado) { ?>
-              <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_rollo_estrusion_edit['cod_empleado_r']))) {
+              <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_rollo['cod_empleado_r']))) {
                                                                                       echo "selected=\"selected\"";
                                                                                     } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
             <?php } ?>
           </select>
 
         </td>
-        <td id="fuente1">MAQUINA</td>
-        <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
-            <option value="" <?php if (!(strcmp("", $row_rollo_estrusion_edit['str_maquina_ext']))) {
-                                echo "selected=\"selected\"";
-                              } ?>>Seleccione</option>
-            <?php
-            do {
-            ?>
-              <option value="<?php echo $row_maquinas['id_maquina'] ?>" <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo_estrusion_edit['str_maquina_ext']))) {
-                                                                          echo "selected=\"selected\"";
-                                                                        } ?>><?php echo $row_maquinas['nombre_maquina'] ?></option>
-            <?php
-            } while ($row_maquinas = mysql_fetch_assoc($maquinas));
-            $rows = mysql_num_rows($maquinas);
-            if ($rows > 0) {
-              mysql_data_seek($maquinas, 0);
-              $row_maquinas = mysql_fetch_assoc($maquinas);
-            }
-            ?>
-          </select></td>
+        <td id="fuente1">&nbsp;</td>
+        <td id="fuente1">&nbsp;</td>
       </tr>
       <tr>
         <td id="fuente1">TURNO</td>
-        <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="6" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['turno_r']; ?>" required></td>
-        <td colspan="2" id="fuente1">
-          <p>FECHA IMPRIME
-            ESTIQUER ROLLO</p>
-          <p>
-            <input name="fechaV_r" type="datetime-local" min="2000-01-02" size="15" value="<?php echo muestradatelocal($row_rollo_estrusion_edit['fechaV_r']); ?>" readonly required />
-          </p>
+        <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="7" style="width:40px" required value="<?php echo $row_rollo['turno_r']; ?>"></td>
+        <td id="fuente1">MAQUINA</td>
+        <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
+            <option value=""<?php if (!(strcmp("", $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>>Seleccione</option>
+            <?php foreach ($row_maquinas_ext as $row_maquinas) { ?>
+              <option value="<?php echo $row_maquinas['id_maquina'] ?>"
+                            <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>><?php echo $row_maquinas['nombre_maquina']?>
+              </option>
+            <?php } ?>
+          </select>
         </td>
       </tr>
       <tr>
         <td id="fuente1">FECHA INICIO ROLLO</td>
-        <td id="fuente1"><input name="fechaI_r" id="fecha_ini_rp" type="datetime-local" size="15" value="<?php echo muestradatelocal($row_rollo_estrusion_edit['fechaI_r']); ?>" onChange="alerta_ext();" required="required" /></td>
+        <td id="fuente1">
+          <?php
+
+          $horaIni = restoHoranew2(2);
+
+          $ultimaF = $row_rollo['fechaF_r'] == '' ? date("Y-m-d " . $horaIni) : $row_rollo['fechaF_r'];
+          $horaAdd = '16'; //16 es si la fecha del ultimo rollo supera en 16 horas entonces coloca la actual
+
+
+          $fechahoraofinal = sumarHorasparam($ultimaF, $horaAdd);
+
+          ?>
+          <input name="fechaI_r" id="fecha_ini_rp" min="2000-01-02" type="datetime-local" size="15" value="<?php echo $fechaibloque == '' ? $fechahoraofinal : $fechaibloque; ?>" required="required" <?php if ($fechaibloque != '') { ?> readonly="readonly" <?php } ?> />
+        </td>
         <td colspan="2" id="fuente1">
           <p>FECHA FIN ROLLO
           </p>
           <p>
-            <input name="fechaF_r" id="fecha_fin_rp" type="datetime-local" size="15" value="<?php echo muestradatelocal($row_rollo_estrusion_edit['fechaF_r']); ?>" onBlur="validacion_registro_rollo();" required />
+            <input name="fechaF_r" id="fecha_fin_rp" type="datetime-local" min="2000-01-02" size="15" value="" onblur="validacion_registro_rollo();" required="required" />
           </p>
         </td>
       </tr>
       <tr>
-        <td>&nbsp;</td>
+        <td id="fuente1">METROS EXTRUIDOS</td>
         <td id="fuente1">METROS ESTE PARCIAL</td>
         <td id="fuente1">KILOS ESTE PARCIAL</td>
       </tr>
       <tr>
-      <td>&nbsp;</td>
-        <td><input style="border: none; background:#BCC1C5" name="mts_parcial_actual" id="mts_parcial_actual" type="text"  value="<?php echo $row_rollo_estrusion_edit['metro_parcial_r'] ?>"></td>
-        <td><input style="border: none; background:#BCC1C5" name="kg_parcial_actual" id="kg_parcial_actual" type="text"  value="<?php echo $row_rollo_estrusion_edit['kilos_parcial_r'] ?>"></td>
-      </tr>
-      <tr>
-        <td colspan="2" id="fuente4">
-          <div id="resultado_generador"></div>
-        </td>
-        <td colspan="2" id="fuente4">&nbsp;</td>
+        <td><input style="border: none; background:#BCC1C5" name="mts_parcial_ant" id="mts_parcial_ant" type="text" readonly value="<?php echo $row_mts['metro_r'] ?>"></td>
+        <td><input style="border: none; background:#BCC1C5" name="mts_parcial_actual" id="mts_parcial_actual" type="text" readonly value=""></td>
+        <td><input style="border: none; background:#BCC1C5" name="kg_parcial_actual" id="kg_parcial_actual" type="text" readonly value=""></td>
       </tr>
       <tr>
         <td id="fuente1">METRO LINEAL</td>
-        <td id="fuente1">
-          <input name="metro_r" type="number" id="metro_r" min="1" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['metro_r']; ?>" required />
-
-          <?php echo $row_lista_op['metroLineal_op']; ?>
-        </td>
+        <td id="fuente1"><input name="metro_r" type="number" id="metro_r" min="1" style="width:100px" value="" required="required" /> <?php //echo redondear_decimal($metrosE/$max_rollo); 
+                                                                                                                                      ?>
+          de <?php if ($row_op_carga['metroLineal_op'] == '') {
+                echo $row_lista_op['metroLineal_op'];
+              } else {
+                echo $row_op_carga['metroLineal_op'];
+              }  ?></td>
         <td id="fuente1">PESO</td>
-        <td id="fuente1"><input name="kilos_r" type="number" id="kilos_r" min="1.00" step="0.01" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['kilos_r']; ?>" required /></td>
+        <td id="fuente1"><input name="kilos_r" type="number" id="kilos_r" min="1.00" step="0.01" style="width:100px" value="" required="required" /><?php //echo redondear_decimal($kilosR/$max_rollo); 
+                                                                                                                                                    ?></td>
       </tr>
       <tr>
-        <td colspan="4">&nbsp;</td>
+        <td colspan="3" id="titulo1">DEFECTOS</td>
       </tr>
-      <?php } ?>
+
       <!-- Desperdicio -->
       <tr id="tr1">
         <td style="text-align:center" colspan="1" id="dato1">Tiempos Muertos</td>
         <td style="text-align:center" id="dato1">Tiempos Preparacion</td>
         <td style="text-align:center" id="dato1">Desperdicios</td>
-        <td style="text-align:center" id="titulo1" rowspan="2">DEFECTOS</td>
-
       </tr>
       <tr id="tr1">
         <td colspan="1" id="dato1"><input type="button" class="botonFinalizar" name="button" id="button" value="Crear otra fila" onclick="tiemposM()" style="width:193px" /></td>
         <td id="dato1" style="text-align:center"><input type="button" name="button2" class="botonFinalizar" id="button2" value="Crear otra fila" onclick="tiemposP()" style="width:193px" /></td>
         <td id="dato1"><input type="button" name="button3" class="botonFinalizar" id="button3" value="Crear otra fila" onclick="tiemposD()" style="width:193px" /></td>
-        <td><input type="hidden" name="cod_ref_rd" id="cod_ref_rd" value="<?php echo $row_orden['int_cod_ref_op'] ?>" /></td>
       </tr>
 
       <tr>
@@ -690,11 +687,9 @@ $num_banderas = sizeof($banderas);
           <div id="moreUploads3"></div>
         </td>
       </tr>
+      <!-- fin desperdicio  -->
 
-      <tr>
-        <td colspan="4">&nbsp;</td>
-      </tr>
-
+      <!--inicio cuadro de tiempos muertos a -->
       <tr>
         <td colspan="4">
           <table width="100%" border="1">
@@ -724,7 +719,7 @@ $num_banderas = sizeof($banderas);
                                     echo $var;
                                     $TM = $TM + $var; ?></td>
                   <td id="fuente1"><a href="javascript:eliminarTiemposDesp('idtiemprollo','id_rt',<?php $delrt = mysql_result($tiempoMuerto, $x, id_rt);
-                                                                                                  echo $delrt; ?>,'id_r',<?php echo $_GET['id_r']; ?>,'Tbl_reg_tiempo','produccion_extrusion_stiker_rollo_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a>
+                                                                                                  echo $delrt; ?>,'id_op_r',<?php echo $_GET['id_op_r']; ?>,'Tbl_reg_tiempo','produccion_extrusion_stiker_rollo_add.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a>
                   </td>
                 </tr>
               <?php } ?>
@@ -760,7 +755,7 @@ $num_banderas = sizeof($banderas);
                                     echo $var2;
                                     $TP += $var2; ?></td>
                   <td id="fuente1"><a href="javascript:eliminarTiemposDesp('idtiemprollo','id_rt',<?php $delrp = mysql_result($tiempoPreparacion, $o, id_rt);
-                                                                                                  echo $delrp; ?>,'id_r',<?php echo $_GET['id_r']; ?>,'Tbl_reg_tiempo_preparacion','produccion_extrusion_stiker_rollo_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
+                                                                                                  echo $delrp; ?>,'id_op_r',<?php echo $_GET['id_op_r']; ?>,'Tbl_reg_tiempo_preparacion','produccion_extrusion_stiker_rollo_add.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                 </tr>
               <?php } ?>
               <tr>
@@ -791,7 +786,7 @@ $num_banderas = sizeof($banderas);
                                     echo $var3;
                                     $TD = $TD + $var3; ?></td>
                   <td id="fuente1"><a href="javascript:eliminarTiemposDesp('idtiemprollo','id_rd',<?php $delrd = mysql_result($desperdicio, $m, id_rd);
-                                                                                                  echo $delrd; ?>,'id_r',<?php echo $_GET['id_r']; ?>,'Tbl_reg_desperdicio','produccion_extrusion_stiker_rollo_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
+                                                                                                  echo $delrd; ?>,'id_op_r',<?php echo $_GET['id_op_r']; ?>,'Tbl_reg_desperdicio','produccion_extrusion_stiker_rollo_add.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                 </tr>
               <?php } ?>
               <tr>
@@ -803,38 +798,29 @@ $num_banderas = sizeof($banderas);
           </table>
         </td>
       </tr>
-
-      <tr><td >&nbsp;</td></tr>
       <tr>
-        <td colspan="2" id="titulo1">BANDERAS
-          <!-- grid -->
-          <?php if ($num_banderas > 0) { ?>
-            <hr>
-            <table id="example" class="display" style="width:100%" border="1">
-              <thead>
-                <tr id="titulo1">
-                  <td style="text-align: center;">NOMBRE</td>
-                  <td>METROS</td>
-                  <td>ELIMINAR</td>
-                </tr>
-              </thead>
-              <tbody id="DataResult">
-                <?php foreach ($banderas as $value) { ?>
-                  <tr>
-                    <td nowrap id="detalle2"> <?php echo  ucfirst($value['nombre']) ?></td>
-                    <td nowrap id="detalle2"> <?php echo $value['metros'] ?></td>
-                    <td style="text-align: center;"><a href="javascript:eliminarBandera('id_bandera',<?php echo $value['id_bandera'] ?>, 'proceso', <?php echo $value['proceso'] ?>,'Tbl_banderas', <?php echo $_GET['id_r'] ?>, 'produccion_extrusion_stiker_rollo_edit.php?id_r=')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR BANDERA" border="0"></td>
-                  </tr>
+        <td colspan="4" id="titulo1">BANDERAS</td>
+      </tr>
 
-                <?php } ?>
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      <?php } ?>
-
+      <tr>
       <tr id="tablaf">
-        <td></td>
+
+        <td colspan="2">
+          <select oninput=actualizarTotal() name="banderas[]" id="banderas[]" class="banderas">
+            <option value="">SELECCIONE</option>
+            <option value="apagon">APAGON</option>
+            <option value="arrugas">ARRUGAS</option>
+            <option value="cortes_huecos">CORTES/HUECOS</option>
+            <option value="descalibre">DESCALIBRE</option>
+            <option value="medida">MEDIDA</option>
+            <option value="montaje">MONTAJE</option>
+            <option value="pigmentacion">PIGMENTACION</option>
+            <option value="reventon">REVENTON</option>
+            <option value="tratamiento">TRATAMIENTO</option>
+          </select>
+
+          <input name="metroBandera[]" type="number" id="metroBandera[]" style="width:60px" min="0" value="0" onblur="validacionBanderasExt()">Metros
+        </td>
       </tr>
 
       <tr>
@@ -844,31 +830,30 @@ $num_banderas = sizeof($banderas);
           <button style="width:40px" type="button" class="botonGMini" onClick="AddItemd();"> + </button>
         </td>
       </tr>
+
       <tr>
         <td id="fuente1" colspan="1">TOTAL BANDERAS:
           <input type="number" readonly value="" name="bandera_r" id="totales" style="width:35px; border:0">
         </td>
       </tr>
-
       <tr>
         <td colspan="4" id="titulo1">OBSERVACIONES</td>
       </tr>
       <tr>
-        <td colspan="4" id="fuente2"><textarea name="observ_r" cols="75" rows="2" id="observ_r" onKeyUp="conMayusculas(this)"><?php echo $row_rollo_estrusion_edit['observ_r']; ?></textarea></td>
+        <td colspan="4" id="fuente2"><textarea name="observ_r" cols="75" rows="2" id="observ_r" onKeyUp="conMayusculas(this)"></textarea></td>
       </tr>
       <tr>
         <td colspan="4" id="fuente5">&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="4" id="fuente2">
-          <input type="button" class="botonGeneral" name="button" id="button" value="EDITAR" onclick='parcial();'><!--onClick="envio_form(this);"-->
-        </td>
+        <td colspan="4" id="fuente2"><input type="button" class="botonGeneral" name="button" id="buttonExt" value="GUARDAR" onclick='parcial(); validaTodoExtruder()'><!--onClick="envio_form(this);"--></td>
       </tr>
       <tr>
         <td colspan="4" id="dato2"></td>
       </tr>
     </table>
-    <input type="hidden" name="MM_update" value="form1">
+    <input name="id_proceso" type="hidden" id="id_proceso" value="1" />
+    <input type="hidden" name="MM_insert" value="form1">
   </form>
   <?php echo $conexion->header('footer'); ?>
 </body>
@@ -876,9 +861,15 @@ $num_banderas = sizeof($banderas);
 </html>
 <script type="text/javascript">
   function desperdicios() {
-    idop = $("#id_op_r").val();
+    idop = "<?php echo $_GET['id_op_r'] ?>";
     fechaIni = $("#fecha_ini_rp").val();
     rollito = $("#rollo_r").val();
+    operario = $("#montaje").val();
+    turno = $("#turno_r").val();
+    fechaFin = $("#fecha_fin_rp").val();
+    metros = $("#metro_r").val();
+    peso = $("#kilos_r").val();
+
     if (fechaIni) {
       verFoto('produccion_registro_extrusion_detalle_add.php?id_op=' + idop + '&fecha=' + fechaIni + '&rollo=' + rollito)
 
@@ -1038,44 +1029,38 @@ $num_banderas = sizeof($banderas);
   }
 
   //funcion para sumar total de las cantidades
-  actualizarTotal();
 
   function actualizarTotal() {
     var cantidades = document.getElementsByClassName("banderas");
-    var total = <?php echo $num_banderas ?>;
+    var total = 0;
 
     for (var i = 0; i < cantidades.length; i++) {
       if (cantidades[i].value != '') {
         var valorCampo = 1; // Convertir a número o usar 0 si no es válido
         total += valorCampo;
       }
-
     }
 
     // Actualizar el contenido del campo "total"
     document.getElementById('totales').value = total;
   }
 
+  /* Calculo de metros a kilos */
   $("#metro_r").on("change", function() {
-    let total = parseInt($("#metro_r").val());
-    let totalAnterior = parseInt(<?php echo $row_rollo_estrusion_edit['metro_r']?>);
-    let parcial = parseInt(<?php echo $row_rollo_estrusion_edit['metro_parcial_r']?>);
-    if(total > totalAnterior){
-      $("#mts_parcial_actual").val(parcial-(totalAnterior-total))
-    } else if(total < totalAnterior){
-      $("#mts_parcial_actual").val(parcial+(total-totalAnterior))
-    } 
-  })
+    restaMetros()
+    let ancho = '<?php echo $row_orden['int_ancho_rollo_op'] ?>'
+    let calibre = '<?php echo $row_orden['int_calibre_op'] ?>'
+    let metros = $("#metro_r").val();
+    let metros_parcial = $("#mts_parcial_actual").val();
+    let presentacion = '<?php echo $row_op_carga['str_presentacion_op']; ?>'
 
-  $("#kilos_r").on("change", function() {
-    let total = parseInt($("#kilos_r").val());
-    let totalAnterior = parseInt(<?php echo $row_rollo_estrusion_edit['kilos_r']?>);
-    let parcial = parseInt(<?php echo $row_rollo_estrusion_edit['kilos_parcial_r']?>);
-    if(total > totalAnterior){
-      $("#kg_parcial_actual").val(parcial-(totalAnterior-total))
-    } else if(total < totalAnterior){
-      $("#kg_parcial_actual").val(parcial+(total-totalAnterior))
-    } 
+    if (presentacion === "LAMINA") {
+      $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros) / 2))
+      $("#kg_parcial_actual").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros_parcial) / 2))
+    } else {
+      $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros)))
+      $("#kg_parcial_actual").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros_parcial)))
+    }
   })
 </script>
 
@@ -1084,7 +1069,18 @@ mysql_free_result($usuario);
 
 mysql_free_result($codigo_empleado);
 
+mysql_free_result($ultimo);
+
 mysql_free_result($lista_op);
 
+mysql_free_result($op_carga);
 
+?>
+
+<?php
+if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+
+  echo "<script type=\"text/javascript\">window.opener.location.reload();</script>";
+  echo "<script type=\"text/javascript\">window.close();</script>";
+}
 ?>

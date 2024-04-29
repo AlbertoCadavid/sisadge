@@ -339,7 +339,7 @@ foreach ($rollos_en_liquidacion as $value) {
 // AND fechaI_r BETWEEN '$fechaR' AND '$fechaF' AND fechaF_r  BETWEEN '$fechaR' AND '$fechaF' 
 $id_op = $row_rp_edit['id_op_rp'];
 mysql_select_db($database_conexion1, $conexion1);
-$query_sql = "SELECT SUM(kilos_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$id_op'  AND  fechaI_r  >= '$fechaR' AND  fechaF_r <= '$fechaF'";
+$query_sql = "SELECT SUM(kilos_parcial_r) AS kilos FROM TblExtruderRollo WHERE id_op_r='$id_op'  AND  fechaI_r  >= '$fechaR' AND  fechaF_r <= '$fechaF' AND rolloParcial_r=0";
 $res = mysql_query($query_sql, $conexion1) or die(mysql_error());
 if ($inf = mysql_fetch_array($res)) {
   $kilosDRollos = dosDecimalesSinMiles($inf["kilos"]);

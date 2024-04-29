@@ -17,7 +17,7 @@ if (isset($_GET['getClientId'])) {
 		$metrosParcial = "";
 	}
 
-	$query = "SELECT TIMEDIFF(MAX(`fechaF_r`),  MIN(`fechaI_r`)) AS TIEMPODIFE_P FROM TblExtruderRollo WHERE id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' $tiempoOptimoParcial  GROUP BY `fechaI_r` ASC";
+	$query = "SELECT TIMEDIFF(MAX(`fechaF_r`),  MIN(`fechaI_r`)) AS TIEMPODIFE_P FROM TblExtruderRollo WHERE rolloParcial_r = 0 AND id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' $tiempoOptimoParcial  GROUP BY `fechaI_r` ASC";
 	$query_sql2 = mysql_query($query);
 	$numOpmes = mysql_num_rows($query_sql2);
 	while ($row = mysql_fetch_array($query_sql2)) {
@@ -35,7 +35,7 @@ if (isset($_GET['getClientId'])) {
 	}
 
 	//DATOS GENERALES DEL ROLLO SEA NORMAL
-	$query_sql = "SELECT cod_empleado_r, MAX(rollo_r) AS rollo, SUM(kilos_r) AS kilos, SUM(metro_r) AS metros, (fechaI_r) AS fechaI, MAX(fechaF_r) AS fechaF, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE FROM TblExtruderRollo WHERE id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' $metrosParcial";
+	$query_sql = "SELECT cod_empleado_r, MAX(rollo_r) AS rollo, SUM(kilos_parcial_r) AS kilos, SUM(metro_parcial_r) AS metros, (fechaI_r) AS fechaI, MAX(fechaF_r) AS fechaF, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE FROM TblExtruderRollo WHERE rolloParcial_r = 0 AND id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' $metrosParcial";
 	$res = mysql_query($query_sql, $conexion1) or die(mysql_error());
 
 	if ($inf = mysql_fetch_array($res)) {
@@ -59,7 +59,7 @@ if (isset($_GET['getClientId'])) {
 	}
 	//FECHA INICIAL DEL ROLLO DONDE INICIA EL PARCIAL EXCLUSIVA SI ES PARCIAL
 	//$_GET['getrollo'] CON ESTE ROLLO SE SABE DONDE QUEDO EL PRIMER PARCIAL
-	$query_fechaparcial = "SELECT cod_empleado_r, MAX(rollo_r) AS rollo, SUM(kilos_r) AS kilos, SUM(metro_r) AS metros, (fechaI_r) AS fechaI, MAX(fechaF_r) AS fechaF, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE FROM TblExtruderRollo WHERE id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' AND rollo_r > '" . $_GET['getrollo'] . "' ";
+	$query_fechaparcial = "SELECT cod_empleado_r, MAX(rollo_r) AS rollo, SUM(kilos_parcial_r) AS kilos, SUM(metro_parcial_r) AS metros, (fechaI_r) AS fechaI, MAX(fechaF_r) AS fechaF, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE FROM TblExtruderRollo WHERE rolloParcial_r = 0 AND id_op_r='" . $_GET['getClientId'] . "' AND fechaF_r <= '" . $_GET['getfechaF'] . "' AND rollo_r > '" . $_GET['getrollo'] . "' ";
 	
 	$res_fechaparcial = mysql_query($query_fechaparcial, $conexion1) or die(mysql_error());
 

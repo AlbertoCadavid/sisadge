@@ -245,7 +245,8 @@ function pesoMillarFormulaCotiz(tiposolapa,N_ancho,N_alto,B_fuelle='',N_solapa='
 
         var cons= $("#tipo_bolsa").val()=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
 
-        nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+        //nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+        nuevasolapa = tiposolapa == 1 ? (parseFloat(N_solapa) * parseFloat(2)) : parseFloat(N_solapa);//1 es boble
 
         pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons)
         pesoBolsillo=((parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*parseFloat(cons))/parseFloat(2));
@@ -293,7 +294,8 @@ function pesoMillarFormulaCotizNueva(tiposolapa,N_ancho,N_alto,B_fuelle='',N_sol
 
         var cons= $("#tipo_bolsa").val()=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
 
-        nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+        //nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+        nuevasolapa = tiposolapa == 1 ? (parseFloat(N_solapa) * parseFloat(2)) : parseFloat(N_solapa);//1 es boble
 
         pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons)
         pesoBolsillo=((parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*parseFloat(cons))/parseFloat(2));
@@ -327,6 +329,122 @@ function pesoMillarFormulaCotizNueva(tiposolapa,N_ancho,N_alto,B_fuelle='',N_sol
   
  
 }
+
+
+
+function pesoMillarFormulaCotizRef(tiposolapa,N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precioactual='',valor_impuesto='' ){    
+
+        const precioingresado=valor_impuesto; 
+        
+        if(B_fuelle==''){
+          B_fuelle=0;
+        }else{
+            B_fuelle=B_fuelle*2;//siempre es por 2
+        }  
+        var cons= $("#tipo_bolsa_ref").val()=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
+ 
+        nuevasolapa = tiposolapa == 1 ? (parseFloat(N_solapa) * parseFloat(2)) : parseFloat(N_solapa);//1 es boble
+ 
+
+        pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(B_fuelle)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons)
+        pesoBolsillo=((parseFloat(N_ancho)*parseFloat(N_tam_bol)*parseFloat(1.5)*parseFloat(cons))/parseFloat(2));
+
+        pesoMillar=(parseFloat(pesoBolsa)+parseFloat(pesoBolsillo));
+        impuesto = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+
+        impuesto = impuesto.toFixed(2);
+ 
+    if( $('#calculaformula').prop('checked') ) {
+        $("#calculaformula").val(1); 
+        $('#valor_impuesto').val(impuesto);  
+        $("#impuesto").prop("checked", true);
+        $("#impuesto").val(1); 
+     }else{ 
+         $("#calculaformula").val(0);
+        $('#valor_impuesto').val(precioingresado);  
+        $("#impuesto").prop("checked", false);
+        $("#impuesto").val(0); 
+     }
+ 
+  
+ 
+}
+
+
+function pesoMillarFormulaCotizPak(N_ancho,N_alto,N_calibre,precioactual='',valor_impuesto_backup=''){    
+
+        const precioingresado=valor_impuesto_backup;  
+        var cons= parseFloat(0.00467);
+ 
+        pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)) * parseFloat(N_calibre)*parseFloat(cons) 
+        pesoMillar=(parseFloat(pesoBolsa));
+        impuesto = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+
+        impuesto = impuesto.toFixed(2);
+ 
+ 
+    if( $('#calculaformula').prop('checked') ) {
+        precio_new = parseFloat(precioactual)+parseFloat(impuesto); 
+        precio_new = precio_new.toFixed(2); 
+        $("#calculaformula").val(1);
+        $('#valor_impuesto').val(impuesto);
+        $('#N_precio_old').val(precio_new);   
+        $("#impuesto").prop("checked", true);
+        $("#impuesto").val(1); 
+     }else{ 
+        precio_new = parseFloat(precioactual)+parseFloat(precioingresado); 
+        precio_new = precio_new.toFixed(2);
+        $("#calculaformula").val(0); 
+        $('#valor_impuesto').val(precioingresado);
+        $('#N_precio_old').val(precio_new);   
+        $("#impuesto").prop("checked", false);
+        $("#impuesto").val(0); 
+     }
+ 
+  
+ 
+}
+
+
+
+function pesoMillarFormulaCotizPakRef(tiposolapa,N_ancho,N_alto,N_solapa,N_calibre,precioactual='',valor_impuesto_backup=''){    
+
+        const precioingresado=valor_impuesto_backup;  
+        var cons= parseFloat(0.00467);
+        
+        //nuevasolapa = tiposolapa > 0 ? (parseFloat(N_solapa) / parseFloat(tiposolapa)) : parseFloat(N_solapa);
+        nuevasolapa = tiposolapa == 1 ? (parseFloat(N_solapa) * parseFloat(2)) : parseFloat(N_solapa);//1 es boble
+
+        pesoBolsa=parseFloat(N_ancho) * (parseFloat(N_alto)+parseFloat(nuevasolapa)) * parseFloat(N_calibre)*parseFloat(cons) 
+        pesoMillar=(parseFloat(pesoBolsa));
+        impuesto = parseFloat(pesoMillar)*parseFloat(2.35);//2.35 valor del incremento al plastico  
+
+        impuesto = impuesto.toFixed(2);
+ 
+ 
+    if( $('#calculaformula').prop('checked') ) {
+        precio_new = parseFloat(precioactual)+parseFloat(impuesto); 
+        precio_new = precio_new.toFixed(2); 
+        $("#calculaformula").val(1);
+        $('#valor_impuesto').val(impuesto);
+        $('#N_precio_old').val(precio_new);   
+        $("#impuesto").prop("checked", true);
+        $("#impuesto").val(1); 
+     }else{ 
+        precio_new = parseFloat(precioactual)+parseFloat(precioingresado); 
+        precio_new = precio_new.toFixed(2);
+        $("#calculaformula").val(0); 
+        $('#valor_impuesto').val(precioingresado);
+        $('#N_precio_old').val(precio_new);   
+        $("#impuesto").prop("checked", false);
+        $("#impuesto").val(0); 
+     }
+ 
+  
+ 
+}
+
+
 /*function pesoMillarFormula(N_ancho,N_alto,B_fuelle='',N_solapa='',N_calibre,N_tam_bol='',precio =''){    
  
     

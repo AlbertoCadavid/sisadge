@@ -2,7 +2,9 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
 ?>
-<?php require_once('Connections/conexion1.php'); ?>
+<?php require_once('Connections/conexion1.php');
+?>
+
 <?php
 //initialize the session
 if (!isset($_SESSION)) {
@@ -131,9 +133,12 @@ $totalRows_lista_op = mysql_num_rows($lista_op);
 
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+  if ($_POST['rolloParcial_r'] === "1") {
+    $parcial = 1;
+  } else $parcial = 0;
 
   $insertSQL = sprintf(
-    "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, str_maquina_ext, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    "INSERT INTO TblExtruderRollo ( id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, calibre_r, presentacion_r, cod_empleado_r, turno_r, str_maquina_ext, fechaI_r, fechaF_r, metro_r, kilos_r, reven_r, medid_r, corte_r, desca_r, calib_r, trata_r, arrug_r, bandera_r, montaje_r, apagon_r, observ_r, reven2_r,medid2_r,corte2_r,desca2_r,calib2_r,trata2_r,arrug2_r,apagon2_r,montaje2_r, rolloParcial_r, metro_parcial_r, kilos_parcial_r) VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
 
     GetSQLValueString($_POST['id_r'], "int"),
     GetSQLValueString($_POST['rollo_r'], "int"),
@@ -172,7 +177,10 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     GetSQLValueString($_POST['trata2_r'],  "text"),
     GetSQLValueString($_POST['arrug2_r'],  "text"),
     GetSQLValueString($_POST['apagon2_r'],  "text"),
-    GetSQLValueString($_POST['montaje2_r'],  "text")
+    GetSQLValueString($_POST['montaje2_r'],  "text"),
+    GetSQLValueString($parcial,  "int"),
+    GetSQLValueString($_POST['metro_r'], "int"),
+    GetSQLValueString($_POST['kilos_r'], "double")
   );
 
 
@@ -272,8 +280,12 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     }
   }
   /* Fin Desperdicios */
-
-  $insertGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_r=" . $_POST['id_r'] . "";
+  
+  if ($_POST['rolloParcial_r'] === "1"){
+    $insertGoTo = "produccion_extrusion_listado_rollos.php";
+  } else {
+    $insertGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_op_r=" . $_POST['id_op_r'] . "&rollo_r=$_POST[rollo_r]";
+  }
   if (isset($_SERVER['QUERY_STRING'])) {
     $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
     $insertGoTo .= $_SERVER['QUERY_STRING'];
@@ -312,10 +324,11 @@ if (isset($_GET['id_op_r'])) {
   $colname_rollo = (get_magic_quotes_gpc()) ? $_GET['id_op_r'] : addslashes($_GET['id_op_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_rollo = sprintf("SELECT cod_empleado_r,turno_r,fechaI_r, fechaF_r,id_op_r,rollo_r FROM TblExtruderRollo WHERE id_op_r=%s ORDER BY rollo_r DESC", $colname_rollo); //orden en rollo
+$query_rollo = sprintf("SELECT cod_empleado_r,turno_r,fechaI_r, fechaF_r,id_op_r,rollo_r, str_maquina_ext  FROM TblExtruderRollo WHERE id_op_r=%s ORDER BY rollo_r DESC", $colname_rollo); //orden en rollo
 $rollo = mysql_query($query_rollo, $conexion1) or die(mysql_error());
 $row_rollo = mysql_fetch_assoc($rollo);
 $totalRows_rollo = mysql_num_rows($rollo);
+
 //INFORMACION OP
 $colname_op_carga = "-1";
 if (isset($_GET['id_op_r'])) {
@@ -326,8 +339,6 @@ $query_op_carga = sprintf("SELECT id_op, int_cod_ref_op, version_ref_op, int_cli
 $op_carga = mysql_query($query_op_carga, $conexion1) or die(mysql_error());
 $row_op_carga = mysql_fetch_assoc($op_carga);
 $totalRows_op_carga = mysql_num_rows($op_carga);
-
-
 
 
 //CARGA LOS TIEMPOS MUERTOS 
@@ -390,11 +401,13 @@ $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
 
 //MAQUINAS
-mysql_select_db($database_conexion1, $conexion1);
+$row_maquinas_ext = $conexion->llenaSelect("maquina","WHERE activo=0 AND proceso_maquina='1'", " ORDER BY id_maquina DESC");
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='1' ORDER BY id_maquina DESC";
 $maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
 $row_maquinas = mysql_fetch_assoc($maquinas);
-$totalRows_maquinas = mysql_num_rows($maquinas);
+$totalRows_maquinas = mysql_num_rows($maquinas); */
+
 ?>
 <html>
 
@@ -404,6 +417,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
   <link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
 
   <link href="css/formato.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="js/extruder_rollos.js"></script>
   <script type="text/javascript" src="js/formato.js"></script>
   <script type="text/javascript" src="js/consulta.js"></script>
   <script type="text/javascript" src="js/validacion_numerico.js"></script>
@@ -564,17 +578,20 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
         <td colspan="4" id="titulo1">INFORMACION DEL ROLLO</td>
       </tr>
       <tr>
+        <td id="fuente1"><input type="hidden" name="rolloParcial_r" id="rolloParcial_r" value="" />
+      </tr>
+      <tr>
+
         <td id="fuente1">OPERARIO</td>
         <td id="fuente1">
 
           <select name="cod_empleado_r" id="montaje">
-            <option value="" <?php if (!(strcmp("", $row_rollo['cod_empleado_r']))) {
-                                echo "selected=\"selected\"";
-                              } ?>>Seleccione</option>
+            <option value="" <?php if (!(strcmp("", $row_rollo['cod_empleado_r']))) { echo "selected=\"selected\""; } ?>>Seleccione</option>
             <?php foreach ($row_codigo_empleado as $row_codigo_empleado) { ?>
               <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_rollo['cod_empleado_r']))) {
                                                                                       echo "selected=\"selected\"";
-                                                                                    } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?></option>
+                                                                                    } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?>
+                                                                                    </option>
             <?php } ?>
           </select>
 
@@ -587,20 +604,14 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
         <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="7" style="width:40px" required value="<?php echo $row_rollo['turno_r']; ?>"></td>
         <td id="fuente1">MAQUINA</td>
         <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
-            <option value="">Seleccione</option>
-            <?php
-            do {
-            ?>
-              <option value="<?php echo $row_maquinas['id_maquina'] ?>"><?php echo $row_maquinas['nombre_maquina'] ?></option>
-            <?php
-            } while ($row_maquinas = mysql_fetch_assoc($maquinas));
-            $rows = mysql_num_rows($maquinas);
-            if ($rows > 0) {
-              mysql_data_seek($maquinas, 0);
-              $row_maquinas = mysql_fetch_assoc($maquinas);
-            }
-            ?>
-          </select></td>
+            <option value=""<?php if (!(strcmp("", $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>>Seleccione</option>
+            <?php foreach ($row_maquinas_ext as $row_maquinas) { ?>
+              <option value="<?php echo $row_maquinas['id_maquina'] ?>"
+                            <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>><?php echo $row_maquinas['nombre_maquina']?>
+              </option>
+            <?php } ?>
+          </select>
+        </td>
       </tr>
       <tr>
         <td id="fuente1">FECHA INICIO ROLLO</td>
@@ -825,7 +836,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
         <td colspan="4" id="fuente5">&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="4" id="fuente2"><input type="submit" class="botonGeneral" name="button" id="buttonExt" value="GUARDAR"><!--onClick="envio_form(this);"--></td>
+        <td colspan="4" id="fuente2"><input type="button" class="botonGeneral" name="button" id="buttonExt" value="GUARDAR" onclick= 'parcial(); validaTodoExtruder()'><!--onClick="envio_form(this);"--></td>
       </tr>
       <tr>
         <td colspan="4" id="dato2"></td>
@@ -1024,6 +1035,20 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
     // Actualizar el contenido del campo "total"
     document.getElementById('totales').value = total;
   }
+
+  /* Calculo de metros a kilos */
+  $("#metro_r").on("change", function() {
+    let ancho = '<?php echo $row_orden['int_ancho_rollo_op'] ?>'
+    let calibre = '<?php echo $row_orden['int_calibre_op'] ?>'
+    let kilos = $("#metro_r").val();
+    let presentacion = '<?php echo $row_op_carga['str_presentacion_op']; ?>'
+
+    if (presentacion === "LAMINA") {
+      $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, kilos) / 2))
+    } else {
+      $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, kilos)))
+    }
+  })
 </script>
 
 <?php

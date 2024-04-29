@@ -90,9 +90,10 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
   $updateSQL = sprintf(
-    "UPDATE TblExtruderRollo SET fechaV_r=%s WHERE id_r=%s",
+    "UPDATE TblExtruderRollo SET fechaV_r=%s WHERE id_op_r=%s AND rollo_r=%s" ,
     GetSQLValueString($_POST['fechaV_r'], "date"),
-    GetSQLValueString($_POST['id_r'], "int")
+    GetSQLValueString($_GET['id_op_r'], "int"),
+    GetSQLValueString($_GET['rollo_r'], "int")
   );
 
   mysql_select_db($database_conexion1, $conexion1);
@@ -113,15 +114,37 @@ $usuario = mysql_query($query_usuario, $conexion1) or die(mysql_error());
 $row_usuario = mysql_fetch_assoc($usuario);
 $totalRows_usuario = mysql_num_rows($usuario);
 
-$colname_rollo_estrusion = "-1";
+/* $colname_rollo_extrusion = "-1";
 if (isset($_GET['id_r'])) {
-  $colname_rollo_estrusion = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
+  $colname_rollo_extrusion = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_rollo_estrusion = sprintf("SELECT *, maquina.nombre_maquina FROM TblExtruderRollo LEFT JOIN maquina ON (maquina.id_maquina = tblExtruderRollo.str_maquina_ext) WHERE TblExtruderRollo.id_r=%s", $colname_rollo_estrusion);
+$query_rollo_estrusion = sprintf("SELECT *, maquina.nombre_maquina FROM TblExtruderRollo LEFT JOIN maquina ON (maquina.id_maquina = tblExtruderRollo.str_maquina_ext) WHERE TblExtruderRollo.id_r=%s", $colname_rollo_extrusion);
 $rollo_estrusion = mysql_query($query_rollo_estrusion, $conexion1) or die(mysql_error());
-$row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion);
-$totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
+$row_rollo_extrusion = mysql_fetch_assoc($rollo_estrusion);
+$totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion); */
+if ($_GET['p'] == 1) { 
+  $colname_rollo_extrusion = "-1";
+  if (isset($_GET['id_r'])) {
+    $colname_rollo_extrusion = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
+  }
+  mysql_select_db($database_conexion1, $conexion1);
+  $query_rollo_extrusion = sprintf("SELECT *, metro_parcial_r as metro_r, kilos_parcial_r as kilos_r , maquina.nombre_maquina FROM TblExtruderRollo LEFT JOIN maquina ON (maquina.id_maquina = tblExtruderRollo.str_maquina_ext) WHERE TblExtruderRollo.id_r=%s", $colname_rollo_extrusion);
+  $rollo_extrusion = mysql_query($query_rollo_extrusion, $conexion1) or die(mysql_error());
+  $row_rollo_extrusion = mysql_fetch_assoc($rollo_extrusion);
+  $totalRows_rollo_extrusion = mysql_num_rows($rollo_extrusion);
+} else {
+  /* CONSULTA POR EL TOTAL DE CADA ROLLO */
+  $colname_rollo_cola = "-1";
+  if (isset($_GET['id_op_r'])) {
+    $colname_rollo_cola = (get_magic_quotes_gpc()) ? $_GET['id_op_r'] : addslashes($_GET['id_op_r']);
+  }
+  mysql_select_db($database_conexion1, $conexion1);
+  $query_rollo_extrusion = "SELECT id_r, rollo_r, id_op_r, ref_r, id_c_r, tratInter_r, tratExt_r, pigmInt_r, pigmExt_r, presentacion_r, calibre_r, MIN(fechaI_r) as fechaI_r, MAX(fechaF_r) as fechaF_r, MAX(fechaV_r) as fechaV_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r, maquina.nombre_maquina, GROUP_CONCAT(turno_r SEPARATOR ', ') AS turno_r FROM TblExtruderRollo LEFT JOIN maquina ON (maquina.id_maquina = tblExtruderRollo.str_maquina_ext) WHERE TblExtruderRollo.id_op_r= $colname_rollo_cola AND rollo_r= $_GET[rollo_r] AND rolloParcial_r = 0 GROUP BY rollo_r";
+  $rollo_extrusion = mysql_query($query_rollo_extrusion, $conexion1) or die(mysql_error());
+  $row_rollo_extrusion = mysql_fetch_assoc($rollo_extrusion);
+  $totalRows_rollo_extrusion = mysql_num_rows($rollo_extrusion);
+}
 
 /*$colname_rp = "-1";
 if (isset($_GET['id_r'])) {
@@ -133,12 +156,13 @@ $rp_edit= mysql_query($query_rp, $conexion1) or die(mysql_error());
 $row_rp_edit = mysql_fetch_assoc($rp_edit);
 $totalRows_rp_edit = mysql_num_rows($rp_edit);*/
 //EXISTE OP
+
 $colname_existe = "-1";
 if (isset($_GET['id_r'])) {
   $colname_existe = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query = "SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=$colname_existe AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1' AND Tbl_reg_produccion.rollo_rp>=$row_rollo_estrusion[rollo_r]";
+$query = "SELECT Tbl_reg_produccion.id_rp, Tbl_reg_produccion.rollo_rp, Tbl_reg_produccion.id_proceso_rp FROM TblExtruderRollo,Tbl_reg_produccion WHERE TblExtruderRollo.id_r=$colname_existe AND TblExtruderRollo.id_op_r = Tbl_reg_produccion.id_op_rp AND Tbl_reg_produccion.id_proceso_rp='1' AND Tbl_reg_produccion.rollo_rp>=$row_rollo_extrusion[rollo_r]";
 $query_existe = sprintf($query); // AND TblExtruderRollo.rollo_r=Tbl_reg_produccion.rollo_rp 
 $existe_edit = mysql_query($query_existe, $conexion1) or die(mysql_error());
 $row_existe_edit = mysql_fetch_assoc($existe_edit);
@@ -146,10 +170,10 @@ $totalRows_existe_edit = mysql_num_rows($existe_edit);
 
 $conexion2 = new oMmezclas();
 
-$existemezcla = $conexion2->ObtenerColumn("tbl_caracteristicas_prod", "cod_ref", "cod_ref", $row_rollo_estrusion['ref_r'], " AND proceso=1 ORDER BY cod_ref DESC LIMIT 1 ");
+$existemezcla = $conexion2->ObtenerColumn("tbl_caracteristicas_prod", "cod_ref", "cod_ref", $row_rollo_extrusion['ref_r'], " AND proceso=1 ORDER BY cod_ref DESC LIMIT 1 ");
 
 /* obtener banderas */
-$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_estrusion[id_op_r] AND rollo_r = $row_rollo_estrusion[rollo_r] AND proceso = 1", "ORDER BY metros ASC", "nombre, metros");
+$banderas = $conexion->llenaListas("tbl_banderas", "WHERE id_op = $row_rollo_extrusion[id_op_r] AND rollo_r = $row_rollo_extrusion[rollo_r] AND proceso = 1", "ORDER BY metros ASC", "nombre, metros");
 $num_banderas = sizeof($banderas);
 $modulo = $num_banderas % 3;
 if ($modulo == 0) {
@@ -220,39 +244,45 @@ if ($modulo == 0) {
     <table id="tabla6" cellspacing="0" cellpadding="0">
       <tr>
         <td rowspan="2" nowrap="nowrap" id="fuentND" style="border-bottom: 3px solid #000000;">
-          <?php if ($row_rollo_estrusion['id_c_r'] == '5735') : ?> <img src="images/logocodiplax.jpg" width="100" height="50" /> <?php else : ?> <img src="images/logoacyc.jpg" width="80" height="50" /> <?php endif; ?>
+          <?php if ($row_rollo_extrusion['id_c_r'] == '5735') : ?> <img src="images/logocodiplax.jpg" width="100" height="50" /> <?php else : ?> <img src="images/logoacyc.jpg" width="80" height="50" /> <?php endif; ?>
           <div class="marca-de-agua"></div>
         </td>
         <td colspan="5" nowrap="nowrap" id="stikersC_titu_grande" style="border-left: 3px solid #000000;">MATERIALES EXTRUSION</td>
       </tr>
       <tr>
-        <td colspan="2" nowrap="nowrap" id="stikersC_titu_grande" style="border-bottom: 3px solid #000000;border-left: 3px solid #000000;">ROLLO N&deg; <?php echo $row_rollo_estrusion['rollo_r']; ?></td>
+        <td colspan="2" nowrap="nowrap" id="stikersC_titu_grande" style="border-bottom: 3px solid #000000;border-left: 3px solid #000000;">ROLLO N&deg; <?php echo $row_rollo_extrusion['rollo_r']; ?></td>
         <td colspan="3" nowrap="nowrap" id="fuentND" style="border-bottom: 3px solid #000000;">
-          <a href="produccion_extrusion_stiker_rollo_edit.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" /></a>
-          <a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a>
-          <?php if ($_SESSION['acceso'] == 1) { ?>
-            <a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRIME TODOS LOS ROLLOS" title="IMPRIME TODOS LOS ROLLOS" border="0" /></a>
+          <?php if ($_GET['p'] != 0) { ?>
+            <a href="produccion_extrusion_stiker_rollo_edit.php?id_r=<?php echo $row_rollo_extrusion['id_r']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" style="cursor:hand;" /></a>
           <?php } ?>
-          <?php if ($row_existe_edit['id_rp'] == '') :  ?>
-            <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_estrusion['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php', <?php echo $row_rollo_estrusion['id_op_r']; ?>, <?php echo $row_rollo_estrusion['rollo_r']; ?>, 1)"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
-          <?php else : ?>
-            <img src="images/por.gif" alt="ELIMINAR" title="no se puede Eliminar debido a que ya esta liquidado" border="0" style="cursor:hand;" onclick="liquidado()" />
-          <?php endif; ?>
+          <a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_rollo_extrusion['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a>
+          <?php if ($_SESSION['acceso'] == 1 && $_GET['p'] != 1) { ?>
+            <a href="produccion_extrusion_stiker_rollo_colas_vista.php?id_op_r=<?php echo $row_rollo_extrusion['id_op_r']; ?>"><img src="images/t.gif" alt="IMPRIME TODOS LOS ROLLOS" title="IMPRIME TODOS LOS ROLLOS" border="0" /></a>
+          <?php } ?>
+          <?php if ($_GET['p'] != 0) { ?>
+            <?php if ($row_existe_edit['id_rp'] == '') :  ?>
+              <a href="javascript:eliminar1('id_re',<?php echo $row_rollo_extrusion['id_r']; ?>,'produccion_extrusion_stiker_rollo_edit.php', <?php echo $row_rollo_extrusion['id_op_r']; ?>, <?php echo $row_rollo_extrusion['rollo_r']; ?>, 1)"><img src="images/por.gif" alt="ELIMINAR" title="Eliminara todos los tiempos y desperdicios si tienen fecha de este rollo" border="0" style="cursor:hand;" /></a>
+            <?php else : ?>
+              <img src="images/por.gif" alt="ELIMINAR" title="no se puede Eliminar debido a que ya esta liquidado" border="0" style="cursor:hand;" onclick="liquidado()" />
+            <?php endif; ?>
+          <?php } ?>
 
-          <?php if ($existemezcla['cod_ref'] == '') : ?>
+          <?php if ($_GET['p'] != 1) { ?>
+            <?php if ($existemezcla['cod_ref'] == '') : ?>
 
-            <!--  <a href="produccion_registro_extrusion_add.php?id_op=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a> -->
+              <!--  <a href="produccion_registro_extrusion_add.php?id_op=<?php echo $row_rollo_extrusion['id_op_r']; ?>"><img src="images/adelante.gif" alt="LIQUIDAR"title="LIQUIDAR" border="0" style="cursor:hand;"/></a> -->
 
-            <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $row_rollo_estrusion['ref_r']; ?>&vistaLiquida=<?php echo $row_rollo_estrusion['id_op_r']; ?>','1600','700')"><img src="images/adelanter.gif" alt="FALTA MEZCLA" title="FALTA MEZCLA" border="0" style="cursor:hand;" /></a>
-          <?php else : ?>
-            <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $existemezcla['cod_ref']; ?>&vistaLiquida=<?php echo $row_rollo_estrusion['id_op_r']; ?>','1600','700')"><img src="images/adelante.gif" alt="LIQUIDAR" title="LIQUIDAR" border="0" style="cursor:hand;" /></a>
+              <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $row_rollo_extrusion['ref_r']; ?>&vistaLiquida=<?php echo $row_rollo_extrusion['id_op_r']; ?>','1600','700')"><img src="images/adelanter.gif" alt="FALTA MEZCLA" title="FALTA MEZCLA" border="0" style="cursor:hand;" /></a>
+            <?php else : ?>
+              <a href="javascript:popUp('view_index.php?c=cmezclas&a=Mezcla&cod_ref=<?php echo $existemezcla['cod_ref']; ?>&vistaLiquida=<?php echo $row_rollo_extrusion['id_op_r']; ?>','1600','700')"><img src="images/adelante.gif" alt="LIQUIDAR" title="LIQUIDAR" border="0" style="cursor:hand;" /></a>
 
 
-          <?php endif; ?>
+            <?php endif; ?>
+          <?php } ?>
           <?php
 
-          $op_c = $row_rollo_estrusion['id_op_r'];
-          $rollo_c = $row_rollo_estrusion['rollo_r'];
+          $op_c = $row_rollo_extrusion['id_op_r'];
+          $rollo_c = $row_rollo_extrusion['rollo_r'];
 
 
 
@@ -261,15 +291,15 @@ if ($modulo == 0) {
 
           //$parcial2=$conexion->llenarCampos("tbl_reg_produccion cp","WHERE cp.id_op_rp='$op_c' AND cp.id_proceso_rp ='1' and rollo_rp=$rollo_c ", "ORDER BY parcial DESC","parcial");  
 
-          /*$op_c=$row_rollo_estrusion['id_op_r'];
+          /*$op_c=$row_rollo_extrusion['id_op_r'];
            $sqlparcial="SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' ORDER BY parcial DESC"; 
            $resultparcial=mysql_query($sqlparcial); 
            $numparcial=mysql_num_rows($resultparcial); 
            echo'P1 '.$parcial = mysql_result($resultparcial, 0, 'parcial');
 
 
-           $op_c=$row_rollo_estrusion['id_op_r'];
-           $rollo_c=$row_rollo_estrusion['rollo_r'];
+           $op_c=$row_rollo_extrusion['id_op_r'];
+           $rollo_c=$row_rollo_extrusion['rollo_r'];
            $sqlparcial="SELECT parcial FROM Tbl_reg_produccion WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1' and rollo_rp=$rollo_c ORDER BY parcial DESC"; 
            $resultparcial=mysql_query($sqlparcial); 
            $numparcial=mysql_num_rows($resultparcial); 
@@ -278,28 +308,30 @@ if ($modulo == 0) {
 
           if ($parcial2['parcial'] > 1) : ?>
 
-            <a href="produccion_registro_extrusion_vistap.php?id_op_rp=<?php echo $row_rollo_estrusion['id_op_r']; ?>&parcial=<?php echo $parcial2['parcial']; ?>"><img src="images/hojap.gif" alt="VISTA EXTRUDER PARCIAL" title="VISTA EXTRUDER PARCIAL" border="0" /></a>
+            <a href="produccion_registro_extrusion_vistap.php?id_op_rp=<?php echo $row_rollo_extrusion['id_op_r']; ?>&parcial=<?php echo $parcial2['parcial']; ?>"><img src="images/hojap.gif" alt="VISTA EXTRUDER PARCIAL" title="VISTA EXTRUDER PARCIAL" border="0" /></a>
           <?php else :  ?>
-            <a href="produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/hoja.gif" alt="VISTA EXTRUDER" title="VISTA EXTRUDER" border="0" /></a>
+            <a href="produccion_registro_extrusion_vista.php?id_op_rp=<?php echo $row_rollo_extrusion['id_op_r']; ?>"><img src="images/hoja.gif" alt="VISTA EXTRUDER" title="VISTA EXTRUDER" border="0" /></a>
           <?php endif; ?>
 
-          <a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a>
-          <img src="images/impresor.gif" onClick="envio_form();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" />
+          <a href="produccion_extrusion_listado_rollos.php?id_op_r=<?php echo $row_rollo_extrusion['id_op_r']; ?>"><img src="images/opciones.gif" alt="LISTADO ROLLOS" title="LISTADO ROLLO" border="0" style="cursor:hand;" /></a>
+          <?php if ($_GET['p'] != 1) { ?>
+            <img src="images/impresor.gif" onClick="envio_form();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" />
+          <?php } ?>
         </td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">ORDEN P:</td>
         <td nowrap="nowrap" id="stikers_fuentN">
-          <input type="hidden" name="id_r" value="<?php echo $_GET['id_r']; ?>">
+          <input type="hidden" name="id_op_r" value="<?php echo $_GET['id_op_r']; ?>">
           <input type="hidden" name="fechaV_r" value="<?php echo fechaHora(); ?>">
-          <?php echo $row_rollo_estrusion['id_op_r']; ?>
+          <?php echo $row_rollo_extrusion['id_op_r']; ?>
         </td>
         <td nowrap="nowrap" id="stikersC_fuentN">REF:</td>
-        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['ref_r']; ?></td>
+        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['ref_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">CLIENTE:</td>
-        <td colspan="5" id="stikers_fuent2"><?php $id_c = $row_rollo_estrusion['id_c_r'];
+        <td colspan="5" id="stikers_fuent2"><?php $id_c = $row_rollo_extrusion['id_c_r'];
                                             $sqln = "SELECT id_c,nombre_c FROM cliente WHERE id_c='$id_c'";
                                             $resultn = mysql_query($sqln);
                                             $numn = mysql_num_rows($resultn);
@@ -311,44 +343,44 @@ if ($modulo == 0) {
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">TRAT. INT:</td>
-        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['tratInter_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['tratInter_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN">TRAT. EXT:</td>
-        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['tratExt_r']; ?></td>
+        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['tratExt_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">PIGM. INT:</td>
-        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['pigmInt_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['pigmInt_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN">PIGM. EXT:</td>
-        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['pigmExt_r']; ?></td>
+        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['pigmExt_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">PRESENTA:</td>
-        <td id="stikers_fuentN"><?php echo $row_rollo_estrusion['presentacion_r']; ?></td>
+        <td id="stikers_fuentN"><?php echo $row_rollo_extrusion['presentacion_r']; ?></td>
         <td id="stikersC_fuentN">CAL. MILS:</td>
-        <td colspan="3" id="stikers_fuentN"><?php echo $row_rollo_estrusion['calibre_r']; ?></td>
+        <td colspan="3" id="stikers_fuentN"><?php echo $row_rollo_extrusion['calibre_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">FECHA INI:</td>
-        <td nowrap="nowrap" id="stikers_fuent2"><?php echo $row_rollo_estrusion['fechaI_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuent2"><?php echo $row_rollo_extrusion['fechaI_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN">COD. OPE:</td>
-        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?></td>
+        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['cod_empleado_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">PESO:</td>
-        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['kilos_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['kilos_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN">TURNO:</td>
-        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['turno_r']; ?></td>
+        <td colspan="3" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['turno_r']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">MAQUINA:</td>
-        <td nowrap="nowrap" id="stikers_fuentN" ><?php echo $row_rollo_estrusion['nombre_maquina']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['nombre_maquina']; ?></td>
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN" style="border-bottom: 3px solid #000000;"> METROS: </td>
-        <td nowrap="nowrap" id="stikers_fuentN" style="border-bottom: 3px solid #000000;"><?php echo $row_rollo_estrusion['metro_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN" style="border-bottom: 3px solid #000000;"><?php echo $row_rollo_extrusion['metro_r']; ?></td>
         <td nowrap="nowrap" id="stikersC_fuentN" style="border-bottom: 3px solid #000000;"> ANCH R: </td>
         <td colspan="3" nowrap="nowrap" id="stikers_fuentN" style="border-bottom: 3px solid #000000;"><?php
-                                                                                                      $op_id = $row_rollo_estrusion['id_op_r'];
+                                                                                                      $op_id = $row_rollo_extrusion['id_op_r'];
                                                                                                       $sqlev = "SELECT int_ancho_rollo_op FROM Tbl_orden_produccion WHERE id_op='$op_id'";
                                                                                                       $resultev = mysql_query($sqlev);
                                                                                                       $numev = mysql_num_rows($resultev);
@@ -357,7 +389,7 @@ if ($modulo == 0) {
                                                                                                       }
                                                                                                       ?></td>
       </tr>
-      
+
 
 
       <!--<tr>
@@ -382,12 +414,12 @@ if ($modulo == 0) {
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">TOTAL B:</td>
-        <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;"><?php echo $row_rollo_estrusion['bandera_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;"><?php echo $row_rollo_extrusion['bandera_r']; ?></td>
 
       </tr>
       <!-- <tr>
     <td nowrap="nowrap" id="stikersC_fuentN">OBSERV:</td>
-    <td colspan="5" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_estrusion['observ_r']; ?></td>
+    <td colspan="5" nowrap="nowrap" id="stikers_fuentN"><?php echo $row_rollo_extrusion['observ_r']; ?></td>
     </tr> -->
     </table>
     <input type="hidden" name="MM_update" value="form1">

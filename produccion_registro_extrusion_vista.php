@@ -142,6 +142,11 @@ $horasOpmes = $row_extrusion_vista['id_op_rp'];
 $resultOpmes = mysql_query("SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollos, `cod_empleado_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS TIEMPOINI, DATE_FORMAT(MAX(`fechaF_r`), '%k.%i.%s') AS TIEMPOFIN, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS KILOS FROM `TblExtruderRollo` WHERE `id_op_r`= '$horasOpmes' GROUP BY `fechaI_r` ASC"); // `cod_empleado_r`  HAY QUE AGRUPAR POR FECHA YA QUE SALEN VARIOS ROLLOS AL MISMO TIEMPO
 $numOpmes = mysql_num_rows($resultOpmes); //enviar c�digo MySQL
 
+mysql_select_db($database_conexion1, $conexion1);
+$query_rollo_estrusion_total = "SELECT id_r, rollo_r, id_op_r, ref_r, MIN(fechaI_r) as fechaI_r, MAX(fechaF_r) as fechaF_r, MAX(fechaV_r) as fechaV_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r= $horasOpmes AND rolloParcial_r = 0 GROUP BY rollo_r";
+$rollo_estrusion_total = mysql_query($query_rollo_estrusion_total, $conexion1) or die(mysql_error());
+$row_rollo_estrusion_total = mysql_fetch_assoc($rollo_estrusion_total);
+$totalRows_rollo_estrusion_total = mysql_num_rows($rollo_estrusion_total);
 
 ?>
 <?php if ($row_extrusion_vista['parcial'] > '1') {
@@ -477,7 +482,7 @@ $numOpmes = mysql_num_rows($resultOpmes); //enviar c�digo MySQL
             <td id="fuente2">&nbsp;</td>
             <td id="fuente2"><strong><?php echo redondear_decimal($totalkp - $desperdicios); ?></strong></td>
             <td id="fuente2"><strong><?php echo $totalL; ?></strong></td>
-            <td id="fuente2"><strong><?php echo $trollos; ?></strong></td>
+            <td id="fuente2"><strong><?php echo $totalRows_rollo_estrusion_total; ?></strong></td>
           </tr>
           <tr>
             <td colspan="9" id="subppal"><strong>RPM - %</strong></td>

@@ -1031,6 +1031,12 @@ swal({
         }
     });  
 
+$('.botonGeneral').on('click', function(){
+   if($("#N_solapa").val()!='' && $("#tiposolapa").val()=='0'){
+      swal("Especifique si la solapa es Sencilla/Doble");
+        required="required"
+   }
+}); 
 
 $(document).ready(function(){
       

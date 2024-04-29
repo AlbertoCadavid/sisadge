@@ -111,9 +111,11 @@ if (isset($_GET['id_op_r'])) {
 }
 mysql_select_db($database_conexion1, $conexion1);
 if (isset($_GET['desde'])) {
-  $query_rollo_estrusion = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r=$colname_rollo_cola and rollo_r >= $_GET[desde] and rollo_r <= $_GET[hasta]");
+  $query_rollo_estrusion = "SELECT rollo_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r= $colname_rollo_cola AND rolloParcial_r = 0 AND rollo_r >= $_GET[desde] AND rollo_r <= $_GET[hasta] GROUP BY rollo_r";
+  //$query_rollo_estrusion = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r=$colname_rollo_cola and rollo_r >= $_GET[desde] and rollo_r <= $_GET[hasta]");
 } else {
-  $query_rollo_estrusion = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r=%s", $colname_rollo_cola, $startRow_proceso_rollos, $maxRows_proceso_rollos);
+  $query_rollo_estrusion = sprintf("SELECT rollo_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r=%s AND rolloParcial_r = 0 GROUP BY rollo_r", $colname_rollo_cola, $startRow_proceso_rollos, $maxRows_proceso_rollos);
+  //$query_rollo_estrusion = sprintf("SELECT * FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r=%s", $colname_rollo_cola, $startRow_proceso_rollos, $maxRows_proceso_rollos);
 }
 $rollo_estrusion = mysql_query($query_rollo_estrusion, $conexion1) or die(mysql_error());
 $row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion);
