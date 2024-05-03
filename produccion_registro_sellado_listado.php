@@ -389,8 +389,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
             if($id == '0') { ?><div id="numero1"> <?php echo "NO HA SELECCIONADO"; ?> </div> <?php }?></td>
             <td colspan="5" id="dato3"><?php  if ($row_usuario['tipo_usuario']==1) {?><a href="extruder_tiempos_y_preparacion.php"><img src="images/rt.gif" alt="LISTADO DE TIEMPOS Y PREPARACION" title="LISTADO DE TIEMPOS Y PREPARACION" border="0" style="cursor:hand;"></a><a href="consumo_tiempos_sell.php"><img src="images/rt.gif" alt="LISTADO DE TIEMPOS"title="LISTADO DE TIEMPOS" border="0" style="cursor:hand;"></a><a href="consumo_materias_primas_sell.php"><img src="images/mp.gif" alt="LISTADO DE MATERIAS PRIMAS"title="LISTADO DE MATERIAS PRIMAS" border="0" style="cursor:hand;"></a><a href="despacho_direccion.php"><img src="images/d.gif" alt="DESPACHO"title="DESPACHO" border="0" style="cursor:hand;"></a><?php } ?><a href="produccion_registro_sellado_listado_add.php"><img src="images/opciones.gif" alt="LISTADO SELLADAS"title="LISTADO SELLADAS" border="0" style="cursor:hand;"></a><a href="hoja_maestra_listado.php"><img src="images/m.gif" alt="HOJAS MAESTRAS"title="HOJAS MAESTRAS" border="0" style="cursor:hand;"></a>
               <a href="javascript:location.reload()"><img src="images/ciclo1.gif" alt="REFRESCAR"title="REFRESCAR" border="0" style="cursor:hand;"/></a>
-              <input type="button" value="Excel Rollos" onClick="ListadoProduccionExcel('produccion_exportar_excel.php')" />
-              <input type="button" value="Excel liquidacion" onClick="ListadoProduccionExcel('produccion_exportar_excel_liquidacion.php')" />
+              <input type="button" value="Excel Rollos" onClick="ListadoProduccionExcel('produccion_exportar_excel.php')" /><input type="button" value="Excel liquidacion" onClick="ListadoProduccionExcel('produccion_exportar_excel_liquidacion.php')" />
             </td>
           </tr>  
           <tr id="tr1">

@@ -31,10 +31,10 @@ class CgeneralController{
     }
 
 
-    public function Menu(){ 
+    public function Menu($vista=''){ 
         $logs = new omGeneral();
         //$this->ordenc=$logs->get_Menu();//aqui llamo las funciones del modelo
-        $vista = 'orden_compra_cl2.php';
+        //$vista = 'orden_compra_cl2.php';
         self::Cgeneral($vista);
     }
  
@@ -222,7 +222,8 @@ class CgeneralController{
           require_once("views/".$vista);  //header('Location:'.$vista);  
         }
         else{
-          require_once("orden_compra_cl2.php");
+         header("Location:orden_compra_ingresos.php" );
+          //require_once("orden_compra_cl2.php");
         }
     }
 

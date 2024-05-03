@@ -102,7 +102,7 @@
      $soloinventario = "(Tbl_orden_compra.tipo_despacho is null or Tbl_orden_compra.tipo_despacho ='despacho') and ";
 
   }
-
+  
   mysql_select_db($database_conexion1, $conexion1);
 
   $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario  b_borrado_oc='0' AND  pago_pendiente <> 'SI' AND  especialweb <> '1' ORDER BY  $listar,   str_numero_oc DESC";

@@ -232,7 +232,7 @@ do {
 ?>
   </select></td>
   <td colspan="2" id="dato2"><input name="Str_nombre_r" type="text" id="Str_nombre_r" size="28" maxlength="70"onkeyup="conMayusculas(this)" value="<?php echo $row_ver_ref['Str_nombre'] ?>"/></td>
-  <td id="dato1"><input type="hidden" name="arte1" value="<?php echo $row_ver_ref['Str_linc_archivo'] ?>"/><a href="javascript:verFoto('archivosc/archivos_pdf_mp/<?php echo $row_ver_ref['Str_linc_archivo'] ?>','610','490')" target="_blank"><?php echo $row_ver_ref['Str_linc_archivo'] ?></a>    <input type="file" name="Fil_archivo"/></td>
+  <td id="dato1"><input type="hidden" name="arte1" value="<?php echo $row_ver_ref['Str_linc_archivo'] ?>"/><a href="javascript:verFoto('archivosc/archivos_pdf_mp/<?php echo $row_ver_ref['Str_linc_archivo']; ?>','800','600')"> <?php echo $row_ver_ref['Str_linc_archivo']; ?></a>  <input type="file" name="Fil_archivo"/></td>
   <td id="dato2"><input name="valor" type="hidden" value="4" />
     <input name="submit" type="submit" onclick="MM_validateForm('Str_nombre_r','','R');return document.MM_returnValue"value="Editar" /></td>
 </tr>

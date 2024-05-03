@@ -714,7 +714,7 @@ $fech_oc = $resultoc['fecha_ingreso_oc'];
 $nit_oc = $resultoc['str_nit_oc']; 
 
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*');  
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY formulacion ASC",'*');  
 /*$ref_io = $row_orden_produccion['int_cod_ref_op'];
 $resultio = $conexion->llenarCampos("Tbl_items_ordenc tmi ", " WHERE tmi.str_numero_io= '" . $numer_oc . "'  AND int_cod_ref_io='" .$ref_io. "'  ", "", "tmi.fecha_entrega_io");
 $fech_io = $resultio['fecha_entrega_io'];*/
@@ -1026,7 +1026,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                            <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  style="width:200px" >
                                             <option value="">Seleccione...</option>
                                                <?php  foreach($row_formulas as $row_formulas ) { ?>
-                                            <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                                            <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
                                         <?php } ?>
                                         </select>
                                       </td>

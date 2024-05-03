@@ -150,7 +150,7 @@ $totalRows_bolsa= mysql_num_rows($bolsa);
 if($row_bolsa!='')
 {
 if($row_bolsa['tipo_bolsa_ref']!='LAMINA'||$row_bolsa['tipo_bolsa_ref']!='LAMINAS'||$row_bolsa['tipo_bolsa_ref']!='PACKING LIST'){
-header("location:referencia_bolsa_edit.php?id_ref=" . $row_bolsa['id_ref'] . "&N_cotizacion=" .  $row_bolsa['n_cotiz_ref']  ."&tipo=" . $_GET['tipo']);}
+header("location:referencia_bolsa_vista.php?id_ref=" . $row_bolsa['id_ref'] . "&N_cotizacion=" .  $row_bolsa['n_cotiz_ref']  ."&tipo=" . $_GET['tipo']);}
 if ($row_bolsa['tipo_bolsa_ref']=='LAMINA'||$row_bolsa['tipo_bolsa_ref']=='LAMINAS'){
 header("location:referencia_lamina_edit.php?id_ref=" . $row_bolsa['id_ref'] . "&N_cotizacion=" .  $row_bolsa['n_cotiz_ref']  ."&tipo=" . $_GET['tipo']);}
 if($row_bolsa['tipo_bolsa_ref']=='PACKING LIST'){

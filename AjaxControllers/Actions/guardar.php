@@ -270,6 +270,7 @@ function enviarEmail() {
     $to = "lidersistemas@acycia.com";
     $to2 = "andres85684@outlook.com";
     $to3 = ['andres.11b85@gmail.com'];
+    //$to2 = 'compras@acycia.com';
     //$from = ;
     $asunto = 'Informacion '.$_POST['entrada']." ".$cliente;
     $body = $_POST['entrada']." N: ".$_POST['id_remision']."<br>"."Cliente: ".$cliente."<br>"."la siguiente es la lista de los items que recibio " . $_POST['recibe'] . ":" . "<br>";

@@ -24,35 +24,36 @@ if ((isset($_POST['MM_update'])) && !(empty($_POST['MM_update']) )) {
    
    foreach ($lineas as $linea_num => $linea)
    { 
-      //abrimos bucle
-      /*si es diferente a 0 significa que no se encuentra en la primera línea 
-      (con los títulos de las columnas) y por lo tanto puede leerla*/
-      for($i=0;$i <=$linea;$i++) 
-      { 
-     
 
-          //abrimos condición, solo entrará en la condición a partir de la segunda pasada del bucle.
-          /* La funcion explode nos ayuda a delimitar los campos, por lo tanto irá 
-          leyendo hasta que encuentre un ; O , */
-          $datos = explode(",",$linea);//;
+       if($linea !=''){
+
+          $datos = explode(",",$linea); 
           //CONSULTO SI EXISTE
           $str_numero_oc =str_replace(' ', '', $datos[0]);
-          //$str_numero_oc = strtoupper($str_numero_oc);
-          $resultvi = $conexion->llenarCampos("tbl_orden_compra", "WHERE str_numero_oc='$str_numero_oc' ", " ", "str_numero_oc");
-          if($resultvi['str_numero_oc'] !='')
-           { 
-          //UPDATE en base de datos la línea que existe
-           $factura_oc =str_replace(' ', '', $datos[1]); 
-           $actualizofac = $conexion->actualizar("tbl_orden_compra", "factura_oc='$factura_oc', b_estado_oc='5'", " str_numero_oc='$str_numero_oc' " ); 
+          $str_numero_oc = strtoupper($str_numero_oc);
+          $factura_oc =str_replace(' ', '', $datos[1]); 
+              
+               if($str_numero_oc!=''){
+ 
+                      // Consulta SQL de inserción
+                      $resultvi = $conexion->llenarCampos("tbl_orden_compra", "WHERE str_numero_oc='$str_numero_oc' ", " ", "str_numero_oc");
+ 
+                      if($resultvi['str_numero_oc'] !='')
+                       { 
+                          //UPDATE en base de datos la línea que existe 
+                           $actualizofac = $conexion->actualizar("tbl_orden_compra", "factura_oc='$factura_oc', b_estado_oc='5'", " str_numero_oc='$str_numero_oc' " );  
+                           //UPDATE remision
+                           $actualizoremfac = $conexion->actualizar("tbl_remisiones", "factura_r='$factura_oc' ", " str_numero_oc_r='$str_numero_oc' " ); 
 
-           //UPDATE remision
-            $actualizoremfac = $conexion->actualizar("tbl_remisiones", "factura_r='$factura_oc' ", " str_numero_oc_r='$str_numero_oc' " ); 
+                        }  
+             }
+           
+ 
+        }
+ 
+   }  
 
-            } 
-        
-      }//for cerramos bucle
-   } 
-
+     
 }
 
   ?>
@@ -175,7 +176,7 @@ $currentPage = $_SERVER["PHP_SELF"];
               window.opener.location.reload();
              setTimeout(function() 
                  { 
-                   window.close();
+                   //window.close();
                  },2000); 
              //updatenumFactura(id,campo,pagina);//este actualiza en base
              return true;

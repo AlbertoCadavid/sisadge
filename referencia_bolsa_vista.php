@@ -305,8 +305,12 @@ $totalRows_cotiza = mysql_num_rows($cotiza);
     <td id="subppal2">pre.e/solapa</td>
     <td colspan="2" id="subppal2">FONDO</td>
   </tr>
-  <tr>
-    <td id="fuente2"><?php echo $row_referencia_egp['tipo_bolsa_ref']; ?></td>
+  <tr> 
+    <td id="fuente2"><?php if($row_referencia_egp['tipo_bolsa_ref']){
+      $tipobolsa=$row_referencia_egp['tipo_bolsa_ref'];
+        $formula=$conexion->llenarCampos('tbl_formulacion', "WHERE nombre='$tipobolsa'",""," * " ); 
+        echo $formula['formulacion'];
+        } ?></td>
     <td id="fuente2"><?php echo $row_referencia_egp['tipo_sello_egp']; ?></td>
     <td colspan="3" id="fuente2"><?php if (!(strcmp("", $row_referencia_egp['B_troquel']))) {echo "N.A";} ?>
              <?php if (!(strcmp("1", $row_referencia_egp['B_troquel']))) {echo "SI";} ?>

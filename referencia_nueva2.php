@@ -95,8 +95,13 @@ $resultinv=mysql_query($sqlinv);
 //TBLCOSTOREF
 /*$sqlinv2="INSERT INTO TblCostoRef (id_ref_cref, cod_cref ,codigo_cref, descripcion_cref, unidad_cref, cliente_cref, costo_und_cref,  responsable_cref, fecha_cref) VALUES (%s, '$cods', '$codvers', '$tipo_bolsa', '$medida', '$Str_nit', '$costoUnd', '$registro', '$fecha')";
 $resultinv2=mysql_query($sqlinv2);*/ 
- 
 
+
+$query_formula = "SELECT * FROM tbl_formulacion WHERE nombre='$tipo_bolsa' ";
+$formula = mysql_query($query_formula, $conexion1) or die(mysql_error());
+$row_formula = mysql_fetch_assoc($formula);
+$tipo_formula=$row_formula['formulacion']; 
+ 
 //BOLSAS INSERTAR EL TABLA DE REFERENCIAS
 if($id == '1') {//EL NUMERO UNO ES ADD DE BOLSA A LA TABLA DE REFERENCIAS
 $sql="SELECT * FROM Tbl_cotiza_bolsa WHERE Tbl_cotiza_bolsa.N_cotizacion='$n_cn' and Tbl_cotiza_bolsa.N_referencia_c='$cod_ref' and Tbl_cotiza_bolsa.Str_nit='$Str_nit'";
@@ -182,7 +187,7 @@ $adhesivo=$seg.$per.$res.$hot;
 $sql1="INSERT INTO Tbl_referencia (cod_ref, version_ref, n_egp_ref, n_cotiz_ref, tipo_bolsa_ref, tipo_formula, material_ref, Str_presentacion, Str_tratamiento, ancho_ref, N_repeticion_l, N_diametro_max_l, N_peso_max_l, 
 N_cantidad_metros_r_l, N_embobinado_l, Str_referencia_m, Str_linc_m, largo_ref, solapa_ref, b_solapa_caract_ref, bolsillo_guia_ref, calibre_ref, peso_millar_ref, Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p, B_troquel, 
 B_precorte, N_fuelle, B_fondo, impresion_ref, num_pos_ref, cod_form_ref, adhesivo_ref, estado_ref, registro1_ref, fecha_registro1_ref, registro2_ref, fecha_registro2_ref, B_generica, ancho_rollo,valor_impuesto,peso_paquete,sello_superior
-) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$tipo_bolsa','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','',$anchoRollo,'$row[43]','','$row[39]')";
+) VALUES ('$row[1]','00','$row[1]','$row[0]','$tipo_bolsa','$tipo_formula','$row[17]','$presen','$trata','$row[3]','','','','','','','','$row[4]','$row[11]','$Tiposolapa','$row[10]','$row[6]','$psm','','','','','$row[7]','$row[8]','$row[5]','$row[29]','$row[22]','$row[31]','$row[30]','$adhesivo','1','$registro','$fecha','','','',$anchoRollo,'$row[43]','','$row[39]')";
  
 $result1=mysql_query($sql1); 
 //INSERTA EGP

@@ -159,6 +159,7 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
     <tr>
       <td colspan="2" align="center">
         <table class="table table-bordered table-sm">
+          
           <tr>
             <td id="subtitulo">LISTADO DE ROLLOS</td>
           </tr>
@@ -170,41 +171,48 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
             <td id="fuente2"><a href="produccion_extrusion_listado_rollos_informe.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/clip.gif" alt="INFORME" title="INFORME" border="0" style="cursor:hand;" /></a></td>
           </tr>
         </table>
-        <div class="divScrollMedio" style="height:300px">
-          <table id="tabla2" style="width:800px">
+        
+          <table id="tabla2" style="width:800px; margin-right:auto">
+          <tr>
+            <td colspan="9"><p style="color:#2582E2">En este listado se puede editar y eliminar los rollos COMPLETOS o PARCIALES</p></td>
+          </tr>
           <tr>
               <td colspan="8" id="subtitulo">LISTADO DE ROLLOS <strong style="background:#8DC4F1;">PARCIALES</strong></td>
             </tr>
             <tr id="tr1">
-              <td nowrap="nowrap" id="titulo4">ROLLO N&deg;</td>
-              <td nowrap="nowrap" id="titulo4">O.P.</td>
-              <td nowrap="nowrap" id="titulo4">KILOS</td>
-              <td nowrap="nowrap" id="titulo4">METRO</td>
-              <td nowrap="nowrap" id="titulo4">FECHA INICIO</td>
-              <td nowrap="nowrap" id="titulo4">FECHA FIN</td>
-              <td nowrap="nowrap" id="titulo4">FECHA IMPRESION</td>
-              <td nowrap="nowrap" id="titulo4">CODIGO OPERARIO</td>
-
+              <td style="width:72px" nowrap="nowrap" id="titulo4">ROLLO N&deg;</td>
+              <td style="width:48px" nowrap="nowrap" id="titulo4">O.P.</td>
+              <td style="width:45px" nowrap="nowrap" id="titulo4">KILOS</td>
+              <td style="width:53px" nowrap="nowrap" id="titulo4">METRO</td>
+              <td style="width:133px" nowrap="nowrap" id="titulo4">FECHA INICIO</td>
+              <td style="width:133px" nowrap="nowrap" id="titulo4">FECHA FIN</td>
+              <td style="width:136px" nowrap="nowrap" id="titulo4">FECHA IMPRESION</td>
+              <td style="width:140px" nowrap="nowrap" id="titulo4">CODIGO OPERARIO</td>
             </tr>
+            </table>
+            <div class="divScrollMedio" style="height:300px">
+            <table id="tabla2" style="width:800px">
             <?php do { ?>
               <?php $row_parcial = $conexion->llenarCampos("tbl_reg_produccion", "WHERE id_op_rp='" . $row_rollo_estrusion['id_op_r'] . "' and rollo_rp='" . $row_rollo_estrusion['rollo_r'] . "' AND id_proceso_rp='1' ", " ", "parcial,rollo_rp "); ?>
 
               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?><?php echo $row_rollo_estrusion['rolloParcial_r'] == 1 ? "&p=1" : ""?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['rollo_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['id_op_r']; ?></a></td>
-                <td id="dato3"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['kilos_parcial_r'];
+                <td style="width:72px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?><?php echo $row_rollo_estrusion['rolloParcial_r'] == 1 ? "&p=1" : ""?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['rollo_r']; ?></a></td>
+                <td style="width:48px;" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['id_op_r']; ?></a></td>
+                <td style="width:45px" id="dato3"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['kilos_parcial_r'];
                                                                                                                                                                                                     $TKILOS += $row_rollo_estrusion['kilos_parcial_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['metro_parcial_r'];
+                <td style="width:53px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['metro_parcial_r'];
                                                                                                                                                                                                     $TMETROS += $row_rollo_estrusion['metro_parcial_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaI_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaF_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaV_r']; ?></a></td>
-                <td id="dato1"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?> <?php if ($row_parcial['rollo_rp'] == $row_rollo_estrusion['rollo_r']) {
+                <td style="width:133px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaI_r']; ?></a></td>
+                <td style="width:133px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaF_r']; ?></a></td>
+                <td style="width:136px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['fechaV_r']; ?></a></td>
+                <td style="width:70px" id="dato1"><a href="produccion_extrusion_stiker_rollo_vista.php?id_r=<?php echo $row_rollo_estrusion['id_r']; ?>&p=1" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion['cod_empleado_r']; ?> <?php if ($row_parcial['rollo_rp'] == $row_rollo_estrusion['rollo_r'] && $row_parcial['rollo_rp'] != "") {
                                                                                                                                                                                                                                                             $textos = $row_parcial['parcial'] == 1 ? 'Unico' : 'Parcial';
-                                                                                                                                                                                                                                                            echo "<em style='color: red;' >  $textos <em>" . $row_parcial['parcial'];
+                                                                                                                                                                                                                                                            echo "<em style='color: gray;' >  $textos <em>" . $row_parcial['parcial'];
                                                                                                                                                                                                                                                           }  ?> </a></td>
                 <?php if ($row_rollo_estrusion['rolloParcial_r'] == 1) { ?>
                   <td id="dato1"><a href="produccion_extrusion_stiker_rollo_add_parcial.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion['rollo_r']; ?> " target="_top" style="text-decoration:none; color:#2582E2; font-size:12px"><?php echo "PARCIAL"; ?> </a></td>
+                <?php } else { ?>
+                  <td style="width:65px"></td>
                 <?php } ?>
               </tr>
             <?php } while ($row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion)); ?>
@@ -219,7 +227,7 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
               <td id="dato1">&nbsp;</td>
             </tr>
 
-            <table id="tabla3">
+            <!-- <table id="tabla3">
               <tr>
                 <td width="23%" align="center" id="dato2"><?php if ($pageNum_proceso_rollos > 0) { // Show if not first page 
                                                           ?>
@@ -245,40 +253,46 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
                   <?php } // Show if not last page 
                   ?>
                 </td>
-              </tr>
+              </tr> -->
             </table>
         </div>
         <!-- Tabla Totales -->
-        <div class="divScrollMedio" style="height:300px; margin-top:20px">
-          <table id="tabla2" style="width:800px">
+        
+          <table id="tabla2" style="width:800px; margin-right:auto; margin-top:20px">
+          <tr>
+            <td colspan="9"><p style="color: #229954;">En este listado se puede ver los rollos Totales, LIQUIDAR e IMPRIMIR el Sticker</p></td>
+          </tr>
             <tr>
               <td colspan="8" id="subtitulo">LISTADO DE ROLLOS <strong style="background:#92EFA0;">TOTALES</strong></td>
             </tr>
             <tr id="tr1">
-              <td nowrap="nowrap" id="titulo4">ROLLO N&deg;</td>
-              <td nowrap="nowrap" id="titulo4">O.P.</td>
-              <td nowrap="nowrap" id="titulo4">KILOS</td>
-              <td nowrap="nowrap" id="titulo4">METRO</td>
-              <td nowrap="nowrap" id="titulo4">FECHA INICIO</td>
-              <td nowrap="nowrap" id="titulo4">FECHA FIN</td>
-              <td nowrap="nowrap" id="titulo4">FECHA IMPRESION</td>
-              <td nowrap="nowrap" id="titulo4">CODIGO OPERARIO</td>
+              <td style="width:72px" nowrap="nowrap" id="titulo4">ROLLO N&deg;</td>
+              <td style="width:48px" nowrap="nowrap" id="titulo4">O.P.</td>
+              <td style="width:45px" nowrap="nowrap" id="titulo4">KILOS</td>
+              <td style="width:53px" nowrap="nowrap" id="titulo4">METRO</td>
+              <td style="width:133px" nowrap="nowrap" id="titulo4">FECHA INICIO</td>
+              <td style="width:133px" nowrap="nowrap" id="titulo4">FECHA FIN</td>
+              <td style="width:136px" nowrap="nowrap" id="titulo4">FECHA IMPRESION</td>
+              <td style="width:140px" nowrap="nowrap" id="titulo4">CODIGO OPERARIO</td>
             </tr>
+            </table>
+            <div class="divScrollMedio" style="height:300px">
+            <table id="tabla2" style="width:800px">
             <?php do { ?>
               
               <?php $row_parcial_total = $conexion->llenarCampos("tbl_reg_produccion", "WHERE id_op_rp='" . $row_rollo_estrusion_total['id_op_r'] . "' and rollo_rp='" . $row_rollo_estrusion_total['rollo_r'] . "' AND id_proceso_rp='1' ", " ", "parcial,rollo_rp "); ?>
 
               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['rollo_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['id_op_r']; ?></a></td>
-                <td id="dato3"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['kilos_r'];
+                <td style="width:72px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['rollo_r']; ?></a></td>
+                <td style="width:48px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['id_op_r']; ?></a></td>
+                <td style="width:45px" id="dato3"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['kilos_r'];
                                                                                                                                                                                                       $TKILOST += $row_rollo_estrusion_total['kilos_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['metro_r'];
+                <td style="width:53px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['metro_r'];
                                                                                                                                                                                                       $TMETROST += $row_rollo_estrusion_total['metro_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaI_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaF_r']; ?></a></td>
-                <td id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaV_r']; ?></a></td>
-                <td id="dato1"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['cod_empleado_r']; ?> <?php if ($row_parcial_total['rollo_rp'] == $row_rollo_estrusion_total['rollo_r']) {
+                <td style="width:133px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaI_r']; ?></a></td>
+                <td style="width:133px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaF_r']; ?></a></td>
+                <td style="width:136px" id="dato2"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['fechaV_r']; ?></a></td>
+                <td style="width:140px" id="dato1"><a href="produccion_extrusion_stiker_rollo_vista.php?id_op_r=<?php echo $row_rollo_estrusion_total['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion_total['rollo_r'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_rollo_estrusion_total['cod_empleado_r']; ?> <?php if ($row_parcial_total['rollo_rp'] == $row_rollo_estrusion_total['rollo_r'] && $row_parcial_total['rollo_rp'] != "") {
                                                                                                                                                                                                                                                                     $textos = $row_parcial_total['parcial'] == 1 ? 'Unico' : 'Parcial';
                                                                                                                                                                                                                                                                     echo "<em style='color: red;' >  $textos <em>" . $row_parcial_total['parcial'];
                                                                                                                                                                                                                                                                   }  ?> </a></td>

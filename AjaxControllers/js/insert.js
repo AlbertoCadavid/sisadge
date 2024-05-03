@@ -35,9 +35,8 @@
           success: function(data){ 
             $('#alertG').show(); 
             let result = parseInt(data)
-           
+            
             if(result == 1) {
-              
               document.querySelector(".loader").style.display='none'
               showAlert("guardado");
               $("#alertG").text('Guardando correctamente... !');
@@ -50,7 +49,6 @@
                $("#alertG").text('Se Guardo'); 
                showAlert("No guardado"); 
              } 
-             
              $('#alertG').fadeIn(); 
 
              setTimeout(function() {

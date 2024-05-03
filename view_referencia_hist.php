@@ -1,3 +1,7 @@
+ <?php
+ require_once ($_SERVER['DOCUMENT_ROOT'].'/config.php');
+ require (ROOT_BBDD); 
+ ?> 
  <?php require_once('Connections/conexion1.php'); ?>
 <?php
 require_once("db/db.php");
@@ -103,7 +107,7 @@ $editFormAction = $_SERVER['PHP_SELF'];
 if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 } 
-
+$conexion = new ApptivaDB();
 
 $colname_usuario = "-1";
 if (isset($_SESSION['MM_Username'])) {
@@ -164,7 +168,13 @@ $query_insumo3 = "SELECT id_insumo,descripcion_insumo FROM insumo WHERE clase_in
 $insumo3 = mysql_query($query_insumo3, $conexion1) or die(mysql_error());
 $row_insumo3 = mysql_fetch_assoc($insumo3);
 $totalRows_insumo3 = mysql_num_rows($insumo3);
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+$tippobolsa = $row_referencia_editar['tipo_bolsa_ref'];
+
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY formulacion ASC",'*'); 
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
@@ -172,30 +182,46 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
 
 <link rel="stylesheet" type="text/css" href="css/general.css"/>
 
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script>
 
 <link href="css/formato.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="js/formato.js"></script>
 <script type="text/javascript" src="js/validacion_numerico.js"></script>
 <script type="text/javascript" src="js/consulta.js"></script>
+
+
+<!-- desde aqui para listados nuevos -->
+<link rel="stylesheet" type="text/css" href="css/desplegable.css" />
+<link rel="stylesheet" type="text/css" href="css/general.css"/>
+
+<!-- sweetalert -->
+<script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!-- select2 -->
+<link href="select2/css/select2.min.css" rel="stylesheet"/>
+<script src="select2/js/select2.min.js"></script>
+
+<!-- css Bootstrap-->
+<link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+
+
 </head>
 <body onload="javascript: mostrarBols(this);traslape();calcular_pesom()">
-<div align="center">
-<table align="center" id="tabla"><tr align="center"><td>
-<div> 
-<b class="spiffy">  
-<b class="spiffy1"><b></b></b>
-<b class="spiffy2"><b></b></b>
-<b class="spiffy3"></b>
-<b class="spiffy4"></b>
-<b class="spiffy5"></b></b>
-<div class="spiffy_content">
-<table id="tabla1"><tr>
-<td colspan="2" align="center"><img src="images/cabecera.jpg"></td></tr>
-<tr><td id="nombreusuario"><?php echo $row_usuario['nombre_usuario']; ?></td>
-  <td id="cabezamenu"><ul id="menuhorizontal">
-  <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
-  <li><a href="menu.php">MENU PRINCIPAL</a></li>
+<?php echo $conexion->header('listas'); ?>
+ <?php echo $row_usuario['nombre_usuario'] ?>
+ <ul id="menuhorizontal"> 
     <!--SELLADO-->
     <?php $idref_e=$row_referencia_editar['id_ref'];
     $sqlpm="SELECT * FROM Tbl_produccion_mezclas WHERE id_ref_pm='$idref_e' and id_proceso='1'";
@@ -217,16 +243,11 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
     { ?> 
       <li><a href="produccion_caract_impresion_vista.php?id_ref=<?php echo $row_referencia_editar['id_ref']; ?>">IMPRESION</a></li><?php } else{ ?>
       <li><a href="produccion_caract_impresion_add.php?id_ref=<?php echo $row_referencia_editar['id_ref']; ?>&cod_ref=<?php echo $row_referencia_editar['cod_ref']; ?>">IMPRESION</a></li>
-    <?php } ?>      
-    <li><a href="produccion_refilado_add.php">REFILADO</a></li>  
-    <li><a href="produccion_sellado_add.php">SELLADO</a></li>   
+    <?php } ?> 
   </ul>
-</td>
-</tr>  
-  <tr>
-    <td colspan="2" align="center">
+ 
   <form action="<?php echo $editFormAction; ?>" method="post" onsubmit="return validacion_select_bolsillo();" enctype="multipart/form-data" name="form1" id="form1">
-    <table id="tabla2">
+    <table class="table table-bordered table-sm">
       <tr id="tr1">
         <td colspan="8" id="titulo2">REFERENCIA ( BOLSA PLASTICA ) </td>
         </tr>
@@ -260,7 +281,8 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td colspan="6" id="dato3">
           <input type="hidden" name="codigo_usuario" value="<?php echo $row_usuario['codigo_usuario'] ?>" />
           Ingresado por
-<input name="registro1_ref" type="text" value="<?php echo $row_referencia_editar['registro1_ref']; ?>" size="27" readonly="readonly" /></td>
+     <input name="registro1_ref" type="text" value="<?php echo $row_referencia_editar['registro1_ref']; ?>" size="27" readonly="readonly" />
+     </td>
         </tr>
       <tr id="tr3">
         <td nowrap="nowrap" id="fuente2"><strong>REFERENCIA - VERSION</strong></td>
@@ -285,15 +307,17 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         </tr>
       <tr id="tr1">
         <td nowrap="nowrap" id="fuente2">Cotizaci&oacute;n N&ordm;</td>
-        <td colspan="3" nowrap="nowrap" id="fuente2">Referencia Generica</td>
+        <td colspan="3" nowrap="nowrap" id="fuente2">Tipo Referencia</td>
         <td colspan="3" id="fuente2">Fecha Arte</td>
       </tr>
       <tr>
         <td id="dato2"><input name="n_cotiz_ref" type="text" value="<?php echo $row_referencia_editar['n_cotiz_ref']; ?>" size="5" readonly="readonly" /></td>
         <td colspan="3" id="dato2"><select name="B_generica" id="B_generica"onblur="if(form1.B_generica.value) { generica(); } else{ alert('Debe Seleccionar GENERICA'); }">
-          <option value=""<?php if (!(strcmp('', $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>></option></option>
-          <option value="1" <?php if (!(strcmp(1, $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>>SI</option>
-          <option value="0" <?php if (!(strcmp(0, $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>>NO</option>
+           
+          <option value="0"<?php if (!(strcmp(0, $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>>Normal</option>
+          <option value="1"<?php if (!(strcmp(1, $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>>Generica</option>
+          <option value="2"<?php if (!(strcmp(2, $row_referencia_editar['B_generica']))) {echo "selected=\"selected\"";} ?>>Otros clientes</option>
+ 
         </select></td>
         <td colspan="3" id="dato2"><?php echo $row_referencia_editar['fecha_aprob_arte_verif']; ?></td>
       </tr>
@@ -303,19 +327,32 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       <tr id="tr1">
         <td id="fuente1">ANCHO (cms)</td>
         <td id="fuente1">LARGO (cms)</td>
+        <td id="fuente1">SELLO SUPERIOR </td>
         <td colspan="3" id="fuente1">SOLAPA  (cms)</td>
-        <td colspan="3" id="fuente1">BOLSILLO PORTAGUIA </td>
+        <td colspan="2" id="fuente1">BOLSILLO PORTAGUIA </td>
       </tr>
       <tr>
         <td id="dato1"><input name="ancho_ref" id="ancho_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['ancho_ref']; ?>"/></td>
-        <td id="dato1"><input name="largo_ref" id="largo_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['largo_ref']; ?>"/></td>
+        <td id="dato1"><input name="largo_ref" id="largo_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['largo_ref']; ?>" onChange="anchodelRollo()" /></td>
+        <td  id="dato1"> 
+         <select name="sello_superior" id="sello_superior" style="width:100px" onchange="return anchodelRollo();" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>N/A</option> 
+           <option value="plano"<?php if (!(strcmp("plano", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Plano</option>
+           <option value="tubular"<?php if (!(strcmp("tubular", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular</option>
+           <option value="tubular/tubular"<?php if (!(strcmp("tubular/tubular", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Tubular/Tubular</option>
+           <option value="refuerzo"<?php if (!(strcmp("refuerzo", $row_referencia_editar['sello_superior']))) {echo "selected=\"selected\"";} ?>>Con Refuerzo</option> 
+
+
+         </select>
+        </td>
         <td colspan="2" id="dato1">
-        <p><input type="radio" name="valora" id="ocultar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],0))) {echo "checked=\"checked\"";} ?> value="0" onClick="return validarRadio(),calcular_pesom();"/>N/A<br/>
-        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" onClick="return validarRadio(),calcular_pesom();"/>Sencilla<br/>
-        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onClick="return validarRadio(),calcular_pesom();"/>Doble<br /></p></td>
+        <p><input type="radio" name="valora" id="ocultar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],0))) {echo "checked=\"checked\"";} ?> value="0" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();" />N/A<br/>
+        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();"/>Sencilla<br/>
+        <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onClick="return anchodelRollo(),calcular_pesom(),validaRadiosolapa();"/>Doble<br /></p>
+      </td>
         <td id="dato1">Solapa valor
-          <input name="solapa_ref" id="solapa_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['solapa_ref']; ?>" onblur="calcular_pesom()"/></td>
-        <td colspan="3" id="dato1"><input name="bolsillo_guia_ref" id="bolsillo_guia_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['bolsillo_guia_ref']; ?>" onChange="mostrarBols(this)"/></td>
+          <input name="solapa_ref" id="solapa_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['solapa_ref']=='' ? 0 :$row_referencia_editar['solapa_ref']; ?>" onblur="calcular_pesom()" onChange="anchodelRollo()"/></td>
+        <td colspan="2" id="dato1"><input name="bolsillo_guia_ref" id="bolsillo_guia_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['bolsillo_guia_ref']; ?>" onChange="mostrarBols(this)"/></td>
       </tr>
       <tr id="tr1">
         <td id="fuente1">CALIBRE (mills)</td>
@@ -326,7 +363,8 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input name="calibre_ref" id="calibre_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" onChange="calcular_pesom()" value="<?php echo $row_referencia_editar['calibre_ref']; ?>"/></td>
-        <td id="dato1"><input name="B_fuelle" id="B_fuelle" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['N_fuelle']?>" /></td>
+        <td id="dato1"><input name="B_fuelle" id="B_fuelle" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['N_fuelle']?>" onChange="anchodelRollo()"/> 
+       </td>
         <td colspan="2" id="dato1"><input name="peso_millar_ref" type="text" id="peso_millar_ref" onChange="calcular_pesom();" value="<?php echo $row_referencia_editar['peso_millar_ref']; ?>" size="10" readonly="readonly"/></td>
         <td id="dato1"><select name="adhesivo_ref" id="adhesivo" style="width:100px">
           <option value="N.A" <?php if (!(strcmp("N.A", $row_referencia_editar['adhesivo_ref']))) {echo "selected=\"selected\"";} ?>>N.A.</option>
@@ -361,35 +399,56 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td id="fuente1">FONDO</td>
       </tr>
       <tr>
-        <td id="fuente1"><select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:100px" onChange="calcular_pesom();"> 
-          <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $row_referencia_editar['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
-          <option value="CURRIER" <?php if (!(strcmp("CURRIER", $row_referencia_editar['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>CURRIER</option>
-          <option value="BOLSA PLASTICA" <?php if (!(strcmp("BOLSA PLASTICA", $row_referencia_editar['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>BOLSA PLASTICA</option>
-          <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $row_referencia_editar['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
-          <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $row_referencia_editar['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
-        </select></td>
-        <td id="fuente1"><select name="tipo_sello_egp" id="tipo_sello_egp" style="width:100px">
+        <td id="fuente1">
+
+          <!-- <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" style="width:100px" onChange="calcular_pesom();" onblur="anchoRolloRef();" > 
+          <option value="SEGURIDAD" <?php if (!(strcmp("SEGURIDAD", $tippobolsa))) {echo "selected=\"selected\"";} ?>>SEGURIDAD</option>
+          <option value="CURRIER" <?php if (!(strcmp("CURRIER", $tippobolsa))) {echo "selected=\"selected\"";} ?>>CURRIER</option>
+          <option value="BOLSA PLASTICA" <?php if (!(strcmp("BOLSA PLASTICA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA PLASTICA</option>
+          <option value="BOLSA MONEDA" <?php if (!(strcmp("BOLSA MONEDA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA MONEDA</option>
+          <option value="COMPOSTABLE" <?php if (!(strcmp("COMPOSTABLE", $tippobolsa))) {echo "selected=\"selected\"";} ?>>COMPOSTABLE</option>
+          <option value="BOLSA TROQUELADA" <?php if (!(strcmp("BOLSA TROQUELADA", $tippobolsa))) {echo "selected=\"selected\"";} ?>>BOLSA TROQUELADA</option> -->
+          <select name="tipo_bolsa_ref" id="tipo_bolsa_ref" class="materia" style="width:220px" onChange="calcular_pesom();" > 
+                 <?php  foreach($row_formulas as $row_formulas ) { ?>
+              <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+          <?php } ?>
+          </select> 
+        </select>
+      </td>
+        <td id="fuente1">
+          <select name="tipo_sello_egp" id="tipo_sello_egp" style="width:100px">
           <option></option>
           <option value="HILO"<?php if (!(strcmp("HILO", $row_referencia_editar['tipo_sello_egp']))) {echo "selected=\"selected\"";} ?>>HILO</option>
           <option value="PLANO"<?php if (!(strcmp("PLANO", $row_referencia_editar['tipo_sello_egp']))) {echo "selected=\"selected\"";} ?>>PLANO</option>
           <option value="HILO/PLANO"<?php if (!(strcmp("HILO/PLANO", $row_referencia_editar['tipo_sello_egp']))) {echo "selected=\"selected\"";} ?>>HILO/PLANO</option>
-        </select></td>
-        <td id="fuente1"><select name="B_troquel" id="B_troquel" style="width:50px">
+        </select>
+      </td>
+        <td id="fuente1">
+          <select name="B_troquel" id="B_troquel" style="width:50px">
           <option value=""<?php if (!(strcmp("", $row_referencia_editar['B_troquel']))) {echo "selected=\"selected\"";} ?>>N.A</option>
           <option value="1"<?php if (!(strcmp("1", $row_referencia_editar['B_troquel']))) {echo "selected=\"selected\"";} ?>>SI</option>
           <option value="0"<?php if (!(strcmp("0",$row_referencia_editar['B_troquel']))) {echo "selected=\"selected\"";} ?>>NO</option>
-        </select></td>
-        <td id="fuente1"><select name="B_precorte" id="B_precorte" style="width:50px">
+        </select>
+      </td>
+        <td id="fuente1">
+          <select name="B_precorte" id="B_precorte" style="width:50px">
           <option value="1"<?php if (!(strcmp("1", $row_referencia_editar['B_precorte']))) {echo "selected=\"selected\"";} ?>>SI</option>
           <option value="0"<?php if (!(strcmp("0",$row_referencia_editar['B_precorte']))) {echo "selected=\"selected\"";} ?>>NO</option>
-        </select></td>
-        <td id="fuente1"><input name="precorte_cuerpo" id="precorte_cuerpo" type="number" style="width:50px" min="0" max="7" step="1" required="required" value="<?php echo $row_referencia_editar['precorte_cuerpo']; ?>"/></td>
-        <td id="fuente1"><input name="precorte_solapa" id="precorte_solapa" type="number" style="width:50px" min="0" max="7" step="1" required="required" value="<?php echo $row_referencia_editar['precorte_solapa']; ?>"/></td>
-        <td id="fuente1"><select name="B_fondo" id="B_fondo" style="width:50px">
+        </select>
+      </td>
+        <td id="fuente1">
+          <input name="precorte_cuerpo" id="precorte_cuerpo" type="number" style="width:50px" min="0" max="7" step="1" required="required" value="<?php echo $row_referencia_editar['precorte_cuerpo']; ?>"/>
+        </td>
+        <td id="fuente1">
+          <input name="precorte_solapa" id="precorte_solapa" type="number" style="width:50px" min="0" max="7" step="1" required="required" value="<?php echo $row_referencia_editar['precorte_solapa']; ?>"/>
+        </td>
+        <td id="fuente1">
+          <select name="B_fondo" id="B_fondo" style="width:50px">
           <option value=""<?php if (!(strcmp("", $row_referencia_editar['B_fondo']))) {echo "selected=\"selected\"";} ?>>N.A</option>
           <option value="1"<?php if (!(strcmp("1", $row_referencia_editar['B_fondo']))) {echo "selected=\"selected\"";} ?>>SI</option>
           <option value="0"<?php if (!(strcmp("0",$row_referencia_editar['B_fondo']))) {echo "selected=\"selected\"";} ?>>NO</option>
-        </select></td>
+        </select>
+      </td>
       </tr>
       <tr id="tr1">
         <td rowspan="2" id="fuente1">PRESENTACION</td>
@@ -401,14 +460,18 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td id="fuente1">Forma:</td>
         <td id="fuente1">Cant/Traslape</td>
         <td id="fuente1">Tipo /Lamina</td>
-        <td id="fuente1">Lamina1</td>
+        <td id="fuente1">Lamina Bols.</td>
       </tr>
       <tr>
-        <td id="fuente1"><select name="Str_presentacion" id="opciones2" style="width:100px">
+        <td id="fuente1">
+          <select name="Str_presentacion" id="opciones2" style="width:100px" onchange="anchodelRollo()">
           <option value="LAMINA" <?php if (!(strcmp('LAMINA', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>LAMINA</option>
           <option value="TUBULAR" <?php if (!(strcmp('TUBULAR', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>TUBULAR</option>
        <option value="SEMITUBULAR" <?php if (!(strcmp('SEMITUBULAR', $row_referencia_editar['Str_presentacion']))) {echo "selected=\"selected\"";} ?>>SEMITUBULAR</option>
-        </select></td>
+        </select>
+        <br>
+         <input name="ancho_rollo" id="ancho_rollo" style="width:100px" type="text" value="" <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ) { ?> required <?php } ?>  />Ancho Rollo 
+      </td>
         <td id="fuente1"><select name="Str_tratamiento" id="Str_tratamiento" style="width:100px">
           <option value="N.A"<?php if (!(strcmp('N.A', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>N.A</option>
           <option value="UNA CARA" <?php if (!(strcmp('UNA CARA', $row_referencia_editar['Str_tratamiento']))) {echo "selected=\"selected\"";} ?>>UNA CARA</option>
@@ -427,8 +490,7 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td id="fuente1"><input name="B_cantforma" id="B_cantforma" disabled type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['B_cantforma']; ?>"/>
           <input name="auxil" type="hidden" id="auxil" value="<?php echo $row_referencia_editar['B_cantforma']; ?>" /></td>
         <td id="dato1">
-          <select name="tipoLamina_ref" id="tipolam" style="width:100px" onChange="medida_bolsillo(this)"><!--onblur="validacion_todos_select(this)"-->
-          <option value="NA">NA</option>
+          <select name="tipoLamina_ref" id="tipolam" style="width:100px" onChange="medida_bolsillo(this);calcular_pesomBols()"><!--onblur="validacion_todos_select(this)"-->
           <option value="0"<?php if (!(strcmp("", $row_referencia_editar['tipoLamina_ref']))) {echo "selected=\"selected\"";} ?>>Tipo Lamina</option>
           <?php
           do {  
@@ -443,7 +505,10 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
           }
           ?>
         </select></td>
-        <td id="dato1"><input name="bol_lamina_1_ref" id="valorlam" style="width:50px" min="0"step="0.01" type="number"  required="required" onchange="calcular_pesomBols()" value="<?php if($row_referencia_editar['bol_lamina_1_ref']==''){echo '0.00';}else{echo $row_referencia_editar['bol_lamina_1_ref'];}?>" /></td>
+        <td id="dato1">
+          <span class="laminas" title="Edita superusuario"> Lamina1 <input name="bol_lamina_1_ref" id="valorlam" style="width:50px" min="0"step="0.01" type="number" required="required" onchange="calcular_pesomBols()" value="<?php if($row_referencia_editar['bol_lamina_1_ref']==''){echo '0.00';}else{echo $row_referencia_editar['bol_lamina_1_ref'];}?>" <?php if(!$_SESSION['superacceso']): ?> readonly="readonly" <?php endif; ?> />
+        </span>
+         </td>
         </tr>
       <tr>
         <td id="fuente1">&nbsp;</td>
@@ -452,8 +517,10 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td id="fuente1"><input name="calibreBols_ref" id="calibreBols_ref" type="number" style="width:50px" min="0.00" step="0.1" onchange="calcular_pesomBols()" value="<?php echo $row_referencia_editar['calibreBols_ref']; ?>"/></td>
         <td id="fuente1">Peso Millar Bols.</td>
         <td id="fuente1"><input name="peso_millar_bols" readonly="readonly" id="peso_millar_bols" type="number" style="width:50px" min="0.00" step="0.01" required="required" onclick="calcular_pesomBols()" value="<?php echo $row_referencia_editar['peso_millar_bols'] ?>"/></td>
-        <td id="fuente1">Lamina 2
-          <input name="bol_lamina_2_ref" id="bol_lamina_2_ref" style="width:50px" min="0"step="0.01" type="number" required="required" onchange="calcular_pesomBols()" size="5" value="<?php if($row_referencia_editar['bol_lamina_2_ref']==''){echo '0.00';}else{echo $row_referencia_editar['bol_lamina_2_ref'];} ?>" /></td>
+        <td id="fuente1">
+          <span class="laminas" title="Edita superusuario"> Lamina2 <input name="bol_lamina_2_ref" id="bol_lamina_2_ref" style="width:50px" min="0"step="0.01" type="number" required="required" onchange="calcular_pesomBols()" size="5" value="<?php if($row_referencia_editar['bol_lamina_2_ref']==''){echo '0.00';}else{echo $row_referencia_editar['bol_lamina_2_ref'];} ?>" <?php if(!$_SESSION['superacceso']): ?> readonly="readonly" <?php endif; ?>/>
+            </span>
+          </td>
         </tr>
         <tr id="tr1"> 
         <td rowspan="2" id="talla1">MARGENES</td>
@@ -475,8 +542,19 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       <tr  id="tr1">
         <td id="fuente1">&nbsp;</td>
         <td id="fuente1"><strong>Z</strong></td>
-        <td id="fuente1"><input name="margen_z_imp_egp" id="margen_z_imp_egp" style="width:50px" type="number" min="0" step="0.01" value="<?php echo $row_referencia_editar['margen_z_imp_egp']?>"/></td>
-        <td colspan="5" id="fuente1">&nbsp;</td>
+        <td id="fuente1"><input name="margen_z_imp_egp" id="margen_z_imp_egp" style="width:50px" type="number" min="0" step="0.01" value="<?php echo $row_referencia_editar['margen_z_imp_egp']?>"/>
+        </td>
+        <td colspan="5" id="fuente1">IMPUESTO $  <strong>
+          <input name="valor_impuesto_backup" id="valor_impuesto_backup" style="width:50px" type="hidden" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> />
+          <input name="valor_impuesto" id="valor_impuesto" style="width:50px" type="text" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> /></strong>
+              
+                <input name="N_precio" type="hidden" style="width:100px" min="0" step="0.01" id="N_precio" value="<?php echo $row_cotiza['N_precio']==''?0:$row_cotiza['N_precio']; ?>"/> 
+          
+                <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
+             
+          
+
+        </td>
         </tr>        
         
       <tr>
@@ -490,8 +568,8 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
     </table>
       
         
-        <table id="tabla2">
-      <tr id="tr1">
+        <table class="table table-bordered table-sm">
+      <tr >
         <td colspan="3" id="titulo4">DATOS ESPECIFICOS DE LA REFERENCIA</td>
         </tr>
       <tr id="tr1">
@@ -515,8 +593,8 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
           <option value="COEXTRUSION" <?php if (!(strcmp("COEXTRUSION", $row_referencia_editar['tipo_ext_egp']))) {echo "selected=\"selected\"";} ?>>COEXTRUSION</option></select>-->
           
           <!--<input type="hidden" name="material_ref" id="material_ref" value="<?php echo $row_referencia_editar['material_ref'] ?>" />--></td>
-        <td id="dato1"><input type="text" name="pigm_ext_egp" value="<?php echo $row_referencia_editar['pigm_ext_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pigm_int_epg" value="<?php echo $row_referencia_editar['pigm_int_epg']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1"><input type="text" name="pigm_ext_egp" id="pigm_ext_egp" value="<?php echo $row_referencia_editar['pigm_ext_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1"><input type="text" name="pigm_int_epg" id="pigm_int_epg" value="<?php echo $row_referencia_editar['pigm_int_epg']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
         <td id="fuente1">Numero de Colores</td>
@@ -528,18 +606,41 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
         <td id="dato1"><input type="text" name="impresion_ref" size="5" id="impresion_ref" value="<?php echo $row_referencia_editar['impresion_ref'] ?>" />          <?php //echo  "Lleva ".$row_ver_ref['impresion_ref']." Colores"?></td>
         <td id="dato1"><input <?php if (!(strcmp($row_referencia_editar['cod_form_ref'],1))) {echo "checked=\"checked\"";} ?> name="cod_form_ref" type="checkbox" value="1" />
         Codigo de Barras </td>
-        <td id="dato1"><em>
+        <td id="dato1">
+          <em>
        <?php 
-    $id_ref=$row_referencia_editar['id_ref'];
-    $sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
-    $resultop=mysql_query($sqlop); 
-    $numop=mysql_num_rows($resultop);
-    if($numop >= '1')
-    { ?><a href="produccion_caract_impresion_vista.php?id_ref=<?php echo $row_referencia_editar['id_ref'];?>" title="Actualizar Mezcla" target="_blank">Mezclas-colores</a><?php 
-    }else { ?>
-      <a href="produccion_caract_impresion_add.php?id_ref=<?php echo $row_referencia_editar['id_ref'];?>&cod_ref=<?php echo $row_referencia_editar['cod_ref'];?>" title="Actualizar Mezcla" target="_blank">Falta-Mezcla</a>
-       <?php } ?>
-        </em></td>
+
+       $cod_ref=$row_referencia_editar['cod_ref'];
+       $sqloca="SELECT * FROM tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas_impresion pm ON pm.int_cod_ref_pmi = cp.cod_ref WHERE cp.cod_ref='$cod_ref' AND cp.proceso=2 ORDER BY cp.proceso DESC LIMIT 1"; //nuevas mezclas
+       $resultca = mysql_query($sqloca); 
+       $existenuevamezcla=mysql_num_rows($resultca); 
+       $refNueva = mysql_result($resultca, 0, 'cod_ref');
+       $procesoNuevo = mysql_result($resultca, 0, 'proceso');
+
+
+        $id_ref=$row_referencia_editar['id_ref'];
+        $sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
+        $resultop=mysql_query($sqlop); 
+        $numop=mysql_num_rows($resultop); 
+
+
+       if( $numop >= '1' ) { ?>
+        
+            <a href="produccion_caract_impresion_vista.php?id_ref=<?php echo $row_referencia_editar['id_ref'];?>" title="Actualizar Mezcla" target="_blank">Ver Mezclas-colores-Antigua</a> 
+             <?php }else { ?>
+ 
+             <a href="produccion_caract_impresion_add.php?id_ref=<?php echo $row_referencia_editar['id_ref'];?>&cod_ref=<?php echo $row_referencia_editar['cod_ref'];?>" title="Actualizar Mezcla" target="_blank">Falta-Mezcla-Antigua</a> 
+        /  <?php } ?>
+
+      <?php if( $refNueva >= '1' && $procesoNuevo==2) { ?>
+        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_referencia_editar['cod_ref'];?>','1500','700')">Ver Mezclas-colores-Nueva</a>
+ 
+         <?php }else { ?> 
+
+        <a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_referencia_editar['cod_ref'];?>','1500','700')">Falta-Mezcla-Nueva</a>
+ 
+      <?php } ?>
+     </em></td>
       </tr>
       <tr id="tr1">
         <td id="fuente1">Color 1 </td>
@@ -548,7 +649,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color1_egp" value="<?php echo $row_referencia_editar['color1_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone1_egp" value="<?php echo $row_referencia_editar['pantone1_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+          <select name="pantone1_egp" id="pantone1_egp" class="busqueda selectsGrande" >
+             <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone1_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+             <?php foreach($materiasss as $row_materia_prima ) { ?>
+                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone1_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+               </option>
+             <?php } ?> 
+           </select>
+         </td>
         <td id="dato1"><input type="text" name="ubicacion1_egp" value="<?php echo $row_referencia_editar['ubicacion1_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
@@ -558,7 +667,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color2_egp" value="<?php echo $row_referencia_editar['color2_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone2_egp" value="<?php echo $row_referencia_editar['pantone2_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+          <select name="pantone2_egp" id="pantone2_egp" class="busqueda selectsGrande" >
+             <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone2_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+             <?php foreach($materiasss as $row_materia_prima ) { ?>
+                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone2_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+               </option>
+             <?php } ?> 
+           </select>
+         </td>
         <td id="dato1"><input type="text" name="ubicacion2_egp" value="<?php echo $row_referencia_editar['ubicacion2_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
@@ -568,9 +685,16 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color3_egp" value="<?php echo $row_referencia_editar['color3_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone3_egp" value="<?php echo $row_referencia_editar['pantone3_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+          <select name="pantone3_egp" id="pantone3_egp" class="busqueda selectsGrande" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone3_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+           <?php foreach($materiasss as $row_materia_prima ) { ?>
+               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone3_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+             </option>
+           <?php } ?> 
+         </select></td>
         <td id="dato1"><input type="text" name="ubicacion3_egp" value="<?php echo $row_referencia_editar['ubicacion3_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-      </tr>
+      </tr>      
       <tr id="tr1">
         <td id="fuente1">Color 4</td>
         <td id="fuente1">Pantone</td>
@@ -578,7 +702,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color4_egp" value="<?php echo $row_referencia_editar['color4_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone4_egp" value="<?php echo $row_referencia_editar['pantone4_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+          <select name="pantone4_egp" id="pantone4_egp" class="busqueda selectsGrande" >
+             <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone4_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+             <?php foreach($materiasss as $row_materia_prima ) { ?>
+                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone4_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+               </option>
+             <?php } ?> 
+           </select>
+         </td>
         <td id="dato1"><input type="text" name="ubicacion4_egp" value="<?php echo $row_referencia_editar['ubicacion4_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
@@ -588,7 +720,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color5_egp" value="<?php echo $row_referencia_editar['color5_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone5_egp" value="<?php echo $row_referencia_editar['pantone5_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+        <select name="pantone5_egp" id="pantone5_egp" class="busqueda selectsGrande" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone5_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+           <?php foreach($materiasss as $row_materia_prima ) { ?>
+               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone5_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+             </option>
+           <?php } ?> 
+         </select>
+       </td>
         <td id="dato1"><input type="text" name="ubicacion5_egp" value="<?php echo $row_referencia_editar['ubicacion5_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
@@ -598,7 +738,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color6_egp" value="<?php echo $row_referencia_editar['color6_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone6_egp" value="<?php echo $row_referencia_editar['pantone6_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+        <select name="pantone6_egp" id="pantone6_egp" class="busqueda selectsGrande" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone6_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+           <?php foreach($materiasss as $row_materia_prima ) { ?>
+               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone6_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+             </option>
+           <?php } ?> 
+         </select>
+       </td>
         <td id="dato1"><input type="text" name="ubicacion6_egp" value="<?php echo $row_referencia_editar['ubicacion6_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
@@ -608,7 +756,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color7_egp" value="<?php echo $row_referencia_editar['color7_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone7_egp" value="<?php echo $row_referencia_editar['pantone7_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+        <select name="pantone7_egp" id="pantone7_egp" class="busqueda selectsGrande" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone7_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+           <?php foreach($materiasss as $row_materia_prima ) { ?>
+               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone7_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+             </option>
+           <?php } ?> 
+         </select>
+       </td>
         <td id="dato1"><input type="text" name="ubicacion7_egp" value="<?php echo $row_referencia_editar['ubicacion7_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>  
       <tr id="tr1">
@@ -618,7 +774,15 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       </tr>
       <tr>
         <td id="dato1"><input type="text" name="color8_egp" value="<?php echo $row_referencia_editar['color8_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
-        <td id="dato1"><input type="text" name="pantone8_egp" value="<?php echo $row_referencia_editar['pantone8_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        <td id="dato1">
+        <select name="pantone8_egp" id="pantone8_egp" class="busqueda selectsGrande" >
+           <option value=""<?php if (!(strcmp("", $row_referencia_editar['pantone8_egp']))) {echo "selected=\"selected\"";} ?>>COLOR</option> 
+           <?php foreach($materiasss as $row_materia_prima ) { ?>
+               <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'],$row_referencia_editar['pantone8_egp']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
+             </option>
+           <?php } ?> 
+         </select>
+       </td>
         <td id="dato1"><input type="text" name="ubicacion8_egp" value="<?php echo $row_referencia_editar['ubicacion8_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>           
       <tr id="tr1">
@@ -793,7 +957,8 @@ Incluir Fecha de Caducidad </td>
         <td id="detalle2">Dise&ntilde;ador</td>
       </tr>
       <tr>
-        <td colspan="2" rowspan="3" id="detalle2"><table border="0">
+        <td colspan="2" rowspan="3" id="detalle2">
+          <table border="0">
             <tr>
               <td id="dato1"><input name="arte1" type="hidden" value="<?php echo $row_referencia_editar['archivo1'];?>" /><a href="javascript:verFoto('egpbolsa/<?php echo $row_referencia_editar['archivo1'];?>','610','490')"><?php if ($row_referencia_editar['archivo1']!="")echo "Arte1";?></a></td><td id="dato2"><input type="file" name="archivo1"size="20" /></td>              
             </tr>
@@ -807,8 +972,10 @@ Incluir Fecha de Caducidad </td>
                 <a href="javascript:verFoto('egpbolsa/<?php echo $row_referencia_editar['archivo3'];?>','610','490')"><?php if ($row_referencia_editar['archivo3']!="")echo "Arte3";?></a></td>
               <td id="dato2"><input type="file" name="archivo3" size="20"/></td>              
             </tr>
-        </table></td>
-        <td id="detalle2"><input type="text" name="disenador_egp" value="<?php echo $row_referencia_editar['disenador_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
+        </table>
+      </td>
+        <td id="detalle2">
+          <input type="text" name="disenador_egp" value="<?php echo $row_referencia_editar['disenador_egp']; ?>" size="20" onKeyUp="conMayusculas(this)"/></td>
       </tr>
       <tr id="tr1">
         <td id="detalle2">Telefono </td>
@@ -885,25 +1052,20 @@ do {
           <?php echo $row_referencia_editar['hora_modificacion']; ?>
           <input name="tipo_usuario" type="hidden" id="tipo_usuario" value="<?php echo $row_usuario['tipo_usuario']; ?>" />
           <input name="codigo_usuario" type="hidden" id="codigo_usuario" value="<?php echo $row_usuario['codigo_usuario']; ?>" /></td>
-        <td id="dato2"> </td>
+        <td id="dato2">
+   
+        </td>
       </tr>
 
     </table>
         <input type="hidden" name="vendedor" id="vendedor" value="<?php echo $row_referencia_editar['vendedor']?>"/>
         <input type="hidden" name="MM_update" value="form1">
     <!--<input type="hidden" name="Str_nit" value="<?php //echo $row_ver_ref['Str_nit']; ?>">--> 
-    <input type="hidden" name="id_ref" value="<?php echo $row_referencia_editar['id_ref']; ?>">     
-  </form></td></tr></table>
-  </div>
-<b class="spiffy"> 
-<b class="spiffy5"></b>
-<b class="spiffy4"></b>
-<b class="spiffy3"></b>
-<b class="spiffy2"><b></b></b>
-<b class="spiffy1"><b></b></b></b></div> 
-</td></tr></table>
-        
-</div>
+    <input type="hidden" name="id_ref" id="id_ref" value="<?php echo $row_referencia_editar['id_ref']; ?>">     
+  </form>
+  <?php echo $conexion->header('footer'); ?>
+ 
+
 </body>
 </html>
 <?php

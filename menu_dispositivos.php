@@ -105,9 +105,8 @@ $totalRows_ver_menu = mysql_num_rows($ver_menu);
          <div class="row">
            <div class="col-md-4">
               <!--INICIA MENU-->
-	                 <div class="navbar">
-                    <ul>  <?php $i=0; do { ?>
-                      <li><?php 
+	                 <div class="navbar"><ul><?php $i=0; do { ?>
+                    <li><?php 
                         $tipo=$row_usuario['tipo_usuario'];
                         $id_menu=$row_ver_menu['id_menu'];
                         $sql="select * from permisos where menu='$id_menu' and usuario='$tipo'";

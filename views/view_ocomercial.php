@@ -59,24 +59,24 @@
                    <div class="col-lg-2" ><strong>MODIFICO Y FECHA</strong></div> 
                    <div class="col-lg-1" ><strong>VER</strong></div>     
                 </div> 
-                <?php foreach($this->ordenc as $dato) {  ?>
-               <div class="row celdaborde1">
-                 <div class="col-lg-1" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
-                   <p><?php echo $dato['id_pedido_io']=='' ? $dato['id_pedido'] : $dato['id_pedido_io']; ?></a></p>
+                <?php foreach($this->ordenc as $dato) {?>
+               <div class="row celdaborde1"><?php $columna=$dato['id_i']=='' ? "id" : "id_i";  ?>
+                 <div class="col-lg-1" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
+                   <p><?php echo $dato['id_i']=='' ? $dato['id'] : $dato['id_i']; ?></a></p>
                  </div> 
-                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?></a></p>
                  </div>
-                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php echo $dato["int_cod_ref_io"]=='' ? $dato['int_cod_ref_oc'] : $dato['int_cod_ref_io']; ?></a></p>
-                 </div> 
-                 <!-- <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 </div>  
+                 <!-- <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php echo $dato["str_nit_io"]; ?></a></p>
                  </div> -->
-                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php echo $dato["fecha_modif_io"]=='' ? $dato['fecha_ingreso_oc'] : $dato['fecha_modif_io']; ?></a></p>
                  </div>
-                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php 
                      switch ($dato["b_estado_oc"]) { 
                       case '1':
@@ -112,21 +112,21 @@
 
                    echo $dato["b_estado_oc"]=='' ? $dato['b_estado_io'] : $dato['b_estado_oc']; ?></a></p>
                  </div>
-                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>">
+                 <div class="col-lg-2" id="fondo_2"><a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>">
                    <p><?php echo $dato["modifico"]; ?></a></p>
                  </div>
                  <div class="col-lg-1" id="fondo_2">
                    <p>
-                  <!--  <a href="?c=ocomercial&a=Crud&id=<?php echo $dato['id_pedido_io']=='' ? $dato['id_pedido_io'] : $dato['id_pedido_io']; ?>&columna=id_pedido&tabla=tbl_orden_compra_historico" target="_top" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="VER" title="VER" border="0" style="cursor:hand;" width="20" height="18" /> </a> -->
-                     <a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_pedido']=='' ? $dato['id_pedido_io'] : $dato['id_pedido']; ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>"><img src="images/pincel.PNG" alt="VER" title="VER"  border="0" style="cursor:hand;" width="20" height="18" /></a>
+                  <!--  <a href="?c=ocomercial&a=Crud&id=<?php echo $dato['id_i']=='' ? $dato['id_i'] : $dato['id_i']; ?>&columna=id_pedido&tabla=tbl_orden_compra_historico" target="_top" style="text-decoration:none; color:#000000"><img src="images/pincel.PNG" alt="VER" title="VER" border="0" style="cursor:hand;" width="20" height="18" /> </a> -->
+                     <a target="_blank" style="text-decoration:none; color:#000000" href="view_orden_compra_cl_edit_hist.php?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i'] ?>&str_numero_oc=<?php echo $dato["str_numero_io"]=='' ? $dato['str_numero_oc'] : $dato['str_numero_io']; ?>&id_oc=<?php echo  $_GET['id_oc'];?>&columna=<?php echo $columna;?>&id_pedido=<?php echo $dato['id_pedido_io'];?>"><img src="images/pincel.PNG" alt="VER" title="VER"  border="0" style="cursor:hand;" width="20" height="18" /></a>
                    </p>
                  </div> 
                </div>
                <?php  } ?>
 
              <br><br><br>
-                <!-- <a class="botonGeneral" href="?c=ocomercial&id=<?php echo $dato['id_pedido']; ?>">SALIR</a>  -->
-                <a class="botonGeneral" style="text-decoration:none; "href="?id=<?php echo $dato['id_pedido']; ?>">SALIR</a> 
+                <!-- <a class="botonGeneral" href="?c=ocomercial&id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i']; ?>">SALIR</a>  -->
+                <a class="botonGeneral" style="text-decoration:none; "href="?id=<?php echo $dato['id_i']=='' ? $dato['id'] :$dato['id_i']; ?>">SALIR</a> 
           </div> 
              
 

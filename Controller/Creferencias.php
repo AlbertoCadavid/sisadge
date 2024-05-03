@@ -41,8 +41,7 @@ class CreferenciasController{
     	if(isset($_REQUEST['id'])){ 
     		$this->historico=$myObject->Obtener('tbl_referencia_historico','id_ref',$_REQUEST['id']);
     	} 
-        
-        $myObject->Registrar("tbl_referencia_historico", "id_ref,cod_ref,version_ref,n_egp_ref,n_cotiz_ref,tipo_bolsa_ref,material_ref,Str_presentacion,Str_tratamiento,ancho_ref,N_repeticion_l,N_diametro_max_l,N_peso_max_l,N_cantidad_metros_r_l,N_embobinado_l,Str_referencia_m,Str_linc_m,largo_ref,solapa_ref,b_solapa_caract_ref,bolsillo_guia_ref,str_bols_ub_ref,str_bols_fo_ref,B_cantforma,bol_lamina_1_ref,bol_lamina_2_ref,calibre_ref,peso_millar_ref,Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,B_precorte,N_fuelle,B_fondo,impresion_ref,num_pos_ref,cod_form_ref,adhesivo_ref,estado_ref,registro1_ref,fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica,calibreBols_ref,peso_millar_bols,precorte_cuerpo,precorte_solapa,tipoLamina_ref,tipoCinta_ref,modifico", $this->historico);
+        $myObject->Registrar("tbl_referencia_historico", "id_ref,cod_ref,version_ref,n_egp_ref,n_cotiz_ref,tipo_bolsa_ref,tipo_formula,material_ref,Str_presentacion,Str_tratamiento,ancho_ref,N_repeticion_l,N_diametro_max_l,N_peso_max_l,N_cantidad_metros_r_l,N_embobinado_l,Str_referencia_m,Str_linc_m,largo_ref,solapa_ref,b_solapa_caract_ref,bolsillo_guia_ref,str_bols_ub_ref,str_bols_fo_ref,B_cantforma,bol_lamina_1_ref,bol_lamina_2_ref,calibre_ref,peso_millar_ref,Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,B_precorte,N_fuelle,B_fondo,impresion_ref,num_pos_ref,cod_form_ref,adhesivo_ref,estado_ref,registro1_ref,fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica,calibreBols_ref,peso_millar_bols,precorte_cuerpo,precorte_solapa,tipoLamina_ref,tipoCinta_ref,modifico", $this->historico);
   
       	 $vista =!'' ? header('Location:'.$vista)  : header('Location: index.php');
     }

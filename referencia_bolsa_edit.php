@@ -302,9 +302,12 @@ $historico =  new Referencias();
 if(isset($_POST['id_ref'])){ 
   $historico=$myObject->Obtener('tbl_referencia','id_ref',$_POST['id_ref']);
 } 
-
 if(isset($_POST['id_ref']) && $historico){
-  $myObject->Registrar("tbl_referencia_historico", "id_ref,cod_ref,version_ref,n_egp_ref,n_cotiz_ref,tipo_bolsa_ref,material_ref,Str_presentacion,Str_tratamiento,ancho_ref,N_repeticion_l,N_diametro_max_l,N_peso_max_l,N_cantidad_metros_r_l,N_embobinado_l,Str_referencia_m,Str_linc_m,largo_ref,solapa_ref,b_solapa_caract_ref,bolsillo_guia_ref,str_bols_ub_ref,str_bols_fo_ref,B_cantforma,bol_lamina_1_ref,bol_lamina_2_ref,calibre_ref,peso_millar_ref,Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,B_precorte,N_fuelle,B_fondo,impresion_ref,num_pos_ref,cod_form_ref,adhesivo_ref,estado_ref,registro1_ref,fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica,calibreBols_ref,peso_millar_bols,precorte_cuerpo,precorte_solapa,tipoLamina_ref,tipoCinta_ref,modifico,valor_impuesto", $historico);
+ /*echo "<pre>";
+ var_dump($historico);
+ echo "<pre>";die;*/
+
+  $myObject->Registrar("tbl_referencia_historico", "id_ref,cod_ref,version_ref,n_egp_ref,n_cotiz_ref,tipo_bolsa_ref,tipo_formula,material_ref,Str_presentacion,Str_tratamiento,ancho_ref,N_repeticion_l,N_diametro_max_l,N_peso_max_l,N_cantidad_metros_r_l,N_embobinado_l,Str_referencia_m,Str_linc_m,largo_ref,solapa_ref,b_solapa_caract_ref,bolsillo_guia_ref,str_bols_ub_ref,str_bols_fo_ref,B_cantforma,bol_lamina_1_ref,bol_lamina_2_ref,calibre_ref,peso_millar_ref,Str_boca_entr_p,Str_entrada_p,Str_lamina1_p,Str_lamina2_p,B_troquel,B_precorte,N_fuelle,B_fondo,impresion_ref,num_pos_ref,cod_form_ref,adhesivo_ref,estado_ref,registro1_ref,fecha_registro1_ref,registro2_ref,fecha_registro2_ref,B_generica,calibreBols_ref,peso_millar_bols,precorte_cuerpo,precorte_solapa,tipoLamina_ref,tipoCinta_ref,modifico,valor_impuesto", $historico);
 }//FIN HISTORICO
 
   $updateGoTo = "referencia_bolsa_vista.php?cod_ref=" . $_POST['cod_ref'] . "&tipo=" . $_POST['tipo_usuario'] . "";
@@ -401,9 +404,10 @@ $totalRows_ref_cirel = mysql_num_rows($ref_cirel);
 
 $tippobolsa = $row_referencia_editar['tipo_bolsa_ref']=='' ? $row_cotiza['tipo_bolsa'] : $row_referencia_editar['tipo_bolsa_ref'];
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY formulacion ASC",'*'); 
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
@@ -1290,7 +1294,7 @@ do {
         <input type="hidden" name="vendedor" id="vendedor" value="<?php echo $row_referencia_editar['vendedor']?>"/>
         <input type="hidden" name="MM_update" value="form1">
     <!--<input type="hidden" name="Str_nit" value="<?php //echo $row_ver_ref['Str_nit']; ?>">--> 
-    <input type="hidden" name="id_ref" value="<?php echo $row_referencia_editar['id_ref']; ?>">     
+    <input type="hidden" name="id_ref" id="id_ref" value="<?php echo $row_referencia_editar['id_ref']; ?>">     
   </form>
   <?php echo $conexion->header('footer'); ?>
  
@@ -1303,7 +1307,13 @@ do {
     verLaminas();
     anchodelRollo();
     validaRadiosolapa();
-
+    if($("#calculaformula").val()==1){
+      $("#calculaformula").val('1')
+        $("#calculaformula").prop("checked", true);
+    }else{
+      $("#calculaformula").val('0')
+        $("#calculaformula").prop("checked", false);
+    }
 });
 
   //valida radio solapa 

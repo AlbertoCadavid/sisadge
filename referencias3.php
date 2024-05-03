@@ -225,7 +225,11 @@ $row_referencianueva3=$conexion->llenarCampos("tbl_cotiza_laminas","WHERE Tbl_co
 			</td>
 			<td class="derecha1"><a class="editar" href="control_tablas.php?cod_ref=<?php echo $row_referencias['cod_ref']; ?>&id_ref=<?php echo $row_referencias['id_ref']; ?>&n_cotiz=<?php echo $row_referencias['n_cotiz_ref']; ?>&tipo=<?php echo $row_usuario['tipo_usuario']; ?>&case=<?php echo "2"; ?>" target="_blank" style="text-decoration:none; color:#000000"><?php echo $row_referencias['n_cotiz_ref']; ?></a>
 			</td>
-			<td class="Estilo4"><a class="editar" href="referencia_bolsa_vista.php?cod_ref=<?php echo $row_referencias['cod_ref']; ?>&id_ref=<?php echo $row_referencias['id_ref']; ?>&n_cotiz=<?php echo $row_referencias['n_cotiz_ref']; ?>&tipo=<?php echo $row_usuario['tipo_usuario']; ?>" target="_blank" style="text-decoration:none; color:#000000"><?php echo $row_referencias['tipo_bolsa_ref']; ?></a>
+			<td class="Estilo4"><a class="editar" href="referencia_bolsa_vista.php?cod_ref=<?php echo $row_referencias['cod_ref']; ?>&id_ref=<?php echo $row_referencias['id_ref']; ?>&n_cotiz=<?php echo $row_referencias['n_cotiz_ref']; ?>&tipo=<?php echo $row_usuario['tipo_usuario']; ?>" target="_blank" style="text-decoration:none; color:#000000">
+				<?php $tipo_bolsa=$row_referencias['tipo_bolsa_ref'];
+				     $formulacio = $conexion->llenarCampos('tbl_formulacion', "WHERE nombre='$tipo_bolsa' ", "","formulacion" ); 
+			       echo $tipo_formula= $formulacio['formulacion'];
+          ?></a>
 			</td>
 			<td class="Estilo3"><a class="editar" href="referencia_bolsa_vista.php?cod_ref=<?php echo $row_referencias['cod_ref']; ?>&id_ref=<?php echo $row_referencias['id_ref']; ?>&n_cotiz=<?php echo $row_referencias['n_cotiz_ref']; ?>&tipo=<?php echo $row_usuario['tipo_usuario']; ?>" target="_blank" style="text-decoration:none; color:#000000"><?php echo $row_referencias['material_ref']; ?></a>
 			</td>

@@ -92,6 +92,12 @@ $totalRows_ver_sub_menu = mysql_num_rows($ver_sub_menu);
 <link rel="StyleSheet" href="css/imageMenu.css" type="text/css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="StyleSheet" href="css/imageMenu.css" type="text/css">
+<link href="SpryAssets/SpryMenuBarVertical.css" rel="stylesheet" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+<script src="SpryAssets/SpryMenuBar.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="container-fluid" id="divconten"> 
@@ -120,19 +126,46 @@ $totalRows_ver_sub_menu = mysql_num_rows($ver_sub_menu);
                         echo "<a href=$url>".$row_ver_sub_menu['nombre_submenu']."</a>"; }
                         else { echo $row_ver_sub_menu['nombre_submenu']; } ?></li>
                       <?php } while ($row_ver_sub_menu = mysql_fetch_assoc($ver_sub_menu)); ?>
+                      <li><a href=referencia_precio.php>Referencias por Precio</a></li>
+                      <li><a href=referencia_copia.php>Listado Referencias</a></li>
                    </ul>
                  </div>
               </div>          
             <div class="col-md-4">
-             <strong>GESTION COMERCIAL</strong><br><br>
-              <strong>Objetivo:</strong> Proyectar y posicionar la Organización en nuevos mercados con productos de excelente calidad que cumplan los requerimientos y especificaciones de los clientes logrando su satisfacción, lealtad y confianza generando rentabilidad para la empresa.<br><br><strong>Alcance:</strong> Cubre desde la planificación de mercado y ventas, la comercialización, definición y verificación del cumplimiento de los requisitos, la determinación de los recursos para la fabricación del producto, la evaluación del nivel de satisfacción del cliente, su lealtad y confianza, hasta el cumplimiento de las metas de venta para lograr la rentabilidad esperada.            </div>
+              <strong>MENU PRINCIPAL</strong><br><br>
+              El sistema administrador de gestiones (SISADGE) de ALBERTO CADAVID R & C&Iacute;A S.A. es un desarrollo gen&eacute;rico que especifica el Sistema de Gesti&oacute;n de Calidad en nuestra organizaci&oacute;n. 
+              <br>El proposito fundamental de este desarrollo es seguir paso a paso la metodologia del sistema de Gesti&oacute;n de Calidad para la linea comercial, de dise&ntilde;o, producci&oacute;n y comercializaci&oacute;n de bolsas de seguridad para el empaque y transporte de valores.<br><br>
+            </div>
             <div class="col-md-4">
-              <strong>Responsable:</strong> Gerente de Unidad - Director Comercial.<br><br><strong>Participantes:</strong> Gerente de Unidad, Asesores comerciales, Coordinador de Calidad, Supervisor de Producción.<br>            </div>            
-          </div>
+              <!-- <strong>POLITICA DE CALIDAD</strong><br><br>Se busca la completa satisfaccion de los clientes a trav&eacute;s del mejoramiento continuo y con un grupo humano comprometido, verificando que durante todo el proceso se este cumpliendo con sus requisitos, necesidades y expectativas garantizando un producto y servicio de excelente calidad en el menor tiempo y a un precio justo, generando en ellos lealtad y confianza. -->
+              <strong>PROPOSITO ORGANIZACIONAL</strong><br><br>En Alberto Cadavid R.& CIA estamos comprometidos con la generacion y suministro de soluciones seguras y confiables de empaques para el transporte de documentos, valores u otros productos que mantenga la satisfaccion, confianza y fidelizacion con el cliente y partes interesadas. 
+            <br> Gestionamos eficientemente nuestros procesos con una infraestructura adecuada y el desarrollo de las competencias de nuestros colaboradores, garantizando la calidad de nuestros productos, el cumplimiento a los requisitos aplicables y el mejoramiento continuo de nuestros Sistema de Gestion.
+            <button id="accordion" class="accordion">Continuar Leyendo....</button>
+            <div class="panel">
+            <br> Reafirmamos el compromiso con la proteccion y promocion de la salud de los trabajadores, en beneficio de su integridad física, mediante la gestion de los controles de los riesgos existentes, el cuidado, la intervencion de las condiciones de trabajo que puedan causar accidentes y enfermedades laborales. Logrando mecanismos efectivos que proporcionen un control del ausentismo, la preparacion ante emergencias y una cultura preventiva. 
+            <br> Fomentamos el cumplimiento de normas y procedimientos de seguridad en beneficio de la realizacion de un trabajo seguro y productivo, en los empleados, contratistas y personal temporal, quienes serán responsables de notificar oportunamente todas aquellas condiciones que puedan generar consecuencias y contingencias en la empresa. 
+            <br> A partir del cumplimiento de nuestro proposito, nuestra empresa mantendrá el reconocimiento y posicionamiento a nivel nacional e internacional, con un liderazgo y un crecimiento que garantice el desarrollo sostenible de nuestra empresa. 
+            </div>
 
-  </div> 
+  </div>
+  <script type="text/javascript">
+    var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
+  </script> 
 </body>
 </html>
+<script>
+let ac = document.getElementById('accordion')
+
+  ac.addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    } 
+  });
+</script>
 <?php
 mysql_free_result($usuario_comercial);
 

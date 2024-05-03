@@ -88,17 +88,20 @@ include('funciones/funciones_php.php');//SISTEMA RUW PARA LA BASE DE DATOS
 $conexion = new ApptivaDB();
  
  
-
 $colname_orden_compra = "-1";
 if (isset($_GET['id'])) {
   $colname_orden_compra = (get_magic_quotes_gpc()) ? $_GET['id'] : addslashes($_GET['id']);
 }
+ 
+$columnas=$_GET['id_pedido']!='' ? "id_pedido" : "id";
+$ids=$_GET['id_pedido']!='' ? $_GET['id_pedido'] : $_GET['id'];
+
 mysql_select_db($database_conexion1, $conexion1);
-$query_orden_compra = sprintf("SELECT * FROM tbl_orden_compra_historico WHERE id_pedido ='%s'  ", $colname_orden_compra);
+$query_orden_compra = sprintf("SELECT * FROM tbl_orden_compra_historico WHERE $columnas ='$ids'  ", $colname_orden_compra);
 $orden_compra = mysql_query($query_orden_compra, $conexion1) ;
 $row_orden_compra = mysql_fetch_assoc($orden_compra);
 $totalRows_orden_compra = mysql_num_rows($orden_compra);
-
+ 
 $colname_cliente = "-1";
 if (isset($_GET['id_oc'])) {
   $colname_cliente = (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);
@@ -109,12 +112,11 @@ $cliente = mysql_query($query_cliente, $conexion1) ;
 $row_cliente = mysql_fetch_assoc($cliente);
 $totalRows_cliente = mysql_num_rows($cliente);
 
-$colname_detalle = "-1";
-if (isset($_GET['str_numero_oc'])) {
-  $colname_detalle = (get_magic_quotes_gpc()) ? $_GET['str_numero_oc'] : addslashes($_GET['str_numero_oc']);
-}
+$columnas=$_GET['columna']=='id_i' ? "id_i" : "id_pedido_io";
+ 
+$ids=$_GET['columna']=='id' ? $row_orden_compra['id_pedido'] : $_GET['id'];
 mysql_select_db($database_conexion1, $conexion1);
-$query_detalle = sprintf("SELECT * FROM tbl_items_ordenc_historico WHERE str_numero_io = '%s' ORDER BY id_i DESC", $colname_detalle);
+$query_detalle =  ("SELECT * FROM tbl_items_ordenc_historico WHERE $columnas = $ids ORDER BY id_i DESC" );//str_numero_io = '%s'
 $detalle = mysql_query($query_detalle, $conexion1) ;
 $row_detalle = mysql_fetch_assoc($detalle);
 $totalRows_detalle = mysql_num_rows($detalle);

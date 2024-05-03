@@ -67,7 +67,6 @@ function actualizacion(id,campo,pagina=''){
 
 
 function updateGeneral(id,campo,cualfuncion,pagina ){
- 
   swal({   
    title: "ACTUALIZAR?",   
    text: "Esta seguro que Quiere Actualizar " ,   
@@ -80,6 +79,7 @@ function updateGeneral(id,campo,cualfuncion,pagina ){
    closeOnCancel: false }, 
    function(isConfirm){   
      if (isConfirm) {  
+ 
        swal("Actualizado!", "Los registros se han Actualizado.", "success"); 
        cualfuncion(id,campo,pagina);//este actualiza en base
         
@@ -176,8 +176,72 @@ function configUpdate(id,campo,pagina,valor){
     }
   }); 
 }
-
  
+function UpdateGenerals(id,campo,url,campo2='' ){ 
+ swal({   
+  title: "ACTUALIZAR?",   
+  text: "Esta seguro que Quiere Actualizar " ,   
+  type: "warning",   
+  showCancelButton: true,   
+  confirmButtonColor: "#DD6B55",   
+  confirmButtonText: "Si, Actualizar!",   
+  cancelButtonText: "No, Actualizar!",   
+  closeOnConfirm: false,   
+  closeOnCancel: false }, 
+  function(isConfirm){   
+    if (isConfirm) {  
+ 
+      swal("Actualizado!", "Los registros se han Actualizado.", "success"); 
+      
+    } else {     
+      swal("Cancelado", "has cancelado :)", "error");
+     
+    } 
+  }); 
+ 
+ 
+  $.ajax({
+    dataType: "json",
+    data: { 
+      "id_for": id, 
+      "campo": campo,
+      "campo2": campo2,  
+    },
+    url: url, // '../view_index.php?c=comprasEM&a=Eliminar&columna=',
+    type:  'post',
+    beforeSend: function(){
+      //Lo que se hace antes de enviar el formulario
+    },
+    success: function(respuesta){
+      //lo que se si el destino devuelve algo
+       $('#resp').show(); 
+       $('#resp').fadeIn(); 
+
+       setTimeout(function() {
+        $("#resp").fadeOut();           
+      },2000);
+
+       setTimeout(function() 
+            {
+               location.reload(); 
+            },2000);
+       
+    },
+    error:  function(xhr,err){ 
+       $('#resp').show(); 
+       $('#resp').fadeIn();     
+       setTimeout(function() {
+        $("#resp").fadeOut();           
+      },2000);
+       
+       setTimeout(function() 
+            {
+                 location.reload(); 
+            },2000);
+      
+    }
+  }); 
+}
 /*function updatenumFactura(id,campo,pagina){
    alert($("#form1").serialize());
   $.ajax({

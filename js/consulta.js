@@ -1413,6 +1413,9 @@ function mostrardiv3() {
 	div = document.getElementById("liquida");
 	div.style.display="none";
 }
+
+
+
 /*PESO-MILLAR REFERENCIA*/
 function calcular_pesom()
 {
@@ -1439,8 +1442,9 @@ var solapa=parseFloat(document.form1.solapa_ref.value);
 
 //Divide la cantidad de la solapa si es sencilla o doble si es cero no divide
 var dsolapa=(solapa/v_solapa);
-var cons= document.form1.tipo_bolsa_ref.value=="COMPOSTABLE" ? parseFloat(0.00665) : parseFloat(0.00467);
-var fuelle=parseFloat(document.form1.B_fuelle.value);
+var cons= document.form1.tipo_bolsa_ref.value=="KO-12" ? parseFloat(0.00665) : parseFloat(0.00467);
+
+var fuelle=parseFloat(document.form1.B_fuelle.value)*parseFloat(2);
 var larg=parseFloat(document.form1.largo_ref.value);
 var ancho=parseFloat(document.form1.ancho_ref.value);
 var calibre=parseFloat(document.form1.calibre_ref.value);
@@ -1777,9 +1781,9 @@ function consultanit_oc()
 /*-------------------------------------------------*/
 /*--------------CONSULTA DESDE ITEMS O.C-----------------*/
 //select ref
-function refacvsrefcl(){
+function refacvsrefcl(){ 
 	if (document.form1.int_cod_ref_io.value != "") {
-		window.location ='orden_compra_cl_add_detalle.php?str_numero_oc='+document.form1.str_numero_oc.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.int_cod_ref_io.value;	
+		window.location ='orden_compra_cl_add_detalle.php?str_numero_oc='+document.form1.str_numero_oc.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.int_cod_ref_io.value+'&id_pedido='+document.form1.id_pedido_io.value;	
 			//document.form1.id_mp_vta_io.disabled = true;
 			document.getElementById('ref_mp').disabled = true;
 		}else if (document.form1.int_cod_ref_io.value == "") {
@@ -1789,7 +1793,7 @@ function refacvsrefcl(){
  //select mp
  function refmpvsrefac(){
  	if (document.form1.id_mp_vta_io.value != "") {
- 		window.location ='orden_compra_cl_add_detalle.php?str_numero_oc='+document.form1.str_numero_oc.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.id_mp_vta_io.value;	
+ 		window.location ='orden_compra_cl_add_detalle.php?str_numero_oc='+document.form1.str_numero_oc.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.id_mp_vta_io.value+'&id_pedido='+document.form1.id_pedido_io.value;	
  		document.getElementById('ref_cl').disabled = true;
  	}else if (document.form1.id_mp_vta_io.value == "") {
  		document.getElementById('ref_cl').disabled = false;
@@ -1798,21 +1802,21 @@ function refacvsrefcl(){
  }
  function refmpvsrefac_edit(){
  	if (document.form1.id_mp_vta_io.value != "") {
- 		window.location ='orden_compra_cl_edit_detalle.php?id_items='+document.form1.id_items.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.id_mp_vta_io.value;	
+ 		window.location ='orden_compra_cl_edit_detalle.php?id_items='+document.form1.id_items.value+'&id_oc='+document.form1.id_oc.value+'&nit_c='+document.form1.nit_c.value+'&int_cod_ref_io='+document.form1.id_mp_vta_io.value+'&id_pedido='+document.form1.id_pedido_io.value;	
  		document.getElementById('ref_cl').disabled = true;
  	}else if (document.form1.id_mp_vta_io.value == "") {
  		document.getElementById('ref_cl').disabled = false;
  		
  	}
- } 
+ }  
  function refacvsrefcl_edit(){
  	if (document.form1.int_cod_ref_io.value != "") {	  
- 		window.location ='orden_compra_cl_edit_detalle.php?id_oc='+document.form1.id_oc.value+'&int_cod_ref_io='+document.form1.int_cod_ref_io.value+'&nit_c='+document.form1.nit_c.value+'&id_items='+document.form1.id_items.value;
+ 		window.location ='orden_compra_cl_edit_detalle.php?id_oc='+document.form1.id_oc.value+'&int_cod_ref_io='+document.form1.int_cod_ref_io.value+'&nit_c='+document.form1.nit_c.value+'&id_items='+document.form1.id_items.value+'&id_pedido='+document.form1.id_pedido_io.value;
  		document.getElementById('ref_mp').disabled = true;
  	}else if (document.form1.int_cod_ref_io.value == "") {
  		document.getElementById('ref_mp').disabled = false;
  	}				       	  
- }
+ } 
 
  //ORDEN DE COMPRA
 //DIFERENCIA DE FECHA ENTREGA EN O.C DETALLE
@@ -3956,13 +3960,13 @@ function nobackbutton(){
  	window.location.href = pag+"?"+name+"="+valor+"&"+name2+"="+valor2;
  }
 
- /* CONVERTIR METROS A KILOS */
- function metrosakilosExtrusion(ancho_cm,calibre_milesimas,longitud_metros){
-	//OPERACION 			
-	let calibre=(calibre_milesimas/100);  			
-	let cm=100;//centimetros de un metro 
-	let cons=0.000467;//constante en kg/cm3		
+  /* CONVERTIR METROS A KILOS */
+  function metrosakilosExtrusion(ancho_cm,calibre_milesimas,longitud_metros){
+	//OPERACION                        
+	let calibre=(calibre_milesimas/100);                          
+	let cm=100;//centimetros de un metro
+	let cons=0.000467;//constante en kg/cm3                
 	let result = (cm * calibre * cons * ancho_cm); //peso de un metro cuadrado
-	let toKilos = (result * longitud_metros);			
-	return  (toKilos); 
+	let toKilos = (result * longitud_metros);                        
+	return  (toKilos);
 }

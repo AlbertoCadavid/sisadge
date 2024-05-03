@@ -82,7 +82,6 @@ class oMextruder{
                  while($filas=$consulta->fetch_assoc()){
                     $this->existe[]=$filas;
                  }
-
                 }
              
                 
@@ -179,7 +178,6 @@ class oMextruder{
 
 }
 
-
 class UtilHelper {
    /* Crea un string codificado a partir de un array
    * @param Array array: array asociativo clave => valor
@@ -197,4 +195,3 @@ class UtilHelper {
       return json_decode((base64_decode($array)),true);
   }
 }
-?>

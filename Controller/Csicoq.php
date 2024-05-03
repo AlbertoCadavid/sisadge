@@ -142,7 +142,6 @@ class CsicoqController
     $porciones = explode(".", $nombre);
     $adjunto = "SICOQ" . $_REQUEST['autorizacion'] . "." . $porciones[1];
     $tieneadjunto1 = adjuntarArchivo('', $directorio, $adjunto, $_FILES['adjunto']['tmp_name'], 'NUEVOS');
-    echo $_FILES['adjunto']['tmp_name']; die;
 
 
     $this->proformas =  new oSicoq();

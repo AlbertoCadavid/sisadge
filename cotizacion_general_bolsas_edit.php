@@ -699,7 +699,7 @@ function MM_popupMsg(msg) { //v1.0
                                   <input name="fecha_modificacion" type="hidden" value="<?php echo date("Y-m-d");?>" />
                                   <input name="B_generica" type="hidden" value="<?php echo $row_bolsa['B_generica']?>" />
                                   <input name="hora_modificacion" type="hidden" value="" />
-                                  <input name="N_referencia" type="hidden" value="<?php echo $_GET['cod_ref']?>" />
+                                  <input name="N_referencia" type="hidden" value="<?php echo $row_bolsa['cod_ref']=='' ? $_GET['cod_ref']:$row_bolsa['cod_ref'];?>" />
                                   <input name="tipo_usuario" type="hidden" value="<?php echo $_SESSION['tipo_usuario']; ?>" />
                                   <input name="valor" type="hidden" value="2" />
                                   <input name="submit" class="botonGeneral" type="submit"value="EDITAR COTIZACION BOLSA" /></td>

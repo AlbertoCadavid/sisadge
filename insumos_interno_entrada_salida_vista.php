@@ -3,7 +3,6 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
 ?>
 <?php require_once('Connections/conexion1.php'); ?>
-
 <?php
 if (!isset($_SESSION)) {
   session_start();
@@ -184,6 +183,7 @@ $row_existe = $conexion->buscar('tbl_remision_interna', 'id_remision', $colname_
                   <tr>
                     <td colspan="5"><strong>FECHA: </strong><?php echo $row_existe['fecha']; ?> </td>
                     <?php if ($row_existe['correo'] == '') { ?>
+                     
                   </tr>
                   <tr>
                     <td colspan="10">

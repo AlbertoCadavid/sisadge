@@ -25,6 +25,7 @@
   function eliminacionYactualizacion(id_op,id,campo,pagina='',id_add='',msn='', funcionn1, funcionn2, array){
     var funcionn1=funcionn1;
     var funcionn2=funcionn2;
+
      swal({   
       title: "ELIMINAR?",   
       text: msn+campo,   

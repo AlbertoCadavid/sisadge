@@ -227,8 +227,10 @@ class cmezclasimController{
             $this->proforma = $_REQUEST;  
             /*echo '<pre>';
              var_dump($this->proforma);
-            echo '<pre>';*/
-
+            echo '<pre>'; die;*/
+             
+            //se guarda Maestra
+            //$this->mezclas->RegistrarMaster("tbl_maestra_mezcla_caract", "int_id_ref_mm, int_cod_ref_mm, id_proceso_mm", "int_cod_ref_mm",$_POST['cod_ref'],  $this->proforma);
             //guarda caracteristicas
             $this->mezclas->Registrar("tbl_caracteristicas_prod", "cod_ref,fecha_registro,usuario,modifico,fecha_modif,extrusora,proceso,campo_1,campo_2,campo_3,campo_4,campo_5,campo_6,campo_7,campo_8,campo_9,campo_10,campo_11,campo_12,campo_13,campo_14,campo_15,campo_16,campo_17,campo_18,campo_19,campo_20,campo_21,campo_22,campo_23,campo_24,campo_25,campo_26,campo_27,campo_28,campo_29,campo_30,campo_31,campo_32,campo_33,campo_34,campo_35,campo_36,campo_37,campo_38,campo_39,campo_40,campo_41,campo_42,campo_43,campo_44,campo_45,campo_46,campo_47,campo_48,campo_49,campo_50,campo_51,campo_52,campo_53,campo_54,campo_55,campo_56,campo_57,campo_58,campo_59,campo_60,campo_61,campo_62,campo_63,campo_64,campo_65,campo_66,campo_67,campo_68,campo_69,campo_70,campo_71,campo_72,campo_73,campo_74,campo_75,campo_76,campo_77,campo_78,campo_79,campo_80,campo_81,campo_82,campo_83,campo_84,campo_85,campo_86,campo_87,campo_88,campo_89,campo_90,campo_91,campo_92,campo_93,campo_94,campo_95,campo_96,campo_97,campo_98,campo_99,campo_100,campo_101,campo_102,campo_103,campo_104,campo_105,campo_106,campo_107,campo_108,campo_109,campo_110,campo_111,campo_112,campo_113,campo_114,campo_115,campo_116,campo_117,campo_118,campo_119,campo_120,campo_121,campo_122,campo_123,campo_124,campo_125,campo_126,campo_127,campo_128,campo_129,campo_130,campo_131,campo_132,campo_133,campo_134,campo_135,campo_136,campo_137,campo_138,campo_139,campo_140,campo_141,campo_142,campo_143,campo_144,campo_145,campo_146", "cod_ref",$_POST['cod_ref'],  $this->proforma);
             //actualiza mezclas

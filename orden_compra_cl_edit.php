@@ -956,7 +956,7 @@ if( $_SESSION['superacceso']==1 ) {
                         <tr>
                           <td colspan="3" id="detalle">&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr> 
                           <td id="dato1"><strong>ELABORA/VENDE </strong></td>
                           <td id="dato1"><strong>ELABORÓ </strong></td>
                           <!-- <td id="dato1"><strong>APROBADO POR</strong></td> -->

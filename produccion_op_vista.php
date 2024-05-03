@@ -320,7 +320,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
       <tr>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_desperdicio_op']; ?> %<strong></strong></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_cantidad_op']; ?></td>
-        <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['str_tipo_bolsa_op']; ?></td>
+        <td colspan="2" id="detalle1"><?php $row_formula = $conexion->buscar('tbl_formulacion','nombre',$row_orden_produccion['str_tipo_bolsa_op']);   echo $row_formula['formulacion']; ?></td>
         <td id="detalle1"><?php echo $row_orden_produccion['coextrusion'] ?></td>
         <td id="detalle1"><?php echo $row_orden_produccion['int_pesom_op']; ?></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['b_visual_op']; ?></td>

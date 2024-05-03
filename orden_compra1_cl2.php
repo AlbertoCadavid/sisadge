@@ -331,6 +331,18 @@ if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0
 {
   $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado='$autorizado' and DATE(fecha_ingreso_oc) BETWEEN '$fecha1' AND '$fecha2'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY str_numero_oc ORDER BY fecha_ingreso_oc desc";
 }
+//Filtra autorizado, vendedor
+if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado !='0')
+{
+ 
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' and Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+}
+//Filtra autorizado, elaborado
+if($str_numero_oc == '0' && $elaborador != '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado !='0')
+{
+ 
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND  Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+}
 //Filtra factura oc con y sin, autorizado, fecha
 if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 != '' && $fecha2 != '' && $factura!='0' && $nfactura =='0' && $autorizado !='0')
 {

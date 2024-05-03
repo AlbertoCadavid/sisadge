@@ -135,10 +135,8 @@ class Msolicitud_compras
     {
         $num = self::elementosArray($insumos);
         $envioCorreo = new EnvioEmails();
-        //$to = $this->correo;
-        $to = "lidersistemas@acycia.com";
-        $to2 = 'andres85684@outlook.com';
-        //$to2 = 'compras@acycia.com';
+        $to = $this->correo;
+        $to2 = 'compras@acycia.com';
         //$from = ;
         $asunto = 'Solicitud para aprobacion de compras';
         $body = "Solicitud de Compras: ".$id_solicitud."<br>"."Hola se requiere autorizar a " . $this->nombre . ", los siguientes materiales: " . "<br>";

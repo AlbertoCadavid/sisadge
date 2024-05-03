@@ -14,7 +14,7 @@
                         return "";
                     }
                     return Nume;
-                }
+                } 
                 			
                 //*** Fin del Codigo para Validar que sea un campo Numerico	
                 function cupo_solicitado_c(cupo_solicitado_c){
@@ -256,8 +256,8 @@
 				document.getElementById('Str_capa_inter_coext').value  ="BLANCO";
  				} 
 				}
-				<!--fin validacion extranjero-->
-				<!--referencia aparece select-->
+				/*<!--fin validacion extranjero-->
+				<!--referencia aparece select-->*/
 				function mostrarBols(input) {  
 				if ((document.form1.bolsillo_guia_ref.value == "0.00")||(document.form1.bolsillo_guia_ref.value == '0')||(document.form1.bolsillo_guia_ref.value == '')) { 
 				document.getElementById('str_bols_ub_ref').disabled = true;
@@ -1196,8 +1196,22 @@ function validacion_select_refac_cliente() {
 			}
 			return true;
 	}
-//valida radio referencias	
-$(document).ready(function(){
+//valida radio referencias
+	function validaRadiosolapa(){
+
+	 var solapa=document.form1.solapa_ref.value; 
+
+	 $("input[name=valora]").change(function () {  
+	      var valor=($(this).val()); 
+	        if(valor > 0 && solapa < 1){ 
+	          swal("Debe agregar un valor al campo solapa!");
+	          $("#solapa_ref").show();
+	          $("#solapa_ref").focus();
+	        }       
+	  });
+	}	
+	
+/*$(document).ready(function(){
 	var solapa=document.form1.solapa_ref.value;	
  $("input[name=valora]").change(function () {	 
 			var valor=($(this).val());
@@ -1212,7 +1226,7 @@ $(document).ready(function(){
 					$("#solapa_ref").focus();
 				}				
   			});
-});
+});*/
 
 /*function validarRadio(){
 var i 

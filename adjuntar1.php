@@ -3,7 +3,7 @@
 //initialize the session
 if (!isset($_SESSION)) {
   session_start();
-}
+}    
 
 // ** Logout the current user. **
 $logoutAction = $_SERVER['PHP_SELF']."?doLogout=true";

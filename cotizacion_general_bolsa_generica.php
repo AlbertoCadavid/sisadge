@@ -226,7 +226,7 @@ $row_referencias3 = $conexion->llenaListas('Tbl_referencia',"","WHERE Tbl_refere
 $row_ref_verif = $conexion->llenarCampos('verificacion',"WHERE id_ref_verif='$colname_obs' ","","userfile,estado_arte_verif"); 
  
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY formulacion ASC",'*'); 
 
 
 //TRAE EL NUMERO DE REFERENCIA +1 PARA GUARDARLO SI NO ESCOGE GENERICA
@@ -958,6 +958,8 @@ swal({
              }
  
      sumaImpuesto($("#N_precio").val(),$("#valor_impuesto").val());
+
+     TipoSolapa()
  });
 
     
@@ -993,14 +995,6 @@ swal({
    }); 
    
    
-   
-
-   $('#N_solapa').on('change', function() { 
-           if ($("#N_solapa").val() > 0  ){
-                $("#tiposolapa").val("2"); //2 es sencilla por defecto
-           }
-   
-   });
 
 
 /*   $('#N_precio_old').on('change', function() { 
@@ -1024,6 +1018,7 @@ swal({
 
  
        $('.botonGeneral').on('click', function(){
+          TipoSolapa(); 
         if($("#Str_nit").val()!='' && $("#B_estado").val()!='' && $("#N_ancho").val()!='' && $("#N_alto").val()!='' && $("#N_calibre").val()!='' && $("#tipo_bolsa").val()!=''  && $("#N_precio").val()!='' && $("#valor_impuesto").val()!='' && $("#N_precio_old").val()!='' && $("#N_cant_impresion").val()!='' && $("#vendedor").val()!='' && $("#N_comision").val()!='' ){
 
            $('#content').html('<div class="loader"></div>'); setTimeout(function() { $(".loader").fadeOut("slow");},3000); 
@@ -1031,12 +1026,26 @@ swal({
         }
     });  
 
-$('.botonGeneral').on('click', function(){
-   if($("#N_solapa").val()!='' && $("#tiposolapa").val()=='0'){
-      swal("Especifique si la solapa es Sencilla/Doble");
-        required="required"
-   }
-}); 
+ 
+
+       $('#N_solapa').on('change', function() { 
+               TipoSolapa();   
+       });
+
+        function TipoSolapa(){
+          if($("#N_solapa").val()>0.00){
+            $("#tiposolapa").val("2"); //2 es sencilla por defecto
+          }else{
+            $("#tiposolapa").val("0"); //2 es sencilla por defecto
+          }
+          if( ($("#N_solapa").val()!='' ) && $("#tiposolapa").val()=='0'){
+               
+               //swal("Especifique si la solapa es Sencilla/Doble");
+              $("#tiposolapa").attr("required", "true"); 
+          }else{
+             $("#tiposolapa").attr("required", "false"); 
+          }
+        }
 
 $(document).ready(function(){
       

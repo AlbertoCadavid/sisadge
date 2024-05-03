@@ -301,6 +301,15 @@ $insumo3 = mysql_query($query_insumo3, $conexion1) or die(mysql_error());
 $row_insumo3 = mysql_fetch_assoc($insumo3);
 $totalRows_insumo3 = mysql_num_rows($insumo3);
 
+
+$ref_cotiz = $row_referencia_editar['cod_ref'];
+
+mysql_select_db($database_conexion1, $conexion1);
+$query_cotiza = "SELECT N_precio,tipo_bolsa,sello_superior FROM tbl_cotiza_bolsa WHERE N_referencia_c= '$ref_cotiz' ORDER BY N_cotizacion DESC limit 0,1 " ; 
+$cotiza = mysql_query($query_cotiza, $conexion1) or die(mysql_error());
+$row_cotiza = mysql_fetch_assoc($cotiza);
+$totalRows_cotiza = mysql_num_rows($cotiza);
+
 //SELECTS COMBOS
  $materiasss=$conexion->llenaSelect('insumo',"WHERE clase_insumo='8' AND estado_insumo='0' ", "ORDER BY descripcion_insumo ASC","id_insumo, descripcion_insumo " );
 
@@ -314,7 +323,7 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
 <script type="text/javascript" src="js/formato.js"></script>
 <script type="text/javascript" src="js/validacion_numerico.js"></script>
 <script type="text/javascript" src="js/consulta.js"></script>
-
+<script type="text/javascript" src="AjaxControllers/js/funcionesmat.js"></script> 
 <!-- desde aqui para listados nuevos -->
 <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
 <link rel="stylesheet" type="text/css" href="css/general.css"/>
@@ -426,10 +435,10 @@ $totalRows_insumo3 = mysql_num_rows($insumo3);
       <tr>
         <td id="dato1"><input name="ancho_ref" id="ancho_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['ancho_ref']; ?>"/></td>
         <td id="dato1"><input name="largo_ref" id="largo_ref" type="number" style="width:90px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['largo_ref']; ?>"/></td>
-        <td id="dato1"><input type="radio" name="valora" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" onclick="calcular_pesom();"/> Sencilla<br />
-          <input type="radio" name="valora" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onclick="calcular_pesom();"/>
+        <td id="dato1"><input type="radio" name="valora" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],2))) {echo "checked=\"checked\"";} ?> value="2" id="mostrar" onclick="calcular_pesom(),validaRadiosolapa();"/> Sencilla<br />
+          <input type="radio" name="valora" id="mostrar" <?php if (!(strcmp($row_referencia_editar['b_solapa_caract_ref'],1))) {echo "checked=\"checked\"";} ?> value="1" onclick="calcular_pesom(),validaRadiosolapa();"/>
           Doble</td>
-        <td id="dato1"><input name="solapa_ref" id="solapa_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['solapa_ref']; ?>" onblur="validarRadio(),calcular_pesom()"/></td>
+        <td id="dato1"><input name="solapa_ref" id="solapa_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['solapa_ref']; ?>" onblur="validarRadio(),calcular_pesom();"/></td>
         <td id="dato1"><input name="calibre_ref" id="calibre_ref" type="number" style="width:50px" min="0.00" step="0.01" required="required" value="<?php echo $row_referencia_editar['calibre_ref']; ?>" onBlur="calcular_pesom()"/>
           <input name="bolsillo_guia_ref" type="hidden" id="bolsillo_guia_ref" value="<?php echo $row_referencia_editar['bolsillo_guia_ref']; ?>" size="10"/>
           <input name="B_fuelle" type="hidden" id="B_fuelle" value="<?php echo $row_referencia_editar['N_fuelle']?>" size="10" /></td>
@@ -509,7 +518,12 @@ do {
       </tr>
       <tr>
         <td colspan="9" id="dato4">
+          <input name="valor_impuesto_backup" id="valor_impuesto_backup" style="width:50px" type="hidden" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> />
             IMPUESTO $  <strong><input name="valor_impuesto" id="valor_impuesto" style="width:50px" type="text" value="<?php echo $row_referencia_editar['valor_impuesto']?>" <?php if(!$_SESSION['superacceso']){ echo "readonly"; } ?> /></strong>
+
+            <input name="N_precio" type="hidden" style="width:100px" min="0" step="0.01" id="N_precio" value="<?php echo $row_cotiza['N_precio']==''?0:$row_cotiza['N_precio']; ?>"/> 
+            
+            <span style="color: red;" >CALCULAR IMPUESTO CON FORMULA </span> <input type="checkbox" name="calculaformula" id="calculaformula" title="Solamente para referencias nuevas" value="1"> <label for="calculaformula">
         </td>
       </tr>
       <tr id="tr1">
@@ -790,6 +804,35 @@ do {
   <?php echo $conexion->header('footer'); ?>
 </body>
 </html>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    validaRadiosolapa();
+
+    if($("#calculaformula").val()==1){
+      $("#calculaformula").val('1')
+        $("#calculaformula").prop("checked", true);
+    }else{
+      $("#calculaformula").val('0')
+        $("#calculaformula").prop("checked", false);
+    }
+  });
+  //valida radio solapa 
+  $('input:radio[name=valora]:checked').click(function () {
+             if ($("input[name='valora']:checked").val() > '0') {
+                 validaRadiosolapa()
+             } 
+         });
+ 
+    $('#calculaformula').on('change', function() { 
+     
+        if( $("#ancho_ref").val()!='' && $("#largo_ref").val()!='' &&  $("#solapa_ref").val()!='' && $("#calibre_ref").val()!='' && $("#N_precio").val()!='' ) 
+      {   
+    
+        pesoMillarFormulaCotizPakRef($("#mostrar").val(),$("#ancho_ref").val(),$("#largo_ref").val(),$("#solapa_ref").val(),$("#calibre_ref").val(),$("#N_precio").val(),$("#valor_impuesto_backup").val() );
+      } 
+   });
+</script>
 <?php
 mysql_free_result($usuario);
 

@@ -301,7 +301,7 @@ function MM_popupMsg(msg) { //v1.0
                             mysql_data_seek($verlinc, 0);
                             $row_verlinc = mysql_fetch_assoc($verlinc);
                           }
-                          ?>
+                          ?> 
                         </select></td>
                         <td colspan="2" id="fuente1"><?php $idmp=$row_materia['Str_referencia'];
                         if($idmp!=''){ 
@@ -311,9 +311,9 @@ function MM_popupMsg(msg) { //v1.0
                           if($num_select>='1') { 
                            $nombre_link=mysql_result($result_select,0,'Str_linc_archivo'); }
                            ?>
-                           <a href="javascript:verFoto('archivosc/archivos_pdf_mp/<?php echo $nombre_link ?>','610','490')" target="_blank"><?php echo $nombre_link ?></a>
+                           <a href="javascript:verFoto('archivosc/archivos_pdf_mp/<?php echo $nombre_link; ?>','800','600')"> <?php echo $nombre_link; ?></a> 
                          <?php }else  echo "<span class='rojo'>No tiene archivos adjuntos</span>";  ?>
-                         <input type="hidden" name="Str_linc" id="Str_linc" value="<?php echo $nombre_link; ?>"/></td>
+                         <input type="hidden" name="Str_linc" id="Str_linc" value="<?php echo $nombre_link; ?>"/><input type="file" name="Fil_archivo"/></td>
                        </tr>
                        <tr>
                         <td id="fuente4">&nbsp;</td>

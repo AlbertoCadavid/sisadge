@@ -212,7 +212,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                            <select name="tipo_bolsa" id="tipo_bolsa" style="width:160px" required>
                                <option value="">Seleccione...</option>
                                   <?php  foreach($row_formulas as $row_formulas ) { ?>
-                               <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                               <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $tippobolsa))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
                            <?php } ?>
                            </select> 
  
@@ -515,7 +515,11 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
            sumatoriaDoble = (largo)+(parseFloat($('#N_solapa').val())*parseInt(3))+2;//solapa vale 3
      }else if(sellosuperior=='' && solaparadio=='0'){ 
            sumatoriaDoble = (largo);//no tiene solapa
-     }
+     }else if(sellosuperior=='' && solaparadio=='1'){
+           sumatoriaDoble = (largo)+(solapa);  
+   }else if(sellosuperior=='' && solaparadio=='2'){
+           sumatoriaDoble = (largo)+(solapa); 
+   }
  
        var anchoRollo=(sumatoriaDoble+fuelle); 
        

@@ -348,7 +348,7 @@ $row_unidad_ocho = mysql_fetch_assoc($unidad_ocho);
 $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
 
 
-$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY id_for  ASC",'*'); 
+$row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' and material='1' ORDER BY formulacion ASC",'*'); 
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -661,7 +661,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                        <select name="str_tipo_bolsa_op" id="str_tipo_bolsa_op"  onchange="if(form1.str_tipo_bolsa_op.value=='PACKING LIST') { swal('PUEDE EDITAR EL METRO LINEAL YA QUE ES UN PACKING LIST')}else if(form1.str_tipo_bolsa_op.value=='BOLSA TROQUELADA'){anchoRolloRefOp();}else{calcular_op()}"  style="width:200px" >
                                         <option value="">Seleccione...</option>
                                            <?php  foreach($row_formulas as $row_formulas ) { ?>
-                                        <option value="<?php echo $row_formulas['formulacion']?>"<?php if (!(strcmp($row_formulas['formulacion'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
+                                        <option value="<?php echo $row_formulas['nombre']?>"<?php if (!(strcmp($row_formulas['nombre'], $row_referencia['tipo_bolsa_ref']))) {echo "selected=\"selected\"";} ?>><?php echo $row_formulas['formulacion']?></option>
                                     <?php } ?>
                                     </select>
                                   </td>

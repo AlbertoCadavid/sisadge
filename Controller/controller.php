@@ -74,7 +74,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
      //LLENAR CAMPOS
     public function llenarCampos($tabla, $condicion, $orden='', $distinct='' ){  
-      //echo "SELECT $distinct FROM $tabla $condicion $orden  ";
+      //echo "SELECT $distinct FROM $tabla $condicion $orden  ";die; 
       $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden ") or die($this->conexion->error);
       if($resultado)
         $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
@@ -87,7 +87,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
     //LLENA COMBOS CONVIERTE 
      public function llenaSelect($tabla, $condicion='', $orden='' ){ 
-       
+       //echo "SELECT * FROM $tabla $condicion $orden "."<pre>"; 
        $resultado = $this->conexion->query("SELECT * FROM $tabla $condicion $orden ") or die($this->conexion->error); 
        if($resultado) 
          //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 
@@ -99,7 +99,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
      //LLENA LISTADOS CON FOREACH
       public function llenaListas($tabla, $condicion, $orden='', $distinct=''){ 
-        //echo "SELECT $distinct FROM $tabla $condicion $orden";
+        //echo "SELECT $distinct FROM $tabla $condicion $orden";die;
         $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden") or die($this->conexion->error);
 
         if($resultado) 
@@ -167,7 +167,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
   //ACTUALIZAR
     public function actualizar($tabla, $campos, $condicion){   
-    //echo "UPDATE $tabla SET $campos WHERE $condicion";die; 
+     //echo "UPDATE $tabla SET $campos WHERE $condicion";die; 
       $resultado  =   $this->conexion->query("UPDATE $tabla SET $campos WHERE $condicion") or die($this->conexion->error);
       if($resultado)
         return true;

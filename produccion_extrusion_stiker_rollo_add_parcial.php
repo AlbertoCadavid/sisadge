@@ -148,7 +148,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
         $conexion->actualizar("tblextruderrollo", "kilos_r = '$nuevokg', rolloParcial_r = '0', kilos_parcial_r = '$nuevokg_parcial'", "id_r = $dato[id_r] AND id_op_r = $_POST[id_op_r]");
       }
     }
-   $kilo_parcial = ($_POST['kilos_r'] * $_POST['mts_parcial_actual']) / $_POST['metro_r']; //si el rollo ya es el final, se realiza la regla de 3 para colocar los kilos reales 
+   $kilo_parcial = round(($_POST['kilos_r'] * $_POST['mts_parcial_actual']) / $_POST['metro_r']); //si el rollo ya es el final, se realiza la regla de 3 para colocar los kilos reales 
   }
 
 

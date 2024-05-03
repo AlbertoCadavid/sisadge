@@ -238,11 +238,7 @@ switch ($tipoListado) {
         </tr>
         <?php do { ?>
           <tr>
-            <!-- N_OP -->
             <td nowrap="nowrap" id="dato2"><?php echo $row_orden_produccion['id_op_r']; ?></td>
-            <!--  -->
-
-            <!-- Cliente -->
             <td nowrap="nowrap" id="dato2">
               <?php
               $op_c = $row_orden_produccion['id_op_r'];
@@ -266,46 +262,26 @@ switch ($tipoListado) {
               } else {
                 echo "";
               } ?>
-              </a>
-            </td>
-            <!--  -->
-
-            <!-- Ref -->
+              </a></td>
             <td id="dato2"><?php echo $row_orden_produccion['ref_r']; ?></td>
-            <!--  -->
-            
-            <!-- Rollo -->
             <td id="dato2"><?php echo $num_rollo; ?></td>
-            <!--  -->
-
-            <!-- Kilos -->
             <td id="dato2"><?php echo round($row_orden_produccion['KILOS'], 2); ?></td>
-            <!--  -->
-
-            <!-- Kilos Desp -->
             <td id="dato2"><?php
 
                             $fechaI = $row_orden_produccion['fechaI_r'];
 
                             if ($num_rollo != '') {
-                              $query_desperdicio = "SELECT *, (SUM(trd.valor_desp_rd) ) AS T_desp FROM tbl_reg_desperdicio trd WHERE trd.op_rd=$op_c AND trd.int_rollo_rd=$num_rollo AND trd.id_proceso_rd='4' AND trd.fecha_rd='$fechaI' GROUP BY trd.int_rollo_rd ASC";
+                              $query_desperdicio = "SELECT SUM(trd.valor_desp_rd) AS T_desp FROM tbl_reg_desperdicio trd WHERE trd.op_rd=$op_c AND trd.int_rollo_rd=$num_rollo AND trd.id_proceso_rd='4' AND trd.fecha_rd='$fechaI' GROUP BY trd.int_rollo_rd ASC";
                               $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
                               $row_desperdicio = mysql_fetch_assoc($desperdicio);
                               echo $row_desperdicio['T_desp'];
                             }
                             //echo $row_orden_produccion['int_kilos_desp_rp']; 
-                            ?>
-            </td>
-            <!--  -->
-
-            <!-- Tiempos Total -->
+                            ?></td>
             <td id="dato2"><?php
                             $tiempototal = $row_orden_produccion['TIEMPODIFE'];
                             $totaltiempo = horadecimalUna($tiempototal);
-                            echo $totaltiempo; ?>
-            </td>
-            <!--  -->
-
+                            echo $totaltiempo; ?></td>
             <td id="dato2"><?php
                             if ($num_rollo != '') {
                               $query_tiempoMuerto = "SELECT SUM(trt.valor_tiem_rt) AS muertos FROM Tbl_reg_tiempo trt WHERE trt.op_rt=$op_c AND trt.id_rpt_rt <> '141' AND trt.int_rollo_rt=$num_rollo AND trt.id_proceso_rt='4' AND trt.fecha_rt='$fechaI'";

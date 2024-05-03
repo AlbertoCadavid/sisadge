@@ -33,6 +33,7 @@ class oComercial{
 
         try 
         {
+             //echo "SELECT * FROM $tabla WHERE $columna = $id ORDER BY $columna DESC";die;
             $stm = $this->db->query("SELECT * FROM $tabla WHERE $columna = $id ORDER BY $columna DESC");
             if($stm){
             while($filas=$stm->fetch_assoc()){
@@ -48,6 +49,26 @@ class oComercial{
         }
     }
 
+
+    public function ObtenerDos($tabla,$where )
+    {
+
+        try 
+        {
+            $stm = $this->db->query("SELECT * FROM $tabla $where ");
+            if($stm){
+            while($filas=$stm->fetch_assoc()){
+                $this->ordenc[]=$filas;
+            }
+
+            return $this->ordenc;
+            }
+
+        } catch (Exception $e) 
+        {
+            die($e->getMessage());
+        }
+    }
 
     public function ObtenerId($tabla,$columna,$columna2,$id)
     {
@@ -121,12 +142,12 @@ class oComercial{
         {
             die($e->getMessage());
         }
-    }
+    } 
 
 
     public function RegistrarItems($tabla,$columna, $data)
     { 
-
+ 
         try 
         {
             foreach ($data as $data) {
