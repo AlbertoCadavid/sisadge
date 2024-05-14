@@ -100,7 +100,7 @@ if (isset($_GET['id_pedido'])) {
   $colname_detalle = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_detalle = sprintf("SELECT * FROM Tbl_items_ordenc WHERE id_pedido_io = '%s' ORDER BY id_items ASC", $colname_detalle); 
+$query_detalle = sprintf("SELECT * FROM Tbl_orden_compra toc, Tbl_items_ordenc tio WHERE toc.id_c_oc='$id_oc' AND toc.id_pedido = '%s' AND toc.id_pedido = tio.id_pedido_io ORDER BY tio.id_items ASC", $colname_detalle);  
 $detalle = mysql_query($query_detalle, $conexion1) or die(mysql_error());
 $row_detalle = mysql_fetch_assoc($detalle);
 $totalRows_detalle = mysql_num_rows($detalle);
@@ -110,7 +110,7 @@ if (isset($_GET['id_pedido'])) {
   $colname_remision = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_remision = sprintf("SELECT * FROM Tbl_orden_compra,Tbl_remision_detalle,Tbl_remisiones,Tbl_items_ordenc WHERE Tbl_orden_compra.id_pedido = '%s' AND Tbl_orden_compra.b_borrado_oc='0' AND tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND Tbl_items_ordenc.id_items = Tbl_remision_detalle.int_item_io_rd ORDER BY  Tbl_items_ordenc.id_items ASC", $colname_remision);
+$query_remision = sprintf("SELECT * FROM Tbl_orden_compra,Tbl_remision_detalle,Tbl_remisiones,Tbl_items_ordenc WHERE tbl_orden_compra.id_c_oc='$id_oc' AND Tbl_orden_compra.id_pedido = '%s' AND Tbl_orden_compra.id_pedido = Tbl_items_ordenc.id_pedido_io AND Tbl_orden_compra.b_borrado_oc='0' AND tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND Tbl_items_ordenc.id_items = Tbl_remision_detalle.int_item_io_rd ORDER BY  Tbl_items_ordenc.id_items ASC", $colname_remision);
  
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);

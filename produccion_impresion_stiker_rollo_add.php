@@ -448,7 +448,7 @@ $row_Rollo_E = mysql_fetch_assoc($Rollo_E);
 $totalRows_Rollo_E = mysql_num_rows($Rollo_E);
 
 //INFORMACION DE LAS BANDERAS
-$rollos_info = $conexion->llenaListas('`tbl_banderas` as tb INNER JOIN tblextruderrollo as te', "ON tb.id_op = te.id_op_r AND tb.rollo_r = te.rollo_r WHERE tb.id_op='$colname_Rollo_E' AND tb.proceso = 1 AND Tb.rollo_r NOT IN (SELECT TblImpresionRollo.rollo_r FROM TblImpresionRollo WHERE  TblImpresionRollo.id_op_r=tb.id_op)","", 'tb.*, te.metro_r');
+$rollos_info = $conexion->llenaListas('`tbl_banderas` as tb', "WHERE tb.id_op='$colname_Rollo_E' AND tb.proceso = 1 AND Tb.rollo_r NOT IN (SELECT TblImpresionRollo.rollo_r FROM TblImpresionRollo WHERE  TblImpresionRollo.id_op_r=tb.id_op)","", 'tb.*');
 
 
 //ROLLOS IMPRESOS
@@ -956,7 +956,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
           <h5 style="color:red">
           <?php 
           foreach ($rollos_info as $value) {
-            echo "OJO BANDERA de ".ucfirst($value['nombre'])." en el rollo ".$value['rollo_r']." a los ".($value['metro_r']-$value['metros'])." mts".'<br>';
+            echo "OJO BANDERA de ".ucfirst($value['nombre'])." en el rollo ".$value['rollo_r']." a los ".($value['metros_rollo']-$value['metros'])." mts".'<br>';
           }
           
         ?>

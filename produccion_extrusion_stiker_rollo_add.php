@@ -280,8 +280,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     }
   }
   /* Fin Desperdicios */
-  
-  if ($_POST['rolloParcial_r'] === "1"){
+
+  if ($_POST['rolloParcial_r'] === "1") {
     $insertGoTo = "produccion_extrusion_listado_rollos.php";
   } else {
     $insertGoTo = "produccion_extrusion_stiker_rollo_vista.php?id_op_r=" . $_POST['id_op_r'] . "&rollo_r=$_POST[rollo_r]";
@@ -401,7 +401,7 @@ $row_desperdicios = mysql_fetch_assoc($desperdicios);
 $totalRows_desperdicios = mysql_num_rows($desperdicios);
 
 //MAQUINAS
-$row_maquinas_ext = $conexion->llenaSelect("maquina","WHERE activo=0 AND proceso_maquina='1'", " ORDER BY id_maquina DESC");
+$row_maquinas_ext = $conexion->llenaSelect("maquina", "WHERE activo=0 AND proceso_maquina='1'", " ORDER BY id_maquina DESC");
 /* mysql_select_db($database_conexion1, $conexion1);
 $query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='1' ORDER BY id_maquina DESC";
 $maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
@@ -586,12 +586,14 @@ $totalRows_maquinas = mysql_num_rows($maquinas); */
         <td id="fuente1">
 
           <select name="cod_empleado_r" id="montaje">
-            <option value="" <?php if (!(strcmp("", $row_rollo['cod_empleado_r']))) { echo "selected=\"selected\""; } ?>>Seleccione</option>
+            <option value="" <?php if (!(strcmp("", $row_rollo['cod_empleado_r']))) {
+                                echo "selected=\"selected\"";
+                              } ?>>Seleccione</option>
             <?php foreach ($row_codigo_empleado as $row_codigo_empleado) { ?>
               <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_rollo['cod_empleado_r']))) {
                                                                                       echo "selected=\"selected\"";
                                                                                     } ?>><?php echo $row_codigo_empleado['codigo_empleado'] . " - " . $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado'] ?>
-                                                                                    </option>
+              </option>
             <?php } ?>
           </select>
 
@@ -604,10 +606,13 @@ $totalRows_maquinas = mysql_num_rows($maquinas); */
         <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="7" style="width:40px" required value="<?php echo $row_rollo['turno_r']; ?>"></td>
         <td id="fuente1">MAQUINA</td>
         <td id="fuente1"><select required="required" name="str_maquina_rp" id="maquina" style="width:120px">
-            <option value=""<?php if (!(strcmp("", $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>>Seleccione</option>
+            <option value="" <?php if (!(strcmp("", $row_rollo['str_maquina_ext']))) {
+                                echo "selected=\"selected\"";
+                              } ?>>Seleccione</option>
             <?php foreach ($row_maquinas_ext as $row_maquinas) { ?>
-              <option value="<?php echo $row_maquinas['id_maquina'] ?>"
-                            <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo['str_maquina_ext']))) { echo "selected=\"selected\""; } ?>><?php echo $row_maquinas['nombre_maquina']?>
+              <option value="<?php echo $row_maquinas['id_maquina'] ?>" <?php if (!(strcmp($row_maquinas['id_maquina'], $row_rollo['str_maquina_ext']))) {
+                                                                          echo "selected=\"selected\"";
+                                                                        } ?>><?php echo $row_maquinas['nombre_maquina'] ?>
               </option>
             <?php } ?>
           </select>
@@ -836,7 +841,7 @@ $totalRows_maquinas = mysql_num_rows($maquinas); */
         <td colspan="4" id="fuente5">&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="4" id="fuente2"><input type="button" class="botonGeneral" name="button" id="buttonExt" value="GUARDAR" onclick= 'parcial(); validaTodoExtruder()'><!--onClick="envio_form(this);"--></td>
+        <td colspan="4" id="fuente2"><input type="button" class="botonGeneral" name="button" id="buttonExt" value="GUARDAR" onclick='parcial(); validaTodoExtruder()'><!--onClick="envio_form(this);"--></td>
       </tr>
       <tr>
         <td colspan="4" id="dato2"></td>
@@ -1048,6 +1053,10 @@ $totalRows_maquinas = mysql_num_rows($maquinas); */
     } else {
       $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, kilos)))
     }
+
+    $("#kilos_r").focus();
+    swal("Verifique el peso del Rollo");
+
   })
 </script>
 

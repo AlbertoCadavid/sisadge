@@ -507,7 +507,8 @@ class CselladoController
       $op_id = $_POST["id_op"];
       $rollo = $_POST["rollo_r"];
 
-      $resp =  $this->bandera->consultaBandera("tb.*, tx.metro_r as metros_extruder", "tbl_banderas as tb", "INNER JOIN tblextruderrollo as tx ON (tb.id_op = tx.id_op_r AND tb.rollo_r = tx.rollo_r)", "id_op", $op_id, "AND tb.rollo_r = $rollo AND tb.visto is null ORDER BY tb.proceso DESC");
+      //$resp =  $this->bandera->consultaBandera("tb.*, tx.metro_r as metros_extruder", "tbl_banderas as tb", "INNER JOIN tblextruderrollo as tx ON (tb.id_op = tx.id_op_r AND tb.rollo_r = tx.rollo_r)", "id_op", $op_id, "AND tb.rollo_r = $rollo AND tb.visto is null ORDER BY tb.proceso DESC");
+      $resp =  $this->bandera->consultaBandera("tb.*, sum(tx.metro_parcial_r) as metros_extruder", "tbl_banderas as tb", "INNER JOIN tblextruderrollo as tx ON (tb.id_op = tx.id_op_r AND tb.rollo_r = tx.rollo_r)", "id_op", $op_id, "AND tb.rollo_r = $rollo AND tb.visto is null GROUP BY tb.id_bandera ORDER BY tb.proceso DESC");
       if ($resp) {
         return $resp;
       } else return false;

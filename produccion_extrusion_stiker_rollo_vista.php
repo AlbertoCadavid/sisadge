@@ -414,7 +414,7 @@ if ($modulo == 0) {
       </tr>
       <tr>
         <td nowrap="nowrap" id="stikersC_fuentN">TOTAL B:</td>
-        <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;"><?php echo $row_rollo_extrusion['bandera_r']; ?></td>
+        <td nowrap="nowrap" id="stikers_fuentN" style="border-right: 3px solid #000000;"><?php echo sizeof($banderas); ?></td>
 
       </tr>
       <!-- <tr>

@@ -509,8 +509,8 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                             $factura_oc =  $resultmp['factura_oc']; 
                         } 
 
-                        $idoc = $row_remision['str_numero_oc_r'];
-                        $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
+                        $idoc = $row_remision['id_pedido_oc'];
+                        $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                          foreach($select_direccion as $row_direccion) { 
                            $vende = $row_direccion['nombre_vendedor']." ";
                          } 

@@ -140,7 +140,7 @@ $totalRows_detalle = mysql_num_rows($detalle);
 
                 <table class="table table-bordered table-sm">
                   <tr>
-                    <td rowspan="4" align="center" ><img src="images/logoacyc.jpg"></td> 
+                    <td rowspan="5" align="center" ><img src="images/logoacyc.jpg"></td> 
                   </tr>  
                   <tr>
                     <td style="color: red;" align="center" ><h3> N&deg; <?php echo $row_orden_compra['n_oc']; ?> </h3></td>
@@ -150,6 +150,9 @@ $totalRows_detalle = mysql_num_rows($detalle);
                   </tr>
                 </table>
                 <table class="table table-bordered table-sm">
+                  <tr>
+                    <td colspan="20"><b style="color: red;" > Somos Agentes retenedores del impuesto de Instistria y Comercio de Medellin (ICA) - Resolucion 20245013185 de 2024</b></td>
+                  </tr>
                   <tr>
                     <td colspan="5" ><strong>FECHA DE PEDIDO : </strong><?php echo $row_proveedor_oc['fecha_pedido_oc']; ?></td>
                     <td colspan="5" ><strong>FECHA DE ENTREGA : </strong><span class="rojo_azul_n" > <?php echo $row_proveedor_oc['fecha_entrega_oc']; ?></span></td>

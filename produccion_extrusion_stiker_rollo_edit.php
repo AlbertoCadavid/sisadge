@@ -126,12 +126,25 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     $parcial = 1;
   } else {
     $parcial = 0;
-    $updateParcialRollosSQL = sprintf(
-      "UPDATE tblextruderrollo SET rolloParcial_r = %s WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]",
-      GetSQLValueString($parcial, "int")
+     /* busco los rollos existentes y le cambio los kilos calculados por los kilos reales y le cambio el estado de parcial a 0 */
+     $row_info_kilos_rollos = $conexion->llenaListas("tblextruderrollo", "WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]", "", "*");
+     if ($row_info_kilos_rollos) {
+       foreach ($row_info_kilos_rollos as $dato) {
+         $nuevokg = ($_POST['kilos_r'] * $dato['metro_r']) / $_POST['metro_r']; // regla de 3 a los kilos totales de los rollos anteriores
+         $nuevokg_parcial = ($_POST['kilos_r'] * $dato['metro_parcial_r']) / $_POST['metro_r']; // regla de 3 a los kilos parciales de los rollos anteriores
+         $conexion->actualizar("tblextruderrollo", "kilos_r = $_POST[kilos_r], metro_r = $_POST[metro_r], rolloParcial_r = '0', kilos_parcial_r = '$nuevokg_parcial'", "id_r = $dato[id_r] AND id_op_r = $_POST[id_op_r]");
+         //$conexion->actualizar("tblextruderrollo", "kilos_r = '$nuevokg', rolloParcial_r = '0', kilos_parcial_r = '$nuevokg_parcial'", "id_r = $dato[id_r] AND id_op_r = $_POST[id_op_r]");
+       }
+     }
+    /* $updateParcialRollosSQL = sprintf(
+      "UPDATE tblextruderrollo SET rolloParcial_r = %s, metro_r = %s, kilos_r = %s WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]",
+      GetSQLValueString($parcial, "int"),
+      GetSQLValueString($_POST['metro_r'], "int"),
+      GetSQLValueString($_POST['kilos_r'], "double")
     );
     mysql_select_db($database_conexion1, $conexion1);
     $Resultt = mysql_query($updateParcialRollosSQL, $conexion1) or die(mysql_error());
+ */
   }
 
   $updateSQL = sprintf(
@@ -1060,23 +1073,28 @@ $num_banderas = sizeof($banderas);
     let total = parseInt($("#metro_r").val());
     let totalAnterior = parseInt(<?php echo $row_rollo_estrusion_edit['metro_r']?>);
     let parcial = parseInt(<?php echo $row_rollo_estrusion_edit['metro_parcial_r']?>);
+    
     if(total > totalAnterior){
       $("#mts_parcial_actual").val(parcial-(totalAnterior-total))
-    } else if(total < totalAnterior){
+    } else if(total <= totalAnterior){
       $("#mts_parcial_actual").val(parcial+(total-totalAnterior))
     } 
+
+    let reglaTres = reglaTresKilos();
+    $("#kg_parcial_actual").val(reglaTres);
   })
 
   $("#kilos_r").on("change", function() {
-    let total = parseInt($("#kilos_r").val());
-    let totalAnterior = parseInt(<?php echo $row_rollo_estrusion_edit['kilos_r']?>);
-    let parcial = parseInt(<?php echo $row_rollo_estrusion_edit['kilos_parcial_r']?>);
-    if(total > totalAnterior){
-      $("#kg_parcial_actual").val(parcial-(totalAnterior-total))
-    } else if(total < totalAnterior){
-      $("#kg_parcial_actual").val(parcial+(total-totalAnterior))
-    } 
+    let reglaTres = reglaTresKilos();
+    $("#kg_parcial_actual").val(reglaTres);
   })
+
+  function reglaTresKilos(){
+    let totalK = parseInt($("#kilos_r").val());
+    let mtsParcial = parseInt($("#mts_parcial_actual").val());
+    let mtsTotal = parseInt($("#metro_r").val());
+    return parseInt((totalK * mtsParcial)/mtsTotal);
+  }
 </script>
 
 <?php

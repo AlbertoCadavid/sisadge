@@ -141,7 +141,7 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
 
    $faltantes = $conexion->llenaListas('tbl_faltantes', " WHERE id_op_f='".$op_gen."' "." AND int_paquete_f='".$paq_gen."' "." AND int_caja_f='".$caja_gen."' ", 'ORDER BY int_inicial_f ASC','int_inicial_f,int_final_f ' );
    ?>
-   <?php if($faltantes): ?>
+   <?php if($faltantes && sizeof($faltantes) <= 5): ?>
 
         <div class="box" >
           <table align="center" class="tableFaltantes"> <!-- border="1"  -->
@@ -149,7 +149,7 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
                  <tr>
                    <td nowrap="nowrap" ><b>FALTANTES Paq: <?php echo $paq_gen; ?> Caja:<?php echo $caja_gen ; ?> OP:<?php echo $op_gen; ?> </b></td>
                  </tr>    
-                 <?php foreach ($faltantes as $row_vista_faltantes) { ?>
+                 <?php foreach ($faltantes as $key => $row_vista_faltantes) { ?>
                   <tr>
                    <td id="stikers_fuentN2"><?php echo 'Del: <b>'. $row_vista_faltantes['int_inicial_f'].$row_info_op['charfin']; ?> - <?php echo '</b>Al: <b>'. $row_vista_faltantes['int_final_f'].$row_info_op['charfin']."</b> "; ?></td>
                  </tr> 
@@ -158,6 +158,35 @@ $hasta = $row_numeracion['int_hasta_tn'];//inicial de la etiqueta
          </table> 
         </div>
   <?php endif; ?> 
+
+  <?php if($faltantes && sizeof($faltantes) > 5): ?>
+
+<div class="box" >
+  <table align="center" class="tableFaltantes"> <!-- border="1"  -->
+   <?php if($faltantes[0]['int_inicial_f']!=''){ ?>
+         <tr>
+           <td nowrap="nowrap" ><b>FALTANTES Paq: <?php echo $paq_gen; ?> Caja:<?php echo $caja_gen ; ?> OP:<?php echo $op_gen; ?> </b></td>
+         </tr>    
+         <?php foreach ($faltantes as $key => $row_vista_faltantes) { if($key <= 5){?>
+          <tr>
+           <td id="stikers_fuentN2"><?php echo 'Del: <b>'. $row_vista_faltantes['int_inicial_f'].$row_info_op['charfin']; ?> - <?php echo '</b>Al: <b>'. $row_vista_faltantes['int_final_f'].$row_info_op['charfin']."</b> "; ?></td>
+         </tr> 
+       <?php } }  ?>
+     <?php }?> 
+ </table> 
+</div>
+<div class="box" >
+  <table align="center" class="tableFaltantes"> <!-- border="1"  -->
+   <?php if($faltantes[0]['int_inicial_f']!=''){ ?>   
+         <?php foreach ($faltantes as $key => $row_vista_faltantes) { if($key > 5){?>
+          <tr>
+           <td id="stikers_fuentN2"><?php echo 'Del: <b>'. $row_vista_faltantes['int_inicial_f'].$row_info_op['charfin']; ?> - <?php echo '</b>Al: <b>'. $row_vista_faltantes['int_final_f'].$row_info_op['charfin']."</b> "; ?></td>
+         </tr> 
+       <?php } }  ?>
+     <?php }?> 
+ </table> 
+</div>
+<?php endif; ?> 
     
 
   </div>

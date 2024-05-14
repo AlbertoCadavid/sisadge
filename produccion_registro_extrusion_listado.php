@@ -301,7 +301,9 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                             <td colspan="3" id="dato1">
                               <img src="images/falta.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Ingresada <br>
                               <img src="images/falta7.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Liquidada<br>
-                              <img src="images/completo.gif" width="20" height="17" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /> Ya tiene rollos
+                              <img src="images/completo.gif" width="20" height="17" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /> Ya tiene rollos<br>
+                              <img src="images/mas.gif"  width="20" height="17" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /> Agregar un solo rollo<br>
+                              <img src="images/mas_r.gif"  width="20" height="17" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /> Agregar varios rollos a la vez
                             </td>
                             <td colspan="3" id="dato1">
                               <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Extruyendo Falta por liquidar <br>
@@ -391,6 +393,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                   <?php if ($kilosE == '') { ?>
 
                                     <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','1000','1200')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
+                                    <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add_varios.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','1000','1200')"><img src="images/mas_r.gif" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /></a>
 
                                   <?php } else if ($kilosE != '' && ($parcial > '1')) {
                                     $tienerollos = 1; ?>

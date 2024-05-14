@@ -99,7 +99,7 @@ $desperdicios = $conexion->llenaListas(
     WHERE td.id_proceso_rd = 1 AND DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
     GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
-    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina "
+    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(td.valor_desp_rd),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina "
 );
 $produccion = $conexion->llenaListas(
     "tblextruderrollo AS te",
@@ -108,7 +108,7 @@ $produccion = $conexion->llenaListas(
     WHERE DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
     GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
-    "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina,maquina.nombre_maquina as maquina"
+    "empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(te.kilos_r),1) AS total_kilos, maquina.id_maquina,maquina.nombre_maquina as maquina"
 );
 
 $tmuertos = $conexion->llenaListas(
@@ -119,7 +119,7 @@ $tmuertos = $conexion->llenaListas(
     WHERE tt.id_proceso_rt = 1 AND DATE(te.fechaF_r) >= '$fechaToday' AND DATE(te.fechaF_r) <= '$fechaTomorrow'
     GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
-    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(tt.valor_tiem_rt) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(tt.valor_tiem_rt),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $desperdiciosWeek = $conexion->llenaListas(
@@ -133,7 +133,7 @@ $desperdiciosWeek = $conexion->llenaListas(
     AND DATE(te.fechaF_r) >= '$fechaWeekInit' AND DATE(te.fechaF_r) <= '$fechaWeekFin'
     GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
-    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(td.valor_desp_rd),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $produccionWeek = $conexion->llenaListas(
@@ -143,7 +143,7 @@ $produccionWeek = $conexion->llenaListas(
     WHERE DATE(te.fechaF_r) >= '$fechaWeekInit' AND DATE(te.fechaF_r) <= '$fechaWeekFin'
     GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
-    "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    "empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(te.kilos_r),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $tmuertosWeek = $conexion->llenaListas(
@@ -159,7 +159,7 @@ $tmuertosWeek = $conexion->llenaListas(
     GROUP BY 
     maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
-    " te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(tt.valor_tiem_rt) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    " te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(tt.valor_tiem_rt),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $produccionMonth = $conexion->llenaListas(
@@ -172,7 +172,7 @@ $produccionMonth = $conexion->llenaListas(
     GROUP BY 
     maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado ",
-    "empleado.nombre_empleado, empleado.apellido_empleado, SUM(te.kilos_r) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    "empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(te.kilos_r),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $desperdiciosMonth = $conexion->llenaListas(
@@ -184,7 +184,7 @@ $desperdiciosMonth = $conexion->llenaListas(
         AND DATE(te.fechaF_r) >= '$fechaMonth' AND DATE(te.fechaF_r) <= '$fechaFinMonth'
         GROUP BY maquina.id_maquina, empleado.nombre_empleado",
     "ORDER BY empleado.nombre_empleado",
-    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, SUM(td.valor_desp_rd) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
+    "te.cod_empleado_r, empleado.nombre_empleado, empleado.apellido_empleado, ROUND(SUM(td.valor_desp_rd),1) AS total_kilos, maquina.id_maquina, maquina.nombre_maquina as maquina"
 );
 
 $tmuertosMonth = $conexion->llenaListas(
@@ -379,6 +379,8 @@ GROUP BY
     let rowProdMonth = <?php echo json_encode($produccionMonth) ?>;
     let rowDesperdicosMonth = <?php echo json_encode($desperdiciosMonth) ?>;
     let rowTmuertosMonth = <?php echo json_encode($tmuertosMonth) ?>;
+console.log("prod diaria");
+console.log(rowProd);
 console.log("prod semanal");
 console.log(rowProdWeek);
 console.log("prod mensual");

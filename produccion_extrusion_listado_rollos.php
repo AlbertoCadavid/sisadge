@@ -167,7 +167,9 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
             <td id="subtitulo" style="color: red;">*Para visualizar la flecha de Liquidacion debe seleccionar justo en el rollo que divide el parcial</td>
           </tr>
           <tr>
-            <td id="fuente2"><a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a></td>
+            <td id="fuente2">(ADD varios rollos) <a href="produccion_extrusion_stiker_rollo_add_varios.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/mas_r.gif" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /></a>
+                            <a href="produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/mas.gif" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /></a> (ADD un rollo)
+            </td>
             <td id="fuente2"><a href="produccion_extrusion_listado_rollos_informe.php?id_op_r=<?php echo $_GET['id_op_r']; ?>"><img src="images/clip.gif" alt="INFORME" title="INFORME" border="0" style="cursor:hand;" /></a></td>
           </tr>
         </table>
@@ -211,7 +213,7 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
                                                                                                                                                                                                                                                           }  ?> </a></td>
                 <?php if ($row_rollo_estrusion['rolloParcial_r'] == 1) { ?>
                   <td id="dato1"><a href="produccion_extrusion_stiker_rollo_add_parcial.php?id_op_r=<?php echo $row_rollo_estrusion['id_op_r']; ?>&rollo_r=<?php echo $row_rollo_estrusion['rollo_r']; ?> " target="_top" style="text-decoration:none; color:#2582E2; font-size:12px"><?php echo "PARCIAL"; ?> </a></td>
-                <?php } else { ?>
+                <?php $existe_parcial=1;} else { ?>
                   <td style="width:65px"></td>
                 <?php } ?>
               </tr>
@@ -224,7 +226,12 @@ $totalPages_proceso_rollos = ceil($totalRows_proceso_rollos / $maxRows_proceso_r
               <td id="dato1">&nbsp;</td>
               <td id="dato1">&nbsp;</td>
               <td id="dato1">&nbsp;</td>
+              <?php if($existe_parcial == 1){?>
+                <td colspan="2" id="dato1"><a href="produccion_extrusion_stiker_rollo_add_varios_parciales.php?id_op_r=<?php echo $_GET['id_op_r']; ?> " target="_top" style="text-decoration:none; color:#229954; font-size:12px"><?php echo "PARCIALES"; ?> </a></td>
+              <?php } else {?>
+                <td id="dato1">&nbsp;</td>
               <td id="dato1">&nbsp;</td>
+              <?php } ?>
             </tr>
 
             <!-- <table id="tabla3">

@@ -127,7 +127,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0'
 if($str_numero != '0' && $id_c != '0' && $cod_ref != '0' && $int_remision!= '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones',' tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r, tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c'
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c'
   AND Tbl_orden_compra.b_estado_oc='$estado_oc'"); 
 }
 //Filtra remision lleno
@@ -141,14 +141,14 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0'
 if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY Tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc AND tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_remisiones.b_borrado_r='0' "); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY Tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc AND tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_remisiones.b_borrado_r='0' "); 
 
 }
 
 //Filtra str_numero lleno
 if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
-   $registros = $conexion->buscarListar('tbl_remisiones','tbl_remisiones.comprobante_file, ciudad_pais,str_transportador_r,factura_r,int_remision,str_numero_oc_r,fecha_r,str_guia_r,b_borrado_r','ORDER BY int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE str_numero_oc_r='$str_numero' AND b_borrado_r='0'"); 
+   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_remisiones.b_borrado_r,tbl_remisiones.id_pedido_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.id_pedido=tbl_remisiones.id_pedido_oc and tbl_remisiones.str_numero_oc_r='$str_numero' AND tbl_remisiones.b_borrado_r='0'"); 
 }
 
 
@@ -156,7 +156,7 @@ if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0'
 if($str_numero == '0' && $id_c != '0' && $cod_ref == '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc,tbl_orden_compra.b_estado_oc','ORDER BY  tbl_remisiones.fecha_r DESC','',$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.id_c_oc='$id_c' AND tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r AND tbl_remisiones.b_borrado_r='0' AND b_borrado_r='0' "); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY  tbl_remisiones.fecha_r DESC','',$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.id_c_oc='$id_c' AND tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r AND tbl_remisiones.b_borrado_r='0' AND b_borrado_r='0' "); 
  
 }
 //Filtra estado oc lleno
@@ -164,7 +164,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0'
 {
 
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc ','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r and tbl_remisiones.b_borrado_r='0' "); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc ','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r and tbl_remisiones.b_borrado_r='0' "); 
  
 }
 
@@ -172,7 +172,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0'
 if($str_numero == '0' && $id_c != '0'   && $cod_ref != '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and Tbl_orden_compra.id_c_oc='$id_c' and Tbl_remisiones.b_borrado_r='0'"); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and Tbl_orden_compra.id_c_oc='$id_c' and Tbl_remisiones.b_borrado_r='0'"); 
  
 }
 
@@ -180,7 +180,7 @@ if($str_numero == '0' && $id_c != '0'   && $cod_ref != '0' && $int_remision== '0
 if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND
   Tbl_orden_compra.b_estado_oc='$estado_oc'");
  
 }
@@ -188,7 +188,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0'
 if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE
   Tbl_remisiones.str_numero_oc_r='$str_numero' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND 
   Tbl_orden_compra.b_estado_oc='$estado_oc'");
  
@@ -203,7 +203,7 @@ if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0'
 if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE
   Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND  Tbl_remisiones.str_numero_oc_r='$str_numero' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.b_estado_oc='$estado_oc'");
 
 }
@@ -211,7 +211,7 @@ if($str_numero != '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0'
 if($str_numero == '0' && $id_c != '0' && $cod_ref == '0' && $int_remision!= '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE 
   Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c'");
  
 }
@@ -219,7 +219,7 @@ if($str_numero == '0' && $id_c != '0' && $cod_ref == '0' && $int_remision!= '0' 
 if($str_numero == '0' && $id_c != '0' && $cod_ref == '0' && $int_remision!= '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND  
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND  
   Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_orden_compra.id_c_oc='$id_c' ");
 
 }
@@ -235,16 +235,15 @@ if($str_numero == '0' && $id_c == '0' && $cod_ref == '0' && $int_remision== '0' 
   }
   
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones ','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r, 
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_orden_compra.str_numero_oc=tbl_remisiones.str_numero_oc_r AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");  
 
 }
-
 
 //Filtra remision, cliente y O.C llenos
 if($str_numero != '0' && $id_c != '0'  && $cod_ref == '0' && $int_remision!= '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' AND 
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' AND 
   Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c' ");
  
 }
@@ -252,21 +251,21 @@ if($str_numero != '0' && $id_c != '0'  && $cod_ref == '0' && $int_remision!= '0'
 if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision == '0' && $estado_oc== '0' && $estado_rd == '0'  && $anual != '0' && $mes != '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and year(tbl_remisiones.fecha_r) = '$anual' and month(tbl_remisiones.fecha_r) = '$mes' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc");
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and year(tbl_remisiones.fecha_r) = '$anual' and month(tbl_remisiones.fecha_r) = '$mes' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc");
  
 }
 //Filtra  FECHA
 if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision == '0' && $estado_oc== '0' && $estado_rd == '0'  && $anual != '0' && $mes != '0' && $dia != '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_remisiones.fecha_r =  '$fecha' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc"); 
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_remisiones.fecha_r =  '$fecha' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc"); 
 }
 
 //Filtra Estado o.c, FECHA
 if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision == '0' && $estado_oc!= '0' && $estado_rd == '0'  && $anual != '0' && $mes != '0' && $dia != '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_orden_compra.b_estado_oc='$estado_oc' and tbl_remisiones.fecha_r =  '$fecha' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc"); 
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_orden_compra.b_estado_oc='$estado_oc' and tbl_remisiones.fecha_r =  '$fecha' and  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc"); 
 }
 
 //Filtra Estado y AÑO, MES 
@@ -286,7 +285,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref == '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and year(tbl_remisiones.fecha_r) = '$anual' and month(tbl_remisiones.fecha_r) = '$mes' AND tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc");
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and year(tbl_remisiones.fecha_r) = '$anual' and month(tbl_remisiones.fecha_r) = '$mes' AND tbl_orden_compra.b_estado_oc='$estado_oc' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND  tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc");
   
 }
 
@@ -296,8 +295,9 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref == '0' && $int_remision== '0
   if($vende!='0'){
     $elvendedor = $conexion->llenarCampos("vendedor","WHERE id_vendedor=$vende","","nombre_vendedor");
     $vendedor = $elvendedor['nombre_vendedor'];
-  }
-  $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc");  
+  } 
+  $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones',' tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,id_pedido_oc
+tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_orden_compra.id_pedido=tbl_remisiones.id_pedido_oc");  //ORDER BY tbl_remisiones.int_remision
 } 
 //Filtra FECHA y vendedor
 if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision == '0' && $estado_oc== '0' && $estado_rd == '0'  && $anual != '0' && $mes != '0' && $dia != '0' && $vende !='0')
@@ -307,7 +307,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision == '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones ','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,
-  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_remisiones.fecha_r =  '$fecha'  and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc ");  
+  tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_remisiones.fecha_r =  '$fecha'  and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc ");  
 
 }
 
@@ -325,7 +325,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io and tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");   
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io and tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");   
 
 }
 //Filtra ref y FECHA, vende lleno
@@ -336,7 +336,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io and tbl_remisiones.fecha_r = '$fecha' and tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc and tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io and tbl_remisiones.fecha_r = '$fecha' and tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_remisiones.b_borrado_r='0'");  
 }
 
 //Filtra ref y AÑO, vende lleno
@@ -347,7 +347,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'"); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'"); 
  
 }
 //Filtra ref y MES, vende lleno
@@ -358,7 +358,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'"); 
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'"); 
 
 }
 //Filtra ref y AÑO, MES, vende lleno
@@ -369,7 +369,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_orden_compra.str_elaboro_oc='$vendedor' AND Tbl_remisiones.b_borrado_r='0'");  
 }
 //Filtra ref y AÑO, MES 
 if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual != '0' && $mes != '0' && $dia == '0' && $vende =='0')
@@ -379,7 +379,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  MONTH(Tbl_remisiones.fecha_r) = '$mes' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
 
 }
 //Filtra ref y AÑO, MES, DIA
@@ -390,7 +390,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND tbl_remisiones.fecha_r =  '$fecha' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND tbl_remisiones.fecha_r =  '$fecha' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
 
 }
 //Filtra ref y AÑO
@@ -401,7 +401,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0
     $vendedor = $elvendedor['nombre_vendedor'];
   }
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','DISTINCT tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io  AND YEAR(Tbl_remisiones.fecha_r) = '$anual' AND  Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.b_borrado_r='0'");  
 
 }
 
@@ -687,7 +687,9 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                   <td nowrap id="dato1"><a href="despacho_items_oc_vista.php?int_remision=<?php echo $row_remision['int_remision']; ?>" target="_blank" style="text-decoration:none; color:#000000">
                     <?php 
                          $str_numero_oc_r=$row_remision['str_numero_oc_r'];
-                         $sqln = $conexion->llenarCampos('cliente,tbl_orden_compra', "WHERE tbl_orden_compra.id_c_oc = cliente.id_c and tbl_orden_compra.str_numero_oc='$str_numero_oc_r' ", '','cliente.nombre_c,cliente.ciudad_c' );
+                         $id_c_oc=$row_remision['id_c_oc'];
+                         //$sqln = $conexion->llenarCampos('cliente,tbl_orden_compra', "WHERE tbl_orden_compra.id_c_oc = cliente.id_c and tbl_orden_compra.str_numero_oc='$str_numero_oc_r' ", '','cliente.nombre_c,cliente.ciudad_c' );
+                         $sqln = $conexion->llenarCampos('cliente', "WHERE cliente.id_c='$id_c_oc' ", '','cliente.nombre_c,cliente.ciudad_c' );
                          
                          $cliente_c=$sqln['nombre_c']; echo  htmlentities($cliente_c);  
                          $ciudad_c=$sqln['ciudad_c']; 
@@ -808,12 +810,18 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                         $factura_oc =  $resultmp['factura_oc'];
                         $vendedor =  $resultmp['str_elaboro_oc'];  
                     } 
+                    $idoc = $row_remision['id_pedido_oc']; 
+                    $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
+                     foreach($select_direccion as $row_direccion) { 
+                       $vende = $row_direccion['nombre_vendedor']." ";
+                     } 
+                         echo htmlentities($vende);
                     /*$idoc = $row_remision['str_numero_oc_r'];
                     $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
                      foreach($select_direccion as $row_direccion) { 
                        $vende = $row_direccion['nombre_vendedor']." ";
                      } */
-                         echo htmlentities($vendedor); 
+                         //echo htmlentities($vendedor); 
                     ?>  
                   </td>
                   <td id="dato2">  

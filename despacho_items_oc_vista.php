@@ -59,7 +59,7 @@ if (isset($_GET['int_remision'])) {
 }
 
 mysql_select_db($database_conexion1, $conexion1);
-$query_cliente_r = sprintf("SELECT * FROM Tbl_remisiones,Tbl_orden_compra, cliente WHERE Tbl_remisiones.int_remision = %s AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.str_nit_oc = cliente.nit_c AND Tbl_orden_compra.b_borrado_oc='0'", $colname_cliente_r);
+$query_cliente_r = sprintf("SELECT * FROM Tbl_remisiones,Tbl_orden_compra, cliente WHERE Tbl_remisiones.int_remision = %s AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.id_pedido_oc=Tbl_orden_compra.id_pedido AND Tbl_orden_compra.str_nit_oc = cliente.nit_c AND Tbl_orden_compra.b_borrado_oc='0'", $colname_cliente_r);
  
 $cliente_r = mysql_query($query_cliente_r, $conexion1) or die(mysql_error());
 $row_cliente_r = mysql_fetch_assoc($cliente_r);
@@ -370,8 +370,8 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
   <tr>
     <td id="detalle2">
      <?php 
-     $idoc = $row_cliente_r['str_numero_oc'];
-       $row_vendio = $conexion->llenarCampos("vendedor ver", "LEFT JOIN tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io='$idoc'","","distinct ver.nombre_vendedor");   
+      $idoc = $row_cliente_r['id_pedido'];
+       $row_vendio = $conexion->llenarCampos("vendedor ver", "LEFT JOIN tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io='$idoc'","","distinct ver.nombre_vendedor");   
         echo $row_vendio['nombre_vendedor'];
     ?>
     </td>
