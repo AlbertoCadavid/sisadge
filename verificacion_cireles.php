@@ -98,7 +98,7 @@ if (isset($_GET['cod_ref'])) {
   $colname_ref_egp = $_GET['cod_ref'];
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_ref_egp = sprintf("SELECT * FROM Tbl_referencia, Tbl_egp WHERE Tbl_referencia.cod_ref = '%s' AND Tbl_referencia.n_egp_ref = Tbl_egp.n_egp", GetSQLValueString($colname_ref_egp, "int"));
+$query_ref_egp = sprintf("SELECT * FROM Tbl_referencia, Tbl_egp WHERE CONVERT(Tbl_referencia.cod_ref, SIGNED INTEGER) = '%s' AND Tbl_referencia.n_egp_ref = Tbl_egp.n_egp", GetSQLValueString($colname_ref_egp, "int"));
 $ref_egp = mysql_query($query_ref_egp, $conexion1) or die(mysql_error());
 $row_ref_egp = mysql_fetch_assoc($ref_egp);
 $totalRows_ref_egp = mysql_num_rows($ref_egp);
@@ -313,7 +313,7 @@ $query_verificar_cirel = sprintf("SELECT * FROM verificacion WHERE id_verif = %s
 $verificar_cirel = mysql_query($query_verificar_cirel, $conexion1) or die(mysql_error());
 $row_verificar_cirel = mysql_fetch_assoc($verificar_cirel);
 $totalRows_verificar_cirel = mysql_num_rows($verificar_cirel);
- 
+
 
 $colname_verif_ref_egp = "-1";
 if (isset($_GET['id_verif'])) {

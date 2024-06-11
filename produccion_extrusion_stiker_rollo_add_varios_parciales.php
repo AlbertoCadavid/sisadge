@@ -229,7 +229,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rpt'] as $key => $v)
         $a[] = $v;
       foreach ($_POST['valor_tiem_rt'] as $key => $v)
-        $b[] = $v;
+        $b[] = round($v / $num_rollos, 2);
       $c = $_GET['id_op_r'];
 
       for ($i = 0; $i < count($a); $i++) {
@@ -238,7 +238,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
             "INSERT INTO Tbl_reg_tiempo (id_rpt_rt,id_rollo,valor_tiem_rt,op_rt,int_rollo_rt,id_proceso_rt,fecha_rt) VALUES (%s, %s, %s, %s,%s, %s, %s)",
             GetSQLValueString($a[$i], "int"),
             GetSQLValueString($idRollo, "int"),
-            GetSQLValueString($b[$i], "int"),
+            GetSQLValueString($b[$i], "double"),
             GetSQLValueString($c, "int"),
             GetSQLValueString($_POST['rollo_r'], "text"),
             GetSQLValueString($_POST['id_proceso'], "int"),
@@ -259,7 +259,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rtp'] as $key => $n)
         $h[] = $n;
       foreach ($_POST['valor_prep_rtp'] as $key => $n)
-        $l[] = $n;
+        $l[] = round($n / $num_rollos, 2);
       $c = $_GET['id_op_r'];
 
       for ($x = 0; $x < count($h); $x++) {
@@ -268,7 +268,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
             "INSERT INTO Tbl_reg_tiempo_preparacion (id_rpt_rtp,id_rollo,valor_prep_rtp,op_rtp,int_rollo_rtp,id_proceso_rtp,fecha_rtp) VALUES (%s, %s, %s, %s,%s, %s, %s)",
             GetSQLValueString($h[$x], "int"),
             GetSQLValueString($idRollo, "int"),
-            GetSQLValueString($l[$x], "int"),
+            GetSQLValueString($l[$x], "double"),
             GetSQLValueString($c, "int"),
             GetSQLValueString($_POST['rollo_r'], "text"),
             GetSQLValueString($_POST['id_proceso'], "int"),
@@ -288,7 +288,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rpd'] as $key => $k)
         $f[] = $k;
       foreach ($_POST['valor_desp_rd'] as $key => $k)
-        $g[] = $k;
+        $g[] = round($k / $num_rollos, 2);
 
       for ($s = 0; $s < count($f); $s++) {
         if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios
@@ -493,7 +493,7 @@ $totalRows_mts = mysql_num_rows($mts);
         </td>
       </tr>
       <tr>
-        <td colspan="3" id="numero2">PARCIAL DEL ROLLO N&deg; <?php echo  $num = $_GET['rollo_r']; ?>
+        <td colspan="3" id="numero2">
           <input type="hidden" name="rollo_r" id="rollo_r" style="width:40px" value="<?php echo $num ?>">
           <input type="hidden" name="id_r" id="id_r" value="<?php echo $row_ultimo['id_r'] + 1; ?>">
         </td>
@@ -1095,7 +1095,7 @@ $totalRows_mts = mysql_num_rows($mts);
       $("#kilos_r").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros)))
       $("#kg_parcial_actual").val(Math.round(metrosakilosExtrusion(ancho, calibre, metros_parcial)))
     }
-    
+
     $("#kilos_r").focus();
     swal("Verifique el peso del Rollo");
 

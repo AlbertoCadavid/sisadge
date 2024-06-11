@@ -23,7 +23,7 @@
     $_SESSION['PrevUrl'] = NULL;
     unset($_SESSION['MM_Username']);
     unset($_SESSION['MM_UserGroup']);
-    unset($_SESSION['PrevUrl']);
+    unset($_SESSION['PrevUrl']); 
 
     $logoutGoTo = "usuario.php";
     if ($logoutGoTo) {
@@ -127,53 +127,8 @@
   }
   $totalPages_ordenes_compra = ceil($totalRows_ordenes_compra/$maxRows_ordenes_compra)-1;
 
-
-/*  $row_lista = $conexion->llenaListas('tbl_orden_compra',"WHERE b_borrado_oc='0' AND fecha_ingreso_oc > '2020-01-01' ","ORDER BY fecha_ingreso_oc DESC",'str_numero_oc');  
- 
-  $row_numero = $conexion->llenaListas('tbl_referencia'," WHERE estado_ref='1'",'ORDER BY CONVERT(cod_ref, SIGNED INTEGER) DESC','cod_ref'); 
-
-  $row_proveedores = $conexion->llenaListas('cliente',"",' ORDER BY CONVERT(nombre_c, SIGNED INTEGER) ASC ','id_c,nombre_c,nit_c');
-
-  $row_nit = $conexion->llenaListas('cliente',"",' ORDER BY CONVERT(nit_c, SIGNED INTEGER) DESC ','nit_c');
-
-  $row_factura = $conexion->llenaListas('tbl_orden_compra',"WHERE factura_oc <>''",'ORDER BY fecha_ingreso_oc DESC','factura_oc');
-*/
   $row_elaborado = $conexion->llenaListas('vendedor',"",'ORDER BY nombre_vendedor ASC','nombre_vendedor');
-
   $row_vendedores = $conexion->llenaListas('vendedor',"",'ORDER BY nombre_vendedor ASC','id_vendedor,nombre_vendedor');
-
- 
-
-/*  mysql_select_db($database_conexion1, $conexion1);
-  $query_proveedores = "SELECT * FROM cliente ORDER BY nombre_c ASC";
-  $proveedores = mysql_query($query_proveedores, $conexion1)  or die(mysql_error());
-  $row_proveedores = mysql_fetch_assoc($proveedores);
-  $totalRows_proveedores = mysql_num_rows($proveedores);*/
-
-/*  mysql_select_db($database_conexion1, $conexion1);
-  $query_ano = "SELECT * FROM cliente ORDER BY nit_c DESC";
-  $ano = mysql_query($query_ano, $conexion1)  or die(mysql_error());
-  $row_ano = mysql_fetch_assoc($ano);
-  $totalRows_ano = mysql_num_rows($ano);*/
-
-/*  mysql_select_db($database_conexion1, $conexion1);
-  $query_factura = "SELECT factura_oc FROM tbl_orden_compra WHERE factura_oc <>'' ORDER BY fecha_ingreso_oc DESC";
-  $factura = mysql_query($query_factura, $conexion1)  or die(mysql_error());
-  $row_factura = mysql_fetch_assoc($factura);
-  $totalRows_factura = mysql_num_rows($factura);*/
-
-/* mysql_select_db($database_conexion1, $conexion1);
- $query_numero = "SELECT * FROM Tbl_referencia  WHERE estado_ref='1' ORDER BY CONVERT(cod_ref, SIGNED INTEGER)  DESC";
- $numero = mysql_query($query_numero, $conexion1)  or die(mysql_error());
- $row_numero = mysql_fetch_assoc($numero);
- $totalRows_numero = mysql_num_rows($numero);*/
-
- //IMRPIME EL NOMBRE DEL VENDEDOR
-/* mysql_select_db($database_conexion1, $conexion1);
- $query_vendedores = "SELECT * FROM vendedor ORDER BY nombre_vendedor ASC";
- $vendedores = mysql_query($query_vendedores, $conexion1)  or die(mysql_error());
- $row_vendedores = mysql_fetch_assoc($vendedores);
- $totalRows_vendedores = mysql_num_rows($vendedores);*/
 
   $queryString_ordenes_compra = "";
   if (!empty($_SERVER['QUERY_STRING'])) {
@@ -190,7 +145,6 @@
   }
 }
 $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRows_ordenes_compra, $queryString_ordenes_compra);
-
 
 ?>
 <html>
@@ -295,7 +249,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                         <div class="main"> 
                            <select id='str_numero_oc' name='str_numero_oc' style="width:150px">
                              <option value='0'<?php if (!(strcmp(0, $_GET['str_numero_oc']))) {echo "selected=\"selected\"";} ?>>- O.C. -</option>
-                           </select>
+                           </select> <!-- lleno con Ajax -->
                         </div> 
                       </td>
                       <td> 
@@ -319,14 +273,14 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                         <div class="main"> 
                            <select id='id_c' name='id_c' style="width:300px">
                              <option value='0'<?php if (!(strcmp(0, $_GET['id_c']))) {echo "selected=\"selected\"";} ?>>- CLIENTE -</option>
-                           </select>
+                           </select> <!-- lleno con Ajax -->
                         </div>  
                       </td>
                       <td>
                         <div class="main"> 
                            <select id='nit_c' name='nit_c' style="width:200px">
                              <option value='0'<?php if (!(strcmp(0, $_GET['nit_c']))) {echo "selected=\"selected\"";} ?>>- NIT -</option>
-                           </select>
+                           </select> <!-- lleno con Ajax -->
                         </div> 
                       </td>
                       <td> 
@@ -355,7 +309,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                         <div class="main"> 
                            <select id='cod_ref' name='cod_ref' style="width:150px">
                              <option value='0'<?php if (!(strcmp(0, $_GET['cod_ref']))) {echo "selected=\"selected\"";} ?>>- REF -</option>
-                           </select>
+                           </select> <!-- lleno con Ajax -->
                         </div> 
                       </td>
                       <td>
@@ -376,7 +330,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                         <div class="main"> 
                            <select id='nfactura' name='nfactura' style="width:150px">
                              <option value='0'<?php if (!(strcmp(0, $_GET['nfactura']))) {echo "selected=\"selected\"";} ?>>- # Factura -</option>
-                           </select>
+                           </select> <!-- lleno con Ajax -->
                         </div> 
                       </td>
                       <td>
@@ -480,11 +434,11 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                          </td>
                          <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_deudoras['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_deudoras['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
                            <?php 
-                           $idoc = $row_ordenes_deudoras['str_numero_oc'];
-                           $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
+                           $idoc = $row_ordenes_deudoras['id_pedido'];
+                           $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                            foreach($select_direccion as $row_direccion) { 
                              echo $row_direccion['nombre_vendedor']." ";
-                           } 
+                           }
                            ?> 
                          </a>
                        </td>
@@ -631,7 +585,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
  
 
            <?php if(in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'])): ?> 
-            <?php if($row_ordenes_notas['id_pedido'] ): ?>
+            <?php if($row_ordenes_notas['id_pedido'] ): ?> 
                                 <fieldset> <legend id="dato1">ORDENES DE COMPRA NOTAS WEB</legend>
                                   <table class="table table-bordered table-sm">
                                      <thead>
@@ -766,8 +720,8 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                 </td>
                                 <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_compra['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_compra['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
                                     <?php 
-                                     $idoc = $row_ordenes_compra['str_numero_oc'];
-                                     $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
+                                     $idoc = $row_ordenes_compra['id_pedido'];
+                                     $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                                       foreach($select_direccion as $row_direccion) { 
                                         echo $row_direccion['nombre_vendedor']." ";
                                       } 
@@ -846,9 +800,9 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                        <?php }
                                        if($estado=='4'){ ?><img src="images/fr.gif" alt="FACTURADA PARCIAL" title="FACTURADA PARCIAL" border="0" style="cursor:hand;"/><?php }
                                         if($estado=='3'){ ?><img src="images/r.gif" alt="REMISION O.C." title="REMISION O.C." border="0" style="cursor:hand;"/><?php }
-                                          $id_oc=$row_ordenes_compra['str_numero_oc'];
+                                          $id_oc=$row_ordenes_compra['id_pedido'];
                                           $sqlmp="SELECT Tbl_orden_produccion.int_cod_ref_op AS existe_op 
-                                          FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.str_numero_io='$id_oc' AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+                                          FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_pedido_io='$id_oc' AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
                                           AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
                                           $resultmp= mysql_query($sqlmp);
                                           $nump = mysql_num_rows($resultmp);

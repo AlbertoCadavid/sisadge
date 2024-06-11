@@ -127,7 +127,7 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision== '0'
 if($str_numero != '0' && $id_c != '0' && $cod_ref != '0' && $int_remision!= '0' && $estado_oc > '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones',' tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r, tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,
-  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c'
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.id_c_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','GROUP tbl_remisiones.int_remision BY ORDER BY tbl_remisiones.int_remision DESC','',$maxRows_registros,$pageNum_registros,"WHERE Tbl_remisiones.int_remision='$int_remision' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.str_numero_oc_r='$str_numero' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.id_c_oc='$id_c'
   AND Tbl_orden_compra.b_estado_oc='$estado_oc'"); 
 }
 //Filtra remision lleno
@@ -137,12 +137,17 @@ if($str_numero == '0' && $id_c == '0'  && $cod_ref == '0' && $int_remision!= '0'
 
 }
 
-//Filtra ref lleno
+//Filtra ref lleno +
 if($str_numero == '0' && $id_c == '0'   && $cod_ref != '0' && $int_remision== '0' && $estado_oc== '0' && $estado_rd == '0' && $anual == '0' && $mes == '0' && $dia == '0' && $vende =='0')
 {
   $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
+  tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','GROUP BY tbl_remisiones.int_remision ORDER BY Tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_items_ordenc.int_cod_ref_io = '$cod_ref'
+  AND tbl_items_ordenc.id_pedido_io = tbl_orden_compra.id_pedido
+  AND tbl_orden_compra.id_pedido = tbl_remisiones.id_pedido_oc 
+  AND tbl_remisiones.b_borrado_r='0'"); 
+  /* $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones,tbl_items_ordenc','tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_items_ordenc.int_cod_ref_io,
   tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,tbl_orden_compra.b_estado_oc,tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY Tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.str_numero_oc_r=tbl_orden_compra.str_numero_oc AND tbl_orden_compra.str_numero_oc = tbl_items_ordenc.str_numero_io AND tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND tbl_remisiones.b_borrado_r='0' "); 
-
+ */
 }
 
 //Filtra str_numero lleno
@@ -296,7 +301,7 @@ if($str_numero == '0' && $id_c == '0'   && $cod_ref == '0' && $int_remision== '0
     $elvendedor = $conexion->llenarCampos("vendedor","WHERE id_vendedor=$vende","","nombre_vendedor");
     $vendedor = $elvendedor['nombre_vendedor'];
   } 
-  $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones',' tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc,id_pedido_oc
+  $registros = $conexion->buscarListar('tbl_orden_compra,tbl_remisiones',' tbl_remisiones.comprobante_file, tbl_remisiones.ciudad_pais,tbl_remisiones.str_transportador_r,tbl_remisiones.factura_r,tbl_remisiones.int_remision,tbl_remisiones.b_borrado_r,tbl_remisiones.str_numero_oc_r,tbl_remisiones.fecha_r,tbl_remisiones.str_guia_r,tbl_orden_compra.str_numero_oc, 
 tbl_remisiones.id_pedido_oc,tbl_orden_compra.id_c_oc','ORDER BY tbl_remisiones.int_remision DESC',"",$maxRows_registros,$pageNum_registros,"WHERE tbl_remisiones.b_borrado_r='0' and tbl_orden_compra.str_elaboro_oc='$vendedor' and tbl_orden_compra.id_pedido=tbl_remisiones.id_pedido_oc");  //ORDER BY tbl_remisiones.int_remision
 } 
 //Filtra FECHA y vendedor
@@ -679,7 +684,7 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                   <td id="titulo4">ESTADO</td>
                   <?php if($_SESSION['acceso']): ?><td id="titulo4" nowrap>FACTURAR</td> <?php endif; ?>
                 </tr>
-                <?php foreach($registros as $row_remision) {  ?>
+                <?php $row_remision['factura_r']=0; foreach($registros as $row_remision) {  ?>
                 <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
                   <td id="dato2"><input name="borrar[]" type="checkbox" id="borrar[]" value="<?php echo $row_remision['int_remision']; ?>" /></td>
                   <td nowrap id="dato2"><a href="despacho_items_oc_vista.php?int_remision=<?php echo $row_remision['int_remision']; ?>" target="_blank" style="text-decoration:none; color:#000000"><strong><?php echo $row_remision['int_remision']; ?></strong></a></td>
@@ -801,15 +806,18 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                         ?> 
                   </td>
                   <td nowrap="nowrap" id="dato1">
-                    <?php $mp=$row_remision['str_numero_oc_r'];
+                    <?php $mp=$row_remision['id_pedido_oc'];
                     if($mp!='')
                     { 
 
-                      $resultmp = $conexion->llenarCampos('tbl_orden_compra', "WHERE str_numero_oc='$mp' ", '','factura_oc,b_estado_oc,str_elaboro_oc' ); 
+                      $resultmp = $conexion->llenarCampos('tbl_orden_compra', "WHERE id_pedido='$mp' ", '','factura_oc,b_estado_oc,str_elaboro_oc' ); 
                         $b_estado_oc= $resultmp['b_estado_oc'];
                         $factura_oc =  $resultmp['factura_oc'];
-                        $vendedor =  $resultmp['str_elaboro_oc'];  
+                        $vendedor =  $resultmp['str_elaboro_oc'];   
                     } 
+                    $b_estado_oc=$b_estado_oc=='' ? 0 : $b_estado_oc;
+                    $factura_oc= $factura_oc=='' ? 0 : $factura_oc;
+
                     $idoc = $row_remision['id_pedido_oc']; 
                     $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                      foreach($select_direccion as $row_direccion) { 
@@ -840,11 +848,11 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                     <?php if($_SESSION['acceso']): ?>
                       <td id="dato2"> 
                         <a href="javascript:updateList('int_remision',<?php echo $row_remision['int_remision']; ?>,'despacho_listado2_oc.php')" >
-                          <?php   
-                          if( ($row_remision['factura_r']=='' || $row_remision['factura_r']=='0')  && ($factura_oc=='' || $factura_oc=='0')  ):?>
-                              <img src="images/falta8.gif" alt="ACTUALIZAR" title="ACTUALIZAR" border="0" style="cursor:hand;" width="20" height="18" /></a>
-                                <?php else: ?>
+                          <?php if( $b_estado_oc == 5  && $row_remision['factura_r']>'0'  && $factura_oc>'0'): ?>
                               <img src="images/facturado.png" alt="YA TIENE FACTURA" title="YA TIENE FACTURA" border="0" style="cursor:hand;" width="20" height="18" />
+                             </a>
+                                <?php else: ?>
+                              <img src="images/falta8.gif" alt="ACTUALIZAR" title="ACTUALIZAR" border="0" style="cursor:hand;" width="20" height="18" />
                             <?php endif; ?>
                             </a>
                       </td> 
@@ -969,7 +977,7 @@ $totalPages_registros = ceil($totalRows_registros/$maxRows_registros)-1;*/
                             var1:"*",
                             var2:"tbl_remisiones",
                             var3:"",
-                            var4:"ORDER BY int_remision DESC",
+                            var4:" GROUP BY str_numero_oc_r ORDER BY int_remision DESC",
                             var5:"str_numero_oc_r",
                             var6:"str_numero_oc_r"
                         };

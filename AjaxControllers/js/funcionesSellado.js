@@ -196,9 +196,9 @@ function AddItem() {
     tr.innerHTML =
       '<td><input type="text" name="int_desde_f[]" tabindex=' +
       count +
-      '  onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango" /></td><td><input type="text" tabindex=' +
+      ' onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango desde" /></td><td><input type="text" tabindex=' +
       (count + 1) +
-      '  id="int_hasta_f" name="int_hasta_f[]" onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango"/></td><td><input tabindex="-1" type="text" size="2" name="int_total_f[]" readonly /></td><td><button tabindex="-1" type="button" value="Borrar" onclick="eliminaFaltantes(this);Calcular(this);">Borrar</button></td>';
+      '  id="int_hasta_f" name="int_hasta_f[]" onKeypress="EnteryTap(event,this);" onChange="Calcular(this);" onBlur="MayusEspacio(this);" value="" required="required" class="focusNext errorRango hasta"/></td><td><input tabindex="-1" type="text" size="2" name="int_total_f[]" readonly /></td><td><button tabindex="-1" type="button" value="Borrar" onclick="eliminaFaltantes(this);Calcular(this);">Borrar</button></td>';
     tbody.appendChild(tr);
   }
 }
@@ -376,6 +376,7 @@ function alertafaltantes() {
   var estado = false;
 
   var elements = document.getElementsByClassName("errorRango");
+
   // valida todos los faltantes iniciales
   Array.from(elements).map((element) => {
     if (element.value != "") {
@@ -406,12 +407,59 @@ function alertafaltantes() {
     }
   });
 
+  if(bandera == 0){ //confirma si ya se realizo las anteriores validaciones y las paso
+    if (alertaNumRepetido()) { //funcion para saber si un numero ingresado en los faltantes ya esta repetido
+      bandera = 1;
+    } else bandera = 0;
+  }
+
   if (bandera == 0) {
     estado = true;
     $("#content").html('<div class="loader"></div>');
     setTimeout(function () {
       $(".loader").fadeOut("slow");
     }, 700);
+  }
+  return estado;
+}
+
+/* funcion para saber si un numero ingresado en los faltantes ya esta repetido */
+function alertaNumRepetido() {
+  var n_desde = document.getElementsByClassName("desde");
+  var n_hasta = document.getElementsByClassName("hasta");
+  let array_desde = [];
+  let array_hasta = [];
+  let total_numeros = [];
+  let estado = false;
+  Array.from(n_desde).map((item) => {
+    if (item.value != "") {
+      var resultF = divideCadenas(item.value);
+      array_desde.push(parseInt(resultF[0])); //se llena un array con los numeros de la columna desde
+    }
+  });
+  Array.from(n_hasta).map((item) => {
+    if (item.value != "") {
+      var resultF = divideCadenas(item.value);
+      array_hasta.push(parseInt(resultF[0])); //se llena un array con los numeros de la columna hasta
+    }
+  });
+
+  for (let i = 0; i < array_desde.length; i++) {
+    if (array_hasta[i] >= array_desde[i]) { //valida si el rango ingresado desde-hasta es valido
+      for (let j = array_desde[i]; j <= array_hasta[i]; j++) { //crea un array con los consecutivos del rango de los faltantes por fila
+        if (!total_numeros.some((num) => num === j)) { // valida si no existe el numero para agregarlo al array
+          total_numeros.push(j);
+        } else { // si el numero ya existe entonces muestra el error
+          estado = true;
+          swal("El numero Faltante " + j + " ya existe");
+          break;
+        }
+      }
+    } else {
+      estado = true;
+      swal("Hay un error en el rango de los faltantes");
+      break;
+    } 
   }
   return estado;
 }
@@ -1658,32 +1706,32 @@ function cargaInfoRollos(id_op) {
   })
     .done(function (data, textStatus, jqXHR) {
       document.querySelector("#id_rollo").innerHTML = ""; //Borra todo lo que tenga el select
-        if (data[0].length != 1 || data[1] == false) {
+      if (data[0].length != 1 || data[1] == false) {
+        $("#id_rollo").append(
+          $("<option>", {
+            value: "",
+            text: "Rollos",
+          })
+        );
+        data[0].forEach((element) => {
           $("#id_rollo").append(
             $("<option>", {
-              value: "",
-              text: "Rollos",
+              value: element.rollo_r,
+              text: element.rollo_r,
             })
           );
-          data[0].forEach((element) => {
-            $("#id_rollo").append(
-              $("<option>", {
-                value: element.rollo_r,
-                text: element.rollo_r,
-              })
-            );
-          });
-          resolve(false);
-        } else {
-          $("#id_rollo").append(
-            $("<option>", {
-              value: data[0][0].rollo_r,
-              text: data[0][0].rollo_r,
-            })
-          );
-          $("#rollo_r").val(data[0][0].rollo_r);
-          resolve(true);
-        }
+        });
+        resolve(false);
+      } else {
+        $("#id_rollo").append(
+          $("<option>", {
+            value: data[0][0].rollo_r,
+            text: data[0][0].rollo_r,
+          })
+        );
+        $("#rollo_r").val(data[0][0].rollo_r);
+        resolve(true);
+      }
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
       document.querySelector("#id_rollo").innerHTML = ""; //Borra todo lo que tenga el select
@@ -1913,4 +1961,3 @@ function guardarRolloSeleccionado(id_op, numRollo, desde, hasta) {
 }
 
 /* ++++++++++FIN NUEVAS FUNCIONES PARA EL MANEJO DE LAS BANDERAS +++++++++*/
-

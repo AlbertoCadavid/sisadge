@@ -336,17 +336,17 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
      <strong >OP: </strong> 
           <select id='op' name='op' class="selectsMini">
             <option value='0'<?php if (!(strcmp(0, $_GET['op']))) {echo "selected=\"selected\"";} ?>>- O.P -</option>
-          </select>
+          </select> <!-- lleno con Ajax -->
      
      <strong >REF: </strong>
          <select id='id_ref' name='id_ref' class="selectsMini">
            <option value='0'<?php if (!(strcmp(0, $_GET['id_ref']))) {echo "selected=\"selected\"";} ?>>- REF: -</option>
-         </select>
+         </select> <!-- lleno con Ajax -->
      
      <strong >CLIENTES: </strong>
          <select id='cliente' name='cliente' class="selectsGrande">
            <option value='0'<?php if (!(strcmp(0, $_GET['cliente']))) {echo "selected=\"selected\"";} ?>>- CLIENTE -</option>
-         </select>
+         </select> <!-- lleno con Ajax -->
     <strong >PROCESO: </strong>
       <select name="proceso" id="proceso" class="busqueda selectsMini">
          <option value="todos"<?php if (!(strcmp("todos", $_GET['proceso']))) {echo "selected=\"selected\"";} ?>>PROCESO</option>

@@ -200,8 +200,9 @@ if ($id_mp!='')
 { 
 //INSERT DE ITEMS
   $fecha_modif_io = date("Y-m-d H:i:s"); 
-  
-  $insertSQL = sprintf("INSERT INTO Tbl_items_ordenc (id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, trm, int_precio_trm, int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io,int_nombre_io, b_estado_io,cobra_cyrel,cobra_flete,precio_flete,pdf_impuesto,N_precio_old,cotiz) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+ 
+
+  $insertSQL = sprintf("INSERT INTO Tbl_items_ordenc (id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, trm, int_precio_trm, int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io,int_nombre_io, b_estado_io,cobra_cyrel,cobra_flete,precio_flete,pdf_impuesto,N_precio_old,valor_impuesto,cotiz) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
    GetSQLValueString($_POST['id_pedido_io'], "int"),
    GetSQLValueString($_POST['str_numero_io'], "text"),
    GetSQLValueString($_POST['int_consecutivo_io'], "int"),
@@ -228,6 +229,7 @@ if ($id_mp!='')
    GetSQLValueString($_POST['precio_flete'], "text"),
    GetSQLValueString($nombre9, "text"),
    GetSQLValueString($_POST['N_precio_old'], "text"),
+   GetSQLValueString($_POST['valor_impuesto'], "text"),
    GetSQLValueString($_POST['cotiz'], "text"));
 
   mysql_select_db($database_conexion1, $conexion1);
@@ -242,15 +244,15 @@ if ($id_mp!='')
 
 
  //GUARDADO DE HISTORICOS
- $myObject = new oComercial();
- $historico =  new oComercial();
+ $myObject = new oComercial(); 
+ $historico =  new oComercial(); 
 
- if(isset($_POST['id_pedido_io'])){ 
+ if(isset($_POST['id_pedido_io'])){  
    $historico=$myObject->ObtenerId('tbl_items_ordenc','id_pedido_io','id_items',$_POST['id_pedido_io']);
  } 
  if(isset($_POST['id_pedido_io']) && $historico){
 
-   $myObject->RegistrarItems("tbl_items_ordenc_historico", "id_items,id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, responsable_modif_io, trm, int_precio_trm , int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io, int_nombre_io, b_estado_io,cobra_cyrel, cobra_flete, precio_flete,modifico", $historico);
+   $myObject->RegistrarItems("tbl_items_ordenc_historico", "id_items,id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, responsable_modif_io, trm, int_precio_trm , int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io, int_nombre_io, b_estado_io,cobra_cyrel, cobra_flete, precio_flete,modifico,impuesto,pdf_impuesto,N_precio_old,valor_impuesto,cotiz", $historico);
  }//FIN HISTORICO
 
 
@@ -380,7 +382,7 @@ $totalRows_refer = mysql_num_rows($refer);
               $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
               UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
               UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
-              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref' AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
+              UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref'  ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
           
               $cotiz = mysql_query($query_cotiz, $conexion1) ;
               $row_cotiz = mysql_fetch_assoc($cotiz);

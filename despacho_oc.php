@@ -83,7 +83,7 @@ $currentPage = $_SERVER["PHP_SELF"];
 
 $conexion = new ApptivaDB();
 
-$maxRows_registros = 20;
+$maxRows_registros = 30;
 $pageNum_registros = 0;
 if (isset($_GET['pageNum_registros'])) {
   $pageNum_registros = $_GET['pageNum_registros'];
@@ -101,7 +101,8 @@ $colname_busqueda= "-1";
 
 //$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY id_pedido DESC "," GROUP BY str_numero_oc",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );
 
-$registros=$conexion->buscarListar("tbl_orden_compra","*","ORDER BY fecha_autoriza DESC "," ",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//GROUP BY str_numero_oc  DESC
+/* $registros=$conexion->buscarListar("tbl_orden_compra","*"," GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC "," ",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//GROUP BY str_numero_oc  DESC */
+$registros=$conexion->buscarListar("tbl_orden_compra","*"," GROUP BY id_pedido ORDER BY fecha_autoriza DESC "," ",$maxRows_registros,$pageNum_registros,"where $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  " );//GROUP BY id_pedido DESC
  
 
 if (isset($_GET['totalRows_registros'])) {
@@ -177,7 +178,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
     <script>
         //$(document).ready(function() { $(".busqueda").select2(); });
     </script>
-  <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
+  <div > <!-- class="spiffy_content" este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
       <table style="width: 80%"><!-- id="tabla1" -->
         <tr>
@@ -301,16 +302,17 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
            </div>
       </form>
              <hr>
-              <div class="row align-items-start">  
+           <div class="spiffy_content" >
+              <div class="row justify-content-md-center">  
                  <div class="col" ><strong>N&deg; O.C  </strong></div>
-                 <div class="col" ><strong>FECHA INGRESO </strong></div> 
-                 <div class="col" ><strong>CLIENTE </strong></div>
-                 <div class="col" ><strong>VENDEDOR </strong></div>
+                 <div class="col-2" ><strong>FECHA INGRESO </strong></div> 
+                 <div class="col-2" ><strong>CLIENTE </strong></div>
+                 <div class="col-2" ><strong>VENDEDOR </strong></div>
                  <div class="col" ><strong>PENDIENTES </strong></div>
                  <div class="col" ><strong>ESTADO </strong></div>
-                 <div class="col" ><strong>FECHA AUTORIZA </strong></div> 
-                 <div class="col" ><strong>AUTORIZAR SALIDA</strong></div>   
-              </div> 
+                 <div class="col-2" ><strong>FECHA AUTORIZA </strong></div> 
+                 <div class="col" ><strong>AUTORIZAR</strong></div>   
+              </div>
              <?php foreach($registros as $row_registros) {  ?>
                <?php 
                $id_pedido=$row_registros['id_pedido'];
@@ -324,40 +326,38 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                   }
               ?>
               
-
-            <div class="row celdaborde1" > 
-              <div class="col" id="fondo_2"onMouseOver="uno(this,'8C8C9F');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                <p><strong><?php echo $urls;?><?php echo $row_registros['str_numero_oc']; ?></strong></a></p>
+          
+            <div class="row justify-content-md-center  "  > 
+              <div class="col "  onMouseOver="uno(this,'8C8C9F');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
+                 <strong><?php echo $urls;?><?php echo $row_registros['str_numero_oc']; ?></strong></a> 
               </div> 
-              <div class="col" id="fondo_2">
-                <p><?php echo $urls;?><?php echo $row_registros['fecha_ingreso_oc']; ?></a></p>
+              <div class="col-2"  >
+                 <?php echo $urls;?><?php echo $row_registros['fecha_ingreso_oc']; ?></a> 
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php echo $urls; 
+              <div class="col-2" >       
+                 <?php echo $urls; 
                               $nit_c=$row_registros['str_nit_oc'];
-                              $sqln="SELECT * FROM cliente WHERE nit_c='$nit_c'"; 
-                              $resultn=mysql_query($sqln); 
-                              $numn=mysql_num_rows($resultn); 
-                              if($numn >= '1') 
-                               { $nit_cliente_c=mysql_result($resultn,0,'nombre_c'); echo utf8_encode($nit_cliente_c); }
-                             else { echo "";  } ?>
-                  </a></p>
+                              $cliente_c = $conexion->llenarCampos('cliente'," WHERE nit_c='$nit_c' ", "", "nombre_c"); 
+                              if($cliente_c['nombre_c'] >= '1') { echo utf8_encode($cliente_c['nombre_c']); }
+                                 else { echo "";  } 
+                           ?>
+                  </a> 
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php echo $urls;?><?php echo $row_registros['str_elaboro_oc']; ?></a></p>
+              <div class="col-2"  >
+                <?php echo $urls;?><?php echo $row_registros['str_elaboro_oc']; ?></a> 
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php  
+              <div class="col"  >
+                <?php  
                        if( $restante['restante'] > 0.00 ) : ?>
                            <img src="images/falta3.gif" alt="CANTIDAD PENDIENTES" width="20" height="18" style="cursor:hand;" title="CANTIDAD PENDIENTES" border="0"/>  
                         <?php elseif($restante['restante'] == '') : ?>
                           <em>sin items</em>
-                        <?php   else:?>
+                        <?php else:?>
                            <img src="images/cumple.gif" alt="OK" width="20" height="18" style="cursor:hand;" title="OK" border="0"/> 
-                        <?php endif; ?></p>
+                        <?php endif; ?> 
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php 
+              <div class="col"  >
+                 <?php 
                 $id_pedido=$row_registros['id_pedido'];
                 $estado=$row_registros['b_estado_oc'];
                 $sqlrem="SELECT int_cantidad_rest_io FROM Tbl_items_ordenc WHERE id_pedido_io='$id_pedido' GROUP BY int_cantidad_rest_io"; 
@@ -384,21 +384,21 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                else if($estado=='4' ){ ?><img src="images/fr.gif" alt="FACTURADA PARCIAL"title="FACTURADA PARCIAL" border="0" style="cursor:hand;"/><?php }
                else if($estado=='5'){ ?><img src="images/f.gif" alt="FACTURADA O.C." title="FACTURADA O.C." border="0" style="cursor:hand;"/><?php }
                else{echo "";}  
-               ?></p>
+               ?> 
               </div>
-              <div class="col" id="fondo_2">
+              <div class="col-2"  >
 
                <a href="javascript:verConsulta('historico','<?php echo $row_registros['id_pedido']; ?>','orden_compra_cl2.php')" ><?php echo substr($row_registros['fecha_autoriza'],0,10); ?></a>
                
                 <!-- <p> <?php echo substr($row_registros['fecha_autoriza'],0,10);?> </p> -->
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php if($row_registros['autorizado']=='SI'): ?>
+              <div class="col"  >
+                 <?php if($row_registros['autorizado']=='SI'): ?>
                   <img src="images/accept.png" alt="AUTORIZADA" title="AUTORIZADA" border="0" style="cursor:hand;" width="20" height="18" /> 
                   <?php else: ?>
                     <a href="javascript:updateAutorizar('Autorizar',<?php echo $row_registros['id_pedido']; ?>,'despacho_oc.php','<?php echo $row_registros['str_numero_oc']; ?>')" ><img src="images/salir.gif" alt="AUTORIZAR" title="AUTORIZAR" border="0" style="cursor:hand;" width="20" height="18" /></a>
                  <!-- <img src="images/salir.gif" alt="SIN AUTORIZAR" title="SIN AUTORIZAR" border="0" style="cursor:hand;" width="20" height="18" /> -->
-                </p> 
+             
               <?php endif; ?>
               <?php 
               //Alert de oc autorizadas 
@@ -411,12 +411,10 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                     <!-- <script type="text/javascript"> var ocsAutor = <?php echo json_encode($arrayName); ?>; swal("Alerta!", "Ordenes Autorizadas y/o con Pendientes: "+ocsAutor, "error");</script> -->
                 <?php //endif; ?>
 
-              </div>  
+              </div>   
+             </div>
+            <?php } ?> 
             </div>
-            <?php  } ?>
-            
-
-          </div> 
              <!-- tabla para paginacion opcional -->
              <table border="0" width="50%" align="center">
                <tr>
@@ -525,7 +523,7 @@ $(document).ready(function() {
                             var1:"*",
                             var2:"tbl_orden_compra",
                             var3:"",
-                            var4:"  ORDER BY str_numero_oc DESC",
+                            var4:" GROUP BY str_numero_oc ORDER BY str_numero_oc DESC",
                             var5:"str_numero_oc",
                             var6:"str_numero_oc"
                         };

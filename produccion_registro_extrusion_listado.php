@@ -235,17 +235,11 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <div id="resultado"><input name="retorno_mensaje" type="hidden">
                                 <select class='busqueda selectsMini' name="op" id="op">
                                   <option value="0">O.P.</option>
-                                  <?php foreach ($row_lista_ops as $row_lista_op) { ?>
-                                    <option value="<?php echo $row_lista_op['id_op'] ?>"><?php echo $row_lista_op['id_op'] ?></option>
-                                  <?php }; ?>
-                                </select>
+                                </select> <!-- List displayed with js -->
 
-                                <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
                                 <select class='busqueda selectsMini' name="id_ref" id="id_ref">
                                   <option value="0">REF</option>
-                                  <!-- List displayed with js -->
-                                </select>
-                                <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
+                                </select> <!-- List displayed with js -->
 
                                 <?php $Year = date("Y"); ?>
                                 <select id='anyo' name='anyo' class="">
@@ -302,8 +296,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <img src="images/falta.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Ingresada <br>
                               <img src="images/falta7.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Liquidada<br>
                               <img src="images/completo.gif" width="20" height="17" alt="YA TIENE ROLLOS" title="YA TIENE ROLLOS" border="0" style="cursor:hand;" /> Ya tiene rollos<br>
-                              <img src="images/mas.gif"  width="20" height="17" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /> Agregar un solo rollo<br>
-                              <img src="images/mas_r.gif"  width="20" height="17" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /> Agregar varios rollos a la vez
+                              <img src="images/mas.gif" width="20" height="17" alt="ADD ROLLO" title="ADD ROLLO" border="0" style="cursor:hand;" /> Agregar un solo rollo<br>
+                              <img src="images/mas_r.gif" width="20" height="17" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /> Agregar varios rollos a la vez
                             </td>
                             <td colspan="3" id="dato1">
                               <img src="images/falta6.gif" width="20" height="17" alt="O.P INGRESADA" title="O.P INGRESADA" border="0" style="cursor:hand;" /> O.P Extruyendo Falta por liquidar <br>
@@ -318,7 +312,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                         </table>
                         <?php if ($row_prioridad['id_op'] != '') { ?>
 
-                        <?php } ?> 
+                        <?php } ?>
                         <fieldset>
                           <legend id="dato1">LISTADO ORDENES DE PRODUCCION</legend>
                           <table class="table table-bordered table-sm">
@@ -339,11 +333,13 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                               <td nowrap="nowrap" id="titulo4">ROLLOS</td>
                               <td nowrap="nowrap" id="titulo4">MEZCLA</td>
                               <td nowrap="nowrap" id="titulo1">
-                            <?php if($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == ' sistemas') { echo "CONSUMOS"; } ?>
-                            </td>
+                                <?php if ($_SESSION['MM_Username'] == 'auxauditor' || $_SESSION['MM_Username'] == ' sistemas') {
+                                  echo "CONSUMOS";
+                                } ?>
+                              </td>
                               <td nowrap="nowrap" id="titulo4">PROCESO</td>
                             </tr>
-                            <?php foreach ($row_orden_producciones as $row_orden_produccion) { ?> 
+                            <?php foreach ($row_orden_producciones as $row_orden_produccion) { ?>
                               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
                                 <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
                                 <td id="dato1"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000">
@@ -362,7 +358,11 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_kilos_op']; ?></a></td>
                                 <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
-                                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {echo "ACTIVA";} else if ($row_orden_produccion['b_borrado_op'] == '1') { echo "INACTIVA"; } ?></a>
+                                <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php if ($row_orden_produccion['b_borrado_op'] == '0') {
+                                                                                                                                                                                                echo "ACTIVA";
+                                                                                                                                                                                              } else if ($row_orden_produccion['b_borrado_op'] == '1') {
+                                                                                                                                                                                                echo "INACTIVA";
+                                                                                                                                                                                              } ?></a>
                                 </td>
                                 <td id="dato2">
                                   <?php
@@ -392,8 +392,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
                                   <?php if ($kilosE == '') { ?>
 
-                                    <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','1000','1200')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
                                     <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add_varios.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','1000','1200')"><img src="images/mas_r.gif" alt="ADD VARIOS ROLLOS" title="ADD VARIOS ROLLOS" border="0" style="cursor:hand;" /></a>
+                                    <a href="javascript:verFoto('produccion_extrusion_stiker_rollo_add.php?id_op_r=<?php echo $row_orden_produccion['id_op']; ?>','1000','1200')"><img src="images/mas.gif" alt="ADD ROLLOS" title="ADD ROLLOS" border="0" style="cursor:hand;" /></a>
 
                                   <?php } else if ($kilosE != '' && ($parcial > '1')) {
                                     $tienerollos = 1; ?>
@@ -416,24 +416,24 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                                   <?php } ?>
                                   <?php
                                   $estado_op = $row_orden_produccion['b_estado_op'];
-                                  
+
                                   $op_c = $row_orden_produccion['id_op'];
-                                  $resultsell = $conexion->llenaListas("Tbl_reg_produccion", "WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1'", "ORDER BY rollo_rp DESC", "SUM(int_kilos_prod_rp) AS int_kilos_prod_rp, id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp"); 
-                                  
+                                  $resultsell = $conexion->llenaListas("Tbl_reg_produccion", "WHERE id_op_rp = '$op_c' AND `id_proceso_rp` ='1'", "ORDER BY rollo_rp DESC", "SUM(int_kilos_prod_rp) AS int_kilos_prod_rp, id_rp,id_ref_rp,id_op_rp,MAX(rollo_rp) as rollo_rp,fecha_ini_rp,int_kilos_prod_rp");
+
                                   $id_rp = $resultsell[0]['id_rp'];
                                   $id_op_rp = $resultsell[0]['id_op_rp'];
                                   $id_ref_rp = $resultsell[0]['id_ref_rp'];
                                   $rollosreg_prod = $resultsell[0]['rollo_rp'];
                                   $totalKilosliq = $resultsell[0]['int_kilos_prod_rp'];
-                                  
+
                                   $resultre = $conexion->llenaListas("Tbl_reg_kilo_producido", "WHERE op_rp='$op_c' AND id_proceso_rkp='1'", "", "SUM(valor_prod_rp) AS totalkilos");
                                   /* $sqlre = "SELECT SUM(valor_prod_rp) AS totalkilos FROM  Tbl_reg_kilo_producido WHERE op_rp='$op_c' AND id_proceso_rkp='1' ";
                                   $resultre = mysql_query($sqlre);*/
-                                  $numere = sizeof($resultre); 
+                                  $numere = sizeof($resultre);
                                   if ($numere >= '1') {
                                     $cantidadKilosprod = $resultre[0]['totalkilos'];
                                   }
-                                  
+
                                   //KILOS DE LOS ROLLO A ROLLO 
                                   $kilosE = round($kilosE, 2);
                                   $totalKilosRollodesp = ($kilosE + $DespRollo); //KILOS DEL ROLLO MAS DESPERDICIO 
@@ -546,58 +546,60 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
 </html>
 <script>
-  $('#op').select2(
-    $.ajax({
-      url: "select3/proceso.php",
-      type: "post",
-      dataType: 'json',
-      delay: 250,
-      data: function(params) {
-        return {
-          palabraClave: params.term, // search term
-          var1: "id_op", //campo normal para usar
-          var2: "tbl_orden_produccion", //tabla
-          var3: "b_estado_op >= 0", //where
-          var4: "ORDER BY Tbl_orden_produccion.id_op DESC",
-          var5: "id_op", //clave
-          var6: "id_op" //columna a buscar
-        };
-      },
-      processResults: function(response) {
-        return {
-          results: response
-        };
-      },
-      cache: true
-    })
-  );
+  $(document).ready(function() {
+    $('#op').select2({
+      ajax: {
+        url: "select3/proceso.php",
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            palabraClave: params.term, // search term
+            var1: "id_op", //campo normal para usar
+            var2: "tbl_orden_produccion", //tabla
+            var3: "b_estado_op >= 0", //where
+            var4: "ORDER BY Tbl_orden_produccion.id_op DESC",
+            var5: "id_op", //clave
+            var6: "id_op" //columna a buscar
+          };
+        },
+        processResults: function(response) {
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
+    });
 
 
-  $('#id_ref').select2({
-    ajax: {
-      url: "select3/proceso.php",
-      type: "post",
-      dataType: 'json',
-      delay: 250,
-      data: function(params) {
-        return {
-          palabraClave: params.term, // search term
-          var1: "cod_ref",
-          var2: "tbl_referencia",
-          var3: "", //where
-          var4: "GROUP BY cod_ref ORDER BY CAST(cod_ref AS int) DESC",
-          var5: "cod_ref",
-          var6: "cod_ref" //columna a buscar
-        };
-      },
-      processResults: function(response) {
-        return {
-          results: response
-        };
-      },
-      cache: true
-    }
-  });
+    $('#id_ref').select2({
+      ajax: {
+        url: "select3/proceso.php",
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            palabraClave: params.term, // search term
+            var1: "cod_ref",
+            var2: "tbl_referencia",
+            var3: "", //where
+            var4: "GROUP BY cod_ref ORDER BY CAST(cod_ref AS int) DESC",
+            var5: "cod_ref",
+            var6: "cod_ref" //columna a buscar
+          };
+        },
+        processResults: function(response) {
+          return {
+            results: response
+          };
+        },
+        cache: true
+      }
+    });
+  })
 
 
   function ListadoProduccion() {

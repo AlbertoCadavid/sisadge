@@ -105,19 +105,22 @@ if (isset($_GET['id_op_rp'])) {
   $colname_tiempoMuerto = (get_magic_quotes_gpc()) ? $_GET['id_op_rp'] : addslashes($_GET['id_op_rp']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoMuerto = sprintf("SELECT *, (`valor_tiem_rt`) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1'", $colname_tiempoMuerto);
+$query_tiempoMuerto = sprintf("SELECT *, round(sum(`valor_tiem_rt`),1) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' GROUP BY id_rpt_rt", $colname_tiempoMuerto);
+//$query_tiempoMuerto = sprintf("SELECT *, (`valor_tiem_rt`) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1'", $colname_tiempoMuerto);
 $tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
 $row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
 $totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
 //CARGA LOS TIEMPOS PREPARACION 
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoPreparacion = sprintf("SELECT *, (`valor_prep_rtp`) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+$query_tiempoPreparacion = sprintf("SELECT *, round(sum(`valor_prep_rtp`),1) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' GROUP BY id_rpt_rtp ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+//$query_tiempoPreparacion = sprintf("SELECT *, (`valor_prep_rtp`) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
 $tiempoPreparacion  = mysql_query($query_tiempoPreparacion, $conexion1) or die(mysql_error());
 $row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion);
 $totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion);
 //CARGA LOS TIEMPOS  DESPERDICIOS
 mysql_select_db($database_conexion1, $conexion1);
-$query_desperdicio = sprintf("SELECT *, (`valor_desp_rd`) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
+$query_desperdicio = sprintf("SELECT *, round(sum(`valor_desp_rd`),1) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' GROUP BY id_rpd_rd ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
+//$query_desperdicio = sprintf("SELECT *, (`valor_desp_rd`) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
 $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
@@ -139,7 +142,7 @@ $row_mezcla = mysql_fetch_assoc($mezcla);
 $totalRows_mezcla = mysql_num_rows($mezcla);
 
 $horasOpmes = $row_extrusion_vista['id_op_rp'];
-$resultOpmes = mysql_query("SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollos, `cod_empleado_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS TIEMPOINI, DATE_FORMAT(MAX(`fechaF_r`), '%k.%i.%s') AS TIEMPOFIN, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS KILOS FROM `TblExtruderRollo` WHERE `id_op_r`= '$horasOpmes' GROUP BY `fechaI_r` ASC"); // `cod_empleado_r`  HAY QUE AGRUPAR POR FECHA YA QUE SALEN VARIOS ROLLOS AL MISMO TIEMPO
+$resultOpmes = mysql_query("SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollos, `cod_empleado_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS TIEMPOINI, DATE_FORMAT(MAX(`fechaF_r`), '%k.%i.%s') AS TIEMPOFIN, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS KILOS FROM `TblExtruderRollo` WHERE `id_op_r`= '$horasOpmes' AND id_rp <> 0 GROUP BY `fechaI_r` ASC"); // `cod_empleado_r`  HAY QUE AGRUPAR POR FECHA YA QUE SALEN VARIOS ROLLOS AL MISMO TIEMPO
 $numOpmes = mysql_num_rows($resultOpmes); //enviar c�digo MySQL
 
 mysql_select_db($database_conexion1, $conexion1);
@@ -318,6 +321,7 @@ $totalRows_rollo_estrusion_total = mysql_num_rows($rollo_estrusion_total);
                                     $sqlrtp = "SELECT * FROM Tbl_reg_tipo_desperdicio WHERE id_rtp='$id_rtp'";
                                     $resultrtp = mysql_query($sqlrtp);
                                     $numrtp = mysql_num_rows($resultrtp);
+                                    
                                     if ($numrtp >= '1') {
                                       $nombre = mysql_result($resultrtp, 0, 'nombre_rtp');
                                       echo $nombre;

@@ -618,7 +618,25 @@ $row_referencia = mysql_fetch_assoc($referencia);
 $totalRows_referencia = mysql_num_rows($referencia);
 
 
+//PARA METROS Y KILOS INICIALES DESDE IMPRESION O EXTRUDER
+$colname_metrosImp = "-1";
+if (isset($_GET['id_r'])) {
+  $colname_metrosImp = (get_magic_quotes_gpc()) ? $_GET['id_r'] : addslashes($_GET['id_r']);
+}
 
+mysql_select_db($database_conexion1, $conexion1);
+$query_metrosImp = sprintf("SELECT TblImpresionRollo.metro_r AS METROSIMP,TblImpresionRollo.kilos_r AS KILOIMP FROM TblImpresionRollo,TblSelladoRollo WHERE TblSelladoRollo.id_r='%s' AND TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r", $colname_metrosImp);
+$metrosImp = mysql_query($query_metrosImp, $conexion1) or die(mysql_error());
+$row_metrosImp = mysql_fetch_assoc($metrosImp);
+$totalRows_metrosImp = mysql_num_rows($metrosImp);
+//SI NO TIENE IMPRESION LA O.P SE DIRIGE A EXTRUSION
+if ($totalRows_metrosImp == '0') {
+  mysql_select_db($database_conexion1, $conexion1);
+  $query_metrosImp = sprintf("SELECT TblExtruderRollo.metro_r AS METROSIMP,TblExtruderRollo.kilos_r AS KILOIMP FROM TblExtruderRollo,TblSelladoRollo WHERE TblSelladoRollo.id_r='%s' AND TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r", $colname_metrosImp);
+  $metrosImp = mysql_query($query_metrosImp, $conexion1) or die(mysql_error());
+  $row_metrosImp = mysql_fetch_assoc($metrosImp);
+  $totalRows_metrosImp = mysql_num_rows($metrosImp);
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -964,8 +982,9 @@ $totalRows_referencia = mysql_num_rows($referencia);
           <p>Metro Inicial
           </p>
           <p>
-            <input name="metroInicial" type="hidden" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />
-            <input name="metro_r" type="number" id="metro_r" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />
+            <!-- <input name="metroInicial" type="hidden" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" /> -->
+            <input name="metro_r" type="hidden" id="metro_r" min="1" style="width:60px" value="<?php echo  $row_metrosImp['METROSIMP']; ?>" readonly="readonly" />
+            <input name="metroInicial" type="number" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />
           </p>
         </td>
         <td id="fuente1">
@@ -1458,11 +1477,12 @@ $totalRows_referencia = mysql_num_rows($referencia);
 
 </html>
 <script type="text/javascript">
+  kiloComparativoSell()
   function enviodeFormulario() {
     var resul = validaTodoSell();
     enviodeForms(resul);
-
   }
+
 </script>
 <?php
 mysql_free_result($usuario);

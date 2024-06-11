@@ -620,7 +620,6 @@ console.log(rowProdMonth);
     .size {
         width: 100%;
         height: auto"
-
     }
 
     @media (max-width: 600px) {
@@ -629,5 +628,9 @@ console.log(rowProdMonth);
             height: 50vh;
             margin: 0 auto;
         }
+        
+    }
+    table {
+        border-collapse: separate;
     }
 </style>

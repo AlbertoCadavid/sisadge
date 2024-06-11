@@ -61,6 +61,8 @@ class OcomercialController{
          $b_oc_interno=$_POST['b_oc_interno'];
          $cobra_flete=$_POST['cobra_flete'];
          
+        
+
          if(($_POST['str_numero_oc']!='' && $_POST['nit_c']!='')){ 
           $myObject = new oComercial();
            $existeorden=$myObject->ObtenerDos('tbl_orden_compra', "WHERE str_numero_oc= '".$_POST['str_numero_oc']."' and str_nit_oc= '".$_POST['nit_c']."' ORDER BY id_pedido DESC " );
@@ -71,24 +73,25 @@ class OcomercialController{
          //evita error duplicado 
          if(($_POST['str_numero_oc']) && !$existeorden) 
          {
-         $nuevovalorRollo = [ "str_numero_oc"=>$_POST['str_numero_oc'],"id_c_oc"=>$_POST['id_c_oc'],"str_nit_oc"=>$_POST['nit_c'],"fecha_ingreso_oc"=>$_POST['fecha_ingreso_oc'],"fecha_entrega_oc"=>$_POST['fecha_entrega_oc'],"str_condicion_pago_oc"=>$_POST['str_condicion_pago_oc'],"str_observacion_oc"=>$_POST['str_observacion_oc'],"int_total_oc"=>$_POST['int_total_oc'],"b_facturas_oc"=>$_POST['b_facturas_oc'],"b_num_remision_oc"=>$_POST['b_num_remision_oc'],"b_factura_cirel_oc"=>$_POST['b_factura_cirel_oc'],"str_dir_entrega_oc"=>$_POST['str_dir_entrega_oc'],"str_archivo_oc"=>$tieneadjunto1,"adjunto2"=>$tieneadjunto2,"adjunto3"=>$tieneadjunto3,"str_elaboro_oc"=>$_POST['str_elaboro_oc'],"str_aprobo_oc"=>$_POST['str_aprobo_oc'],"b_estado_oc"=>$_POST['b_estado_oc'],"str_responsable_oc"=>$_POST['str_responsable_oc'],"b_borrado_oc"=>$_POST['b_borrado_oc'],"salida_oc"=>$_POST['salida_oc'],"b_oc_interno"=>$b_oc_interno,"vta_web_oc"=>$_POST['vta_web_oc'],"expo_oc"=>$_POST['expo_oc'],"autorizado"=>$_POST['autorizado'],"entrega_fac"=>$_POST['entrega_fac'],"fecha_cierre_fac"=>$_POST['fecha_cierre_fac'],"comprobante_ent"=>$_POST['comprobante_ent'],"pago_pendiente"=>$_POST['pago_pendiente'],"cobra_flete"=>$cobra_flete,"precio_flete"=>$_POST['precio_flete'],"tipo_despacho"=>$_POST['tipo_despacho'],"fecha_autoriza"=>$_POST['fecha_ingreso_oc']
+         $nuevovalorRollo = [ "str_numero_oc"=>$_POST['str_numero_oc'],"id_c_oc"=>$_POST['id_c_oc'],"str_nit_oc"=>$_POST['nit_c'],"fecha_ingreso_oc"=>$_POST['fecha_ingreso_oc'],"fecha_entrega_oc"=>$_POST['fecha_entrega_oc'],"str_condicion_pago_oc"=>$_POST['str_condicion_pago_oc'],"str_observacion_oc"=>$_POST['str_observacion_oc'],"int_total_oc"=>$_POST['int_total_oc'],"b_facturas_oc"=>$_POST['b_facturas_oc'],"b_num_remision_oc"=>$_POST['b_num_remision_oc'],"b_factura_cirel_oc"=>$_POST['b_factura_cirel_oc'],"str_dir_entrega_oc"=>$_POST['str_dir_entrega_oc'],"str_archivo_oc"=>$tieneadjunto1,"adjunto2"=>$tieneadjunto2,"adjunto3"=>$tieneadjunto3,"str_elaboro_oc"=>$_POST['str_elaboro_oc'],"str_aprobo_oc"=>$_POST['str_aprobo_oc'],"b_estado_oc"=>$_POST['b_estado_oc'],"str_responsable_oc"=>$_POST['str_responsable_oc'],"b_borrado_oc"=>$_POST['b_borrado_oc'],"salida_oc"=>$_POST['salida_oc'],"b_oc_interno"=>$b_oc_interno,"vta_web_oc"=>$_POST['vta_web_oc'],"expo_oc"=>$_POST['expo_oc'],"autorizado"=>$_POST['autorizado'],"entrega_fac"=>$_POST['entrega_fac'],"fecha_cierre_fac"=>$_POST['fecha_cierre_fac'],"comprobante_ent"=>$_POST['comprobante_ent'],"pago_pendiente"=>$_POST['pago_pendiente'],"proforma_oc"=>$_POST['proforma_oc'],"estado_cartera"=>$_POST['estado_cartera'],"tipo_pago_cartera"=>$_POST['tipo_pago_cartera'],"valor_cartera"=>$_POST['valor_cartera'],"cobra_flete"=>$_POST['cobra_flete'],"precio_flete"=>$_POST['precio_flete'],"tipo_despacho"=>$_POST['tipo_despacho'],"fecha_autoriza"=>$_POST['fecha_autoriza'],"notaweb"=>$_POST['notaweb'],"especialweb"=>$_POST['especialweb'] 
            ];
 
-        $columnasRollo = ["str_numero_oc"=>"str_numero_oc","id_c_oc"=>"id_c_oc","str_nit_oc"=>"str_nit_oc","fecha_ingreso_oc"=>"fecha_ingreso_oc","fecha_entrega_oc"=>"fecha_entrega_oc","str_condicion_pago_oc"=>"str_condicion_pago_oc","str_observacion_oc"=>"str_observacion_oc","int_total_oc"=>"int_total_oc","b_facturas_oc"=>"b_facturas_oc","b_num_remision_oc"=>"b_num_remision_oc","b_factura_cirel_oc"=>"b_factura_cirel_oc","str_dir_entrega_oc"=>"str_dir_entrega_oc","str_archivo_oc"=>"str_archivo_oc","adjunto2"=>"adjunto2","adjunto3"=>"adjunto3","str_elaboro_oc"=>"str_elaboro_oc","str_aprobo_oc"=>"str_aprobo_oc","b_estado_oc"=>"b_estado_oc","str_responsable_oc"=>"str_responsable_oc","b_borrado_oc"=>"b_borrado_oc","salida_oc"=>"salida_oc","b_oc_interno"=>"b_oc_interno","vta_web_oc"=>"vta_web_oc","expo_oc"=>"expo_oc","autorizado"=>"autorizado","entrega_fac"=>"entrega_fac","fecha_cierre_fac"=>"fecha_cierre_fac","comprobante_ent"=>"comprobante_ent","pago_pendiente"=>"pago_pendiente","cobra_flete"=>"cobra_flete","precio_flete"=>"precio_flete","tipo_despacho"=>"tipo_despacho","fecha_autoriza"=>"fecha_autoriza"
+        $columnasRollo = ["str_numero_oc"=>"str_numero_oc","id_c_oc"=>"id_c_oc","str_nit_oc"=>"str_nit_oc","fecha_ingreso_oc"=>"fecha_ingreso_oc","fecha_entrega_oc"=>"fecha_entrega_oc","str_condicion_pago_oc"=>"str_condicion_pago_oc","str_observacion_oc"=>"str_observacion_oc","int_total_oc"=>"int_total_oc","b_facturas_oc"=>"b_facturas_oc","b_num_remision_oc"=>"b_num_remision_oc","b_factura_cirel_oc"=>"b_factura_cirel_oc","str_dir_entrega_oc"=>"str_dir_entrega_oc","str_archivo_oc"=>"str_archivo_oc","adjunto2"=>"adjunto2","adjunto3"=>"adjunto3","str_elaboro_oc"=>"str_elaboro_oc","str_aprobo_oc"=>"str_aprobo_oc","b_estado_oc"=>"b_estado_oc","str_responsable_oc"=>"str_responsable_oc","b_borrado_oc"=>"b_borrado_oc","salida_oc"=>"salida_oc","b_oc_interno"=>"b_oc_interno","vta_web_oc"=>"vta_web_oc","expo_oc"=>"expo_oc","autorizado"=>"autorizado","entrega_fac"=>"entrega_fac","fecha_cierre_fac"=>"fecha_cierre_fac","comprobante_ent"=>"comprobante_ent","pago_pendiente"=>"pago_pendiente","proforma_oc"=>"proforma_oc","estado_cartera"=>"estado_cartera","tipo_pago_cartera"=>"tipo_pago_cartera","valor_cartera"=>"valor_cartera","cobra_flete"=>"cobra_flete","precio_flete"=>"precio_flete","tipo_despacho"=>"tipo_despacho","fecha_autoriza"=>"fecha_autoriza","notaweb"=>"notaweb","especialweb"=>"especialweb" 
         ];
 
             if($nuevovalorRollo){
                $respuesta = $myRollo->RegistrarGen("tbl_orden_compra", $columnasRollo, $nuevovalorRollo);
               }//FIN  
              
-                  
-
+                
+               
              //HISTORICO
               if( $_POST['str_numero_oc']!='' && $_POST['nit_c']!=''){ 
                $historico=$myRollo->ObtenerDos('tbl_orden_compra', "WHERE str_numero_oc= '".$_POST['str_numero_oc']."' and str_nit_oc= '".$_POST['nit_c']."' ORDER BY id_pedido DESC "  );
              }      
 
-             $myRollo->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
+              //echo '<pre>'; var_dump($historico); die;  
+             $myRollo->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,  pago_pendiente, proforma_oc,estado_cartera,tipo_pago_cartera,valor_cartera, cobra_flete,precio_flete,tipo_despacho,fecha_autoriza, modifico,notaweb,especialweb", $historico);
 
         }//Fin evita error duplicado
  
@@ -107,11 +110,12 @@ class OcomercialController{
     		$this->historico=$myObject->Obtener('tbl_orden_compra','id_pedido',$_REQUEST['id']);
     	} 
 
-        $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $this->historico);
+        $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,  pago_pendiente, proforma_oc,estado_cartera,tipo_pago_cartera,valor_cartera, cobra_flete,precio_flete,tipo_despacho,fecha_autoriza, modifico,notaweb,especialweb", $this->historico);
   
       	 $vista =!'' ? header('Location:'.$vista)  : header('Location: index.php');
     }
 
+    
 
     public function Eliminar(){
     	$this->ordenc->Eliminar($_REQUEST['id']);//aqui llamo las funciones del modelo

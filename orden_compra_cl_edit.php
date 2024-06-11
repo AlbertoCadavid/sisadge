@@ -214,10 +214,25 @@ if ($_POST['pago_pendiente']=='NO'){
 
   if(isset($_POST['id_pedido'])){ 
     $historico=$myObject->Obtener('tbl_orden_compra','id_pedido',$_POST['id_pedido']);
+
   } 
 
+/*echo '<pre>';
+var_dump($historico); die;*/
+
   if(isset($_POST['id_pedido']) && $historico){
-    $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
+
+    $Date = date("Y-m-d H:i:s");   
+    $usuario = $_SESSION['Usuario'];
+
+   $nuevovalorRollo = [ "str_numero_oc"=>$_POST['str_numero_oc'],"id_c_oc"=>$_POST['id_c_oc'],"str_nit_oc"=>$_POST['nit_c'],"fecha_ingreso_oc"=>$_POST['fecha_ingreso_oc'],"fecha_entrega_oc"=>$_POST['fecha_entrega_oc'],"str_condicion_pago_oc"=>$_POST['str_condicion_pago_oc'],"str_observacion_oc"=>$_POST['str_observacion_oc'],"int_total_oc"=>$_POST['int_total_oc'],"b_facturas_oc"=>$_POST['b_facturas_oc'],"b_num_remision_oc"=>$_POST['b_num_remision_oc'],"b_factura_cirel_oc"=>$_POST['b_factura_cirel_oc'],"str_dir_entrega_oc"=>$_POST['str_dir_entrega_oc'],"str_archivo_oc"=>$tieneadjunto1,"adjunto2"=>$tieneadjunto2,"adjunto3"=>$tieneadjunto3,"str_elaboro_oc"=>$_POST['str_elaboro_oc'],"str_aprobo_oc"=>$_POST['str_aprobo_oc'],"b_estado_oc"=>$_POST['b_estado_oc'],"str_responsable_oc"=>$_POST['str_responsable_oc'],"b_borrado_oc"=>$_POST['b_borrado_oc'],"salida_oc"=>$_POST['salida_oc'],"b_oc_interno"=>$b_oc_interno,"vta_web_oc"=>$_POST['vta_web_oc'],"expo_oc"=>$_POST['expo_oc'],"autorizado"=>$_POST['autorizado'],"entrega_fac"=>$_POST['entrega_fac'],"fecha_cierre_fac"=>$_POST['fecha_cierre_fac'],"comprobante_ent"=>$_POST['comprobante_ent'],"pago_pendiente"=>$_POST['pago_pendiente'],"proforma_oc"=>$_POST['proforma_oc'],"estado_cartera"=>$_POST['estado_cartera'],"tipo_pago_cartera"=>$_POST['tipo_pago_cartera'],"valor_cartera"=>$_POST['valor_cartera'],"cobra_flete"=>$_POST['cobra_flete'],"precio_flete"=>$_POST['precio_flete'],"tipo_despacho"=>$_POST['tipo_despacho'],"fecha_autoriza"=>$_POST['fecha_autoriza'], "modifico"=>$_SESSION['Usuario'].'-'.$Date,"notaweb"=>$_POST['notaweb'],"especialweb"=>$_POST['especialweb'] 
+     ];
+
+  $columnasRollo = ["str_numero_oc"=>"str_numero_oc","id_c_oc"=>"id_c_oc","str_nit_oc"=>"str_nit_oc","fecha_ingreso_oc"=>"fecha_ingreso_oc","fecha_entrega_oc"=>"fecha_entrega_oc","str_condicion_pago_oc"=>"str_condicion_pago_oc","str_observacion_oc"=>"str_observacion_oc","int_total_oc"=>"int_total_oc","b_facturas_oc"=>"b_facturas_oc","b_num_remision_oc"=>"b_num_remision_oc","b_factura_cirel_oc"=>"b_factura_cirel_oc","str_dir_entrega_oc"=>"str_dir_entrega_oc","str_archivo_oc"=>"str_archivo_oc","adjunto2"=>"adjunto2","adjunto3"=>"adjunto3","str_elaboro_oc"=>"str_elaboro_oc","str_aprobo_oc"=>"str_aprobo_oc","b_estado_oc"=>"b_estado_oc","str_responsable_oc"=>"str_responsable_oc","b_borrado_oc"=>"b_borrado_oc","salida_oc"=>"salida_oc","b_oc_interno"=>"b_oc_interno","vta_web_oc"=>"vta_web_oc","expo_oc"=>"expo_oc","autorizado"=>"autorizado","entrega_fac"=>"entrega_fac","fecha_cierre_fac"=>"fecha_cierre_fac","comprobante_ent"=>"comprobante_ent","pago_pendiente"=>"pago_pendiente","proforma_oc"=>"proforma_oc","estado_cartera"=>"estado_cartera","tipo_pago_cartera"=>"tipo_pago_cartera","valor_cartera"=>"valor_cartera","cobra_flete"=>"cobra_flete","precio_flete"=>"precio_flete","tipo_despacho"=>"tipo_despacho","fecha_autoriza"=>"fecha_autoriza","modifico"=>"modifico","notaweb"=>"notaweb","especialweb"=>"especialweb" 
+  ];
+   $myObject->RegistrarGen("tbl_orden_compra_historico", $columnasRollo, $nuevovalorRollo);
+
+    //$myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
 }//FIN HISTORICO    
 
 //CAMBIA EL ESTADO EN LAS O LA REMISIONES Q TENGA ESA O.C
@@ -692,7 +707,7 @@ if( $_SESSION['superacceso']==1 ) {
                                       $sql2="SELECT * FROM Tbl_items_ordenc,tbl_remision_detalle WHERE Tbl_items_ordenc.id_items='$id_items' AND tbl_remision_detalle.str_numero_oc_rd = Tbl_items_ordenc.str_numero_io AND Tbl_items_ordenc.int_cod_ref_io = tbl_remision_detalle.int_ref_io_rd";
                                       $result2= mysql_query($sql2);
                                       $numRem = mysql_num_rows($result2);
-
+ 
                                       if($nump >='1' || $numRem >='1' || $nump !='' || $numRem !='')
                                       { 
                                         $existe_op_det ="1";
@@ -765,12 +780,13 @@ if( $_SESSION['superacceso']==1 ) {
 
 
 
-<?php elseif($row_detalle['id_mp_vta_io']!='' && $row_detalle['str_numero_io']!='') : ?>
+<?php elseif($row_detalle['id_mp_vta_io']!='' && $row_detalle['str_numero_io']!='' ) : ?>
 
 
 
   <tr id="tr2">
     <td colspan="4" id="dato2"><table id="tabla">
+      <tr><td colspan="19" id="nivel2">MATERIA PRIMA</td></tr>
       <tr>
         <td id="nivel2">&nbsp;</td>
         <td id="nivel2">ITEM</td>
@@ -798,8 +814,31 @@ if( $_SESSION['superacceso']==1 ) {
                 </tr>
                 <?php do { ?>
                   <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                    <td id="talla2"><?php if ($existe_op_det=='0') {?>
-                      <a href="javascript:eliminar1('id_items',<?php echo $row_detalle['id_items']; ?>,'orden_compra_edit.php')"><img src="images/por.gif" alt="ELIMINAR O.C." title="ELIMINAR O.C." border="0" style="cursor:hand;"/></a><?php }else{?><img src="images/pa.gif" alt="EN PRODUCCION"title="EN PRODUCCION" border="0" style="cursor:hand;" onClick="enProduccion();" /><?php } ?></td>
+                    <td id="talla2"><?php 
+                                      $id_items = $row_detalle['id_items'];         
+                                      $sqlmp="SELECT Tbl_orden_produccion.int_cod_ref_op AS existe_op  
+                                      FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_items='$id_items' AND   Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+                                      AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
+                                      $resultmp= mysql_query($sqlmp);
+                                      $nump = mysql_num_rows($resultmp);
+                                      $str_numero_oc=$_GET['str_numero_oc']; 
+//SI EL ITEM TIENE REMISIONES 
+
+                                      $sql2="SELECT * FROM Tbl_items_ordenc,tbl_remision_detalle WHERE Tbl_items_ordenc.id_items='$id_items' AND tbl_remision_detalle.str_numero_oc_rd = Tbl_items_ordenc.str_numero_io AND Tbl_items_ordenc.int_cod_ref_io = tbl_remision_detalle.int_ref_io_rd";
+                                      $result2= mysql_query($sql2);
+                                      $numRem = mysql_num_rows($result2);
+ 
+                                      if($nump >='1' || $numRem >='1' || $nump !='' || $numRem !='')
+                                      { 
+                                        $existe_op_det ="1";
+                                      }else {
+                                        $existe_op_det ="0";
+                                      }         
+
+
+                                  if ($existe_op_det=='0') {?>
+                      <a href="javascript:eliminar1('id_items',<?php echo $row_detalle['id_items']; ?>,'orden_compra_edit.php')"><img src="images/por.gif" alt="ELIMINAR O.C." title="ELIMINAR O.C." border="0" style="cursor:hand;"/></a><?php }else{?><img src="images/pa.gif" alt="EN PRODUCCION"title="EN PRODUCCION" border="0" style="cursor:hand;" onClick="enProduccion();" /><?php } ?>
+                    </td>
                       <td id="talla2"><input type="hidden" name="items" id="items" value="<?php echo $row_detalle['id_items']; ?>"><a href="javascript:verFoto('orden_compra_cl_edit_detalle.php?id_oc=<?php echo $row_orden_compra['id_c_oc']; ?>&id_items=<?php echo $row_detalle['id_items']; ?>&nit_c=<?php echo $row_cliente['nit_c']; ?>','1300','550')" target="_top" style="text-decoration:none; color:#000000">
 
                         <?php echo $row_detalle['int_consecutivo_io']; ?></a></td>

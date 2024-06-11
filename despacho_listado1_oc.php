@@ -90,13 +90,9 @@ $row_dia = $conexion->llenaSelect('dias','','ORDER BY dia DESC');
 $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor ASC');
  
 //$row_numero = $conexion->llenaSelect('tbl_remisiones',"WHERE b_borrado_r='0' AND fecha_r > '2019-01-01' ",'ORDER BY int_remision DESC'); 
-
 //$row_orden =$conexion->llenaListas('tbl_remisiones',"WHERE fecha_r > '2019-01-01' ",'ORDER BY str_numero_oc_r DESC','DISTINCT str_numero_oc_r');
-
 //$row_ref = $conexion->llenaListas('tbl_referencia',"",'ORDER BY CONVERT(cod_ref, SIGNED INTEGER) DESC','cod_ref');  
-
 //$row_cliente = $conexion->llenaSelect('cliente',"",'ORDER BY nombre_c ASC'); 
-
 
 $maxRows_registros = 20;
 $pageNum_registros = 0;
@@ -140,11 +136,7 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registros, $queryString_registros);
 
-
-
-
 $row_alertas_rojo = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"WHERE tbl_orden_compra.str_numero_oc = tbl_remisiones.str_numero_oc_r and (tbl_remisiones.comprobante_file is  null or tbl_remisiones.comprobante_file ='')   and tbl_orden_compra.b_estado_oc in('3','4') and tbl_orden_compra.comprobante_ent='SI'" ,'ORDER BY CONVERT(tbl_orden_compra.str_numero_oc, SIGNED INTEGER) ASC',"DISTINCT tbl_remisiones.int_remision, tbl_remisiones.str_numero_oc_r, tbl_remisiones.comprobante_file ");//and tbl_orden_compra.entrega_fac='NO'
-
 $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"WHERE tbl_orden_compra.str_numero_oc = tbl_remisiones.str_numero_oc_r and (tbl_remisiones.comprobante_file is NOT null or tbl_remisiones.comprobante_file ='')  and tbl_orden_compra.b_estado_oc in('3','4') " ,'ORDER BY CONVERT(tbl_orden_compra.str_numero_oc, SIGNED INTEGER) ASC',"DISTINCT tbl_remisiones.int_remision, tbl_remisiones.str_numero_oc_r, tbl_remisiones.comprobante_file ");//and tbl_orden_compra.entrega_fac='NO' 
 
 ?>
@@ -378,7 +370,7 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                       <td id="titulo4">ESTADO</td>
                       <?php if($_SESSION['acceso']): ?><td id="titulo4" nowrap>FACTURAR</td> <?php endif; ?>
                     </tr>
-                    <?php foreach($registros as $row_remision) {  ?>
+                    <?php $row_remision['factura_r']=0; foreach($registros as $row_remision) {  ?>
                     <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
                       <td id="dato2"><input name="borrar[]" type="checkbox" id="borrar[]" value="<?php echo $row_remision['int_remision']; ?>" /></td>
                       <td nowrap id="dato2"><a href="despacho_items_oc_vista.php?int_remision=<?php echo $row_remision['int_remision']; ?>" target="_blank" style="text-decoration:none; color:#000000"><strong><?php echo $row_remision['int_remision']; ?></strong></a></td>
@@ -500,16 +492,18 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                         ?> 
                       </td>
                       <td nowrap="nowrap" id="dato1">
-                        <?php $mp=$row_remision['str_numero_oc_r'];
+                        <?php $mp=$row_remision['id_pedido_oc'];
                         if($mp!='')
                         { 
-
-                          $resultmp = $conexion->llenarCampos('tbl_orden_compra', "WHERE str_numero_oc='$mp' ", '','factura_oc,b_estado_oc,str_elaboro_oc' ); 
+                         
+                          $resultmp = $conexion->llenarCampos('tbl_orden_compra', "WHERE id_pedido='$mp' ", '','factura_oc,b_estado_oc,str_elaboro_oc' ); 
                             $b_estado_oc= $resultmp['b_estado_oc'];
                             $factura_oc =  $resultmp['factura_oc']; 
                         } 
+                        $b_estado_oc=$b_estado_oc=='' ? 0 : $b_estado_oc;
+                        $factura_oc= $factura_oc=='' ? 0 : $factura_oc;
 
-                        $idoc = $row_remision['id_pedido_oc'];
+                        $idoc = $row_remision['id_pedido_oc']; 
                         $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                          foreach($select_direccion as $row_direccion) { 
                            $vende = $row_direccion['nombre_vendedor']." ";
@@ -532,15 +526,15 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                           <?php if($b_estado_oc=='5'){echo "Facturado Total";}else if($b_estado_oc=='4'){echo "Facturado Parcial";}else if($b_estado_oc=='1'){echo "Ingresado";}else if($b_estado_oc=='2'){echo "Programado";}else if($b_estado_oc=='3'){echo "Remisionado";}else if($b_estado_oc=='6'){echo "Muestras reposicion";}  ?></a>
                       </td>
                       <?php if($_SESSION['acceso']): ?>
-                        <td id="dato2">  
-                          <a href="javascript:updateList('int_remision',<?php echo $row_remision['int_remision']; ?>,'despacho_listado1_oc.php')" >
-                            <?php   //$row_remision['int_remision']
-                            if( ($row_remision['factura_r']=='' || $row_remision['factura_r']=='0')  && ($factura_oc=='' || $factura_oc=='0')  ): ?>
-                                <img src="images/falta8.gif" alt="ACTUALIZAR" title="ACTUALIZAR" border="0" style="cursor:hand;" width="20" height="18" /></a>
-                                  <?php else: ?>
+                        <td id="dato2" nowrap="nowrap">  
+                        <a href="javascript:updateList('int_remision',<?php echo $row_remision['int_remision']; ?>,'despacho_listado1_oc.php')" >
+                            <?php if( $b_estado_oc == 5  && $row_remision['factura_r']>'0'  && $factura_oc>'0'){ ?>
                                 <img src="images/facturado.png" alt="YA TIENE FACTURA" title="YA TIENE FACTURA" border="0" style="cursor:hand;" width="20" height="18" />
-                              <?php endif; ?>
                               </a>
+                                  <?php }else{  ?>
+                                <img src="images/falta8.gif" alt="ACTUALIZAR" title="ACTUALIZAR" border="0" style="cursor:hand;" width="20" height="18" />
+                              <?php  }   ?>
+                              </a> <?php //echo $b_estado_oc.' - '.$row_remision['factura_r'].' - '.$factura_oc.'<br> ';  ?>
                         </td> 
                         <div style="display: none;  align-items: center; justify-content: center; " id="resp"> <b style="color: red;" >Actualizando Numero de Factura!</b></div>
                       <?php endif; ?>
@@ -653,7 +647,7 @@ $row_alertas_verde = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones',"W
                             var1:"*",
                             var2:"tbl_remisiones",
                             var3:"",
-                            var4:"ORDER BY int_remision DESC",
+                            var4:" GROUP BY str_numero_oc_r ORDER BY int_remision DESC",
                             var5:"str_numero_oc_r",
                             var6:"str_numero_oc_r"
                         };

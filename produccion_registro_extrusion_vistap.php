@@ -109,25 +109,27 @@ if (isset($_GET['id_op_rp'])) {
 //CARGA LOS TIEMPOS MUERTOS 
 $fecha_ini_rp = $row_extrusion_vista['fecha_ini_rp'];
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoMuerto = sprintf("SELECT *, (`valor_tiem_rt`) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' ", $colname_tiempoMuerto);
+//$query_tiempoMuerto = sprintf("SELECT *, (`valor_tiem_rt`) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' ", $colname_tiempoMuerto);
+$query_tiempoMuerto = sprintf("SELECT *, round(sum(`valor_tiem_rt`),1) AS muertos FROM Tbl_reg_tiempo WHERE op_rt=%s AND id_proceso_rt='1' GROUP BY id_rpt_rt", $colname_tiempoMuerto);
 $tiempoMuerto = mysql_query($query_tiempoMuerto, $conexion1) or die(mysql_error());
 $row_tiempoMuerto = mysql_fetch_assoc($tiempoMuerto);
 $totalRows_tiempoMuerto = mysql_num_rows($tiempoMuerto);
 //CARGA LOS TIEMPOS PREPARACION 
 mysql_select_db($database_conexion1, $conexion1);
-$query_tiempoPreparacion = sprintf("SELECT *, (`valor_prep_rtp`) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+$query_tiempoPreparacion = sprintf("SELECT *, round(sum(`valor_prep_rtp`),1) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' GROUP BY id_rpt_rtp ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
+//$query_tiempoPreparacion = sprintf("SELECT *, (`valor_prep_rtp`) AS preparacion FROM Tbl_reg_tiempo_preparacion WHERE op_rtp=%s AND id_proceso_rtp='1' ORDER BY id_rpt_rtp ASC", $colname_tiempoMuerto);
 $tiempoPreparacion  = mysql_query($query_tiempoPreparacion, $conexion1) or die(mysql_error());
 $row_tiempoPreparacion  = mysql_fetch_assoc($tiempoPreparacion);
 $totalRows_tiempoPreparacion  = mysql_num_rows($tiempoPreparacion);
 //CARGA LOS TIEMPOS  DESPERDICIOS
 $fecha_ini_rp = $row_extrusion_vista['fecha_ini_rp'];
 mysql_select_db($database_conexion1, $conexion1);
-$query_desperdicio = sprintf("SELECT *, (`valor_desp_rd`) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
+$query_desperdicio = sprintf("SELECT *, round(sum(`valor_desp_rd`),1) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' GROUP BY id_rpd_rd ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
+//$query_desperdicio = sprintf("SELECT *, (`valor_desp_rd`) AS desperdicio FROM Tbl_reg_desperdicio WHERE op_rd=%s AND id_proceso_rd='1' ORDER BY `id_rpd_rd` ASC", $colname_tiempoMuerto);
 $desperdicio = mysql_query($query_desperdicio, $conexion1) or die(mysql_error());
 $row_desperdicio = mysql_fetch_assoc($desperdicio);
 $totalRows_desperdicio = mysql_num_rows($desperdicio);
 //CARGA LOS TIEMPOS KILOS PRODUCIDOS
-
 mysql_select_db($database_conexion1, $conexion1);
 $query_producido = sprintf("SELECT *, SUM(rkp.valor_prod_rp) AS producido  FROM Tbl_reg_produccion rp  
  left join Tbl_reg_kilo_producido rkp on rkp.op_rp =  rp.id_op_rp
@@ -147,7 +149,7 @@ $row_mezcla = mysql_fetch_assoc($mezcla);
 $totalRows_mezcla = mysql_num_rows($mezcla);
 
 $horasOpmes = $row_extrusion_vista['id_op_rp']; //$row_extrusion_vista['rollo_rp'];
-$query = "SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollos, `cod_empleado_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS fechaI_r, DATE_FORMAT(MAX(`fechaF_r`), '%k.%i.%s') AS fechaF_r, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS kilos_r FROM `TblExtruderRollo` WHERE `id_op_r`= '$horasOpmes' GROUP BY `fechaI_r` ASC";
+$query = "SELECT rollo_r AS rollo_r, COUNT(`rollo_r`) AS rollos, `cod_empleado_r`, `turno_r`, DATE_FORMAT(MIN(`fechaI_r`), '%k.%i.%s') AS fechaI_r, DATE_FORMAT(MAX(`fechaF_r`), '%k.%i.%s') AS fechaF_r, TIMEDIFF(MAX(`fechaF_r`), MIN(`fechaI_r`)) AS TIEMPODIFE, SUM(`kilos_r`) AS kilos_r FROM `TblExtruderRollo` WHERE `id_op_r`= '$horasOpmes' AND id_rp <> 0 GROUP BY `fechaI_r` ASC";
 $resultOpmes = mysql_query($query); // `cod_empleado_r`  HAY QUE AGRUPAR POR FECHA YA QUE SALEN VARIOS ROLLOS AL MISMO TIEMPO
 //$resultOpmes = mysql_query(" SELECT * FROM TblExtruderRollo WHERE id_op_r= '$horasOpmes' ORDER BY rollo_r ASC"); //  
 $numOpmes = mysql_num_rows($resultOpmes);
@@ -162,7 +164,6 @@ $query_rollo_estrusion = sprintf("SELECT count(rollo_r) as total_rollos , sum(ki
 $rollo_estrusion = mysql_query($query_rollo_estrusion, $conexion1) or die(mysql_error());
 $row_rollo_estrusion = mysql_fetch_assoc($rollo_estrusion);
 $totalRows_rollo_estrusion = mysql_num_rows($rollo_estrusion);
-echo $row_rollo_estrusion['total_rollos'];
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_rollo_estrusion_total = "SELECT id_r, rollo_r, id_op_r, ref_r, MIN(fechaI_r) as fechaI_r, MAX(fechaF_r) as fechaF_r, MAX(fechaV_r) as fechaV_r, SUM(metro_parcial_r) as metro_r, SUM(kilos_parcial_r) as kilos_r, GROUP_CONCAT(cod_empleado_r SEPARATOR ', ') AS cod_empleado_r FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r= $colname_rollo_cola AND rolloParcial_r = 0 GROUP BY rollo_r";

@@ -341,7 +341,7 @@ if(isset($_POST['int_remision']) && $historico){
 /*window.onbeforeunload = confirmaSalida;  
 function confirmaSalida()   {    
        if (fecha_r.value!=""||str_encargado_r.value!=""||str_transportador_r.value!=""||str_guia_r.value!=""||str_elaboro_r.value!=""||str_aprobo_r.value!="") {
-              return "¿Seguro quieres salir y guardar la informacion?";  
+              return "ï¿½Seguro quieres salir y guardar la informacion?";  
        }
      }*/
      </script>
@@ -350,7 +350,7 @@ function confirmaSalida()   {
 /*function salir()
 {
 	
-	sal=confirm("¿Desea cerrar el despacho, se guardara todos los cambios realizados?");
+	sal=confirm("ï¿½Desea cerrar el despacho, se guardara todos los cambios realizados?");
 	if(sal) {
 	//document.form1.submit();
 	window.form1.submit()
@@ -717,7 +717,7 @@ if (statusConfirm == true)
                                       <input type="hidden" name="MM_update" value="form1">
                                       <input type="hidden" name="b_borrado_r" id="b_borrado_r" value="0">
                                       <input type="hidden" name="id_c_oc" id="id_c_oc" value="<?php echo $row_orden_compra['id_c_oc']; ?>">
-                                      <input type="hidden" name="id_pedido_oc" id="id_pedido_oc" value="<?php echo $row_orden_compra['id_pedido'] ?>">
+                                      <input type="hidden" name="id_pedido_oc" id="id_pedido_oc" value="<?php echo $row_remision['id_pedido_oc'] ?>">
                                       <input type="hidden" name="str_numero_oc_r" id="str_numero_oc_r" value="<?php echo $row_remision['str_numero_oc_r']; ?>">
                                       <!--<img src="images/salir.gif" style="cursor:hand;" alt="GUARDAR Y SALIR" title="GUARDAR Y SALIR" onClick="salir()"/>-->
                                       <input class="botonFinalizar" type="submit"  value="FINALIZAR"></td>

@@ -847,6 +847,7 @@ if($int_remision!='') {
 }
 /*DELETE REF DE REMISIONES*/
 if($id_rd!='') {
+	
 	$sqldato="SELECT * FROM Tbl_remision_detalle WHERE id_rd='$id_rd'";
 	$resultdato=mysql_query($sqldato);
 	$remision=mysql_result($resultdato,0,'int_remision_r_rd');
@@ -870,9 +871,13 @@ if($id_rd!='') {
 	$resultsuma=mysql_query($sqlsuma);
 
 //FIN
+	$query_id_pedido = "SELECT id_pedido_oc FROM Tbl_remisiones WHERE int_remision ='$remision'";
+	$result_id_pedido=mysql_query($query_id_pedido);
+	$id_pedido=mysql_result($result_id_pedido,0,'id_pedido_oc');
+	
 	$sqlremi="DELETE FROM Tbl_remision_detalle WHERE id_rd='$id_rd'";
 	$resultremision=mysql_query($sqlremi);
-	header("location:despacho_items_oc_edit.php?int_remision=$remision&str_numero_r=$orden");
+	header("location:despacho_items_oc_edit.php?int_remision=$remision&str_numero_r=$orden&id_pedido=$id_pedido");
 }
 /*DELETE VERIFICACION INSUMO*/
 if($n_vi!='')

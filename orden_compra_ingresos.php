@@ -337,14 +337,9 @@ function myFunction() {
 </script>
 <?php
 mysql_free_result($usuario);
-
 mysql_free_result($ingresos);
-
 mysql_free_result($lista);
-
 mysql_free_result($codigo);
-
 mysql_free_result($ano);
-
 mysql_free_result($mes);
 ?>

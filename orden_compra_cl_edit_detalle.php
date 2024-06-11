@@ -212,13 +212,14 @@ if (isset($_FILES['pdf_impuesto']) && $_FILES['pdf_impuesto']['name'] != "") {
     
     //GUARDADO DE HISTORICOS
     $myObject = new oComercial();
-    $historico =  new oComercial();
+    $historico =  new oComercial();  
     if(isset($_GET['id_items'])){ 
       $historico=$myObject->Obtener('tbl_items_ordenc','id_items',$_GET['id_items']);
+      $myObject->Historico();
     } 
     if(isset($_GET['id_items']) && $_GET['id_items']!='' && $historico){
     
-      $myObject->RegistrarItems("tbl_items_ordenc_historico", "id_items,id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, responsable_modif_io, trm, int_precio_trm , int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io, int_nombre_io, b_estado_io,cobra_cyrel, cobra_flete, precio_flete,modifico", $historico);
+      $myObject->RegistrarItems("tbl_items_ordenc_historico", "id_items,id_pedido_io, str_numero_io, int_consecutivo_io, int_cod_ref_io, id_mp_vta_io, int_cod_cliente_io, int_cantidad_io, int_cantidad_rest_io, str_unidad_io, fecha_entrega_io, fecha_modif_io, responsable_modif_io, trm, int_precio_trm , int_precio_io, int_total_item_io, str_moneda_io, str_direccion_desp_io, int_vendedor_io, int_comision_io, int_nombre_io, b_estado_io,cobra_cyrel, cobra_flete, precio_flete,modifico,impuesto,pdf_impuesto,N_precio_old,valor_impuesto,cotiz", $historico);
     }//FIN HISTORICO
 
     echo "<script type=\"text/javascript\">window.opener.location.reload();</script>"; 

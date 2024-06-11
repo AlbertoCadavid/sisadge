@@ -113,70 +113,70 @@ $autorizado = $_GET['autorizado'];
 //Filtra todos vacios
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc== '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_borrado_oc='0'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_borrado_oc='0'  AND Tbl_orden_compra.pago_pendiente <> 'SI'   ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra oc lleno
 if($str_numero_oc != '0' && $elaborador == '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_numero_oc like '%$str_numero_oc%'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza desc";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_numero_oc = '$str_numero_oc'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' ORDER BY Tbl_orden_compra.fecha_autoriza desc";//GROUP BY Tbl_orden_compra.str_numero_oc like '%$str_numero_oc%'
 }
 //Filtra elaborador lleno
 if($str_numero_oc == '0' && $elaborador != '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc LIKE '%$elaborador%'  AND pago_pendiente <> 'SI' AND especialweb <> '1' GROUP BY str_numero_oc ORDER BY fecha_ingreso_oc DESC,  str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc LIKE '%$elaborador%'  AND pago_pendiente <> 'SI' AND especialweb <> '1' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY str_numero_oc ORDER BY fecha_ingreso_oc DESC,  str_numero_oc DESC";
 }
 //Filtra vendedor lleno
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor'  AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND tbl_orden_compra.especialweb <> '1' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor'  AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND tbl_orden_compra.especialweb <> '1' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra vendedor, fecha lleno
 if($str_numero_oc == '0' && $vendedor !='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 != '' && $fecha2 != '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io AND tbl_orden_compra.b_borrado_oc='0' and DATE(tbl_orden_compra.fecha_ingreso_oc) BETWEEN '$fecha1' AND '$fecha2'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza desc";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io AND tbl_orden_compra.b_borrado_oc='0' and DATE(tbl_orden_compra.fecha_ingreso_oc) BETWEEN '$fecha1' AND '$fecha2'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza desc";
 }
 //Filtra vendedor, factura Si
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='1' && $nfactura =='0' && $autorizado =='0')
 {
  
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra vendedor, factura No
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='2' && $nfactura =='0' && $autorizado =='0')
 {
  
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND  tbl_orden_compra.factura_oc is null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' AND  tbl_orden_compra.factura_oc is null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
  
 }
 //Filtra cliente lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c != '0' && $nit_c == '0' && $estado_oc== '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra nit_c lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c != '0' && $estado_oc== '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_nit_oc='$nit_c' GROUP  BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC,  Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_nit_oc='$nit_c' AND Tbl_orden_compra.b_borrado_oc='0' GROUP  BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC,  Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra estado_oc lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra cliente y pendientes lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0'&& $estado_oc == '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC";
 }
 //Filtra ref lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
 }
 //Filtra cliente y ref lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c != '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
 }
 //Filtra cliente y estado lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c != '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
@@ -187,58 +187,58 @@ if($vendedor =='0' && $elaborador == '0' && $id_c != '0' && $nit_c == '0' && $es
 if($vendedor =='0' && $elaborador == '0' && $id_c != '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
 //,SUM(Tbl_items_ordenc.int_cantidad_rest_io) AS restante
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra nit y pendientes lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c != '0' && $estado_oc == '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_nit_oc='$nit_c' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_nit_oc='$nit_c' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra vende   y estado lleno
 if($vendedor =='0' && $elaborador != '0' && $id_c == '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND  Tbl_orden_compra.b_estado_oc='$estado_oc'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND  Tbl_orden_compra.b_estado_oc='$estado_oc'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra vende y pendientes lleno
 if($vendedor =='0' && $elaborador != '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
 }
 //Filtra vende y ref lleno
 if($vendedor =='0' && $elaborador != '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.b_borrado_oc='0' ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
 }
 //Filtra estado y pendientes lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc AND Tbl_orden_compra.b_borrado_oc='0' ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra pendientes y ref lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente != '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra estado y ref lleno
 if($vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente == '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc' AND  Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_items_ordenc,Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_estado_oc='$estado_oc' AND  Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_items_ordenc.id_pedido_io = Tbl_orden_compra.id_pedido  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC, Tbl_items_ordenc.int_cod_ref_io DESC";
 }
 //Filtra todos Y NIT  y ref VACIO
 if($vendedor =='0' && $elaborador != '0' && $id_c != '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente != '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
 }
 //Filtra todos Y NIT VACIO
 if($vendedor =='0' && $elaborador != '0' && $id_c != '0' && $nit_c == '0' && $estado_oc != '0' && $pendiente != '0' && $cod_ref != '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND Tbl_orden_compra.id_c_oc='$id_c' AND Tbl_items_ordenc.int_cod_ref_io='$cod_ref' AND Tbl_orden_compra.b_estado_oc='$estado_oc' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.b_estado_oc DESC, Tbl_orden_compra.fecha_ingreso_oc DESC";
 }
 
 //Filtra TB Y PW lleno
 if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  !='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_numero_oc like '%$tbpw%'  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza desc";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.str_numero_oc like '%$tbpw%'  AND Tbl_orden_compra.pago_pendiente <> 'SI' AND Tbl_orden_compra.b_borrado_oc='0' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_autoriza desc";
 }
 //Filtra vendedor, Fecha 
 if($str_numero_oc == '0' && $vendedor =='0' && $elaborador != '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 != '' && $fecha2 != '' && $factura=='0' && $nfactura =='0' && $autorizado =='0')
@@ -335,13 +335,13 @@ if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0
 if($str_numero_oc == '0' && $elaborador == '0' && $vendedor !='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado !='0')
 {
  
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario tbl_items_ordenc.int_vendedor_io = '$vendedor' and Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario b_borrado_oc='0' and tbl_items_ordenc.int_vendedor_io = '$vendedor' and Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra autorizado, elaborado
 if($str_numero_oc == '0' && $elaborador != '0' && $vendedor =='0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 == '' && $fecha2 == '' && $factura=='0' && $nfactura =='0' && $autorizado !='0')
 {
  
-  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND  Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
+  $query_ordenes_compra = "SELECT * FROM tbl_orden_compra,tbl_items_ordenc WHERE $soloinventario b_borrado_oc='0' and Tbl_orden_compra.str_elaboro_oc LIKE '%$elaborador%' AND  Tbl_orden_compra.autorizado='$autorizado' AND  tbl_orden_compra.factura_oc is not null AND tbl_orden_compra.id_pedido=tbl_items_ordenc.id_pedido_io  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY tbl_orden_compra.str_numero_oc ORDER BY tbl_orden_compra.fecha_autoriza DESC,  tbl_orden_compra.str_numero_oc DESC";
 }
 //Filtra factura oc con y sin, autorizado, fecha
 if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0' && $nit_c == '0' && $estado_oc == '0' && $pendiente == '0' && $cod_ref == '0' && $tbpw  =='0' && $fecha1 != '' && $fecha2 != '' && $factura!='0' && $nfactura =='0' && $autorizado !='0')
@@ -352,6 +352,11 @@ if($str_numero_oc == '0' && $vendedor =='0' && $elaborador == '0' && $id_c == '0
     $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado='$autorizado' and DATE(fecha_ingreso_oc) BETWEEN '$fecha1' AND '$fecha2' and factura_oc is null  AND Tbl_orden_compra.pago_pendiente <> 'SI' GROUP BY str_numero_oc ORDER BY fecha_ingreso_oc desc";
   }
 }
+
+if($query_ordenes_compra == ""){
+  $alerta = true;
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario Tbl_orden_compra.b_borrado_oc='0'  AND Tbl_orden_compra.pago_pendiente <> 'SI'   ORDER BY Tbl_orden_compra.fecha_autoriza DESC, Tbl_orden_compra.str_numero_oc DESC";
+} else $alerta = false;
 
 $query_limit_ordenes_compra = sprintf("%s LIMIT %d, %d", $query_ordenes_compra, $startRow_ordenes_compra, $maxRows_ordenes_compra);
 $ordenes_compra = mysql_query($query_limit_ordenes_compra, $conexion1) or die(mysql_error());
@@ -725,8 +730,8 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                                </td>
                                <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_deudoras['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_deudoras['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
                                  <?php 
-                                 $idoc = $row_ordenes_deudoras['str_numero_oc'];
-                                 $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
+                                 $idoc = $row_ordenes_deudoras['id_pedido'];
+                                 $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                                  foreach($select_direccion as $row_direccion) { 
                                    echo $row_direccion['nombre_vendedor']." ";
                                  } 
@@ -997,8 +1002,8 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                            </td>
                            <td id="dato1" nowrap><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_compra['str_numero_oc'];?>&id_oc=<?php echo $row_ordenes_compra['id_c_oc'];?>" target="_top" style="text-decoration:none; color:#000000">
                            <?php 
-                              $idoc = $row_ordenes_compra['str_numero_oc'];
-                              $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.str_numero_io= '$idoc'","","distinct ver.nombre_vendedor");
+                              $idoc = $row_ordenes_compra['id_pedido'];
+                              $select_direccion = $conexion->llenaListas('vendedor ver',"left join tbl_items_ordenc itm on  ver.id_vendedor=itm.int_vendedor_io WHERE itm.id_pedido_io= '$idoc'","","distinct ver.nombre_vendedor");
                                foreach($select_direccion as $row_direccion) { 
                                  echo $row_direccion['nombre_vendedor']." ";
                                } 
@@ -1055,7 +1060,7 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                            <td id="dato2"><?php echo utf8_encode($row_ordenes_compra['tipo_pago_cartera']);?></td>
                            <td id="dato2"><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_ordenes_compra['str_numero_oc']; ?>&id_oc=<?php echo $row_ordenes_compra['id_c_oc'];?>">
                             <?php 
-                            $id_pedido=$row_ordenes_compra['id_pedido'];
+                            $id_pedido=$row_ordenes_compra['id_pedido']; 
                             $sqlpend="SELECT SUM(int_cantidad_rest_io) AS restante FROM Tbl_items_ordenc WHERE id_pedido_io='$id_pedido'"; 
                             $resultpend=mysql_query($sqlpend);
                             $numpend=mysql_num_rows($resultpend); 
@@ -1074,9 +1079,9 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
                           ?><img src="images/f.gif" alt="FACTURADA O.C." title="FACTURADA O.C." border="0" style="cursor:hand;"/><?php }
                           if($estado=='4'){ ?><img src="images/fr.gif" alt="FACTURADA PARCIAL"title="FACTURADA PARCIAL" border="0" style="cursor:hand;"/><?php }
                            if($estado=='3'){ ?><img src="images/r.gif" alt="REMISION O.C."title="REMISION O.C." border="0" style="cursor:hand;"/><?php }
-                            $id_oc=$row_ordenes_compra['str_numero_oc'];
+                            $id_oc=$row_ordenes_compra['id_pedido'];
                             $sqlmp="SELECT Tbl_items_ordenc.str_numero_io,Tbl_orden_produccion.str_numero_oc_op,Tbl_items_ordenc.int_cod_ref_io,Tbl_orden_produccion.int_cod_ref_op AS existe_op, Tbl_orden_produccion.b_borrado_op 
-                            FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.str_numero_io=$id_oc AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
+                            FROM Tbl_items_ordenc,Tbl_orden_produccion WHERE Tbl_items_ordenc.id_pedido=$id_oc AND Tbl_items_ordenc.str_numero_io=Tbl_orden_produccion.str_numero_oc_op 
                             AND Tbl_items_ordenc.int_cod_ref_io=Tbl_orden_produccion.int_cod_ref_op AND Tbl_orden_produccion.b_borrado_op='0'";
                             $resultmp= mysql_query($sqlmp);
                             $nump = mysql_num_rows($resultmp);
@@ -1352,8 +1357,13 @@ $queryString_ordenes_compra = sprintf("&totalRows_ordenes_compra=%d%s", $totalRo
              cache: true
          }
      });
-   
-   
+     
+     var alerta = "<?php echo $alerta ?>"
+     if(alerta){
+       alert("No es posible realizar esta consulta, pruebe otra combinacion o comuniquese con sistemas");
+       url = '<?php echo BASE_URL; ?>';
+       window.location.assign(url+"orden_compra_cl2.php")
+     }
    });  
 
 

@@ -163,21 +163,21 @@ $row_referencianueva3=$conexion->llenarCampos("tbl_cotiza_laminas","WHERE Tbl_co
 			<tr>
 				<td>
 					<form action="referencias3.php" method="get" name="consulta">
-					<select name="cod_ref" id="cod_ref"  class="busqueda selectsMedio ">
+					<select name="cod_ref" id="cod_ref"  class="busqueda selectsMedio "> <!-- lleno con Ajax -->
 						<option value="0"<?php if (!(strcmp(0, $_GET['cod_ref']))) {echo "selected=\"selected\"";} ?>>REF.</option>
-						<?php foreach ($row_ref as $row_ref) { ?>
+						<!-- <?php foreach ($row_ref as $row_ref) { ?>
 							<option value="<?php echo $row_ref['cod_ref']?>"<?php if (!(strcmp($row_ref['cod_ref'], $_GET['cod_ref']))) {echo "selected=\"selected\"";} ?>>
 								<?php echo $row_ref['cod_ref'];?>
 							</option>
-						<?php } ?>
+						<?php } ?> -->
 					</select> &nbsp;&nbsp;
-					<select name="clientes" id="clientes" class="busqueda selectsGrande">
+					<select name="clientes" id="clientes" class="busqueda selectsGrande elcliente"> <!-- lleno con Ajax -->
 						<option value="0"<?php if (!(strcmp(0, $_GET['clientes']))) {echo "selected=\"selected\"";} ?>>CLIENTE</option>
-						<?php foreach ($row_cliente as $row_cliente) { ?>
+						<!-- <?php foreach ($row_cliente as $row_cliente) { ?>
 							<option value="<?php echo $row_cliente['nit_c']?>"<?php if (!(strcmp($row_cliente['nit_c'], $_GET['clientes']))) {echo "selected=\"selected\"";} ?>>
 								<?php echo $row_cliente['nombre_c'];?>
 							</option>
-						<?php } ?>
+						<?php } ?> -->
 					</select> &nbsp;&nbsp; <input type="submit" class="botonGMini" style='width:90px; height:25px' name="Submit" value="FILTRO" />
 				</form>
 			</td>
@@ -417,6 +417,60 @@ $row_referencianueva3=$conexion->llenarCampos("tbl_cotiza_laminas","WHERE Tbl_co
 </body>
 </html>
 <script>
+	$(document).ready(function(){  
+         $('.elcliente').select2({ 
+             ajax: {
+                 url: "select3/proceso.php",
+                 type: "post",
+                 dataType: 'json',
+                 delay: 250,
+                 data: function (params) {
+                     return {
+                         palabraClave: params.term, // search term
+                         var1:"id_c,nombre_c",
+                         var2:"cliente",
+                         var3:"",
+                         var4:"ORDER BY nombre_c ASC",
+                         var5:"id_c",
+                         var6:"nombre_c"
+                     };
+                 },
+                 processResults: function (response) {
+                     return {
+                         results: response
+                     };
+                 },
+                 cache: true
+             }
+         });
+
+		 $('#cod_ref').select2({ 
+        ajax: {
+            url: "select3/proceso.php",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    palabraClave: params.term, // search term
+                    var1:"cod_ref",
+                    var2:"tbl_referencia",
+                    var3:" estado_ref='1'",//where
+                    var4:"ORDER BY CONVERT(cod_ref, SIGNED INTEGER) DESC",
+                    var5:"cod_ref",
+                    var6:"cod_ref"//columna a buscar
+                };
+            },
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+    
+    });
 	
 	$(document).ready(function(){
 	  var editar =  "<?php echo $_SESSION['no_edita'];?>";

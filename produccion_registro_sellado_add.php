@@ -610,15 +610,15 @@ if (isset($_GET['id_op'])) {
   $colname_Rollo_I = (get_magic_quotes_gpc()) ? $_GET['id_op'] : addslashes($_GET['id_op']);
 }
 mysql_select_db($database_conexion1, $conexion1);
-$query_Rollo_I = sprintf("SELECT TblImpresionRollo.id_r, TblImpresionRollo.rollo_r FROM TblImpresionRollo WHERE TblImpresionRollo.id_op_r='%s' AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", $colname_Rollo_I);
+$query_Rollo_I = sprintf("SELECT TblImpresionRollo.id_r, TblImpresionRollo.rollo_r FROM TblImpresionRollo WHERE TblImpresionRollo.id_op_r='%s' AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r) GROUP BY TblImpresionRollo.rollo_r", $colname_Rollo_I);
 $Rollo_I = mysql_query($query_Rollo_I, $conexion1) or die(mysql_error());
 $row_Rollo_I = mysql_fetch_assoc($Rollo_I);
 $totalRows_Rollo_I = mysql_num_rows($Rollo_I);
 //SI NO TIENE IMPRESION LA O.P SE DIRIGE A EXTRUSION
 if ($totalRows_Rollo_I == '0') {
-
+  
   mysql_select_db($database_conexion1, $conexion1);
-  $query_Rollo_I = sprintf("SELECT TblExtruderRollo.id_r, TblExtruderRollo.rollo_r  FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)", $colname_Rollo_I);
+  $query_Rollo_I = sprintf("SELECT TblExtruderRollo.id_r, TblExtruderRollo.rollo_r  FROM TblExtruderRollo WHERE TblExtruderRollo.id_op_r='%s' AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r) GROUP BY TblExtruderRollo.rollo_r", $colname_Rollo_I);
   $Rollo_I = mysql_query($query_Rollo_I, $conexion1) or die(mysql_error());
   $row_Rollo_I = mysql_fetch_assoc($Rollo_I);
   $totalRows_Rollo_I = mysql_num_rows($Rollo_I);
@@ -1148,7 +1148,7 @@ $totalRows_referencia = mysql_num_rows($referencia);*/
           de
           <?php
           $id_op_r = $row_orden_produccion['id_op'];
-          $sqlExt = "SELECT COUNT(rollo_r) AS rollo_ex FROM TblExtruderRollo WHERE id_op_r='$id_op_r'";
+          $sqlExt = "SELECT COUNT(DISTINCT rollo_r) AS rollo_ex FROM TblExtruderRollo WHERE id_op_r='$id_op_r'";
           $resultExt = mysql_query($sqlExt);
           $numExt = mysql_num_rows($resultExt);
           if ($numExt >= '1') {

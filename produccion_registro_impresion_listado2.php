@@ -274,17 +274,17 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_lista_op = "SELECT id_op FROM Tbl_orden_produccion WHERE  b_estado_op >= 0 AND b_borrado_op='0' ORDER BY id_op DESC";
 $lista_op = mysql_query($query_lista_op, $conexion1) ;
 $row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op);
+$totalRows_lista_op = mysql_num_rows($lista_op); */
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_ref_op = "SELECT id_ref, cod_ref FROM Tbl_referencia order by id_ref desc";
 $ref_op = mysql_query($query_ref_op, $conexion1) ;
 $row_ref_op = mysql_fetch_assoc($ref_op);
-$totalRows_ref_op = mysql_num_rows($ref_op);
+$totalRows_ref_op = mysql_num_rows($ref_op); */
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_mensual = "SELECT * FROM mensual ORDER BY id_mensual ASC";
@@ -382,7 +382,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                   <td colspan="9" id="fuente2">
                      <select class="busqueda selectsMini" name="op" id="op">
                     <option value="0">O.P.</option>
-                    <?php
+                    <!-- <?php
                     do {  
                       ?>
                       <option value="<?php echo $row_lista_op['id_op']?>"><?php echo $row_lista_op['id_op']?></option>
@@ -393,12 +393,12 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                       mysql_data_seek($lista_op, 0);
                       $row_lista_op = mysql_fetch_assoc($lista_op);
                     }
-                    ?>
+                    ?> -->
                   </select> 
                     <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
                     <select class="busqueda selectsMini" name="id_ref" id="id_ref">
                       <option value="0">REF</option>
-                      <?php
+                     <!--  <?php
                       do {  
                         ?>
                         <option value="<?php echo $row_ref_op['id_ref']?>">
@@ -411,7 +411,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                         mysql_data_seek($ref_op, 0);
                         $row_ref_op = mysql_fetch_assoc($ref_op);
                       }
-                      ?>
+                      ?> -->
                     </select>
                     <select id='anyo' name='anyo' class="" >
                          <option value="0"<?php if (!(strcmp("0", $_GET['anyo']))) {echo "selected=\"selected\"";} ?>>AÑOS</option>
@@ -463,9 +463,9 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                     </td> 
                   </tr>  
                   <tr>
-                    <td colspan="5" id="dato1">Nota: si en el la columna '<strong>Proceso</strong>', aparecen las siguientes notificaciones tenga en cuenta:
+                    <td colspan="5" id="dato1">Nota: si en la columna '<strong>Proceso</strong>', aparecen las siguientes notificaciones tenga en cuenta:
                     </td>
-                    <td colspan="4" id="dato1">Nota: si en el la columna '<strong>Mezcla</strong>', aparecen las siguientes notificaciones tenga en cuenta:</td>
+                    <td colspan="4" id="dato1">Nota: si en la columna '<strong>Mezcla</strong>', aparecen las siguientes notificaciones tenga en cuenta:</td>
                   </tr>
                   <tr>
                     <td colspan="3" id="dato1" nowrap="nowrap">
@@ -505,9 +505,9 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                     </tr>
                     <?php do { ?>
                       <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                        <td nowrap="nowrap" id="dato2"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></td>
-                        <td nowrap="nowrap" id="dato2"><?php echo $row_orden_produccion['fecha_registro_op']; ?></td>
-                        <td nowrap="nowrap" id="dato2">
+                        <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
+                        <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
+                        <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000">
                           <?php 
                           $op_c=$row_orden_produccion['int_cliente_op'];
                           $sqln="SELECT nombre_c FROM cliente WHERE id_c='$op_c'"; 
@@ -516,11 +516,11 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                           if($numn >= '1') 
                             { $nombre_cliente_c=mysql_result($resultn,0,'nombre_c'); echo $nombre_cliente_c; }
                           else { echo "";	
-                        }?>
+                        }?></a>
                       </td>
-                      <td id="dato2"><?php echo $row_orden_produccion['int_cod_ref_op']; ?><a href="produccion_impresion_stiker_rollo_add.php?id_op_r=<?php echo $row_prioridad['id_op'];?>" target="new"  style="text-decoration:none; color:#000000"></td>
-                        <td id="dato2"><?php echo $row_orden_produccion['version_ref_op']; ?></td>
-                        <td id="dato2"><?php echo $row_orden_produccion['int_kilos_op']; ?></td>
+                      <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_cod_ref_op']; ?></a> </td>
+                        <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
+                        <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op']; ?>" target="new" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_kilos_op']; ?></a></td>
                         <td id="dato2" nowrap="nowrap" >
                          <?php  
                        //ROLLOS ADD
@@ -706,7 +706,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
 </html>
 <script>
  
- 
+ $(document).ready(function(){
   $('#op').select2({ 
         ajax: {
             url: "select3/proceso.php",
@@ -759,6 +759,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                 cache: true
             }
         });
+      })
 
         function ListadoProduccion(){ 
               var form = $("#form1").serialize();

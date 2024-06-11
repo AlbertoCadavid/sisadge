@@ -62,7 +62,7 @@ class CselladoController
 
     $row_revisor = $conexion->llenaSelect('empleado a INNER JOIN TblProcesoEmpleado b ', 'ON a.codigo_empleado=b.codigo_empleado WHERE a.tipo_empleado IN(7,9) AND b.estado_empleado=1 ', 'ORDER BY a.nombre_empleado ASC');
 
-    $row_op = $conexion->llenaSelect('tbl_orden_produccion', 'WHERE tbl_orden_produccion.id_op NOT IN(SELECT tbl_numeracion.int_op_n FROM tbl_numeracion ) AND tbl_orden_produccion.b_borrado_op=0', 'ORDER BY tbl_orden_produccion.id_op DESC', 'tbl_orden_produccion.id_op');
+    //$row_op = $conexion->llenaSelect('tbl_orden_produccion', 'WHERE tbl_orden_produccion.id_op NOT IN(SELECT tbl_numeracion.int_op_n FROM tbl_numeracion ) AND tbl_orden_produccion.b_borrado_op=0', 'ORDER BY tbl_orden_produccion.id_op DESC', 'tbl_orden_produccion.id_op');
 
     $row_caja_num = $conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE ref_tn='" . $mi_array['int_cod_ref_op'] . "' ", " ORDER BY id_tn DESC, int_op_tn DESC,int_hasta_tn DESC ", "int_hasta_tn");
 

@@ -557,6 +557,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Tiempos Muertos- Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Tiempos Muertos- Minutos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
 
                                       </tr>
@@ -577,6 +578,9 @@ foreach ($rollos_en_liquidacion as $value) {
                                           <td id="fuente1"><?php $var = mysql_result($tiempoMuerto, $x, valor_tiem_rt);
                                                             echo $var;
                                                             $TM = $TM + $var; ?></td>
+                                          <td id="fuente1"><?php $var = mysql_result($tiempoMuerto, $x, int_rollo_rt);
+                                                            echo $var; ?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte_parcial('id_rte',<?php $delrt = mysql_result($tiempoMuerto, $x, id_rt);
                                                                                                               echo $delrt; ?>,<?php echo $_GET['parcial'] ?>,<?php echo  $_GET['id_rp'] ?>,'produccion_registro_extrusionp_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a>
                                           </td>
@@ -593,6 +597,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Tiempos Preparacion - Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Tiempos Preparacion - Minutos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
 
                                       </tr>
@@ -613,6 +618,9 @@ foreach ($rollos_en_liquidacion as $value) {
                                           <td id="fuente1"> <?php $var2 = mysql_result($tiempoPreparacion, $o, valor_prep_rtp);
                                                             echo $var2;
                                                             $TP += $var2; ?></td>
+                                          <td id="fuente1"> <?php $var2 = mysql_result($tiempoPreparacion, $o, int_rollo_rtp);
+                                                            echo $var2;?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte_parcial('id_rpe',<?php $delrp = mysql_result($tiempoPreparacion, $o, id_rt);
                                                                                                               echo $delrp; ?>,<?php echo $_GET['parcial'] ?>,<?php echo  $_GET['id_rp'] ?>,'produccion_registro_extrusionp_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                                         </tr>
@@ -627,6 +635,7 @@ foreach ($rollos_en_liquidacion as $value) {
                                       <tr>
                                         <td nowrap id="detalle2"><strong>Desperdicios - Tipo</strong></td>
                                         <td nowrap id="detalle2"><strong>Desperdicios - Kilos</strong></td>
+                                        <td nowrap id="detalle2"><strong>Rollo</strong></td>
                                         <td nowrap id="detalle2"><strong>ELIMINA</strong></td>
                                       </tr>
                                       <?php for ($m = 0; $m <= $totalRows_desperdicio - 1; $m++) { ?>
@@ -644,6 +653,9 @@ foreach ($rollos_en_liquidacion as $value) {
                                           <td id="fuente1"><?php $var3 = mysql_result($desperdicio, $m, valor_desp_rd);
                                                             echo $var3;
                                                             $TD = $TD + $var3; ?></td>
+                                          <td id="fuente1"><?php $var3 = mysql_result($desperdicio, $m, int_rollo_rd);
+                                                            echo $var3;?>
+                                          </td>
                                           <td id="fuente1"><a href="javascript:eliminar_rte_parcial('id_rde',<?php $delrd = mysql_result($desperdicio, $m, id_rd);
                                                                                                               echo $delrd; ?>,<?php echo $_GET['parcial'] ?>,<?php echo  $_GET['id_rp'] ?>,'produccion_registro_extrusionp_edit.php')"><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR " title="ELIMINAR" border="0"></a></td>
                                         </tr>
@@ -722,7 +734,7 @@ foreach ($rollos_en_liquidacion as $value) {
                               <td colspan="4" id="dato1"></td>
                             </tr>
                             <tr>
-                              <td colspan="10" id="detalle2"><a href="javascript:verFoto('produccion_regist_extru_kilos_prod_edit.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&rollo=<?php echo $row_rp_edit['rollo_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>&amp;id_ref=<?php echo $row_rp_edit['id_ref_rp'] ?>','1100','640')"> Editar los valores de las unidades ingresadas</a></td>
+                              <td colspan="10" id="detalle2"><a href="javascript:verFoto('produccion_regist_extru_kilos_prod_edit.php?id_op=<?php echo $row_rp_edit['id_op_rp'] ?>&rollo=<?php echo $row_rp_edit['rollo_rp'] ?>&amp;fecha=<?php echo $row_rp_edit['fecha_ini_rp'] ?>&amp;id_ref=<?php echo $row_rp_edit['id_ref_rp'] ?>&id_rp=<?php echo $_GET['id_rp']?>','1100','640')"> Editar los valores de las unidades ingresadas</a></td>
                             </tr>
                             <tr id="tr1">
                               <td colspan="2" id="fuente1">Maquina</td>

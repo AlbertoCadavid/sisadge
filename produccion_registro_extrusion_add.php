@@ -291,9 +291,9 @@ $totalRows_ultimo_parcial = mysql_num_rows($ultimo_parcial);
 //consulta para saber la fecha del primer y ultimo rollo
 $rollosMaxMin = $conexion->buscarTres("TblExtruderRollo","MIN(rollo_r) as min, MAX(rollo_r) as max", "WHERE id_op_r= $colname_totalKilos AND rolloParcial_r=0" );
 
-$verificacionFechas = $conexion->llenaListas("TblExtruderRollo","WHERE id_op_r = $colname_totalKilos AND (rollo_r = $rollosMaxMin[min] OR rollo_r = $rollosMaxMin[max]) AND rolloParcial_r=0" , "","rollo_r, fechaI_r, fechaF_r"); 
-$diaInicio = $verificacionFechas[0]['fechaI_r'];
-$diaFin = $verificacionFechas[1]['fechaF_r'];
+$verificacionFechas = $conexion->llenarCampos("TblExtruderRollo","WHERE id_op_r = $colname_totalKilos AND (rollo_r = $rollosMaxMin[min] OR rollo_r = $rollosMaxMin[max]) AND rolloParcial_r=0" , "","min(fechaI_r) as fechaI_r, max(fechaF_r) as fechaF_r"); 
+$diaInicio = $verificacionFechas['fechaI_r'];
+$diaFin = $verificacionFechas['fechaF_r'];
 
 
 ?>
@@ -570,7 +570,7 @@ $diaFin = $verificacionFechas[1]['fechaF_r'];
         <td id="fuente1"><?php $kilosT += $row_totalKilos['kilos_parcial_r'];
                           echo $row_totalKilos['kilos_parcial_r']; ?></td>
                          
-        <td id="fuente2"  <?php if($row_totalKilos['fechaI_r'] >= $diaInicio &&$row_totalKilos['fechaF_r'] <= $diaFin ){}else{echo "style=background:#F03312 ";}?> ><?php echo $row_totalKilos['rollo_r']; ?></td>
+        <td id="fuente2"  <?php if($row_totalKilos['fechaI_r'] >= $diaInicio && $row_totalKilos['fechaF_r'] <= $diaFin ){}else{echo "style=background:#F03312 ";}?> ><?php echo $row_totalKilos['rollo_r']; ?></td>
 
         <td nowrap="nowrap" id="fuente1"><?php echo $row_totalKilos['fechaI_r']; ?></td>
 

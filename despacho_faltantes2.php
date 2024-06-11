@@ -279,6 +279,7 @@ $count = 0;
         <td colspan="5" id="titulo3">
           <input type="submit" name="Submit" value="FILTRO" id="btenviar" class="botonGMini" />
           <input type="button" id="excel" name="excel" value="Descarga Excel" onclick="getInfo()" class="botonDel">
+          <input type="button" id="excel" name="excel" value="Descarga Excel Especial" onclick="getInfo2()" class="botonDel">
         </td>
       </tr>
       <tr>
@@ -564,6 +565,33 @@ $count = 0;
 
 </html>
 <script>
+  function getInfo2() {
+
+let num = document.querySelector('#count').value;
+let data = [];
+for (let i = 0; i < num; i++) {
+  data[i] = {
+    op: document.querySelector('.op' + i).textContent,
+    ref: document.querySelector('.ref' + i).textContent,
+    caja: document.querySelector('.caja' + i).innerText,
+    undCaja: document.querySelector('.undCaja' + i).textContent,
+    paquete: document.querySelector('.paquete' + i).innerText,
+    desde: document.querySelector('.desde' + i).textContent,
+    hasta: document.querySelector('.hasta' + i).textContent,
+    undPaquete: document.querySelector('.undPaquete' + i).textContent,
+    falDesde: document.querySelector('.falDesde' + i).innerText,
+    falHasta: document.querySelector('.falHasta' + i).innerText,
+    undFaltantes: document.querySelector('.undFaltante' + i).textContent, 
+    totalFaltantes: document.querySelector('.totalFaltantes' + i).value
+  }
+}
+
+var objetoSerializado = JSON.stringify(data); // Convierte el objeto a una cadena JSON
+localStorage.setItem('miObjetoJSON', objetoSerializado);
+
+let windowExcel = window.open('despacho_faltante_excel_especial.php', '_blank', 'width=1,height=1,left=9999,top=9999');
+
+}
   //obtiene la informacion y la almacena en un array para enviarlo como objeto 
   function getInfo() {
 

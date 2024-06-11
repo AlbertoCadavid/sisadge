@@ -204,10 +204,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
  if(isset($_POST['str_numero_oc'])){ 
   $historico=$myObject->Obtener('tbl_orden_compra','str_numero_oc', " '".$_POST['str_numero_oc']."'  " );
+  
 } 
 
 if(isset($_POST['str_numero_oc']) && $historico){
-  $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent,estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
+  $myObject->Registrar("tbl_orden_compra_historico", "id_pedido,str_numero_oc,id_c_oc,str_nit_oc,fecha_ingreso_oc,fecha_entrega_oc,str_condicion_pago_oc,str_observacion_oc,int_total_oc,b_facturas_oc,b_num_remision_oc,b_factura_cirel_oc,str_dir_entrega_oc,str_archivo_oc,adjunto2,adjunto3,str_elaboro_oc,str_aprobo_oc,b_estado_oc,str_responsable_oc,b_borrado_oc,salida_oc,b_oc_interno,vta_web_oc,expo_oc,autorizado,tb_pago,factura_oc,entrega_fac,fecha_cierre_fac,comprobante_ent, proforma_oc,pago_pendiente,cobra_flete,precio_flete,tipo_despacho,fecha_autoriza,notaweb,especialweb,  estado_cartera,tipo_pago_cartera,valor_cartera,modifico", $historico);
   }//FIN HISTORICO
 
 //ENVIO CORREO JOSE ADMINISTRADOR
@@ -217,9 +218,9 @@ if(isset($_POST['str_numero_oc']) && $historico){
 
 /*           $headers = "MIME-Version: 1.0\r\n"; 
            $headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
-           //dirección del remitente 
+           //direcciï¿½n del remitente 
            $headers .= "From: ACYCIA\r\n"; 
-           //dirección de respuesta, si queremos que sea distinta que la del remitente 
+           //direcciï¿½n de respuesta, si queremos que sea distinta que la del remitente 
            $headers .= "ACYCIA\r\n";         
            $to = 'jcarvajal@acycia.com';  //enviar al correo su carnet
            $mensaje = "<p>Orden de Compra Ingresada: $oc, Fecha Ingreso: $fec,  Cantidad: $cant,</p></b>";           
@@ -332,7 +333,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
               height: 100%;
               z-index: 3200;
               background: url('images/loadingcircle4.gif') 50% 50% no-repeat rgb(250,250,250);
-              background-size: 5% 10%;/*tamaño del gif*/
+              background-size: 5% 10%;/*tamaï¿½o del gif*/
               -moz-opacity:65;
               opacity:0.65;
 
@@ -342,8 +343,8 @@ if(isset($_POST['str_numero_oc']) && $historico){
 
         <body> 
           <script>
-            $(document).ready(function() { $(".combos").select2(); });
-          </script>
+            $(document).ready(function() { $(".combos").select2(); });  
+          </script>     
           <?php echo $conexion->header('vistas'); ?>
            <table align="center" id="tabla"><tr align="center"><td>  
                 <form action="view_index.php?c=ocomercial&a=Guardaroc" method="post"  enctype="multipart/form-data" name="form1" id="form1" ><!--  && validacion_select_oc() -->
@@ -365,34 +366,8 @@ if(isset($_POST['str_numero_oc']) && $historico){
                               <tr>
                                 <td colspan="2" id="dato1"> 
                                   <select class="elcliente"  name="id_oc" id="cliente" onChange=" consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') " style="width:280px">
-                                       <option value='0'>SELECCIONE CLIENTE</option>
-                                     </select>
-                                   </select>
-
-                                  <!--  <select class="elcliente" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) {consultaclienteadd_oc(form1.id_oc.value), verConsultaAlertGenerico('idcliente',form1.id_oc.value,'El Cliente tiene Cartera pendiente ') } else { swal('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
-                                     <option value="0">SELECCIONE CLIENTE</option>
-                                     <?php  foreach($row_nombres as $row_nombres ) { ?>
-                                       <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'],$row_nombres['id_oc']))){echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
-                                     <?php } ?>
-                                   </select> -->
-
-                                   
-
-                                  <!-- <select class="combos" name="id_oc" id="cliente" onChange="if (form1.id_oc.value) { consultaclienteadd_oc(form1.id_oc.value); } else { alert('DEBE SELECCIONAR CLIENTE '); }" style="width:250px">
-                                    <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE CLIENTE</option>
-                                    <?php
-                                    do {  
-                                      ?>
-                                      <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>><?php $cadd=($row_nombres['nombre_c']); echo $cadd;?></option>
-                                      <?php
-                                    } while ($row_nombres = mysql_fetch_assoc($clientes));
-                                    $rows = mysql_num_rows($clientes);
-                                    if($rows > 0) {
-                                      mysql_data_seek($clientes, 0);
-                                      $row_nombres = mysql_fetch_assoc($clientes);
-                                    }
-                                    ?>
-                                  </select> -->
+                                    <option value='0'>SELECCIONE CLIENTE</option>
+                                  </select> <!-- lleno con Ajax -->
                                 </td> 
                               </tr>
                               <tr>
@@ -400,36 +375,9 @@ if(isset($_POST['str_numero_oc']) && $historico){
                               </tr>
                               <tr>
                                 <td colspan="2" id="dato4">
-                                   
-
-                                   <select class="elnit" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:280px">
-                                     <option value="0">SELECCIONE NIT</option> 
-                                   </select>
-
-                                   <!-- <select class="elcliente" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { swal('DEBE SELECCIONAR NIT '); }" style="width:250px">
-                                     <option value="0">SELECCIONE NIT</option>
-                                     <?php  foreach($row_nit as $row_nit ) { ?>
-                                       <option value="<?php echo $row_nit['id_c']?>"<?php if (!(strcmp($row_nit['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nit['nit_c']?></option>
-                                     <?php } ?>
-                                   </select>  -->
-
-                                    
-
-                                  <!-- <select class="combos" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:250px">
-                                    <option value="0" <?php if (!(strcmp(0, $row_nombres['id_oc']))) {echo "selected=\"selected\"";} ?>>SELECCIONE NIT</option>
-                                    <?php 
-                                    do {  
-                                      ?>
-                                      <option value="<?php echo $row_nombres['id_c']?>"<?php if (!(strcmp($row_nombres['id_c'], $_GET['id_oc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_nombres['nit_c']?></option>
-                                      <?php
-                                    } while ($row_nombres = mysql_fetch_assoc($clientes));
-                                    $rows = mysql_num_rows($clientes);
-                                    if($rows > 0) {
-                                      mysql_data_seek($clientes, 0);
-                                      $row_nombres = mysql_fetch_assoc($clientes);
-                                    }
-                                    ?>
-                                  </select> -->
+                                  <select class="elnit" name="id_nit_oc" id="nit" onChange="if (form1.id_nit_oc.value) { consultaclienteadd_oc(form1.id_nit_oc.value); } else { alert('DEBE SELECCIONAR NIT '); }" style="width:280px">
+                                    <option value="0">SELECCIONE NIT</option> 
+                                  </select> <!-- lleno con Ajax -->
                                 </td>
                               </tr>
  
@@ -774,7 +722,7 @@ if(isset($_POST['str_numero_oc']) && $historico){
                        }
                          function validaTodo(){
                            if (document.form1.validar_oc.value > "0"){ 
-                             swal("EXISTE!", "EL NUMERO DE ORDEN YA EXISTE O EXISTEN CARACTERES EXTRAÑOS, FAVOR HACER REVISION ", "warning", {
+                             swal("EXISTE!", "EL NUMERO DE ORDEN YA EXISTE O EXISTEN CARACTERES EXTRAï¿½OS, FAVOR HACER REVISION ", "warning", {
                                button: " OK!",
                              });
                              document.form1.str_numero_oc.focus();

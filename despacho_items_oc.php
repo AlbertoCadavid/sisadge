@@ -494,7 +494,37 @@ $totalRows_items = mysql_num_rows($items);
                               </tr>
                               <?php do { ?>
                               <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF"> 
-                                <td id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['int_consecutivo_io']; ?></a></td>
+                                <!-- Inicio condicional de cantidad restante 0 -->
+                                <?php if($row_items['int_cantidad_rest_io']=='' || $row_items['int_cantidad_rest_io']== '0.00' || $row_items['int_cantidad_rest_io']== 0 || $row_items['int_cantidad_rest_io']<= 0) {?>
+                                <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['int_consecutivo_io']; ?></a></td>
+                                <td id="talla1"><a onclick="mensaje()"><?php echo $row_items['int_cod_ref_io']; ?></a></td>
+                                
+                                <td id="talla1"><a onclick="mensaje()">
+                                  <?php $mp=$row_items['id_mp_vta_io'];
+                                  if($mp!='')
+                                  {
+                                    $sqlmp="SELECT * FROM Tbl_mp_vta WHERE id_mp_vta='$mp'";
+                                    $resultmp= mysql_query($sqlmp);
+                                    $nump= mysql_num_rows($resultmp);
+                                    if($nump >='1')
+                                    { 
+                                      $nombre_mp = mysql_result($resultmp,0,'str_nombre');
+                                      ;
+                                    } } ?><?php echo $nombre_mp ?></a></td> 
+                                    
+                                      <td id="talla3"><a onclick="mensaje()"><?php echo $row_items['int_cod_cliente_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['int_cantidad_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php if($row_items['int_cantidad_rest_io']==''){echo '0';}else{echo $row_items['int_cantidad_rest_io'];} ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['str_unidad_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['fecha_entrega_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['int_precio_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['int_total_item_io'];$total=$subtotal+$row_items['int_total_item_io'];?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php echo $row_items['str_moneda_io']; ?></a></td>
+                                    <td id="talla2"><a onclick="mensaje()"><?php $dd = htmlentities($row_items['str_direccion_desp_io']);echo $dd; ?></a></td>
+                                    <td nowrap="nowrap" id="talla2"><a onclick="mensaje()"><?php if($row_items['b_estado_io']=='5'){echo "Facturado Total";}else if($row_items['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_items['b_estado_io']=='1'){echo "Ingresado";}else if($row_items['b_estado_io']=='2'){echo "Programado";}else if($row_items['b_estado_io']=='3'){echo "Remisionado";}else if($row_items['b_estado_io']=='6'){echo "Muestras reposicion";}  ?></a>
+                                    </td>
+                                    <?php } else { ?>
+                                      <td id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['int_consecutivo_io']; ?></a></td>
                                 <td id="talla1"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['int_cod_ref_io']; ?></a></td>
                                 
                                 <td id="talla1"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000">
@@ -509,7 +539,6 @@ $totalRows_items = mysql_num_rows($items);
                                       $nombre_mp = mysql_result($resultmp,0,'str_nombre');
                                       ;
                                     } } ?><?php echo $nombre_mp ?></a></td> 
-                                    
                                     <td id="talla3"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['int_cod_cliente_io']; ?></a></td>
                                     <td id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_items['int_cantidad_io']; ?></a></td>
                                     <td id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php if($row_items['int_cantidad_rest_io']==''){echo '0';}else{echo $row_items['int_cantidad_rest_io'];} ?></a></td>
@@ -521,6 +550,7 @@ $totalRows_items = mysql_num_rows($items);
                                     <td id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php $dd = htmlentities($row_items['str_direccion_desp_io']);echo $dd; ?></a></td>
                                     <td nowrap="nowrap" id="talla2"><a href="javascript:verPopUp('despacho_oc_add_detalle.php?id_items=<?php echo $row_items['id_items']; ?>&int_remision=<?php echo $row_remision['int_remision']+1; ?>','900','400')" onclick="mostrarId();" target="_top" style="text-decoration:none; color:#000000"><?php if($row_items['b_estado_io']=='5'){echo "Facturado Total";}else if($row_items['b_estado_io']=='4'){echo "Facturado Parcial";}else if($row_items['b_estado_io']=='1'){echo "Ingresado";}else if($row_items['b_estado_io']=='2'){echo "Programado";}else if($row_items['b_estado_io']=='3'){echo "Remisionado";}else if($row_items['b_estado_io']=='6'){echo "Muestras reposicion";}  ?></a>
                                     </td>
+                                    <?php } ?>; <!-- fin condicional de cantidad restante 0 -->
                                     <td id="talla3">
                                       <?php 
                                       $id_items = $row_items['id_items'];         
@@ -556,6 +586,7 @@ $totalRows_items = mysql_num_rows($items);
                                        <a href="javascript:eliminar1('id_items_rem',<?php echo $row_items['id_items']; ?>,'despacho_items_oc.php')"><img src="images/por.gif" alt="PUEDE ELIMINAR POR SER SUPERACCESO" title="PUEDE ELIMINAR POR SER SUPERACCESO" border="0" style="cursor:hand;"/></a>
                                      <?php  } ?> 
                                     </td>
+                                    
                                   </tr>
                                   <?php } while ($row_items = mysql_fetch_assoc($items)); ?>
 
@@ -627,7 +658,9 @@ $totalRows_items = mysql_num_rows($items);
                         return true;
 
                      } 
-      
+                     function mensaje(){
+                      swal("Advertencia", "No tiene cantidades disponibles, o ya tiene una remision creada!", "info");
+                     }
                   </script>
 
                   <?php

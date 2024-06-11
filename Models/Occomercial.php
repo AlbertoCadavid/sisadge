@@ -100,7 +100,7 @@ class oComercial{
     }
         $valores = Cadenas::quitoYagregocomas($data);
     
-        //echo "INSERT INTO $tabla ($columnasCant) VALUES ($valores);";die;
+         //echo "INSERT INTO $tabla ($columnasCant) VALUES ($valores);";die;
         try 
         {
 
@@ -128,10 +128,14 @@ class oComercial{
                 $array_deco = UtilHelper::arrayDecode($array_codificado); 
                 $arrayPHP =  ($array_deco) ;
                 $Date = date("Y-m-d H:i:s"); 
-                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_pedido'] ."','". $arrayPHP['str_numero_oc'] ."','". $arrayPHP['id_c_oc'] ."','". $arrayPHP['str_nit_oc'] ."','". $arrayPHP['fecha_ingreso_oc'] ."','". $arrayPHP['fecha_entrega_oc'] ."','". $arrayPHP['str_condicion_pago_oc'] ."','". $arrayPHP['str_observacion_oc'] ."','". $arrayPHP['int_total_oc'] ."','". $arrayPHP['b_facturas_oc'] ."','". $arrayPHP['b_num_remision_oc'] ."','". $arrayPHP['b_factura_cirel_oc'] ."','". $arrayPHP['str_dir_entrega_oc'] ."','". $arrayPHP['str_archivo_oc'] ."','". $arrayPHP['adjunto2'] ."','". $arrayPHP['adjunto3'] ."','". $arrayPHP['str_elaboro_oc'] ."','". $arrayPHP['str_aprobo_oc'] ."','". $arrayPHP['b_estado_oc'] ."','". $arrayPHP['str_responsable_oc'] ."','". $arrayPHP['b_borrado_oc'] ."','". $arrayPHP['salida_oc'] ."','". $arrayPHP['b_oc_interno'] ."','". $arrayPHP['vta_web_oc'] ."','". $arrayPHP['expo_oc'] ."','". $arrayPHP['autorizado'] ."','". $arrayPHP['tb_pago'] ."','". $arrayPHP['factura_oc'] ."','". $arrayPHP['entrega_fac'] ."','". $arrayPHP['fecha_cierre_fac'] ."','". $arrayPHP['comprobante_ent'] ."','". $arrayPHP['estado_cartera'] ."','". $arrayPHP['tipo_pago_cartera'] ."','". $arrayPHP['valor_cartera'] ."','". $_SESSION['Usuario'] . '-' . $Date ."'  );");
+ 
+
+                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_pedido'] ."','". $arrayPHP['str_numero_oc'] ."','". $arrayPHP['id_c_oc'] ."','". $arrayPHP['str_nit_oc'] ."','". $arrayPHP['fecha_ingreso_oc'] ."','". $arrayPHP['fecha_entrega_oc'] ."','". $arrayPHP['str_condicion_pago_oc'] ."','". $arrayPHP['str_observacion_oc'] ."','". $arrayPHP['int_total_oc'] ."','". $arrayPHP['b_facturas_oc'] ."','". $arrayPHP['b_num_remision_oc'] ."','". $arrayPHP['b_factura_cirel_oc'] ."','". $arrayPHP['str_dir_entrega_oc'] ."','". $arrayPHP['str_archivo_oc'] ."','". $arrayPHP['adjunto2'] ."','". $arrayPHP['adjunto3'] ."','". $arrayPHP['str_elaboro_oc'] ."','". $arrayPHP['str_aprobo_oc'] ."','". $arrayPHP['b_estado_oc'] ."','". $arrayPHP['str_responsable_oc'] ."','". $arrayPHP['b_borrado_oc'] ."','". $arrayPHP['salida_oc'] ."','". $arrayPHP['b_oc_interno'] ."','". $arrayPHP['vta_web_oc'] ."','". $arrayPHP['expo_oc'] ."','". $arrayPHP['autorizado'] ."','". $arrayPHP['tb_pago'] ."','". $arrayPHP['factura_oc'] ."','". $arrayPHP['entrega_fac'] ."','". $arrayPHP['fecha_cierre_fac'] ."','". $arrayPHP['comprobante_ent'] ."','". $arrayPHP['pago_pendiente'] ."','". $arrayPHP['proforma_oc'] ."','". $arrayPHP['estado_cartera'] ."','". $arrayPHP['tipo_pago_cartera'] ."','". $arrayPHP['valor_cartera'] ."','". $arrayPHP['cobra_flete'] ."','". $arrayPHP['precio_flete'] ."','". $arrayPHP['tipo_despacho'] ."','". $arrayPHP['fecha_autoriza'] ."','". $_SESSION['Usuario'] . '-' . $Date ."','". $arrayPHP['notaweb'] ."','". $arrayPHP['especialweb'] ."');");
+
+
                 if($arrayPHP['autorizado']){
 
-                   $hoy = date("Y-m-d H:i:s");  
+                   $hoy = date("Y-m-d H:i:s");   
                    $usuario = $_SESSION['Usuario'];
                    $logs = $this->db->query("INSERT INTO tbl_logs (codigo_id, descrip, fecha, modificacion, usuario) VALUES ('". $arrayPHP['id_pedido'] ."','OC','$hoy','autorizado SI','$usuario')" );
               
@@ -155,7 +159,7 @@ class oComercial{
                 $array_deco = UtilHelper::arrayDecode($array_codificado); 
                 $arrayPHP =  ($array_deco) ;
                 $Date = date("Y-m-d H:i:s"); 
-                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '" . $arrayPHP['id_items'] . "', '" . $arrayPHP['id_pedido_io'] . "', '" . $arrayPHP['str_numero_io'] . "', '" . $arrayPHP['int_consecutivo_io'] . "', '" . $arrayPHP['int_cod_ref_io'] . "', '" . $arrayPHP['id_mp_vta_io'] . "', '" . $arrayPHP['int_cod_cliente_io'] . "', '" . $arrayPHP['int_cantidad_io'] . "', '" . $arrayPHP['int_cantidad_rest_io'] . "', '" . $arrayPHP['str_unidad_io'] . "', '" . $arrayPHP['fecha_entrega_io'] . "', '" . $arrayPHP['fecha_modif_io'] . "', '" . $arrayPHP['responsable_modif_io'] . "', '" . $arrayPHP['trm'] . "', '" . $arrayPHP['int_precio_trm'] . "',  '" . $arrayPHP['int_precio_io'] . "', '" . $arrayPHP['int_total_item_io'] . "', '" . $arrayPHP['str_moneda_io'] . "', '" . $arrayPHP['str_direccion_desp_io'] . "', '" . $arrayPHP['int_vendedor_io'] . "', '" . $arrayPHP['int_comision_io'] . "', '" . $arrayPHP['int_nombre_io'] . "', '" . $arrayPHP['b_estado_io'] . "', '" . $arrayPHP['cobra_cyrel'] . "', '" . $arrayPHP['cobra_flete'] . "', '" . $arrayPHP['precio_flete'] . "', '". $_SESSION['Usuario'] . '-' . $Date ."'  );"); 
+                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '" . $arrayPHP['id_items'] . "', '" . $arrayPHP['id_pedido_io'] . "', '" . $arrayPHP['str_numero_io'] . "', '" . $arrayPHP['int_consecutivo_io'] . "', '" . $arrayPHP['int_cod_ref_io'] . "', '" . $arrayPHP['id_mp_vta_io'] . "', '" . $arrayPHP['int_cod_cliente_io'] . "', '" . $arrayPHP['int_cantidad_io'] . "', '" . $arrayPHP['int_cantidad_rest_io'] . "', '" . $arrayPHP['str_unidad_io'] . "', '" . $arrayPHP['fecha_entrega_io'] . "', '" . $arrayPHP['fecha_modif_io'] . "', '" . $arrayPHP['responsable_modif_io'] . "', '" . $arrayPHP['trm'] . "', '" . $arrayPHP['int_precio_trm'] . "',  '" . $arrayPHP['int_precio_io'] . "', '" . $arrayPHP['int_total_item_io'] . "', '" . $arrayPHP['str_moneda_io'] . "', '" . $arrayPHP['str_direccion_desp_io'] . "', '" . $arrayPHP['int_vendedor_io'] . "', '" . $arrayPHP['int_comision_io'] . "', '" . $arrayPHP['int_nombre_io'] . "', '" . $arrayPHP['b_estado_io'] . "', '" . $arrayPHP['cobra_cyrel'] . "', '" . $arrayPHP['cobra_flete'] . "', '" . $arrayPHP['precio_flete'] . "', '". $_SESSION['Usuario'] . '-' . $Date ."', '" . $arrayPHP['impuesto'] . "','" . $arrayPHP['pdf_impuesto'] . "','" . $arrayPHP['N_precio_old'] . "','" . $arrayPHP['valor_impuesto'] . "','" . $arrayPHP['cotiz'] . "' );"); 
 
             }
         } catch (Exception $e) 
@@ -163,6 +167,15 @@ class oComercial{
             die($e->getMessage());
         }
     }
+    
+
+
+    /*public function insertarQuery($query){
+      
+      $this->db->query($query);
+      return $tabla_principal_id = $this->db->id_pedido;
+      
+    }*/
 
     public function Eliminar($id)
     {

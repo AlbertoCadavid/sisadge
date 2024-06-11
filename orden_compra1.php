@@ -105,6 +105,7 @@ if($n_oc == '0' && $id_p == '0' && $fecha == '0' && $tipo_pedido=='0')
 {
   $row_ordenes_compra = $conexion->buscarListar("orden_compra","*","ORDER BY n_oc DESC","",$maxRows_ordenes_compra,$pageNum_ordenes_compra," " );
   //$query_ordenes_compra = "SELECT * FROM orden_compra ORDER BY n_oc DESC";
+  
 }
 //Filtra oc lleno
 if($n_oc != '0' && $id_p == '0' && $fecha == '0' && $tipo_pedido=='0')
@@ -157,14 +158,8 @@ if (isset($_GET['totalRows_ordenes_compra'])) {
 } 
 $totalPages_ordenes_compra = ceil($totalRows_ordenes_compra/$maxRows_ordenes_compra)-1;
 
-
-
 $row_lista = $conexion->llenaSelect('orden_compra','','ORDER BY n_oc DESC');
- 
 
-$row_proveedores = $conexion->llenaSelect('proveedor','','ORDER BY proveedor_p DESC');
-
- 
 $row_ano = $conexion->llenaSelect('anual','','ORDER BY anual DESC');
 
  
@@ -261,18 +256,10 @@ session_start();
 
                       <select name="n_oc" id="n_oc"  class="selectsMedio busqueda">
                           <option value="0"<?php if (!(strcmp(0, $_GET['n_oc']))) {echo "selected=\"selected\"";} ?>>O.C.</option>
-                             <?php  foreach($row_lista as $row_lista ) { ?>
-                          <option value="<?php echo $row_lista['n_oc']; ?>"<?php if (!(strcmp($row_lista['n_oc'], $_GET['n_oc']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_lista['n_oc']); ?> 
-                        </option>
-                      <?php } ?>
                       </select>
 
                       <select name="id_p" id="id_p"  class="selectsMedio busqueda">
                           <option value="0"<?php if (!(strcmp(0, $_GET['id_p']))) {echo "selected=\"selected\"";} ?>>PROVEEDOR</option>
-                             <?php  foreach($row_proveedores as $row_proveedores ) { ?>
-                          <option value="<?php echo $row_proveedores['id_p']; ?>"<?php if (!(strcmp($row_proveedores['id_p'], $_GET['id_p']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_proveedores['proveedor_p']); ?> 
-                        </option>
-                      <?php } ?>
                       </select>
 
                       <select name="fecha" id="fecha"  class="selectsMedio busqueda">
@@ -283,12 +270,13 @@ session_start();
                       <?php } ?>
                       </select> &nbsp;&nbsp;&nbsp;&nbsp;
                     <select name="tipo_pedido" class="selectsMedio busqueda">
-                        <option value=""<?php if (!(strcmp("", $_GET['tipo_pedido']))) {echo "selected=\"selected\"";} ?>>Tipo Pedido</option>
+                        <option value="0"<?php if (!(strcmp("", $_GET['tipo_pedido']))) {echo "selected=\"selected\"";} ?>>Tipo Pedido</option>
                         <option value="Nacional"<?php if (!(strcmp("Nacional", $_GET['tipo_pedido']))) {echo "selected=\"selected\"";} ?> >Nacional</option>
                         <option value="Importacion"<?php if (!(strcmp("Importacion", $_GET['tipo_pedido']))) {echo "selected=\"selected\"";} ?>>Importacion</option>
                         <option value="Exportacion"<?php if (!(strcmp("Exportacion", $_GET['tipo_pedido']))) {echo "selected=\"selected\"";} ?>>Exportacion</option> 
                     </select>
-                    <input type="submit" name="Submit" value="FILTRO" class="botonGeneral" onClick="if(consulta.n_oc.value=='0' && consulta.id_p.value=='0' && consulta.fecha.value=='0' && consulta.tipo_pedido.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }"/></td>
+                    <input type="submit" name="Submit" value="FILTRO" class="botonGeneral"/></td>
+                    <!-- <input type="submit" name="Submit" value="FILTRO" class="botonGeneral" onClick="if(consulta.n_oc.value=='0' && consulta.id_p.value=='0' && consulta.fecha.value=='0' && consulta.tipo_pedido.value=='0') { alert('DEBE SELECCIONAR UNA OPCION'); }"/></td> -->
                   </tr>
                   <tr>
                     <td id="fuente1"><img src="images/ingreso4.gif" alt="FALTAN INGRESOS (COMPRAS)" width="24" height="26" style="cursor:hand;" title="FALTAN INGRESOS (COMPRAS)" border="0"> Tiene ingresos pendientes a la bodega
@@ -460,3 +448,63 @@ mysql_free_result($ano);
 mysql_close($conexion1);
 
 ?>
+
+<script>
+  $(document).ready(function() {
+    
+    $('#n_oc').select2({
+      ajax: {
+        url: "select3/proceso.php",
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            palabraClave: params.term, // search term
+            var1: "*",
+            var2: "orden_compra",
+            var3: "",
+            var4: "ORDER BY n_oc DESC",
+            var5: "n_oc",
+            var6: "n_oc"
+          };
+        },
+        processResults: function(response) {
+          return {
+            results: response,
+          };
+        },
+        cache: true
+      }
+    });
+  })
+
+  $(document).ready(function() {
+    
+    $('#id_p').select2({
+      ajax: {
+        url: "select3/proceso.php",
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function(params) {
+          return {
+            palabraClave: params.term, // search term
+            var1: "*",
+            var2: "proveedor",
+            var3: "",
+            var4: "ORDER BY proveedor_p DESC",
+            var5: "id_p",
+            var6: "proveedor_p"
+          };
+        },
+        processResults: function(response) {
+          return {
+            results: response,
+          };
+        },
+        cache: true
+      }
+    });
+  })
+</script>

@@ -19,7 +19,7 @@ if($id_pedido !='' && $factura !='') {
    $str_numero_oc=mysql_result($resultdato,0,'str_numero_oc');
    
    $factura = strtoupper($factura);
-   $sqlfactura="UPDATE Tbl_remisiones SET factura_r = '$factura' WHERE str_numero_oc_r='$str_numero_oc'";//actualiza lel numero factura para todas las remisiones por igual
+   $sqlfactura="UPDATE Tbl_remisiones SET factura_r = '$factura' WHERE str_numero_oc_r='$str_numero_oc' AND id_pedido_oc = '$id_pedido'";//actualiza lel numero factura para todas las remisiones por igual
    $resultfactura=mysql_query($sqlfactura);
 
    //$actualizo = $conexion->actualizar("tbl_orden_compra", " b_estado_oc='5', factura_oc='$factura'  ", " factura_oc= '".$factura."' " );

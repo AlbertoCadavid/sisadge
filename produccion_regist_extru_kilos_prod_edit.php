@@ -228,6 +228,7 @@ $query_kilo_editar = "SELECT * FROM Tbl_reg_kilo_producido WHERE op_rp='$id_op' 
 $kilo_editar = mysql_query($query_kilo_editar, $conexion1) or die(mysql_error());
 $row_kilo_editar = mysql_fetch_assoc($kilo_editar);
 $totalRows_kilo_editar = mysql_num_rows($kilo_editar);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

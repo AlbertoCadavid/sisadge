@@ -4,10 +4,7 @@ class Mbanderas_listado
 {
     
     public $db;
-
-    public function __construct(){ 
-
-    }
+    public function __construct(){}
 
     public function mostrarListado($condicion = "", $condicion2 = "", $maxRows_registros,$pageNum_registros)
     {

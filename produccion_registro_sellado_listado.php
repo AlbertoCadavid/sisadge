@@ -164,17 +164,17 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_lista_op = "SELECT id_op FROM Tbl_orden_produccion WHERE  b_estado_op > 0 AND b_borrado_op='0' ORDER BY id_op DESC";
 $lista_op = mysql_query($query_lista_op, $conexion1) ;
 $row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op);
+$totalRows_lista_op = mysql_num_rows($lista_op); */
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_ref_op = "SELECT id_ref, cod_ref FROM Tbl_referencia order by id_ref desc";
 $ref_op = mysql_query($query_ref_op, $conexion1) ;
 $row_ref_op = mysql_fetch_assoc($ref_op);
-$totalRows_ref_op = mysql_num_rows($ref_op);
+$totalRows_ref_op = mysql_num_rows($ref_op); */
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_mensual = "SELECT * FROM mensual ORDER BY id_mensual ASC";
@@ -278,7 +278,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
       <input type="hidden" name="tipoListado" id="tipoListado" value="4">
       <select name="op" id="op" class="busqueda selectsMini" >
         <option value="0">O.P.</option>
-          <?php
+          <!-- <?php
         do {  
           ?>
           <option value="<?php echo $row_lista_op['id_op']?>"><?php echo $row_lista_op['id_op']?></option>
@@ -289,12 +289,12 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
           mysql_data_seek($lista_op, 0);
           $row_lista_op = mysql_fetch_assoc($lista_op);
         }
-        ?>
+        ?> -->
       </select>
        
         <select name="id_ref" id="id_ref" class="busqueda selectsMini" >
           <option value="0">REF</option>
-          <?php
+          <!-- <?php
           do {  
             ?>
             <option value="<?php echo $row_ref_op['cod_ref']?>">
@@ -307,7 +307,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
             mysql_data_seek($ref_op, 0);
             $row_ref_op = mysql_fetch_assoc($ref_op);
           }
-          ?>
+          ?> -->
         </select>
         <?php $Year = date("Y");?>
          <select id='anyo' name='anyo' class=""> 
@@ -395,6 +395,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
           <tr id="tr1">
             <td nowrap="nowrap" id="titulo4">N&deg; O.P </td>
             <td nowrap="nowrap" id="titulo4">FECHA INGRESO</td>
+            <td nowrap="nowrap" id="titulo4">ULT NUMERO</td>
             <td nowrap="nowrap" id="titulo4">CLIENTE</td>
             <td nowrap="nowrap" id="titulo4">REF. </td>
             <td nowrap="nowrap" id="titulo4">VER.</td>
@@ -407,6 +408,9 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
             <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
               <td nowrap="nowrap" id="dato2"><strong><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new"  style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['id_op']; ?></a></strong></td>
               <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new"  style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
+              <?php $num_final_liquidacion = $conexion->llenarCampos("tbl_reg_produccion", "WHERE id_proceso_rp = 4 AND id_op_rp = $row_orden_produccion[id_op]", "ORDER BY fecha_fin_rp DESC LIMIT 1", "n_fin_rp") ?>
+              <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new"  style="text-decoration:none; color:#000000"><?php echo $num_final_liquidacion['n_fin_rp']; ?></a></td>
+              
               <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new"  style="text-decoration:none; color:#000000">
                 <?php 
                 $op_c=$row_orden_produccion['int_cliente_op'];

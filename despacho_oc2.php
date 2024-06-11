@@ -81,7 +81,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 <?php
 $currentPage = $_SERVER["PHP_SELF"];
 
-$maxRows_ordenes_compra = 20;
+$maxRows_ordenes_compra = 30;
 $pageNum_ordenes_compra = 0;
 if (isset($_GET['pageNum_ordenes_compra'])) {
   $pageNum_ordenes_compra = $_GET['pageNum_ordenes_compra'];
@@ -100,7 +100,7 @@ $fecha = $anual.'-'.$mes.'-'.'01';
 $autorizado=$_GET['autorizado'];
 $vende=$_GET['vende'];
 
-  if(!$_SESSION['acceso']){
+  if(!$_SESSION['superacceso']){
      
      $soloinventario = "(Tbl_orden_compra.tipo_despacho is null or Tbl_orden_compra.tipo_despacho ='despacho') and ";
  
@@ -109,12 +109,12 @@ $vende=$_GET['vende'];
 //TODOS VACIOS
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0' && $autorizado=='0' && $vende=='0')
 { 
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //ESTADO LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 
 
@@ -126,17 +126,17 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual =
 //ORDEN COMPRA LLENO
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND b_borrado_oc='0' AND pago_pendiente='NO'   ORDER BY fecha_autoriza DESC";
 }
 //CLIENTE LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //ORDEN COMPRA Y CLIENTE LLENO
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //REF Y CLIENTE LLENO
 if($estado == '0' && $ref != '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -146,17 +146,17 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente != '0' && $anual =
 //ESTADO Y CLIENTE LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND id_c_oc = $cliente AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //FECHA LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC, id_pedido  DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC, id_pedido  DESC";
 }
 //ORDEN COMPRA, CLIENTE LLENO Y FECHA
 if($estado == '0' && $ref == '0' && $orden != '0' && $cliente != '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_numero_oc = '$orden' AND  id_c_oc = $cliente AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //REF Y FECHA LLENO
 if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -172,7 +172,7 @@ if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual !
 //FECHA  Y ESTADO LLENO
 if($estado != '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_estado_oc=$estado AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //ESTADO, REF Y FECHA LLENO
 if($estado != '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende=='0')
@@ -184,6 +184,30 @@ if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual =
 {
   $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente='NO' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC";
 }
+//PENDIENTES Y REFERENCIA LLENO
+if($estado == '0' && $ref != '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente != '0' && $autorizado=='0' && $vende=='0')
+{
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cod_ref_io = '$ref' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente='NO' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC";
+}
+//PENDIENTES Y ORDEN LLENO
+if($estado == '0' && $ref == '0' && $orden != '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente != '0' && $autorizado=='0' && $vende=='0')
+{
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_orden_compra.str_numero_oc = '$orden' AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente='NO' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC";
+}
+//PENDIENTES Y CLIENTE LLENO
+if($estado == '0' && $ref == '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente != '0' && $autorizado=='0' && $vende=='0')
+{
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_orden_compra.id_c_oc = $cliente  AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente='NO' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC";
+}
+//PENDIENTES REFERENCIA Y CLIENTE LLENO
+if($estado == '0' && $ref != '0' && $orden == '0' && $cliente != '0' && $anual == '0' && $mes == '0' && $pendiente != '0' && $autorizado=='0' && $vende=='0')
+{
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra,Tbl_items_ordenc WHERE $soloinventario Tbl_orden_compra.id_pedido=Tbl_items_ordenc.id_pedido_io AND Tbl_items_ordenc.int_cod_ref_io = '$ref' AND Tbl_orden_compra.id_c_oc = $cliente  AND Tbl_items_ordenc.int_cantidad_rest_io $pendiente '0.00' AND Tbl_orden_compra.b_borrado_oc='0' AND Tbl_orden_compra.pago_pendiente='NO' GROUP BY Tbl_orden_compra.str_numero_oc ORDER BY Tbl_orden_compra.fecha_ingreso_oc DESC";
+}
+
+
+
+
 //ESTADO GENERAL Y VENDEDOR LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente != '0' && $autorizado=='0' && $vende!='0')
 {
@@ -192,29 +216,29 @@ if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual =
 //vendedor o responsable
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado=='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND b_borrado_oc='0' AND pago_pendiente='NO'  GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND b_borrado_oc='0' AND pago_pendiente='NO'   ORDER BY fecha_autoriza DESC";
 }
 
 //vendedor o responsable y FECHA
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado=='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 
 //AUTORIZADO LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado!='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //AUTORIZADO Y VENDEDOR
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual == '0' && $mes == '0' && $pendiente == '0'  && $autorizado!='0' && $vende!='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND autorizado = '$autorizado' AND b_borrado_oc='0' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario str_elaboro_oc='$vende' AND autorizado = '$autorizado' AND b_borrado_oc='0' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 //FECHA Y AUTORIZADO LLENO
 if($estado == '0' && $ref == '0' && $orden == '0' && $cliente == '0' && $anual != '0' && $mes != '0' && $pendiente == '0'  && $autorizado!='0' && $vende=='0')
 {
-  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO' GROUP BY str_numero_oc ORDER BY fecha_autoriza DESC";
+  $query_ordenes_compra = "SELECT * FROM Tbl_orden_compra WHERE $soloinventario fecha_ingreso_oc BETWEEN DATE_FORMAT('$fecha', '%Y-%m-01') AND DATE_FORMAT('$fecha', '%Y-%m-31') AND b_borrado_oc='0' and autorizado = '$autorizado' AND pago_pendiente='NO'  ORDER BY fecha_autoriza DESC";
 }
 
 $query_limit_ordenes_compra = sprintf("%s LIMIT %d, %d", $query_ordenes_compra, $startRow_ordenes_compra, $maxRows_ordenes_compra);
@@ -310,7 +334,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
     <script>
         //$(document).ready(function() { $(".busqueda").select2(); });
     </script>
-  <div class="spiffy_content"> <!-- este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
+  <div > <!--class="spiffy_content" este define el fondo gris de lado a lado si se coloca dentro de tabla inicial solamente coloca borde gris -->
     <div align="center">
       <table style="width: 80%"><!-- id="tabla1" -->
         <tr>
@@ -435,15 +459,16 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
            </div>
       </form>
              <hr>
-              <div class="row align-items-start">  
-                 <div class="col" ><strong>N&deg; O.C  </strong></div>
-                 <div class="col" ><strong>FECHA INGRESO </strong></div>
-                 <div class="col" ><strong>CLIENTE </strong></div>
-                 <div class="col" ><strong>VENDEDOR </strong></div>
-                 <div class="col" ><strong>PENDIENTES </strong></div>
-                 <div class="col" ><strong>ESTADO </strong></div>
-                 <div class="col" ><strong>FECHA AUTORIZA </strong></div> 
-                 <div class="col" ><strong>AUTORIZAR SALIDA  </strong></div>   
+                <div class="spiffy_content" >
+                  <div class="row justify-content-md-center">  
+                    <div class="col" ><strong>N&deg; O.C  </strong></div>
+                    <div class="col-2" ><strong>FECHA INGRESO </strong></div> 
+                    <div class="col-2" ><strong>CLIENTE </strong></div>
+                    <div class="col-2" ><strong>VENDEDOR </strong></div>
+                    <div class="col" ><strong>PENDIENTES </strong></div>
+                    <div class="col" ><strong>ESTADO </strong></div>
+                    <div class="col-2" ><strong>FECHA AUTORIZA </strong></div> 
+                    <div class="col" ><strong>AUTORIZAR</strong></div>    
               </div> 
              <?php do{  ?>
                <?php 
@@ -457,39 +482,36 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                   }
               ?>
 
-            <div class="row celdaborde1" > 
-              <div class="col" id="fondo_2"onMouseOver="uno(this,'8C8C9F');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
-                <p><?php echo $urls;?><strong><?php echo $row_ordenes_compra['str_numero_oc']; ?></strong></a></p>
+            <div class="row justify-content-md-center" > 
+              <div class="col"  onMouseOver="uno(this,'8C8C9F');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
+                <?php echo $urls;?><strong><?php echo $row_ordenes_compra['str_numero_oc']; ?></strong></a> 
               </div> 
-              <div class="col" id="fondo_2">
+              <div class="col-2" >
                 <p><?php echo $urls;?><?php echo $row_ordenes_compra['fecha_ingreso_oc']; ?></a></p>
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php echo $urls;?>
-                              <?php 
+              <div class="col-2" >       
+                 <?php echo $urls; 
                               $nit_c=$row_ordenes_compra['str_nit_oc'];
-                              $sqln="SELECT * FROM cliente WHERE nit_c='$nit_c'"; 
-                              $resultn=mysql_query($sqln); 
-                              $numn=mysql_num_rows($resultn); 
-                              if($numn >= '1') 
-                               { $nit_cliente_c=mysql_result($resultn,0,'nombre_c'); echo utf8_encode($nit_cliente_c); }
-                             else { echo "";  } ?>
-                           </a></p>
+                              $cliente_c = $conexion->llenarCampos('cliente'," WHERE nit_c='$nit_c' ", "", "nombre_c"); 
+                              if($cliente_c['nombre_c'] >= '1') { echo utf8_encode($cliente_c['nombre_c']); }
+                                 else { echo "";  } 
+                           ?>
+                  </a> 
               </div>
-              <div class="col" id="fondo_2">
-                <p><?php echo $urls;?><?php echo $row_ordenes_compra['str_elaboro_oc']; ?></a></p>
+              <div class="col-2" >
+                 <?php echo $urls;?><?php echo $row_ordenes_compra['str_elaboro_oc']; ?></a> 
               </div>
-              <div class="col" id="fondo_2">
+              <div class="col" >
                 <p><?php  
                        if( $restante['restante'] > 0.00 ) : ?>
                            <img src="images/falta3.gif" alt="CANTIDAD PENDIENTES" width="20" height="18" style="cursor:hand;" title="CANTIDAD PENDIENTES" border="0"/>  
                         <?php elseif($restante['restante'] == '') : ?>
                           <em>sin items</em>
-                        <?php   else:?>
+                        <?php else:?>
                            <img src="images/cumple.gif" alt="OK" width="20" height="18" style="cursor:hand;" title="OK" border="0"/> 
                         <?php endif; ?></p>
               </div>
-              <div class="col" id="fondo_2">
+              <div class="col" >
                 <p><?php 
                 $id_pedido=$row_ordenes_compra['id_pedido'];
                 $estado=$row_ordenes_compra['b_estado_oc'];
@@ -519,11 +541,11 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                else{echo "";}  
                ?></p>
               </div>
-              <div class="col" id="fondo_2">
+              <div class="col-2" >
                 <a href="javascript:verConsulta('historico','<?php echo $row_ordenes_compra['id_pedido']; ?>','orden_compra_cl2.php')" ><?php echo substr($row_ordenes_compra['fecha_autoriza'],0,10); ?></a>
                 <!-- <p> <?php echo substr($row_ordenes_compra['fecha_autoriza'],0,10);?> </p> -->
               </div>
-              <div class="col" id="fondo_2">
+              <div class="col" >
                 <p><?php if($row_ordenes_compra['autorizado']=='SI'): ?>
                   <img src="images/accept.png" alt="AUTORIZADA" title="AUTORIZADA" border="0" style="cursor:hand;" width="20" height="18" /> 
                   <?php else: ?>
@@ -531,7 +553,6 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                  <!-- <img src="images/salir.gif" alt="SIN AUTORIZAR" title="SIN AUTORIZAR" border="0" style="cursor:hand;" width="20" height="18" /> -->
                 </p> 
               <?php endif; ?> 
-              </div>
               <?php 
               //Alert de oc autorizadas 
                  $nuevafecha = restarMes(date('Y-m-d'), 5); 
@@ -542,9 +563,8 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
               <?php //if($arrayName!='' || $restante['restante'] > 0.00):  ?>
                     <!-- <script type="text/javascript"> var ocsAutor = <?php echo json_encode($arrayName); ?>; swal("Alerta!", "Ordenes Autorizadas y/o con Pendientes: "+ocsAutor, "error");</script> -->
                 <?php //endif; ?>
- 
-              
-            </div>
+              </div>   
+             </div>
             <?php } while ($row_ordenes_compra = mysql_fetch_assoc($ordenes_compra)); ?>
           </div> 
              <!-- tabla para paginacion opcional -->
@@ -644,7 +664,7 @@ $row_vendedores = $conexion->llenaSelect('vendedor','','ORDER BY nombre_vendedor
                     var1:"*",
                     var2:"tbl_orden_compra",
                     var3:"",
-                    var4:"  ORDER BY str_numero_oc DESC",
+                    var4:" GROUP BY str_numero_oc ORDER BY str_numero_oc DESC",
                     var5:"str_numero_oc",
                     var6:"str_numero_oc"
                 };

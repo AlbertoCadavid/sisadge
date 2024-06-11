@@ -136,6 +136,11 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
          //$conexion->actualizar("tblextruderrollo", "kilos_r = '$nuevokg', rolloParcial_r = '0', kilos_parcial_r = '$nuevokg_parcial'", "id_r = $dato[id_r] AND id_op_r = $_POST[id_op_r]");
        }
      }
+     
+    /* condicional para saber si hay que recalcular los metros en impresion y sellado */
+     if($_POST['recalcular_mts'] === "1"){
+       actualizar_metraje_imp_sell($_POST['id_op_r'], $_POST['rollo_r'], $_POST['metro_r'],  $_POST['metro_anterior']); //id_op, numero de rollo, nuevos metros, metro anterior
+     }
     /* $updateParcialRollosSQL = sprintf(
       "UPDATE tblextruderrollo SET rolloParcial_r = %s, metro_r = %s, kilos_r = %s WHERE id_op_r = $_POST[id_op_r] AND rollo_r = $_POST[rollo_r]",
       GetSQLValueString($parcial, "int"),
@@ -426,6 +431,7 @@ $num_banderas = sizeof($banderas);
 /*if($row_tiempoMuerto['fecha_rt'] !='' || $row_tiempoPreparacion['fecha_rtp']!='' || $row_desperdicio['fecha_rd']!=''){
   $fechaibloque = $row_tiempoMuerto['fecha_rt'] =='' ? $row_tiempoPreparacion['fecha_rtp'] : $row_desperdicio['fecha_rd'];
 }*/
+
 ?>
 <html>
 
@@ -627,7 +633,7 @@ $num_banderas = sizeof($banderas);
       </tr>
       <tr>
         <td id="fuente1">TURNO</td>
-        <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="6" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['turno_r']; ?>" required></td>
+        <td id="fuente1"><input type="number" name="turno_r" id="turno_r" min="1" max="7" style=" width:40px" value="<?php echo $row_rollo_estrusion_edit['turno_r']; ?>" required></td>
         <td colspan="2" id="fuente1">
           <p>FECHA IMPRIME
             ESTIQUER ROLLO</p>
@@ -667,12 +673,20 @@ $num_banderas = sizeof($banderas);
         <td id="fuente1">METRO LINEAL</td>
         <td id="fuente1">
           <input name="metro_r" type="number" id="metro_r" min="1" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['metro_r']; ?>" required />
-
+          <input name="metro_anterior" type="hidden" id="metro_anterior" value="<?php echo $row_rollo_estrusion_edit['metro_r']; ?>" /> <!-- campo oculto para saber los metros de la DB para realizar el recalculo de los metros en impresion y sellado (costos)  -->
           <?php echo $row_lista_op['metroLineal_op']; ?>
         </td>
         <td id="fuente1">PESO</td>
         <td id="fuente1"><input name="kilos_r" type="number" id="kilos_r" min="1.00" step="0.01" style=" width:100px" value="<?php echo $row_rollo_estrusion_edit['kilos_r']; ?>" required /></td>
       </tr>
+
+      <?php if ($_SESSION['superacceso'] || strtolower($_SESSION['MM_Username']) == "auditor" ||  strtolower($_SESSION['MM_Username']) == "auxauditor"){?>
+      <tr>
+        <td id="fuente1">Recalcular Metraje Impresion/Sellado</td>
+        <td><input type="checkbox" name="recalcular_mts" id="recalcular_mts" value="1"></td>
+      </tr>
+      <?php } ?>
+      
       <tr>
         <td colspan="4">&nbsp;</td>
       </tr>
@@ -1099,10 +1113,28 @@ $num_banderas = sizeof($banderas);
 
 <?php
 mysql_free_result($usuario);
-
 mysql_free_result($codigo_empleado);
-
 mysql_free_result($lista_op);
+?>
 
-
+<?php 
+function actualizar_metraje_imp_sell($id_op_r, $rollo_r, $metro_r, $metro_anterior){
+  $conexion = new ApptivaDB();
+  
+  $rollo_impresion = $conexion->buscarDos("tblimpresionrollo","id_op_r",$id_op_r,"rollo_r",$rollo_r); //verificamos si el rollo existe en impresion
+  if(!is_null($rollo_impresion)){
+    $nuevo_metro_r = round(($rollo_impresion['metro_r']*$metro_r)/$metro_anterior); // regla de tres entre los metros anteriores y los nuevos metros por si existe desperdicio en impresion
+    $conexion->actualizar("tblimpresionrollo", "metro_r = $nuevo_metro_r", "id_op_r = $id_op_r AND rollo_r = $rollo_r");
+    $liquidacion_rollo_impresion = $conexion->buscarDos("tbl_reg_produccion","id_op_rp",$id_op_r,"rollo_rp",$rollo_r."AND id_proceso_rp = 2"); //verificamos si el rollo ya esta en la liquidacion
+    if(!is_null($liquidacion_rollo_impresion)){
+      $conexion->actualizar("tbl_reg_produccion", "int_metro_lineal_rp = $nuevo_metro_r", "id_op_rp = $id_op_r AND rollo_rp = $rollo_r AND id_proceso_rp = 2");
+    }
+  }
+  $rollos_sellado = $conexion->llenaSelect("tblselladorollo","WHERE id_op_r = $id_op_r AND rollo_r = $rollo_r","ORDER BY id_r ASC");
+  $n_metros = $nuevo_metro_r;
+  foreach ($rollos_sellado as $campo) {
+    $n_metros = $n_metros - $campo['metro_r'];
+    $conexion->actualizar("tblselladorollo", "metroIni_r = $n_metros", "id_op_r = $id_op_r AND rollo_r = $rollo_r AND id_r = $campo[id_r]");
+  }
+}
 ?>

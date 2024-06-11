@@ -88,11 +88,9 @@ if (isset($_SESSION['MM_Username'])) {
 
 $row_usuario = $conexion->buscar('usuario', 'usuario', $colname_usuario);
 
-$row_lista2 = $conexion->llenaListas('tbl_numeracion tn left JOIN tbl_orden_produccion top ON top.id_op=tn.int_op_n', '', 'ORDER BY tn.int_op_n DESC', 'top.id_op');
-
-$row_proveedores = $conexion->llenaListas('cliente', '', 'ORDER BY nombre_c ASC', 'id_c,nombre_c');
-
-$row_lista = $conexion->llenaListas('tbl_numeracion', '', 'GROUP BY cod_ref_n  ORDER BY CAST(cod_ref_n AS int)  DESC', 'cod_ref_n');
+//$row_lista2 = $conexion->llenaListas('tbl_numeracion tn left JOIN tbl_orden_produccion top ON top.id_op=tn.int_op_n', '', 'ORDER BY tn.int_op_n DESC', 'top.id_op');
+//$row_proveedores = $conexion->llenaListas('cliente', '', 'ORDER BY nombre_c ASC', 'id_c,nombre_c');
+//$row_lista = $conexion->llenaListas('tbl_numeracion', '', 'GROUP BY cod_ref_n  ORDER BY CAST(cod_ref_n AS int)  DESC', 'cod_ref_n');
 
 
 $maxRows_numeracion = 20;
@@ -220,62 +218,32 @@ $queryString_numeracion = sprintf("&totalRows_numeracion=%d%s", $totalRows_numer
 
                             <select id='id_op' name='id_op' class="selectsMini">
                               <option value="0">- O.P -</option>
-                              <?php foreach ($row_lista2 as $row_lista2) { ?>
+                              <!-- <?php foreach ($row_lista2 as $row_lista2) { ?>
                                 <option value="<?php echo $row_lista2['id_op']; ?>"><?php echo htmlentities($row_lista2['id_op']); ?>
                                 </option>
-                              <?php } ?>
-                            </select>
+                              <?php } ?> -->
+                            </select> <!-- lleno con Ajax -->
 
                             <select id='cod_ref_n' name='cod_ref_n' class="selectsMini">
                               <option value="0">- REF -</option>
-                              <?php foreach ($row_lista as $row_lista) { ?>
+                              <!-- <?php foreach ($row_lista as $row_lista) { ?>
                                 <option value="<?php echo $row_lista['cod_ref_n']; ?>"><?php echo htmlentities($row_lista['cod_ref_n']); ?>
                                 </option>
-                              <?php } ?>
-                            </select>
+                              <?php } ?> -->
+                            </select> <!-- lleno con Ajax -->
 
                             <select id='cliente' name='cliente' class="selectsGrande">
-                              <option value="" <?php if (!(strcmp("", $_GET['cliente']))) {
-                                                  echo "selected=\"selected\"";
-                                                } ?>>- CLIENTE -</option>
-                              <?php foreach ($row_proveedores as $row_proveedores) { ?>
+                              <option value="" <?php if (!(strcmp("", $_GET['cliente']))) { echo "selected=\"selected\""; } ?>>- CLIENTE -</option>
+                              <!-- <?php foreach ($row_proveedores as $row_proveedores) { ?>
                                 <option value="<?php echo $row_proveedores['id_c']; ?>" <?php if (!(strcmp($row_proveedores['id_c'], $_GET['cliente']))) {
                                                                                           echo "selected=\"selected\"";
                                                                                         } ?>><?php echo htmlentities($row_proveedores['nombre_c']); ?>
                                 </option>
-                              <?php } ?>
-                            </select>
+                              <?php } ?> -->
+                            </select> <!-- lleno con Ajax -->
                           </td>
                         </tr>
                       </table>
-
-
-                      <!-- <select name="id_op" id="id_op"  class="busqueda selectsMini">
-                  <option value="0">O.P</option>
-                  <?php foreach ($row_lista2 as $row_lista2) { ?>
-                    <option value="<?php echo $row_lista2['id_op']; ?>"><?php echo htmlentities($row_lista2['id_op']); ?> 
-                  </option>
-                <?php } ?>
-              </select> -->
-
-                      <!-- <select name="cod_ref_n" id="cod_ref_n"  class="busqueda selectsMini">
-                <option value="0">REF</option>
-                <?php foreach ($row_lista as $row_lista) { ?>
-                  <option value="<?php echo $row_lista['cod_ref_n']; ?>"><?php echo htmlentities($row_lista['cod_ref_n']); ?> 
-                </option>
-              <?php } ?>
-            </select> -->
-                      <!-- <select name="cliente" id="cliente"  class="busqueda selectsGrande">
-              <option value=""<?php if (!(strcmp("", $_GET['cliente']))) {
-                                echo "selected=\"selected\"";
-                              } ?>>CLIENTE</option>
-              <?php foreach ($row_proveedores as $row_proveedores) { ?>
-                <option value="<?php echo $row_proveedores['id_c']; ?>"<?php if (!(strcmp($row_proveedores['id_c'], $_GET['cliente']))) {
-                                                                          echo "selected=\"selected\"";
-                                                                        } ?>><?php echo htmlentities($row_proveedores['nombre_c']); ?> 
-              </option>
-            <?php } ?>
-          </select> -->
 
                       <input type="submit" name="Submit" value="FILTRO" class="botonGMini">
 
@@ -409,6 +377,7 @@ $queryString_numeracion = sprintf("&totalRows_numeracion=%d%s", $totalRows_numer
 </html>
 
 <script>
+  $(document).ready(function() {
   $('#id_op').select2({
     ajax: {
       url: "select3/proceso.php",
@@ -488,6 +457,7 @@ $queryString_numeracion = sprintf("&totalRows_numeracion=%d%s", $totalRows_numer
       cache: true
     }
   });
+})
 </script>
 
 <?php

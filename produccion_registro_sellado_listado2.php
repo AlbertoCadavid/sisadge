@@ -296,17 +296,17 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_lista_op = "SELECT id_op FROM Tbl_orden_produccion WHERE  b_estado_op > 0 AND b_borrado_op='0' ORDER BY id_op DESC";
 $lista_op = mysql_query($query_lista_op, $conexion1) ;
 $row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op);
+$totalRows_lista_op = mysql_num_rows($lista_op); */
 
-mysql_select_db($database_conexion1, $conexion1);
+/* mysql_select_db($database_conexion1, $conexion1);
 $query_ref_op = "SELECT id_ref, cod_ref FROM Tbl_referencia order by id_ref desc";
 $ref_op = mysql_query($query_ref_op, $conexion1) ;
 $row_ref_op = mysql_fetch_assoc($ref_op);
-$totalRows_ref_op = mysql_num_rows($ref_op);
+$totalRows_ref_op = mysql_num_rows($ref_op); */
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_mensual = "SELECT * FROM mensual ORDER BY id_mensual ASC";
@@ -409,7 +409,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                   <input type="hidden" name="tipoListado" id="tipoListado" value="4">
                   <select name="op" id="op" class="busqueda selectsMini" >
                     <option value="0">O.P.</option>
-                    <?php
+                    <!-- <?php
                     do {  
                       ?>
                       <option value="<?php echo $row_lista_op['id_op']?>"<?php if (!(strcmp($row_lista_op['id_op'], $id_op))) {echo "selected=\"selected\"";} ?>><?php echo $row_lista_op['id_op']?></option>
@@ -420,12 +420,12 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                       mysql_data_seek($lista_op, 0);
                       $row_lista_op = mysql_fetch_assoc($lista_op);
                     }
-                    ?>
+                    ?> -->
                   </select>
 
                     <select name="id_ref" id="id_ref" class="busqueda selectsMini" >
                       <option value="0">REF</option>
-                      <?php
+                      <!-- <?php
                       do {  
                         ?>
                         <option value="<?php echo $row_ref_op['cod_ref']?>">
@@ -438,7 +438,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                         mysql_data_seek($ref_op, 0);
                         $row_ref_op = mysql_fetch_assoc($ref_op);
                       }
-                      ?>
+                      ?> -->
                     </select>
                     <select id='anyo' name='anyo' class="" >
                          <option value="0"<?php if (!(strcmp("0", $_GET['anyo']))) {echo "selected=\"selected\"";} ?>>AÑOS</option>

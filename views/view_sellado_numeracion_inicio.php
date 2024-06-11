@@ -180,6 +180,20 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
   <script src="select2/js/select2.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/general.css" />
 
+  <!-- Select3 Nuevo -->
+ <meta charset="UTF-8">
+ <!-- jQuery -->
+ <script src='select3/assets/js/jquery-3.4.1.min.js' type='text/javascript'></script>
+
+ <!-- select2 css -->
+ <link href='select3/assets/plugin/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+ <!-- select2 script -->
+ <script src='select3/assets/plugin/select2/dist/js/select2.min.js'></script>
+ <!-- Styles -->
+ <link rel="stylesheet" href="select3/assets/css/style.css">
+ <!-- Fin Select3 Nuevo -->
+
   <!-- css Bootstrap hace mas grande el formato-->
   <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <style type="text/css">
@@ -299,14 +313,13 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
                             <td colspan="3" id="fuente1">ORDEN P.</td>
                             <td id="fuente1">
                               <select class="form-control" name="int_op_tn" id="int_op_tn" required="required" style=" width:400px">
-                                <option value="" <?php if (!(strcmp("", $row_op_carga['id_op']))) {
-                                                    echo "selected=\"selected\"";
-                                                  } ?>>Seleccione</option>
-                                <?php foreach ($row_op as $row_op) { ?>
+                                <option value="" <?php if (!(strcmp("", $row_op_carga['id_op']))) {echo "selected=\"selected\"";} ?>>Seleccione</option>
+                                
+                                <!-- <?php foreach ($row_op as $row_op) { ?>
                                   <option value="<?php echo $row_op['id_op'] ?>" <?php if (!(strcmp($row_op['id_op'], $row_op_carga['id_op']))) {
                                                                                     echo "selected=\"selected\"";
                                                                                   } ?>><?php echo $row_op['id_op'] ?></option>
-                                <?php } ?>
+                                <?php } ?> -->
                               </select>
                             <td><span class="negro_inteso">REF:&nbsp;</span><span class="referenci"></span></td>
           </td>
@@ -854,6 +867,34 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
     document.getElementById("moreUploads3").appendChild(f);
     upload_number++;
   }
+
+  $(document).ready(function(){
+  $('#int_op_tn').select2({ 
+        ajax: {
+            url: "select3/proceso.php",
+            type: "post",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    palabraClave: params.term, // search term
+                    var1:"id_op",//campo normal para usar
+                    var2:"tbl_orden_produccion",//tabla
+                    var3:"tbl_orden_produccion.id_op NOT IN(SELECT tbl_numeracion.int_op_n FROM tbl_numeracion ) AND tbl_orden_produccion.b_borrado_op=0",//where
+                    var4:"ORDER BY Tbl_orden_produccion.id_op DESC",
+                    var5:"id_op",//clave
+                    var6:"id_op"//columna a buscar
+                };
+            },
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+  })
 </script>
 
 <?php

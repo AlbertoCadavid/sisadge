@@ -123,7 +123,6 @@ $conexion = new ApptivaDB();
 
 $row_orden = $conexion->llenarCampos("tbl_orden_produccion ", "WHERE id_op='" . $_GET['id_op_r'] . "' AND b_borrado_op='0' ", "ORDER BY id_op DESC", " * ");
 
-
 //ORDENES DE PRODUCCION
 mysql_select_db($database_conexion1, $conexion1);
 $query_lista_op = "SELECT id_op,metroLineal_op FROM Tbl_orden_produccion ORDER BY Tbl_orden_produccion.id_op DESC";
@@ -214,7 +213,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rpt'] as $key => $v)
         $a[] = $v;
       foreach ($_POST['valor_tiem_rt'] as $key => $v)
-        $b[] = $v;
+        $b[] = round($v/$num_rollos, 2);
       $c = $_GET['id_op_r'];
 
       for ($i = 0; $i < count($a); $i++) {
@@ -223,7 +222,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
             "INSERT INTO Tbl_reg_tiempo (id_rpt_rt,id_rollo,valor_tiem_rt,op_rt,int_rollo_rt,id_proceso_rt,fecha_rt) VALUES (%s, %s, %s, %s,%s, %s, %s)",
             GetSQLValueString($a[$i], "int"),
             GetSQLValueString($idRollo, "int"),
-            GetSQLValueString($b[$i], "int"),
+            GetSQLValueString($b[$i], "double"),
             GetSQLValueString($c, "int"),
             GetSQLValueString($_POST['rollo_r'], "text"),
             GetSQLValueString($_POST['id_proceso'], "int"),
@@ -244,7 +243,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rtp'] as $key => $n)
         $h[] = $n;
       foreach ($_POST['valor_prep_rtp'] as $key => $n)
-        $l[] = $n;
+        $l[] = round($n/$num_rollos, 2);
       $c = $_GET['id_op_r'];
 
       for ($x = 0; $x < count($h); $x++) {
@@ -253,7 +252,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
             "INSERT INTO Tbl_reg_tiempo_preparacion (id_rpt_rtp,id_rollo,valor_prep_rtp,op_rtp,int_rollo_rtp,id_proceso_rtp,fecha_rtp) VALUES (%s, %s, %s, %s,%s, %s, %s)",
             GetSQLValueString($h[$x], "int"),
             GetSQLValueString($idRollo, "int"),
-            GetSQLValueString($l[$x], "int"),
+            GetSQLValueString($l[$x], "double"),
             GetSQLValueString($c, "int"),
             GetSQLValueString($_POST['rollo_r'], "text"),
             GetSQLValueString($_POST['id_proceso'], "int"),
@@ -273,7 +272,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
       foreach ($_POST['id_rpd'] as $key => $k)
         $f[] = $k;
       foreach ($_POST['valor_desp_rd'] as $key => $k)
-        $g[] = $k;
+        $g[] = round($k/$num_rollos, 2);
 
       for ($s = 0; $s < count($f); $s++) {
         if (!empty($f[$s]) && !empty($g[$s])) { //no salga error con campos vacios

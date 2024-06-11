@@ -113,6 +113,7 @@ if($campo =='' && $criterio!='' && $id_c=='0'){
  $row_cotizacion = $conexion->buscarListar("tbl_cotizaciones"," DISTINCT * ","ORDER BY tbl_cotizaciones.N_cotizacion DESC","WHERE Str_nit LIKE '%$criterio%' and tbl_cotizaciones.fecha > '2017-01-01'",$maxRows_cotizacion,$pageNum_cotizacion,"" );
 //$query_ver_cotizaciones = "SELECT DISTINCT * FROM `tbl_cotizaciones`, `cliente` WHERE cliente.nombre_c LIKE '%$criterio%' and cliente.`nit_c` =tbl_cotizaciones.`Str_nit` ORDER BY tbl_cotizaciones.`N_cotizacion` DESC";
 }
+
 //chekbox y criterio vacios, id lleno
 if($campo =='' && $criterio=='' && $id_c!='0'){
 //$query_ver_cotizaciones = "SELECT * FROM tbl_cotizaciones,cliente WHERE tbl_cotizaciones.Str_nit='$id_c' and tbl_cotizaciones.Str_nit=cliente.nit_c ORDER BY N_cotizacion DESC";
@@ -132,6 +133,7 @@ if($campo !='' && $criterio!='' && $id_c!='0'){
 }
 //chekbox y criterio llenos, id vacio
 if($campo !='' && $criterio=='' && $id_c!='0'){
+  
 //$query_ver_cotizaciones = "SELECT * FROM tbl_cotizaciones,cliente WHERE tbl_cotizaciones.Str_nit='$id_c' and tbl_cotizaciones.Str_nit=cliente.nit_c ORDER BY N_cotizacion DESC";
 $row_cotizacion = $conexion->buscarListar("tbl_cotizaciones,cliente","*","ORDER BY tbl_cotizaciones.N_cotizacion DESC","WHERE tbl_cotizaciones.Str_nit=cliente.nit_c AND tbl_cotizaciones.Str_nit='$id_c' AND tbl_cotizaciones.fecha > '2017-01-01'",$maxRows_cotizacion,$pageNum_cotizacion,"" );
 } 
@@ -147,8 +149,6 @@ if (isset($_GET['totalRows_cotizacion'])) {
   $totalRows_cotizacion = $conexion->conteo('tbl_cotizaciones'); 
 } 
 $totalPages_cotizacion = ceil($totalRows_cotizacion/$maxRows_cotizacion)-1; 
-
-$row_cliente = $conexion->llenaSelect('cliente',' ','ORDER BY nombre_c ASC'); 
 
 $queryString_cotizaciones = "";
 if (!empty($_SERVER['QUERY_STRING'])) {

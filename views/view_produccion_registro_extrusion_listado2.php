@@ -121,7 +121,7 @@ $var3 = $_GET['mes'];
 $estado = $_GET['estado'];
 
 if ($var1 == '0' && $var2 == '0' && $var3 == '0' && $anyo == '0' && $estado == '') {
-    $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE b_borrado_op='0'AND coextrusion='SI' ORDER BY b_visual_op,id_op DESC";
+    $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE b_borrado_op='0' ORDER BY b_visual_op,id_op DESC";
 }
 //FILTRA OP LLENO
 if ($var1 != '0' && $var2 == '0' && $var3 == '0' &&  $anyo == '0' && $estado == '') {
@@ -219,12 +219,6 @@ if ($var1 == '0' && $var2 == '0' && $var3 != '0' && $anyo != '0' && $estado == '
 if ($var1 == '0' && $var2 == '0' && $var3 != '0' && $anyo != '0' && $estado == '2') {
   $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE MONTH(Tbl_orden_produccion.fecha_registro_op)='$var3' AND YEAR(Tbl_orden_produccion.fecha_registro_op)='$anyo' AND Tbl_orden_produccion.id_op IN(SELECT TblExtruderRollo.id_op_r FROM TblExtruderRollo GROUP BY TblExtruderRollo.id_op_r DESC) AND Tbl_orden_produccion.id_op NOT IN(SELECT Tbl_reg_produccion.id_op_rp FROM Tbl_reg_produccion WHERE Tbl_reg_produccion.id_proceso_rp ='1') ORDER BY Tbl_orden_produccion.id_op DESC";
 }
-
-if($query_orden_produccion == ""){
-  $alerta = true;
-  $query_orden_produccion = "SELECT * FROM Tbl_orden_produccion WHERE b_borrado_op='0'AND coextrusion='SI' ORDER BY b_visual_op,id_op DESC";
-} else $alerta = false;
-
 $query_limit_orden_produccion = sprintf("%s LIMIT %d, %d", $query_orden_produccion, $startRow_orden_produccion, $maxRows_orden_produccion);
 $orden_produccion = mysql_query($query_limit_orden_produccion, $conexion1) or die(mysql_error());
 $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
@@ -255,17 +249,17 @@ if (!empty($_SERVER['QUERY_STRING'])) {
 }
 $queryString_orden_produccion = sprintf("&totalRows_orden_produccion=%d%s", $totalRows_orden_produccion, $queryString_orden_produccion);
 
-/* mysql_select_db($database_conexion1, $conexion1);
+mysql_select_db($database_conexion1, $conexion1);
 $query_lista_op = "SELECT Tbl_orden_produccion.id_op FROM Tbl_orden_produccion WHERE b_borrado_op = '0' AND coextrusion='SI' ORDER BY Tbl_orden_produccion.id_op DESC";
 $lista_op = mysql_query($query_lista_op, $conexion1) or die(mysql_error());
 $row_lista_op = mysql_fetch_assoc($lista_op);
-$totalRows_lista_op = mysql_num_rows($lista_op); */
+$totalRows_lista_op = mysql_num_rows($lista_op);
 
-/* mysql_select_db($database_conexion1, $conexion1);
+mysql_select_db($database_conexion1, $conexion1);
 $query_ref_op = "SELECT id_ref, cod_ref FROM Tbl_referencia order by n_egp_ref desc";
 $ref_op = mysql_query($query_ref_op, $conexion1) or die(mysql_error());
 $row_ref_op = mysql_fetch_assoc($ref_op);
-$totalRows_ref_op = mysql_num_rows($ref_op); */
+$totalRows_ref_op = mysql_num_rows($ref_op);
 
 mysql_select_db($database_conexion1, $conexion1);
 $query_mensual = "SELECT * FROM mensual ORDER BY id_mensual ASC";
@@ -371,12 +365,37 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
                     </div>
                     <select class='busqueda selectsMini' name="op" id="op">
                       <option value="0">O.P.</option>
-                    </select> <!-- List displayed with js -->
-                    
+                      <?php
+                      do {
+                      ?>
+                        <option value="<?php echo $row_lista_op['id_op'] ?>"><?php echo $row_lista_op['id_op'] ?></option>
+                      <?php
+                      } while ($row_lista_op = mysql_fetch_assoc($lista_op));
+                      $rows = mysql_num_rows($lista_op);
+                      if ($rows > 0) {
+                        mysql_data_seek($lista_op, 0);
+                        $row_lista_op = mysql_fetch_assoc($lista_op);
+                      }
+                      ?>
+                    </select>
+                    <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
                     <select class='busqueda selectsMini' name="id_ref" id="id_ref">
                       <option value="0">REF</option>
-                    </select> <!-- List displayed with js -->
-                    
+                      <?php
+                      do {
+                      ?>
+                        <option value="<?php echo $row_ref_op['cod_ref'] ?>"><?php echo $row_ref_op['cod_ref'] ?>
+                        </option>
+                      <?php
+                      } while ($row_ref_op = mysql_fetch_assoc($ref_op));
+                      $rows = mysql_num_rows($ref_op);
+                      if ($rows > 0) {
+                        mysql_data_seek($ref_op, 0);
+                        $row_ref_op = mysql_fetch_assoc($ref_op);
+                      }
+                      ?>
+                    </select>
+                    <!--&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&-->
 
                     <select id='anyo' name='anyo' class="">
                       <option value="0" <?php if (!(strcmp("0", $_GET['anyo']))) {
@@ -447,9 +466,9 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
         </tr>
 
         <tr>
-          <td colspan="5" id="dato1">Nota: si en la columna '<strong>Proceso</strong>', aparecen las siguientes notificaciones tenga en cuenta:
+          <td colspan="5" id="dato1">Nota: si en el la columna '<strong>Proceso</strong>', aparecen las siguientes notificaciones tenga en cuenta:
           </td>
-          <td colspan="4" id="dato1">Nota: si en la columna '<strong>Mezcla</strong>', aparecen las siguientes notificaciones tenga en cuenta:
+          <td colspan="4" id="dato1">Nota: si en el la columna '<strong>Mezcla</strong>', aparecen las siguientes notificaciones tenga en cuenta:
           </td>
         </tr>
         <tr>
@@ -712,7 +731,7 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
           palabraClave: params.term, // search term
           var1: "id_op", //campo normal para usar
           var2: "tbl_orden_produccion", //tabla
-          var3: "b_borrado_op = '0' AND coextrusion='SI' AND b_estado_op >= 0", //where
+          var3: "b_estado_op >= 0", //where
           var4: "ORDER BY Tbl_orden_produccion.id_op DESC",
           var5: "id_op", //clave
           var6: "id_op" //columna a buscar
@@ -803,13 +822,6 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
       swal("No Autorizado", "Sin permisos para editar :)", "error");
     }
-
-    var alerta = "<?php echo $alerta ?>"
-     if(alerta){
-       alert("No es posible realizar esta consulta, pruebe otra combinacion o comuniquese con sistemas");
-       url = '<?php echo BASE_URL; ?>';
-       window.location.assign(url+"produccion_registro_extrusion_listado.php")
-     }
   });
 </script>
 <?php
