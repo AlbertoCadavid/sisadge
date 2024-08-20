@@ -423,10 +423,10 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
 
 
-                              $sqlnuevas = "SELECT cod_ref FROM tbl_caracteristicas_prod cp  WHERE cp.cod_ref='$id_ref_pr' AND cp.proceso = '2' ORDER BY cp.proceso DESC LIMIT 1"; //nueva tabla
+                              $sqlnuevas = "SELECT cod_ref_ci FROM tbl_caracteristicas_impresion cp  WHERE cp.cod_ref_ci='$id_ref_pr' LIMIT 1"; //nueva tabla
                               $resultca = mysql_query($sqlnuevas);
                               $existenuevas = mysql_num_rows($resultnuevas);
-                              $refNuevaNueva = mysql_result($resultca, 0, 'cod_ref');
+                              $refNuevaNueva = mysql_result($resultca, 0, 'cod_ref_ci');
 
                               if ($existenuevamezcla > 0 || $refNuevaNueva > 0) : ?>
 

@@ -150,9 +150,9 @@ $totalRows_certificacion = mysql_num_rows($certificacion);
         </tr>
       <tr>
         <td id="fuente1">FUELLE</td>
-        <td id="fuente1"><?php echo $row_referencia['N_fuelle']*10; ?></td>
-        <td id="fuente1">&nbsp;</td>
-        <td id="fuente1">&nbsp;</td>
+        <td id="fuente1"><?php $fuelle=$row_referencia['N_fuelle']*10; echo $fuelle ?></td>
+        <td id="fuente1"><?php echo $fuelle == 0 ? 0: $fuelle+10; ?></td>
+        <td id="fuente1"><?php echo $fuelle == 0 ? 0: $fuelle-10; ?></td>
         <td id="fuente2"><?php echo $row_certificacion['fuellvaloptenido']; ?></td>
         <td id="fuente1">Interno</td>
         <td id="fuente1">mm</td>

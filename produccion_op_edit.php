@@ -229,6 +229,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     $bolsas_op = $_POST['int_cantidad_op'];
     //CONSULTO LA EXISTENCIA DE LA OP
     $query_existe = "SELECT id_op FROM Tbl_orden_produccion WHERE id_op='$op_destino'";
+    
     $resultexiste = mysql_query($query_existe);
     $numexiste = mysql_num_rows($resultexiste);
     if ($numexiste >= '1') {
@@ -552,11 +553,11 @@ SELECT ($rollo_r+200),  '$op_destino','$ref_oc','$cliente_oc',`tratInter_r`,`tra
       }
 
   $updateGoTo = "produccion_op_vista.php?id_op=" . $op_vista . "";
-  if (isset($_SERVER['QUERY_STRING'])) {
+  /*if (isset($_SERVER['QUERY_STRING'])) {
     $updateGoTo .= (strpos($updateGoTo, '?')) ? "&" : "?";
     $updateGoTo .= $_SERVER['QUERY_STRING'];
-  }
-  header(sprintf("Location: %s", $updateGoTo));
+  }*/
+  header("Location:".$updateGoTo);
 } //FIN IF GENERAL
 
 
@@ -564,9 +565,27 @@ SELECT ($rollo_r+200),  '$op_destino','$ref_oc','$cliente_oc',`tratInter_r`,`tra
 //ORDEN DE PRODUCCION
 $conexion = new ApptivaDB(); //consultas
 
-$row_orden_produccion = $conexion->llenarCampos("tbl_orden_produccion ", "INNER JOIN cliente ON(int_cliente_op = cliente.id_c) WHERE id_op='" . $_GET['id_op'] . "' AND b_borrado_op='0'", "ORDER BY id_op DESC", " *, cliente.nombre_c ");
 
-$_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
+
+
+$row_orden_produccion = $conexion->llenarCampos("tbl_orden_produccion ", "INNER JOIN cliente ON(int_cliente_op = cliente.id_c) WHERE id_op='" . $_GET['id_op'] . "' AND b_borrado_op='0'", "ORDER BY id_op DESC", " *, cliente.nombre_c ");
+ 
+if (isset($_GET['traslado']) && $_GET['traslado'] != '') {
+   
+ 
+   $cliente=$_GET['int_cliente_op'];    
+   $referencia=$_GET['int_cod_ref_op'];
+   $clientenombre = $conexion->llenarCampos('cliente', "  WHERE id_c='" .$cliente. "' ", "  "," nombre_c ");
+   $nombrecliente= $clientenombre['nombre_c'];
+
+}else{
+ 
+  $_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
+  $cliente=$row_orden_produccion['int_cliente_op']; 
+  $nombrecliente=$row_orden_produccion['nombre_c'];
+}
+ 
+//$_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
 
 
 $row_referencia = $conexion->llenarCampos('tbl_referencia as ref', "  WHERE ref.cod_ref='" . $_GET['int_cod_ref_op'] . "' ", '', "ref.id_ref,ref.n_egp_ref,ref.tipoCinta_ref,ref.tipo_bolsa_ref,ref.sello_superior");
@@ -582,8 +601,8 @@ $row_precio = $conexion->llenarCampos("tbl_items_ordenc oci", "WHERE oci.int_cod
 //imprime datos de ref
 if (isset($_GET['int_cod_ref_op']) && $_GET['int_cod_ref_op'] != '') {
   $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND  Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
-
   $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
+ 
 } else {
   $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
   $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
@@ -611,7 +630,7 @@ $row_insumo3 = $conexion->llenaSelect('insumo', "WHERE clase_insumo IN ('30','33
 
 //LISTADO ORDEN DE PRODUCCION DESTINO
 $row_orden = $conexion->llenaSelect('Tbl_orden_produccion', " ", "ORDER BY id_op DESC limit 1");
-
+$row_orden_destino = $conexion->llenaSelect('Tbl_orden_produccion', " ", "ORDER BY id_op DESC ");
 //SELECT QUE LLENA COMBO DE ROLLOS
 
 $colname_op = "-1";
@@ -630,7 +649,7 @@ if ($row_rollos['rollo_r'] == '') {
 }
 
 
-$cod_ref = $row_orden_produccion['int_cod_ref_op'];
+$cod_ref = $_GET['int_cod_ref_op'];// $row_orden_produccion['int_cod_ref_op'];
 if ($cod_ref != '')
   $row_numeraciones = $conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE ref_tn='" . $cod_ref . "' ", " ORDER BY fecha_ingreso_tn DESC, hora_tn DESC ", " int_hasta_tn"); //ORDER BY id_tn DESC, int_op_tn DESC,int_hasta_tn DESC
 if ($cod_ref != '')
@@ -877,19 +896,17 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td nowrap="nowrap" id="fuente1">O.P DESTINO</td>
                                       <td nowrap="nowrap" id="fuente1">ROLLO</td>
                                       <td colspan="3" nowrap="nowrap" id="fuente1">KILOS</td>
-                                      <td colspan="2" id="fuente2"><strong>ARTE</strong></td>
+                                      <td colspan="2" id="fuente2"><strong>ARTE</strong></td> 
                                     </tr>
-                                    <tr id="tr3">
+                                    <tr id="tr3"> 
                                       <td nowrap="nowrap" id="numero1"><input name="id_op" id="id_op" type="number" value="<?php echo $row_orden_produccion['id_op']; ?>" style="width:60px" readonly="readonly" />
                                         <input type="button" name="ENVIAR" id="ENVIAR" value="TRASLADAR" onClick="mostrarOcultarTraslado(this)" />
                                       </td>
-                                      <td nowrap="nowrap" id="numero1">
+                                      <td nowrap="nowrap" id="numero1"><?php foreach ($row_orden as $row_orden) {$row_orden; } ?>
                                         <select name="op_destino" id="op_destino" style="width:100px" hidden="true">
-                                          <option value="<?php echo $row_orden['id_op'] + 1; ?>" selected="selected"><?php echo $row_orden_produccion['id_op'] == '' ? $row_orden['id_op'] + 1 : $row_orden_produccion['id_op']; ?></option>
-                                          <?php foreach ($row_orden as $row_orden) { ?>
-                                            <option value="<?php echo $row_orden['id_op'] ?>" <?php if (!(strcmp($row_orden['id_op'], $_GET['id_op']))) {
-                                                                                                echo "selected=\"selected\"";
-                                                                                              } ?>><?php echo $row_orden['id_op']; ?></option>
+                                          <option value="<?php echo $row_orden['id_op'] + 1; ?>" selected="selected"><?php echo $row_orden['id_op'] + 1; ?></option>
+                                          <?php foreach ($row_orden_destino as $row_orden_destino) { ?>
+                                            <option value="<?php echo $row_orden_destino['id_op'] ?>"><?php echo $row_orden_destino['id_op']; ?></option>
                                           <?php } ?>
                                         </select>
                                       </td>
@@ -917,17 +934,17 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                     </tr>
                                     <tr>
                                       <td nowrap="nowrap" id="fuente1">
-                                        <fieldset id="grupo_tras" style="visibility:hidden;">
+                                        <fieldset id="grupo_tras" <?php if ($_GET['traslado'] == '') { ?>style="visibility:hidden;"<?php } ?>>
                                           <legend>Elige Tipo Traslado</legend>
                                           <label>
-                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="total" onClick="habilitaCamposOpTotal(this)">
+                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="total" onClick="habilitaCamposOpTotal(this)" <?php if ($_GET['traslado'] == 'total') { ?>checked="checked" <?php } ?>>
                                             Total
                                           </label>
                                           <label>
-                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="rollo" onClick="habilitaCamposOpRollo(this)">
+                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="rollo" onClick="habilitaCamposOpRollo(this)" <?php if ($_GET['traslado'] == 'rollo') { ?>checked="checked" <?php } ?>>
                                             Rollo</label>
                                           <label>
-                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="parcial" onClick="habilitaCamposOpParcial(this)">
+                                            <input type="radio" name="tipo_tras" id="tipo_tras" value="parcial" onClick="habilitaCamposOpParcial(this)" <?php if ($_GET['traslado'] == 'parcial') { ?>checked="checked" <?php } ?>>
                                             Rollo x kilos</label>
                                         </fieldset>
                                       </td>
@@ -982,10 +999,11 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="dato1"></td>
                                     </tr>
                                     <tr>
-                                      <td id="fuente1">
+                                      <td id="fuente1"> 
+                                             
                                         <select name="int_cliente_op" id="int_cliente_op" class="selectsMedio">
-                                          <?php if ((strcmp("", $row_orden_produccion['int_cliente_op']))) { ?>
-                                            <option value="<?php echo $row_orden_produccion['int_cliente_op'] ?>"><?php echo $row_orden_produccion['nombre_c'] ?> </option>
+                                          <?php if ((strcmp("", $cliente))) { ?>
+                                            <option value="<?php echo $cliente; ?>"><?php echo $nombrecliente; ?> </option>
                                           <?php } ?>
                                           <!-- List displayed with js -->
                                           <!--  -->
@@ -1010,7 +1028,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td nowrap="nowrap" id="fuente1">
                                         <a href="javascript:verFoto('referencia_bolsa_edit.php?id_ref=<?php echo $row_orden_produccion['id_ref_op']; ?>&n_egp=<?php echo  $row_datos_oc['n_egp_ref']; ?>','1100','850')"><em>REF:<?php echo $row_orden_produccion['id_ref_op']; ?></em></a>
 
-                                        <input name="int_cod_ref_op" type="text" id="int_cod_ref_op" min="0" value="<?php echo $row_orden_produccion['int_cod_ref_op']; ?>" size="2" onchange="if(form1.int_cod_ref_op.value) { consulta_ref_op_edit() } else{ alert('Debe Seleccionar una REFERENCIA'); }" />
+                                        <input name="int_cod_ref_op" type="text" id="int_cod_ref_op" min="0" value="<?php echo $referencia=='' ? $row_orden_produccion['int_cod_ref_op'] : $referencia; ?>" size="2" onchange="if(form1.int_cod_ref_op.value && (!form1.tipo_tras.value)) { consulta_ref_op_edit() } else{ consulta_ref_traslado() }" />
                                         -
                                         <input name="version_ref_op" type="number" id="version_ref_op" min="0" max="9" size="2" value="<?php echo $row_orden_produccion['version_ref_op']; ?>" required="required" />
                                       </td>
@@ -1151,13 +1169,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="fuente1">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                      <td colspan="3" id="fuente1"><strong style=" color: red;">SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior']; ?>" onblur="calcular_op()" readonly /> / SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) {
-                                                                                                                                                                                                                                                                                                                  echo "Sencilla";
-                                                                                                                                                                                                                                                                                                                } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) {
-                                                                                                                                                                                                                                                                                                                  echo "Doble";
-                                                                                                                                                                                                                                                                                                                } else {
-                                                                                                                                                                                                                                                                                                                  echo "";
-                                                                                                                                                                                                                                                                                                                } ?>
+                                      <td colspan="3" id="fuente1"><strong style=" color: red;">SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior']; ?>" onblur="calcular_op()" readonly /> / SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) { echo "Sencilla"; } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) { echo "Doble"; } else { echo ""; } ?>
                                       </td>
                                       <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                                       <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
@@ -1849,24 +1861,21 @@ $fech_io = $resultio['fecha_entrega_io'];*/
 </body>
 
 </html>
-<?php
-mysql_free_result($usuario);
-mysql_free_result($orden_produccion);
-mysql_free_result($datos_oc);
-mysql_free_result($unidad_uno);
-mysql_free_result($unidad_dos);
-mysql_free_result($unidad_tres);
-mysql_free_result($unidad_cuatro);
-mysql_free_result($unidad_cinco);
-mysql_free_result($unidad_seis);
-mysql_free_result($unidad_siete);
-mysql_free_result($unidad_ocho);
-mysql_free_result($maquinas);
-mysql_free_result($caract_valor);
+<script>
+ $(document).ready(function() {
 
-mysql_close($conexion1);
-?>
+  traspaso = '<?php echo $_GET['traslado'];?>'  
 
+   if(traspaso=='total'){
+     //$("#tipo_tras").val('total');
+    document.getElementById('grupo_tras').style.visibility = 'visible'; 
+    document.getElementById('op_destino').hidden  = false;   
+
+   } 
+
+  });
+ 
+</script>
 <script>
   $(document).ready(function() {
     $('#int_cliente_op').select2({
@@ -1896,3 +1905,23 @@ mysql_close($conexion1);
     });
   })
 </script>
+
+
+<?php
+mysql_free_result($usuario);
+mysql_free_result($orden_produccion);
+mysql_free_result($datos_oc);
+mysql_free_result($unidad_uno);
+mysql_free_result($unidad_dos);
+mysql_free_result($unidad_tres);
+mysql_free_result($unidad_cuatro);
+mysql_free_result($unidad_cinco);
+mysql_free_result($unidad_seis);
+mysql_free_result($unidad_siete);
+mysql_free_result($unidad_ocho);
+mysql_free_result($maquinas);
+mysql_free_result($caract_valor);
+
+mysql_close($conexion1);
+?>
+

@@ -110,6 +110,17 @@ $totalRows_obs_ref_edit = mysql_num_rows($obs_ref_edit);
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script type="text/javascript" src="js/formato.js"></script>
 <script type="text/javascript" src="js/listado.js"></script>
+<script type="text/javascript" src="AjaxControllers/js/elimina.js"></script>
+
+<!-- sweetalert -->
+<script src="librerias/sweetalert/dist/sweetalert.min.js"></script> 
+<link rel="stylesheet" type="text/css" href="librerias/sweetalert/dist/sweetalert.css">
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
 </head>
 <body>
 <div align="center">
@@ -156,6 +167,7 @@ $totalRows_obs_ref_edit = mysql_num_rows($obs_ref_edit);
     <td id="titulo4">REF</td>
     <td id="titulo4">FECHA</td>
     <td id="titulo4">RESPONSABLE</td>
+    <td id="titulo4">BORRAR</td>
     <!-- <td id="titulo4">OBSERVACION</td> -->
     </tr>
   <?php do { ?>
@@ -163,6 +175,9 @@ $totalRows_obs_ref_edit = mysql_num_rows($obs_ref_edit);
       <td id="dato1"><a href="obs_ref.php?id_ref=<?php echo $_GET['id_ref']; ?>&id=<?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000" ><?php echo $row_obs_ref['ref'].' - '.$row_obs_ref['version']; ?></a></td>
       <td id="dato3"><a href="obs_ref.php?id_ref=<?php echo $_GET['id_ref']; ?>&id=<?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000" ><?php echo $row_obs_ref['fecha']; ?></a></td>
       <td nowrap id="dato2"><a href="obs_ref.php?id_ref=<?php echo $_GET['id_ref']; ?>&id=<?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000" ><?php $cad = htmlentities( $row_obs_ref['usuario']);echo $cad; ?></a></td>
+      
+
+      <td><button onClick="eliminar(<?php echo $row_obs_ref['id']; ?>,'id','0','../<?php echo $_SESSION['ambiente']; ?>/view_index.php?c=cgeneral&a=Eliminar&columna=1','tbl_observaciones_ref')" id="btnDelItems"  name="btnDelItems" type="button" class="botonDel" autofocus="" >DELETE</button></td>
       <!-- <td id="dato2"><a href="obs_vista.php?id= <?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_obs_ref['obs'];?></a></td> -->
     </tr>
     <?php } while ($row_obs_ref = mysql_fetch_assoc($obs_ref)); ?>
@@ -281,6 +296,8 @@ function ocultar_edit(){
         x.style.display = 'none';
     }
 }
+
+ 
 /*function editar() {
   var id = <?php echo $_GET['id']; ?>;
   var ref = <?php echo $_GET['ref']; ?>;

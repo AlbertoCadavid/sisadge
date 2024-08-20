@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   const eventList = document.getElementById("event-list");
-  const searchButton = document.getElementById("searchButton");
-
-  searchButton.addEventListener("click", function () {
+ 
     let op = document.getElementById("op").value;
+    let estado, fecha_fin;
 
     if (op !== "0") {
       var getUrl = window.location.pathname;
@@ -28,6 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
               "div"
             );
             stateExtrusion();
+            if(data.b_estado_op == 5){
+              estado = 5;
+              fecha_fin = data.f_sellada;
+            }
           }
         },
       });
@@ -45,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
           },
           success: function (data) {
 
-            if (data.length > 1) {
-              containerProcesos(eventos[1].descripcion, data[0]["fechaI_r"], eventos[1].tipo, data, "Rollos Extruidos", "subcontainer");
+            if (data.length >= 1) {
+              containerProcesos(eventos[1].descripcion, data[0]["fechaI_r"], eventos[1].tipo, data, eventos[2].tipo, eventos[2].descripcion, "subcontainer", eventos[7].tipo);
             } else {
               createDivEstado(
                 "NO HA LLEGADO A EXTRUSION",
@@ -72,22 +75,14 @@ document.addEventListener("DOMContentLoaded", function () {
             //Lo que se hace antes de enviar el formulario
           },
           success: function (data) {
-console.log(data);
-            if (data.length > 1) {
-              containerProcesos(eventos[3].descripcion, data[0]["fechaI_r"], eventos[3].tipo, data, "Rollos Impresos", "subcontainer2");
-              /* data.forEach((element) => {
-                createDivRollo(
-                  `rollo ${element.rollo_r}`,
-                  element.fechaF_r,
-                  eventos[3].tipo,
-                  "containerRollo"
-                );
-              }); */
+            if (data.length >= 1) {
+              containerProcesos(eventos[3].descripcion, data[0]["fechaI_r"], eventos[3].tipo, data, eventos[4].tipo, eventos[4].descripcion, "subcontainer2", eventos[7].tipo);
+              
             } else {
               createDivEstado(
                 "NO HA LLEGADO A IMPRESION",
                 "",
-                eventos[1].tipo,
+                eventos[3].tipo,
                 "unavailable"
               );
             }
@@ -109,21 +104,21 @@ console.log(data);
           },
           success: function (data) {
 
-            if (data.length > 1) {
-              containerProcesos(eventos[5].descripcion, data[0]["fechaI_r"], eventos[5].tipo, data, "Rollos Sellados", "subcontainer3");
-              data.forEach((element) => {
-                /* createDivRollo(
-                  `rollo ${element.rollo_r}`,
-                  element.fechaF_r,
-                  eventos[5].tipo,
-                  "containerRollo"
-                ); */
-              });
+            if (data.length >= 1) {
+              containerProcesos(eventos[5].descripcion, data[0]["fechaI_r"], eventos[5].tipo, data, eventos[6].tipo, eventos[6].descripcion, "subcontainer3", eventos[7].tipo);
+              if(estado === 5){
+                createDivEstado(
+                  eventos[8].descripcion,
+                  fecha_fin,
+                  eventos[8].tipo,
+                  "div"
+                );
+              }
             } else {
               createDivEstado(
                 "NO HA LLEGADO A SELLADO",
                 "",
-                eventos[1].tipo,
+                eventos[5].tipo,
                 "unavailable"
               );
             }
@@ -131,18 +126,18 @@ console.log(data);
         });
       }
     }
-  });
+ 
 
   const eventos = [
-    { tipo: "entrada", descripcion: "Orden de produccion creada" },
-    { tipo: "procesamiento", descripcion: "Orden Iniciada en extrusion" },
-    { tipo: "salida", descripcion: "OP completada en extrusion" },
-    { tipo: "procesamiento", descripcion: "Orden Iniciada en Impresion" },
-    { tipo: "salida", descripcion: "OP completada en impresion" },
-    { tipo: "procesamiento", descripcion: "Orden Iniciada en sellado" },
-    { tipo: "salida", descripcion: "Enviado al cliente" },
-    { tipo: "entrada", descripcion: "Recibido de proveedor" },
-    { tipo: "procesamiento", descripcion: "Empaquetando producto" },
+    { tipo: "entrada", descripcion: "Orden de produccion creada el: " },
+    { tipo: "extrusion", descripcion: "Orden Iniciada en extrusion el: " },
+    { tipo: "titulo_rollos_extrusion", descripcion: "ROLLOS EXTRUIDOS" },
+    { tipo: "impresion", descripcion: "Orden Iniciada en Impresion el: " },
+    { tipo: "titulo_rollos_impresion", descripcion: "ROLLOS IMPRESOS" },
+    { tipo: "sellado", descripcion: "Orden Iniciada en sellado el: " },
+    { tipo: "titulo_rollos_sellado", descripcion: "ROLLOS SELLADOS" },
+    { tipo: "rollos", descripcion: "ROLLOS" },
+    { tipo: "salida", descripcion: "Orden de produccion Terminada el: " },
   ];
 
   function createDivEstado(eventDescript, descript, type, nClass = "") {
@@ -153,36 +148,37 @@ console.log(data);
     eventList.appendChild(tag);
   }
 
-  function createDivRollo(eventDescript, descript, type, nClass = "") {
+  /* function createDivRollo(eventDescript, descript, type, nClass = "") {
     let tag = document.createElement("div");
     tag.setAttribute("class", `div`);
     tag.textContent = eventDescript + " " + descript;
     tag.classList.add(`event-${type}`);
     tag.classList.add(`${nClass}`);
     document.querySelector(`${parent}`).appendChild(tag);
-  }
+  } */
   
 
-  function containerProcesos(evento, txt, tipo, data, txt2, id) {
+  function containerProcesos(evento, txt, tipo, data, evento2, txt2, id, evento3) {
 
     let div1 = document.createElement("div");
     div1.setAttribute("class", "flex");
     eventList.appendChild(div1);
 
     let div2 = document.createElement("div");
-    div2.setAttribute("class", `div`);
+    div2.setAttribute("class", `div_procesos`);
     div2.textContent = evento + " " + txt;
     div2.classList.add(`event-${tipo}`);
     div1.appendChild(div2);
 
     let div3 = document.createElement("div");
+    div3.setAttribute("class", `div_rollos`);
     div1.appendChild(div3);
 
     let div4 = document.createElement("div");
     let idiv4 = document.createElement("div");
     idiv4.setAttribute("class", "titulo");
     idiv4.textContent = txt2;
-    idiv4.classList.add(`event-${tipo}`);
+    idiv4.classList.add(`event-${evento2}`);
     div4.appendChild(idiv4);
     div3.appendChild(div4);
 
@@ -195,14 +191,14 @@ console.log(data);
       let div6 = document.createElement("div");
       div6.setAttribute("class", `div`);
       div6.textContent = `ROLLO ${element.rollo_r}` + "\n" + element.fechaF_r;
-      div6.classList.add(`event-${tipo}`);
+      div6.classList.add(`event-${evento3}`);
       div6.classList.add("containerRollo");
       document.getElementById(id).appendChild(div6);
     });
   }
 });
 
-$("#op").select2({
+/* $("#op").select2({
   ajax: {
     url: "select3/proceso.php",
     type: "post",
@@ -226,10 +222,10 @@ $("#op").select2({
     },
     cache: true,
   },
-});
+}); */
 
-$(document).ready(function () {
+/* $(document).ready(function () {
   var ref = $("#id_ref").val();
   var ops = $("#op").val();
-});
+}); */
 

@@ -1317,10 +1317,8 @@ function consultaUnSoloPaquetes(id_tn) {
             data[i].int_paquete_tn +
             "</button></td>" +
             '<td><span style=cursor:pointer onclick="popUpNew(' +
-            "'views/view_sellado_caja.php?id_op=" +
+            "'sellado_control_cajas_vista.php?id_op=" +
             data[i].int_op_tn +
-            "&int_paquete_tn=" +
-            data[i].int_paquete_tn +
             "&int_caja_tn=" +
             data[i].int_caja_tn +
             "'" +
@@ -1830,7 +1828,7 @@ async function verificarRollo(id_op) {
     })
       .done(function (data, textStatus, jqXHR) {
         document.querySelector("#id_rollo").innerHTML = ""; //Borra todo lo que tenga el select
-        if (data[0].length != 1 || data[1] == false) {
+        if (data[0].length != 1 && data[1] == false) {
           $("#id_rollo").append(
             $("<option>", {
               value: "",

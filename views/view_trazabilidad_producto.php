@@ -3,17 +3,24 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
 include_once("./Controller/Ctrazabilidad.php");
 
+if($_REQUEST){
+    $id_op = $_REQUEST['id_op'];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
+    <title>SISADGE AC &amp; CIA</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trazabilidad de Producto</title>
-    <link rel="stylesheet" href="trazabilidad.css">
+    <link rel="stylesheet" type="text/css" href="css/trazabilidad.css">
+    <link rel="stylesheet" type="text/css" href="css/formato.css"/>
     <link rel="stylesheet" type="text/css" href="css/desplegable.css" />
     <link rel="stylesheet" type="text/css" href="css/general.css" />
+    <script type="text/javascript" src="js/listado.js"></script>
+    
     <!-- jQuery -->
     <script src='select3/assets/js/jquery-3.4.1.min.js' type='text/javascript'></script>
     <!-- select2 css -->
@@ -23,21 +30,42 @@ include_once("./Controller/Ctrazabilidad.php");
     <!-- Styles -->
     <link rel="stylesheet" href="select3/assets/css/style.css">
     <!-- Fin Select3 Nuevo -->
+    
 </head>
 
-<body>
-   
-    <div class="container">
-        <h1>Trazabilidad de Producto</h1>
+<body onload="JavaScript: AutoRefresh (120000);">
+
+    <div class="container row-fluid">
+    <div class="span8 offset2"> <!--span8 offset2   esto da el tamaño pequeño -->
+              <div class="panel panel-primary">
+                <div class="panel-heading" align="left"></div><!--color azul-->
+                <div class="row">
+                  <div class="span12">&nbsp;&nbsp;&nbsp; <img src="images/cabecera.jpg"></div>
+                </div>
+                <div class="panel-heading" align="left"></div><!--color azul-->
+                <div id="cabezamenu">
+                  <ul id="menuhorizontal">
+                    <li id="nombreusuario"><?php echo $_SESSION['Usuario']; ?></li>
+                    <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
+                    <li><a href="menu.php">MENU PRINCIPAL</a></li>
+                    <li><a href="produccion_ordenes_produccion_listado.php">LISTADO</a></li>
+                  </ul>
+                </div>
+                <div class="panel-body">
+                  <br>
+                  <div>
+                    <div class="row">
+                      <div class="span12">
+                      </div>
+                    </div>
+                    <br>
+                    <div>
+                        <h1>TRAZABILIDAD DE PRODUCTO</h1>
+                    </div>
         <div class="search">
             <div>
-                <strong>OP: </strong>
-                <select id='op' name='op' class="selectsMini">
-                    <option value='0'>- O.P -</option>
-                </select>
-            </div>
-            <div class="">
-                <input id="searchButton" type="button" name="Submit" value="BUSCAR" class="botonGMini">
+                <strong id="titulo3">ORDEN DE PRODUCCION: <?php echo $id_op ?> </strong>
+                <input id="op" type="hidden" value="<?php echo $id_op ?>">
             </div>
         </div>
 

@@ -87,7 +87,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
     //LLENA COMBOS CONVIERTE 
      public function llenaSelect($tabla, $condicion='', $orden='' ){ 
-       //echo "SELECT * FROM $tabla $condicion $orden "."<pre>"; 
+       
        $resultado = $this->conexion->query("SELECT * FROM $tabla $condicion $orden ") or die($this->conexion->error); 
        if($resultado) 
          //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 

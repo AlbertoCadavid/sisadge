@@ -262,6 +262,7 @@ if(isset($_POST['int_remision']) && $historico){
   $remision_detalle = mysql_query($query_remision_detalle, $conexion1) or die(mysql_error());
   $row_remision_detalle = mysql_fetch_assoc($remision_detalle);
   $totalRows_remision_detalle = mysql_num_rows($remision_detalle);
+  
 //imprime total cajas
   if($totalRows_remision_detalle >='1'){
     $total_c = mysql_result($remision_detalle, 0, 'int_total_cajas_rd');
@@ -655,7 +656,7 @@ if (statusConfirm == true)
                                     {  
                                       $nombre_mp = mysql_result($resultmp,0,'str_nombre');
                                     } } ?><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $nombre_mp;?></a><input type="hidden" name="rcl" id="rcl" value="<?php  $rc=$nombre_mp;echo $rc; ?>"></td>
-                                    <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['int_cod_cliente_io']; ?></a></td>                  
+                                    <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:red"><?php echo $row_remision_detalle['str_ref_cl_io_rd']; ?></a></td>                  
                                     <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_rc['str_descripcion_rc']; ?></a></td>
                                     <td id="talla2"><a href="javascript:verFoto('despacho_oc_edit_detalle.php?id_rd=<?php echo $row_remision_detalle['id_rd']; ?>','1100','600')" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_remision_detalle['int_cant_rd']; ?></a>
                                       <input type="hidden" name="cant" id="cant" value="<?php  $can=$row_remision_detalle['int_cant_rd'];echo $can; ?>"></td>

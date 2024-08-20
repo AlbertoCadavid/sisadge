@@ -103,17 +103,16 @@ $ref_egp = mysql_query($query_ref_egp, $conexion1) or die(mysql_error());
 $row_ref_egp = mysql_fetch_assoc($ref_egp);
 $totalRows_ref_egp = mysql_num_rows($ref_egp);
 
-
 //CUANDO NO TIENE UN REPORTE DE PLANCHAS SE INSERTA LA VERIFICACION AUTOMATICA
   $conexion = new CgeneralController();
 
 
   $ref=$row_ref_egp['id_ref'];
-  $resultExiste=$conexion->llenarCampos('verificacion', "WHERE id_ref_verif='$ref'", "ORDER BY id_verif DESC","id_verif,id_ref_verif" ); 
+  $resultExiste=$conexion->llenarCampos('verificacion', "WHERE id_ref_verif='$ref'", "ORDER BY id_verif DESC LIMIT 1","id_verif,id_ref_verif" ); 
 
     $_POST['id_verif'] = $resultExiste['id_verif'];
     $_GET['id_verif'] = $resultExiste['id_verif'];
-
+ 
 
 if((isset($_GET["id_verif2"])) && ($_GET["id_verif2"] != "")){
 
@@ -156,12 +155,9 @@ if((isset($_GET["id_verif2"])) && ($_GET["id_verif2"] != "")){
 
 
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1") ) {
- 
-     
+  
     if( $resultExiste['id_verif']!='')
      {
-
-
           $updateSQL = sprintf("UPDATE verificacion SET `1color_cirel`=%s, observacion_1color=%s, `2color_cirel`=%s, observacion_2color=%s, `3color_cirel`=%s, observacion_3color=%s, `4color_cirel`=%s, observacion_4color=%s, `5color_cirel`=%s, observacion_5color=%s, `6color_cirel`=%s, observacion_6color=%s, `7color_cirel`=%s, observacion_7color=%s, `8color_cirel`=%s, observacion_8color=%s, repeticion_cirel=%s, observacion_repeticion=%s, rodillo_cirel=%s, observacion_rodillo=%s, distancia_logos_cirel=%s, observacion_distancia_logos=%s, concuerda_texto_cirel=%s, observacion_concuerda_texto=%s, fecha_entrega_cirel=%s, registro_cirel=%s, fecha_registro_cirel=%s, modificacion_cirel=%s, fecha_modificacion_cirel=%s,pistas_cirel=%s,observacion_pistas=%s,insumo1=%s,insumo2=%s,insumo3=%s,insumo4=%s,insumo5=%s,insumo6=%s,insumo7=%s,insumo8=%s WHERE id_verif=%s",
                                GetSQLValueString(isset($_POST['1color_cirel']) ? "true" : "", "defined","1","0"),
                                GetSQLValueString($_POST['observacion_1color'], "text"),
@@ -800,7 +796,7 @@ $totalRows_materia_prima = mysql_num_rows($materia_prima);
       var editar =  "<?php echo $_SESSION['no_edita'];?>";//es una excepcion
       var usuario_especifico =  "<?php echo $_SESSION['id_usuario'];?>";//es una excepcion$_SESSION['Usuario']
       //excepcion para el de planchas
-      if(editar==0  || (usuario_especifico!='75' && usuario_especifico!='23' ) )//es una excepcion 23 sistemas, 75 planchas
+      if(editar==0  || (usuario_especifico!='75' && usuario_especifico!='23' && usuario_especifico!='76' ) )//es una excepcion 23 sistemas, 75 planchas, 76 lidersistemas
       {
  
          

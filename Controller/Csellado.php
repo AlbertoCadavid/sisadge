@@ -186,7 +186,6 @@ class CselladoController
     $this->proforma = $_REQUEST;
     $row_control_paquete = new oMsellado();
     
-
     $row_control_paquete = $this->proformas->buscarTres('tbl_tiquete_numeracion', "id_tn,int_op_tn,int_bolsas_tn,int_undxpaq_tn,int_undxcaja_tn,int_desde_tn,int_hasta_tn,int_cod_empleado_tn,int_cod_rev_tn,contador_tn,int_paquete_tn,int_caja_tn,ref_tn", "  WHERE int_op_tn= '" . $_REQUEST['int_op_tn'] . "'  AND int_caja_tn='" . $_REQUEST['int_caja_tn'] . "' AND  int_paquete_tn= '" . $_REQUEST['int_paquete_tn'] . "' ", "ORDER BY int_caja_tn DESC, int_paquete_tn DESC LIMIT 1");
     //si no exit el paquete pues lo registra
     if ($row_control_paquete['id_tn'] == '') {
@@ -198,7 +197,6 @@ class CselladoController
 
 
       $this->proforma['id_tn'] = $row_control_paquete["id_tn"]; //para faltantes
-
       $guardaFalt = self::GuardarFaltante($this->proforma);
 
       //ACTUALIZO tbl_numeracion 
@@ -244,7 +242,7 @@ class CselladoController
       $row_control_paquete = $this->proformas->buscarTres("tbl_tiquete_numeracion ", "id_tn,int_op_tn,int_caja_tn", " WHERE int_op_tn= '" . $_REQUEST['int_op_tn'] . "'  AND int_caja_tn='" . $_REQUEST['int_caja_tn'] . "' AND  int_paquete_tn= '" . $_REQUEST['int_paquete_tn'] . "'  LIMIT 1  ");
 
       $this->proforma['id_tn'] = $row_control_paquete["id_tn"];
-
+      
       self::GuardarFaltante($this->proforma);
 
       $this->proforma['id_tn_n'] = $row_control_paquete["id_tn"];
@@ -283,7 +281,7 @@ class CselladoController
 
   public function GuardarFaltante($data)
   {
-
+    
     /*$this->proformas =  new oMsellado(); 
          $this->proforma = $_REQUEST;*/
 
@@ -480,7 +478,7 @@ class CselladoController
     $this->rollos = new oMsellado();
     /* consulta cuantos rollos se extrulleron o imprimieron */
     //$this->rollos->consultaRollos2tablas("TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "TblImpresionRollo", "TblExtruderRollo", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
-    $this->rollos->consultaRollos3tablas("rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tblselladorollo", "TblImpresionRollo", "TblExtruderRollo", "rolloParcial_r = 1 AND id_op_r = $_REQUEST[int_op_tn]", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+    $res = $this->rollos->consultaRollos3tablas("$_REQUEST[id_op]","rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tblselladorollo", "TblImpresionRollo", "TblExtruderRollo", "rolloParcial_r = 1 AND id_op_r = $_REQUEST[int_op_tn]", "TblImpresionRollo.id_op_r=$_REQUEST[int_op_tn] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[int_op_tn] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
     
   }
 
@@ -495,8 +493,10 @@ class CselladoController
   {
     $this->rollos = new oMsellado();
     /* consulta cuantos rollos se extrulleron o imprimieron */
-    $this->rollos->consultaRollos3tablas("IFNULL(tbl_numeracion.rollo,(SELECT rollo_r FROM tblselladorollo WHERE rolloParcial_r = 1 AND id_op_r = $_REQUEST[id_op])) AS rollo_r ", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tbl_numeracion", "TblImpresionRollo", "TblExtruderRollo", "tbl_numeracion.int_op_n = $_REQUEST[id_op]", "TblImpresionRollo.id_op_r=$_REQUEST[id_op] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[id_op] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
+    /* sino encuentra ninguno disponible, coloca el ultimo rollo que se sello */
+    $res = $this->rollos->consultaRollos3tablas("$_REQUEST[id_op]","IFNULL(tbl_numeracion.rollo,(SELECT rollo_r FROM tblselladorollo WHERE rolloParcial_r = 1 AND id_op_r = $_REQUEST[id_op] LIMIT 1)) AS rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tbl_numeracion", "TblImpresionRollo", "TblExtruderRollo", "tbl_numeracion.int_op_n = $_REQUEST[id_op]", "TblImpresionRollo.id_op_r=$_REQUEST[id_op] AND TblImpresionRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblImpresionRollo.id_op_r AND TblSelladoRollo.rollo_r=TblImpresionRollo.rollo_r)", "TblExtruderRollo.id_op_r=$_REQUEST[id_op] AND TblExtruderRollo.rollo_r NOT IN (SELECT TblSelladoRollo.rollo_r FROM TblSelladoRollo WHERE TblSelladoRollo.id_op_r=TblExtruderRollo.id_op_r AND TblSelladoRollo.rollo_r=TblExtruderRollo.rollo_r)");
     //$this->rollos->consultaRollos3tablas("tbl_numeracion.rollo as rollo_r", "TblImpresionRollo.id_r, TblImpresionRollo.rollo_r", "TblExtruderRollo.id_r, TblExtruderRollo.rollo_r", "tbl_numeracion", "TblImpresionRollo", "TblExtruderRollo", "tbl_numeracion.int_op_n = $_REQUEST[id_op]", "TblImpresionRollo.id_op_r=$_REQUEST[id_op]", "TblExtruderRollo.id_op_r=$_REQUEST[id_op]");
+    
   }
 
   public function consultarBanderas()
@@ -606,6 +606,8 @@ class CselladoController
       $this->proformas->guardarDesperdicios("Tbl_reg_desperdicio", "id_rpd_rd,valor_desp_rd,op_rd,int_rollo_rd,id_proceso_rd,fecha_rd,cod_ref_rd", $data);
       }
     }
+
+    
   }
   //FIN	 
   /* ++++++++++FIN NUEVAS FUNCIONES PARA EL MANEJO DE LAS BANDERAS +++++++++*/

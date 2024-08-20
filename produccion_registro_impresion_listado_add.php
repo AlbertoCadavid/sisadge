@@ -425,14 +425,15 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                           <td id="dato2">
                            <?php 
                            $id_ref_op=$row_orden_produccion['id_ref_rp'];
-                           $sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref_op' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
+                           //$sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref_op' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
+                           $sqlop="SELECT * FROM tbl_caracteristicas_impresion WHERE id_ref_ci='$id_ref_op' ORDER BY id_ref_ci DESC LIMIT 1"; 
                            $resultop=mysql_query($sqlop); 
                            $numop=mysql_num_rows($resultop);
+                           $id_ref_pm = mysql_result($resultop, 0, 'id_ref_ci');
                            if($numop >= '1')
                            { 
-                             $id_ref_pm = mysql_result($resultop, 0, 'id_ref_cp');
-                             ?><a href="javascript:popUp('produccion_caract_impresion_vista.php?id_ref=<?php echo $id_ref_pm;?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php 
-                           }else { ?><a href="javascript:popUp('produccion_caract_impresion_add.php?id_ref=<?php echo $row_orden_produccion['id_ref_rp'];?>&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp'];?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" border="0" /></a>
+                             ?><a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp']; ?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php 
+                           }else { ?><a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp']; ?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" border="0" /></a>
                            <?php }?></td>
                            <td nowrap="nowrap" id="dato2">
                             <?php 	  

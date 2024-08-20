@@ -44,4 +44,5 @@ class Mtrazabilidad
 
         return $rows;
     }
+    
 }

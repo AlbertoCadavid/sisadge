@@ -491,17 +491,6 @@ height:20px;
    cursor:pointer; 
  }
 
-
-/*.loader {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 3200;
-    background: url('images/loadingcircle4.gif') 50% 50% no-repeat rgb(250,250,250);
-    background-size: 5% 10%; 
-    -moz-opacity:65;
-    opacity:0.65;
-
-}*/
+.fondoGris {
+  background-color:#D6D6D6;
+}

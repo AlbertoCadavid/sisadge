@@ -76,6 +76,7 @@ $query_remision = sprintf("SELECT * FROM Tbl_remisiones,Tbl_remision_detalle,Tbl
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);
 $totalRows_remision = mysql_num_rows($remision);
+
 //imprime total cajas
 if($totalRows_remision >='1'){
   $total_cajas = mysql_result($remision, 0, 'int_total_cajas_rd');
@@ -230,7 +231,8 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
         <tr>
           <!--VARIABLES DE REMISION X ITEMS-->   
           <td id="fondo2"><?php echo $row_remision['int_ref_io_rd']; ?></td>
-          <td nowrap="nowrap" id="fondo2"><?php echo $row_remision['int_cod_cliente_io']; ?></td>
+          <!-- <td nowrap="nowrap" id="fondo2"><?php echo $row_remision['int_cod_cliente_io']; ?></td> -->
+          <td nowrap="nowrap" id="fondo2"><?php echo $row_remision['str_ref_cl_io_rd']; ?></td>
           <td colspan="2" id="fondo2"><?php echo $row_remision['int_total_cajas_rd']; ?></td>
           <td colspan="3" id="fondo2"><?php echo $row_remision['int_numd_rd']; ?></td>
           <td colspan="2" id="fondo2"><?php echo $row_remision['int_numh_rd']; ?></td>

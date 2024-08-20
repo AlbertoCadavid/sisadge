@@ -155,6 +155,7 @@ if (isset($_GET['id_items'])){
   $can2=$row_items['int_cantidad_io'];
 //if($can2>$can1){echo "LA CANTIDAD NO PUEDE SER MAYOR";}
   if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+    
 //ACTUALIZA TODOS LOS ITEMS QUE TENGAN ESTADO PENDIENTE DE DESPACHO Y TENGAN LA FECHA DE INGRESO MAYOR A UN MES, SEGUN FECHA ACTUAL
     $updateFecha = sprintf("UPDATE `Tbl_remision_detalle` SET `fecha_rd` = CURDATE( ) WHERE TIMESTAMPDIFF( MONTH , `fecha_rd` , CURDATE( )) <= '1' AND  `estado_rd` = '1'",
       GetSQLValueString($_POST['fecha_rd'], "text")
@@ -170,7 +171,8 @@ if (isset($_GET['id_items'])){
      $int_item_io_rd=$_POST['int_item_io_rd'];
      $int_ref_io_rd=$_POST['int_ref_io_rd'];
      $int_mp_io_rd=$_POST['int_mp_io_rd'];
-     $str_ref_cl_io_rd=$_POST['str_ref_cl_io_rd'];
+     /* $str_ref_cl_io_rd=$_POST['str_ref_cl_io_rd']; */
+     $str_ref_cl_io_rd=$_POST['int_cod_cliente_io'];
      $int_total_cajas_rd=$_POST['int_total_cajas_rd'];
      $int_tolerancia_rd=$_POST['int_tolerancia_rd'];
 

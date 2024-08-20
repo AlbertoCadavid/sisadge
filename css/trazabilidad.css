@@ -1,0 +1,132 @@
+body{
+    font-family: Arial, sans-serif;
+    padding:0px;
+    margin: 0px;
+    background-color: #D6D6D6;
+    width:100%;
+    height:100vh;
+}
+
+.search{
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #D6D6D6;
+    text-align: center;
+}
+ 
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000066;
+    font-family: Arial;  
+    font-weight:bolder;
+}
+
+label {
+    font-weight: bold;
+}
+
+.ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.div {
+    margin: 3px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.div_procesos {
+    width: 19em;
+    margin: 3px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.div_rollos {
+    width: 100%
+}
+
+.event-entrada {
+    background-color: #4091ac;
+}
+.event-extrusion {
+    background-color: #4091ac;
+    
+}
+.event-impresion {
+    background-color: #4091ac;
+    
+}
+.event-sellado {
+    background-color: #4091ac;
+    
+}
+.event-titulo_rollos_extrusion {
+    background-color: darkgray;
+}
+.event-titulo_rollos_impresion {
+    background-color: darkgray;
+}
+.event-titulo_rollos_sellado {
+    background-color: darkgray;
+}
+.event-rollos {
+    background-color: #D6D6D6;
+}
+.event-salida {
+    background-color: #15af5a;
+}
+
+.unavailable{
+    background-color: gray;
+}
+
+.wrapper{
+    /* position: absolute; */
+    top:50%;
+    left:50%;
+    /* transform: translate(-50%, -50%); */
+    width: fit-content;
+    height:auto;
+}
+
+.flex{
+    display: flex;
+}
+
+.wrapRollos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.containerRollo{
+    width: 65px;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.titulo{
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+

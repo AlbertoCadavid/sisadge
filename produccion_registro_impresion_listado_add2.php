@@ -122,6 +122,10 @@ if($var3 != '')
 {
 $query_orden_produccion = "SELECT *, COUNT(DISTINCT rollo_rp) as rollos, SUM(`int_kilos_prod_rp`) as kilos FROM Tbl_reg_produccion WHERE MONTH(fecha_ini_rp)='$var3' AND id_proceso_rp='2' GROUP BY id_op_rp DESC";
 }*/
+//FILTRA TODOS VACIOS
+if($var1 == '0' && $var2 == '0' && $var3 == '0' && $anyo == '0'){
+$query_orden_produccion = "SELECT *, COUNT(DISTINCT rollo_rp) as rollos, SUM(`int_kilos_prod_rp`) as kilos FROM Tbl_reg_produccion WHERE id_proceso_rp='2' GROUP BY id_op_rp DESC";
+}
 //FILTRA OP LLENO
 if($var1 != '0' && $var2 == '0' && $var3 == '0' && $anyo == '0')
 {
@@ -172,6 +176,7 @@ if($var1 == '0' && $var2 == '0' && $var3 != '0' && $anyo != '0')
 {
 $query_orden_produccion = "SELECT *, COUNT(DISTINCT rollo_rp) as rollos, SUM(`int_kilos_prod_rp`) as kilos FROM tbl_reg_produccion WHERE YEAR(fecha_ini_rp)='$anyo' AND MONTH(fecha_ini_rp)='$var3' AND id_proceso_rp='2' GROUP BY id_op_rp DESC ORDER BY id_op_rp DESC";
 }
+
 $query_limit_orden_produccion = sprintf("%s LIMIT %d, %d", $query_orden_produccion, $startRow_orden_produccion, $maxRows_orden_produccion);
 $orden_produccion = mysql_query($query_limit_orden_produccion, $conexion1) or die(mysql_error());
 $row_orden_produccion = mysql_fetch_assoc($orden_produccion);
@@ -495,14 +500,15 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                           <td id="dato2">
                            <?php 
                            $id_ref_op=$row_orden_produccion['id_ref_rp'];
-                           $sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref_op' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
+                           //$sqlop="SELECT id_ref_cp FROM Tbl_caract_proceso WHERE id_ref_cp='$id_ref_op' AND id_proceso='2' ORDER BY id_ref_cp DESC LIMIT 1"; 
+                           $sqlop="SELECT * FROM tbl_caracteristicas_impresion WHERE id_ref_ci='$id_ref_op' ORDER BY id_ref_ci DESC LIMIT 1"; 
                            $resultop=mysql_query($sqlop); 
                            $numop=mysql_num_rows($resultop);
+                           $id_ref_pm = mysql_result($resultop, 0, 'id_ref_ci');
                            if($numop >= '1')
                            { 
-                             $id_ref_pm = mysql_result($resultop, 0, 'id_ref_cp');
-                             ?><a href="javascript:popUp('produccion_caract_impresion_vista.php?id_ref=<?php echo $id_ref_pm;?>','870','600')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php 
-                           }else { ?><a href="javascript:popUp('produccion_caract_impresion_add.php?id_ref=<?php echo $row_orden_produccion['id_ref_rp'];?>&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp'];?>','1100','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" border="0" /></a>
+                             ?><a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp']; ?>','1300','700')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA" title="VISUALIZAR CARACTERISTICA" border="0" /></a><?php 
+                           }else { ?><a href="javascript:popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_orden_produccion['int_cod_ref_rp']; ?>','1300','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" title="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION" border="0" /></a>
                            <?php }?></td>
                            <td nowrap="nowrap" id="dato2">
                             <?php 	  

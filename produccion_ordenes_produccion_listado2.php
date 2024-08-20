@@ -314,7 +314,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
                   <li><a href="<?php echo $logoutAction ?>">CERRAR SESION</a></li>
                   <li><a href="menu.php">MENU PRINCIPAL</a></li>
                 </ul>
-             </div> 
+              </div> 
              <div class="panel-body">
                <br> 
                <div class="container">
@@ -406,7 +406,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
   <tr>
     <td colspan="4" id="dato1">Nota: si en el estado aparece la letra 'E', quiere decir que falta ingresarle la mezcla y caracteristica de la referencia en Extrusion.</td>
     <td id="dato1">&nbsp;</td>
-    <td colspan="3" id="dato2"><a href="produccion_op_interna.php"><img src="images/mas_r.gif" alt="ADD O.P INTERNA" title="ADD O.P INTERNA" border="0" style="cursor:hand;"/></a><a href="produccion_ordenes_produccion_listado_inactivo.php" target="_top"><img src="images/i.gif" alt="O.P. INACTIVAS"title="O.P INACTIVAS" border="0" style="cursor:hand;"/></a><a href="produccion_op_estados.php"><img src="images/p.gif" style="cursor:hand;" alt="LISTADO PROGRAMADAS" title="LISTADO PROGRAMADAS" border="0" /></a><a href="produccion_op_ordenconsultar.php"><img src="images/accept.png" style="cursor:hand;" alt="O.P FINALIZADAS" title="O.P FINALIZADAS" border="0" /></a> <a href="produccion_ordenes_produccion_listado.php"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a>
+    <td colspan="3" id="dato2"><a class="editar" href="produccion_op_interna.php"><img src="images/mas_r.gif" alt="ADD O.P INTERNA" title="ADD O.P INTERNA" border="0" style="cursor:hand;"/></a><a class="editar" href="produccion_ordenes_produccion_listado_inactivo.php" target="_top"><img src="images/i.gif" alt="O.P. INACTIVAS"title="O.P INACTIVAS" border="0" style="cursor:hand;"/></a><a class="editar" href="produccion_op_estados.php"><img src="images/p.gif" style="cursor:hand;" alt="LISTADO PROGRAMADAS" title="LISTADO PROGRAMADAS" border="0" /></a><a class="editar" href="produccion_op_ordenconsultar.php"><img src="images/accept.png" style="cursor:hand;" alt="O.P FINALIZADAS" title="O.P FINALIZADAS" border="0" /></a> <a class="editar" href="produccion_ordenes_produccion_listado.php"><img src="images/ciclo1.gif" alt="RESTAURAR"title="RESTAURAR" border="0" style="cursor:hand;"/></a>
     </td>
     </tr> 
     <tr> 
@@ -441,17 +441,18 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
     <td nowrap="nowrap"id="titulo4">CLIENTE</td>
     <td nowrap="nowrap"id="titulo4">RESPONSABLE</td>
     <td nowrap="nowrap"id="titulo4">ESTADO</td>
+    <td nowrap="nowrap" id="titulo4">MAS INFO</td>
   </tr>
    <?php foreach($row_orden_produccion as $row_orden_produccion) {  ?>
     <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF">
       <?php if( in_array($_SESSION['id_usuario'], $_SESSION['usuariosarray'] ) ):?> 
       <td id="dato2"><input name="id_op_del[]" type="checkbox" value="<?php echo $row_orden_produccion['id_op']; ?>" /> </td>
       <?php endif; ?>
-      <td nowrap="nowrap"id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
-      <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_cod_ref_op']; ?></a></td>
-      <td nowrap="nowrap" id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
-      <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
-      <td id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000">
+      <td nowrap="nowrap"id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><strong><?php echo $row_orden_produccion['id_op']; ?></strong></a></td>
+      <td id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['int_cod_ref_op']; ?></a></td>
+      <td nowrap="nowrap" id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['version_ref_op']; ?></a></td>
+      <td id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['fecha_registro_op']; ?></a></td>
+      <td id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000">
         <?php 
           	$nit_c=$row_orden_produccion['int_cliente_op'];
           	$sqln="SELECT * FROM cliente WHERE id_c='$nit_c'"; 
@@ -462,7 +463,7 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
           	else { echo "";	} ?>
       </a>
     </td>
-      <td nowrap="nowrap"id="dato2"><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['str_responsable_op']; ?></a></td>
+      <td nowrap="nowrap"id="dato2"><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_orden_produccion['str_responsable_op']; ?></a></td>
         <td id="dato2">
           <?php 
             $id_op=$row_orden_produccion['id_op'];
@@ -476,23 +477,24 @@ $row_anual = $conexion->llenaSelect('anual','','ORDER BY id_anual DESC');
             if($sqlImpresion ==''){ $title ="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN IMPRESION"; $control="cmezclasIm"; } 
             ?> 
             <?php if($numExtruder == ''){ $title ="LE FALTO AGREGAR LAS CARACTERISTICA DE ESTA REFERENCIA EN EXTRUDER"; $control="cmezclas"; ?> 
-             <a href="javascript:popUp('view_index.php?c=<?php echo $control;?>&a=Carat&cod_ref=<?php echo $cod_ref_op;?>','1600','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="<?php echo $title;?>" title="<?php echo $title;?>" border="0" /></a>
+             <a class="editar" href="javascript:popUp('view_index.php?c=<?php echo $control;?>&a=Carat&cod_ref=<?php echo $cod_ref_op;?>','1600','700')"><img src="images/e_rojo.gif" style="cursor:hand;" alt="<?php echo $title;?>" title="<?php echo $title;?>" border="0" /></a>
          <?php } ?> 
 
 
          <?php if($numExtruder != '' && $estado=='0') { ?>
-          <a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/falta.gif" alt="O.P INGRESADA "title="O.P INGRESADA" border="0" style="cursor:hand;"/></a>
+          <a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/falta.gif" alt="O.P INGRESADA "title="O.P INGRESADA" border="0" style="cursor:hand;"/></a>
           <?php }else if($numExtruder != '' && $estado=='1') { ?>
-          <a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/extruir.gif" width="28" height="18" alt="O.P EXTRUIDA "title="O.P EXTRUIDA" border="0" style="cursor:hand;"/></a>
+          <a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/extruir.gif" width="28" height="18" alt="O.P EXTRUIDA "title="O.P EXTRUIDA" border="0" style="cursor:hand;"/></a>
         <?php }else if($numExtruder != '' && $estado=='2'){ ?>
-          <a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/imprimir.gif" width="28" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/></a>
-        <?php }else if($numExtruder != '' && $estado=='3'){ ?><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/refilado.gif" width="28" height="20" alt="O.P REFILADO"title="O.P REFILADO" border="0" style="cursor:hand;"/></a>
-        <?php }else if($numExtruder != '' && $estado=='4'){ ?><a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/sellar.gif" width="28" height="20" alt="O.P SELLADO"title="O.P SELLADO" border="0" style="cursor:hand;"/></a>
+          <a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/imprimir.gif" width="28" height="20" alt="O.P IMPRESA"title="O.P IMPRESA" border="0" style="cursor:hand;"/></a>
+        <?php }else if($numExtruder != '' && $estado=='3'){ ?><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/refilado.gif" width="28" height="20" alt="O.P REFILADO"title="O.P REFILADO" border="0" style="cursor:hand;"/></a>
+        <?php }else if($numExtruder != '' && $estado=='4'){ ?><a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/sellar.gif" width="28" height="20" alt="O.P SELLADO"title="O.P SELLADO" border="0" style="cursor:hand;"/></a>
         <?php }else if($numExtruder != '' && $estado=='5'){ ?>
-          <a href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/accept.png" style="cursor:hand;" alt="O.P FINALIZADAS" title="O.P FINALIZADAS" border="0" /></a>
+          <a class="editar" href="produccion_op_vista.php?id_op=<?php echo $row_orden_produccion['id_op'];?>" target="new" style="text-decoration:none; color:#000000"><img src="images/accept.png" style="cursor:hand;" alt="O.P FINALIZADAS" title="O.P FINALIZADAS" border="0" /></a>
          
            <?php } ?>
            </td>
+           <td id="dato2"><a href="view_index.php?c=Ctrazabilidad&a=inicioVista&id_op=<?php echo $row_orden_produccion['id_op'];?>" target="_top" style="text-decoration:none; color:#000000"><img src="images/informacion.png" style="cursor:hand;" alt="Mas Detalles" title="Mas Detalles" border="0" /></a></td>
           <?php } ?>
     </tr>
 </table>
@@ -645,6 +647,24 @@ var anyolis = fecha.getFullYear();
      consultaPorcentajesOpList(meslis,anyolis,ref,ops,cliente); 
 
    }
+  });
+
+  $(document).ready(function() {
+    var editar = "<?php echo $_SESSION['no_edita']; ?>";
+    var tipo_usuario = "<?php echo $_SESSION['tipo_usuario']; ?>";
+    
+    if (editar == 0 || tipo_usuario == 2) { //tipo de usuario 2 es Comercial
+      //$("input").attr('disabled', 'disabled');
+      $('a').each(function() {
+        $(".editar").attr('href', '#');
+      });
+      let div_padre = document.querySelector(".container");
+      let segundo_div = document.querySelector('.container').getElementsByTagName('div')[0];
+      let p = document.createElement("p");
+      p.setAttribute("style", "color:red");
+      p.innerHTML = "SOLO LECTURA, SIN PERMISOS PARA EDITAR";
+      div_padre.insertBefore(p,segundo_div);
+    }
   });
 </script>
 

@@ -209,6 +209,7 @@ class oMsellado
             
             //echo("INSERT INTO $tabla ($columna) VALUES ('" . $arrayPHP['int_op_tn'] . "','" . $arrayPHP['rollo_r'] . "','" . $arrayPHP['int_desde_num'] . "','" . $arrayPHP['int_hasta_num'] . "');"); die;
             $exist = $this->conexion->query("SELECT id_tabla FROM $tabla WHERE id_op = $arrayPHP[int_op_tn] AND rollo_r = $arrayPHP[rollo_r]");
+            
             if ($exist) {
                 $stmt = $exist->fetch_assoc(); //si existe el rollo asociado a la op entonces se guarda la informacion y se actualizza con los nuevos datos
 
@@ -321,7 +322,7 @@ class oMsellado
     }
 
     public function consultaBandera($mostrar, $tabla, $sentencia = "", $columna, $id, $columna2)
-    {
+    { 
         //echo "SELECT * FROM $tabla WHERE  $columna = $id $columna2 " ; die;
         $resultado = $this->conexion->query("SELECT $mostrar FROM $tabla $sentencia WHERE  $columna = $id $columna2 ") or die($this->conexion->error);
 
@@ -372,19 +373,25 @@ class oMsellado
         $result->close();
     }
 
-    public function consultaRollos3tablas($mostrar1, $mostrar2, $mostrar3, $tabla1, $tabla2, $tabla3, $where1, $where2, $where3)
+    public function consultaRollos3tablas($id_op, $mostrar1, $mostrar2, $mostrar3, $tabla1, $tabla2, $tabla3, $where1, $where2, $where3)
     {
         
-        $result = $this->conexion->query("SELECT $mostrar1 FROM $tabla1 WHERE $where1");
+        $result = $this->conexion->query("SELECT $mostrar1 FROM $tabla1 WHERE $where1"); //consulta si hay rollo en tbl_numeracion sino consulta si hay algun parcial en tblselladorollo
         $data = [self::getResultados($result), true];
-
         if ($data[0][0]['rollo_r'] == null) {
-            $result2 = $this->conexion->query("SELECT $mostrar2 FROM $tabla2 WHERE $where2");
+            $result2 = $this->conexion->query("SELECT $mostrar2 FROM $tabla2 WHERE $where2"); // consulta si hay rollos en impresion que no esten sellados
             $data = [self::getResultados($result2), false];
+            
             if (sizeof($data[0]) == 0) {
-                $result3 = $this->conexion->query("SELECT $mostrar3 FROM $tabla3 WHERE $where3");
+                $result3 = $this->conexion->query("SELECT $mostrar3 FROM $tabla3 WHERE $where3"); // consulta si hay rollos en extrusion que no esten sellados
                 $data = [self::getResultados($result3), false];
+            
+                if(sizeof($data[0]) == 0){
+                    $result4 = $this->conexion->query("SELECT `rollo_r` FROM tblselladorollo WHERE tblselladorollo.id_op_r = $id_op ORDER BY fechaF_r DESC LIMIT 1"); //sino encuentra ningun rollo, selecciona el ultimo rollo sellado
+                    $data = [self::getResultados($result4), true];
+                }
             }
+
         }
 
 

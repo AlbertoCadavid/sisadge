@@ -929,6 +929,29 @@ function Salir(pagina) {
   );
 }
 
+function saliryCerrar() {
+  swal(
+    {
+      title: "SALIR?",
+      text: "Esta seguro que Quiere Salir ",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Si, Salir!",
+      cancelButtonText: "No, Salir!",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+    },
+    function (isConfirm) {
+      if (isConfirm) {
+        window.close();
+      } else {
+        window.history.go();
+      }
+    }
+  );
+}
+
 function consultaProveedor(id, campo) {
   $.ajax({
     data: {
@@ -1067,3 +1090,5 @@ function consultaCliente(id, campo) {
     },
   });
 }
+
+

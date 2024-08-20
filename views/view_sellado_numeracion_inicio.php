@@ -331,16 +331,12 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
 
         <tr>
           <td colspan="3" id="fuente1">UNIDADES X CAJA</td>
-          <td colspan="3"><input class="form-control" type="number" name="int_undxcaja_tn" <?php if ($restrincion != '1') {
-                                                                                              echo "readonly";
-                                                                                            } ?> id="int_undxcaja_tn" min="0" value=""></td>
+          <td colspan="3"><input class="form-control" type="number" name="int_undxcaja_tn" <?php if ($restrincion != '1') { echo "readonly"; } ?> id="int_undxcaja_tn" min="0" value=""></td>
         </tr>
         <tr>
           <td colspan="3" id="fuente1">UNIDADES X PAQ.</td>
           <td colspan="3">
-            <input class="form-control" type="number" name="int_undxpaq_tn" <?php if ($restrincion != '1') {
-                                                                              echo "readonly";
-                                                                            } ?> id="int_undxpaq_tn" min="0" value="">
+            <input class="form-control" type="number" name="int_undxpaq_tn" <?php if ($restrincion != '1') { echo "readonly"; } ?> id="int_undxpaq_tn" min="0" value="">
           </td>
         </tr>
         <tr>
@@ -348,9 +344,7 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
             <abbr title="Este numero se trae de numeracion de la o.p"> <strong style="color: red;">ver...</strong></abbr>
           </td>
           <td colspan="2">
-            <input class="form-control negro_inteso " type="text" <?php if ($restrincion != '1') {
-                                                                    echo "readonly";
-                                                                  } ?> name="int_desde_tn" id="int_desde_tn" value="" min="0" onBlur="conMayusculas(this);" autofocus required>
+            <input class="form-control negro_inteso " type="text" <?php if ($restrincion != '1') { echo "readonly"; } ?> name="int_desde_tn" id="int_desde_tn" value="" min="0" onBlur="conMayusculas(this);" autofocus required>
             <input type="hidden" name="int_desde_num" id="int_desde_num" value=""> <!-- manejo de banderas -->
           </td>
           <td>
@@ -360,9 +354,7 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
         <tr>
           <td colspan="3" id="fuente1"><strong>HASTA</strong></td>
           <td colspan="2">
-            <input class="form-control negro_inteso " type="text" name="int_hasta_tn" id="int_hasta_tn" required="required" value="" min="0" <?php if ($restrincion != '1') {
-                                                                                                                                                echo "readonly";
-                                                                                                                                              } ?>>
+            <input class="form-control negro_inteso " type="text" name="int_hasta_tn" id="int_hasta_tn" required="required" value="" min="0" <?php if ($restrincion != '1') { echo "readonly"; } ?>>
             <input type="hidden" name="int_hasta_num" id="int_hasta_num" value=""> <!-- manejo de banderas -->
           </td>
           <td>
@@ -377,9 +369,7 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
                                   echo "selected=\"selected\"";
                                 } ?>>Seleccione</option>
               <?php foreach ($row_codigo_empleado as $row_codigo_empleado) { ?>
-                <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_tiquete_num['int_cod_empleado_n']))) {
-                                                                                        echo "selected=\"selected\"";
-                                                                                      } ?>><?php echo $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado']; ?></option>
+                <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_tiquete_num['int_cod_empleado_n']))) { echo "selected=\"selected\""; } ?>><?php echo $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado']; ?></option>
               <?php } ?>
             </select>
           </td>
@@ -392,9 +382,7 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
                                   echo "selected=\"selected\"";
                                 } ?>>Seleccione</option>
               <?php foreach ($row_revisor as $row_revisor) { ?>
-                <option value="<?php echo $row_revisor['codigo_empleado'] ?>" <?php if (!(strcmp($row_tiquete_num['int_cod_rev_n'], $row_revisor['codigo_empleado']))) {
-                                                                                echo "selected=\"selected\"";
-                                                                              } ?>><?php echo $row_revisor['nombre_empleado'] . " " . $row_revisor['apellido_empleado']; ?></option>
+                <option value="<?php echo $row_revisor['codigo_empleado'] ?>" <?php if (!(strcmp($row_tiquete_num['int_cod_rev_n'], $row_revisor['codigo_empleado']))) { echo "selected=\"selected\""; } ?>><?php echo $row_revisor['nombre_empleado'] . " " . $row_revisor['apellido_empleado']; ?></option>
               <?php } ?>
             </select>
           </td>
@@ -540,8 +528,9 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
         <div class="row">
           <div id="moreUploads3" style="margin-left:15px"></div>
         </div>
-      </form><br>
-      <form action="view_index.php?c=csellado&a=GuardarFaltante" method="POST" name="formfalta" id="formfalta">
+      <!-- </form><br> -->
+      <br>
+      <!-- <form action="view_index.php?c=csellado&a=GuardarFaltante" method="POST" name="formfalta" id="formfalta"> -->
         <div id="faltantess" style="display: none;">
           <!--            TABLA DE FALTANTES-->
           <div id="contenedor">
@@ -707,7 +696,18 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
   });
 
   function validaCampos() {
-
+    /* VALIDA LOS CAMPOS DINAMICOS DEL DESPERDICIO */
+    let desperdicios = document.getElementById('moreUploads3').children;
+    let validados = true;
+    for (let desperdicio of desperdicios) {
+                let select = desperdicio.querySelector('select');
+                let input = desperdicio.querySelector('input[type="number"]');
+                
+                if (!select.value || !input.value) {
+                  validados = false;
+                }
+            }
+    /*FIN VALIDACION*/
     if ($("#validar_paquete").val() == '1') {
       $("#verAlert").show();
       $("#verAlert").text("Ya Existe!");
@@ -715,7 +715,6 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
       setTimeout(function() {
         $("#verAlert").fadeOut();
       }, 4000);
-
       swal("Error", "El registro Ya Existe! :)", "error");
       return false;
     } else if ($("#int_paquete_tn").val() == '') {
@@ -766,7 +765,10 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
         swal("Error", "Debe ingresar un valor a los kilos! :)", "error")
         $("#desp").focus();
     } //manejo de banderas
-    else {
+    else if(!validados){
+      swal("Error", "Debe llenar los campos del desperdicio", "error");
+      return false;
+    }else {
       let res = alertafaltantes();
       if (res) {
         envioEdit($("#int_op_tn").val(), $("#int_caja_tn").val());
@@ -845,14 +847,14 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
 
     file0.setAttribute("name", "id_rpd[]");
     file0.setAttribute("required", "required");
-    file0.options[0] = new Option('Desperdicio', '');
+    file0.options[0] = new Option('Seleccionar Tipo', '');
     
     for (let i = 0; i < opcionesDesperdicio.length; i++) {
       file0.options[i+1] = new Option(opcionesDesperdicio[i]['nombre_rtp'], opcionesDesperdicio[i]['id_rtp']);
     }
-   
     file0.setAttribute("style", "width:150px");
     f.appendChild(file0);
+
     var file = document.createElement("input");
     file.setAttribute("type", "number");
     file.setAttribute("id", "kilosDesp");
@@ -864,6 +866,15 @@ $this->insumo = $insumo->llenaSelect("tbl_reg_tipo_desperdicio", "WHERE id_proce
     file.setAttribute("required", "required");
     f.appendChild(file);
 
+    let del = document.createElement("input");
+    del.setAttribute("type", "button")
+    del.setAttribute("value", "X")
+    del.setAttribute("style", "width:20px");
+    del.addEventListener("click", function(){
+      f.remove()
+    })
+    
+    f.appendChild(del)
     document.getElementById("moreUploads3").appendChild(f);
     upload_number++;
   }
