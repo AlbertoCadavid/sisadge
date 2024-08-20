@@ -356,7 +356,7 @@ document.form1.campo_6.value=Math.round(micra*100)/100;
                                 <option value="<?php echo $row_materia_prima['id_insumo']; ?>"<?php if (!(strcmp($row_materia_prima['id_insumo'], $row_mezcla['int_ref3_tol2_pm']))) {echo "selected=\"selected\"";} ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?> 
                               </option>
                             <?php } ?> 
-                          </select> <span style="width: 10px" title='<?php echo $insumoactual6['descripcion_insumo']; ?>' ><?php echo substr($insumoactual6['descripcion_insumo'], 0, 10);?>... </span>
+                          </select> <span style="width: 10px" title='<?php echo $insumoactual6['descripcion_insumo']; ?>' ><?php echo substr($insumoactual6['descripcion_insumo'], 0, 10);?>... </span>ñ
                       </td>
                         <td colspan="4" id="fuente1">
                           <input name="int_ref3_tol2_porc3_pm"  type="text" required="required" id="int_ref3_tol2_porc3_pm" placeholder="%" size="3"value="<?php echo $row_mezcla['int_ref3_tol2_porc3_pm'] ?>"/>

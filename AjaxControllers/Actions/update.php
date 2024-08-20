@@ -73,7 +73,7 @@ if($_GET['UpdateSiTick']!='') {
    if($resultfactura==1 && $resultorden==1){
       echo 'ok';
    }else{
-      echo 'ko!';
+      //echo 'ko!';
    } 
  
 
@@ -118,5 +118,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $actualizar == 'true' ) {
    $resultorden=mysql_query($query_kilos_produccidos);
    
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['actualizarProveedor']) {
+   $id_p = $_POST['id_p'];
+   $id_pi = $_POST['id_pi'];
+   $id_in = $_POST['id_in'];
+   $accion = $_POST['actualizarProveedor'];
+   if($accion == "update"){
+      $query="UPDATE `tblproveedorinsumo` SET `id_p`= $id_p WHERE id_pi = $id_pi";
+   } else if($accion == "create"){
+      $query="INSERT INTO `tblproveedorinsumo`(`id_p`, `id_in`) VALUES ($id_p, $id_in)";
+   }
+   
+   echo $resultorden=mysql_query($query);
+    
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['update_indice'] == 'true') {
+   $id = $_POST['id'];
+   $nombre = $_POST['nombre'];
+   if($id != "" && $nombre != ""){
+      $query = "UPDATE indices SET nombre='$nombre' WHERE id_i = $id";
+   }
+   echo $resultorden=mysql_query($query);
+}
+
+/* if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['update_egp']) { script para actualizar el egp desde la pantalla de mezclas impresion, ojo. aun no activo
+   $array = $_POST['object'];
+   foreach ($array as $value) {
+      echo "unidad:".$value['unidad']." P: ".$value['pantone'];
+   }
+ 
+} */
 
 ?>

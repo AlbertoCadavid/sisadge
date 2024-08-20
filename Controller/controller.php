@@ -74,7 +74,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
      //LLENAR CAMPOS
     public function llenarCampos($tabla, $condicion, $orden='', $distinct='' ){  
-      //echo "SELECT $distinct FROM $tabla $condicion $orden  ";die; 
+      //echo "SELECT $distinct FROM $tabla $condicion $orden  ";
       $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden ") or die($this->conexion->error);
       if($resultado)
         $fila = $resultado->fetch_assoc();//mysqli_fetch_assoc($resultado)
@@ -87,7 +87,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
     //LLENA COMBOS CONVIERTE 
      public function llenaSelect($tabla, $condicion='', $orden='' ){ 
-       
+       //echo "SELECT * FROM $tabla $condicion $orden "; die;
        $resultado = $this->conexion->query("SELECT * FROM $tabla $condicion $orden ") or die($this->conexion->error); 
        if($resultado) 
          //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 
@@ -99,7 +99,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
      //LLENA LISTADOS CON FOREACH
       public function llenaListas($tabla, $condicion, $orden='', $distinct=''){ 
-        //echo "SELECT $distinct FROM $tabla $condicion $orden";die;
+        //echo "SELECT $distinct FROM $tabla $condicion $orden"; die;
         $resultado = $this->conexion->query("SELECT $distinct FROM $tabla $condicion $orden") or die($this->conexion->error);
 
         if($resultado) 
@@ -122,12 +122,12 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
 
    //LISTAR VARIOS SIN ID TRAE TODOS OPCION GROUP ORDER Y COLUMNAS, COLUMNAS DISTINCT ETC
     public function buscarListar($tabla, $asterisco, $orden='', $group='', $maxRows_registros='' , $pageNum_registros='', $condicion='' ){
-      //echo "SELECT $asterisco FROM $tabla $condicion $group $orden";die;
+      //echo "SELECT $asterisco FROM $tabla $condicion $group $orden";
       $startRow_registros = $pageNum_registros * $maxRows_registros;
       $sql = "SELECT $asterisco FROM $tabla $condicion $group $orden ";  
       //echo $sql;die;
       $query_limit_registros = sprintf("%s LIMIT %d, %d", $sql, $startRow_registros, $maxRows_registros);
-      //echo $query_limit_registros;die;
+      //echo $query_limit_registros; die;
       $resultado = $this->conexion->query($query_limit_registros) or die($this->conexion->error);
       if($resultado) 
         //return $resultado->fetch_array(MYSQLI_BOTH);//MYSQLI_BOTH muestra numerico y asociativo 
@@ -319,7 +319,7 @@ require_once ('C:/xampp/htdocs//config.php');//$_SERVER['DOCUMENT_ROOT'] se debe
       $var6=$_POST['var6']=='' ? "" : $_POST['var6'];  
      if(!isset($_POST['palabraClave']) ){
       // Obtener registros
-      $where  = $var3 == "" ? "" : "WHERE " . $var3;
+      $where  = $var3 == "" ? "" : "WHERE " .$var3;
 
       $sql = "SELECT $var1, $var5 as id, $var6 as descrip FROM ".$var2." ". $where." ". $var4; 
     

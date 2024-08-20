@@ -161,11 +161,12 @@ if (isset($_FILES['pdf_impuesto']) && $_FILES['pdf_impuesto']['name'] != "") {
 }
 
 //$total=$_POST['int_total_item_io'];
-  $ref=$_POST['int_cod_ref_io'];
-  $ref_cl=$_POST['id_mp_vta_io'];
-  if ($ref!=''||$ref_cl!='')
+ 
+ $ref=$_GET['int_cod_ref_io']=='' ? $_GET['id_mp_vta_io'] : $_GET['int_cod_ref_io'];
+  //$ref_cl=$_POST['id_mp_vta_io'];
+  if ($ref!='' )
   {
-
+ 
     $fecha_modif_io = date("Y-m-d H:i:s"); 
 
     $updateSQL = sprintf("UPDATE Tbl_items_ordenc SET id_pedido_io=%s, str_numero_io=%s, int_consecutivo_io=%s, int_cod_ref_io=%s, id_mp_vta_io=%s, int_cod_cliente_io=%s, int_cantidad_io=%s, int_cantidad_rest_io=%s, str_unidad_io=%s, fecha_entrega_io=%s, fecha_modif_io=%s, responsable_modif_io=%s, trm=%s, int_precio_trm =%s, int_precio_io=%s, int_total_item_io=%s, str_moneda_io=%s, str_direccion_desp_io=%s, int_vendedor_io=%s, int_comision_io=%s, int_nombre_io=%s, b_estado_io=%s,cobra_cyrel=%s, cobra_flete=%s, precio_flete=%s, impuesto=%s, pdf_impuesto=%s, N_precio_old=%s,valor_impuesto=%s,cotiz=%s WHERE id_items=%s",
@@ -215,7 +216,7 @@ if (isset($_FILES['pdf_impuesto']) && $_FILES['pdf_impuesto']['name'] != "") {
     $historico =  new oComercial();  
     if(isset($_GET['id_items'])){ 
       $historico=$myObject->Obtener('tbl_items_ordenc','id_items',$_GET['id_items']);
-      $myObject->Historico();
+       
     } 
     if(isset($_GET['id_items']) && $_GET['id_items']!='' && $historico){
     
@@ -245,6 +246,8 @@ if (isset($_GET['id_oc'])){
   $row_cliente = mysql_fetch_assoc($cliente);
   $totalRows_cliente = mysql_num_rows($cliente);*/
 
+
+ 
  
  $cliente = $conexion->llenarCampos('cliente cl',"LEFT JOIN tbl_destinatarios dest ON cl.id_c=dest.id_d WHERE cl.id_c=".$_GET['id_oc'],"","cl.id_c,cl.direccion_c,cl.ciudad_c, cl.direccion_envio_factura_c,dest.id_d,dest.direccion,dest.ciudad");
 
@@ -275,19 +278,35 @@ if (isset($_GET['id_oc'])){
       $query_referencias3 ="SELECT id_mp_vta, str_nombre FROM Tbl_mp_vta  ORDER BY id_mp_vta ASC ";
       $referencias3 = mysql_query($query_referencias3, $conexion1) ;
       $row_referencias3 = mysql_fetch_assoc($referencias3);
-      $totalRows_referencias3 = mysql_num_rows($referencias3);
+      $totalRows_referencias3 = mysql_num_rows($referencias3); 
 //REFERENCIAS CLIENTES
       $colname_ref_cliente2= "-1";   
       if (isset($_GET['id_oc'])){
         $colname_ref_cliente2= (get_magic_quotes_gpc()) ? $_GET['id_oc'] : addslashes($_GET['id_oc']);}
         $colname_ref_cl= "-1";   
         if (isset($_GET['int_cod_ref_io'])){
-          $colname_ref_cl= (get_magic_quotes_gpc()) ? $_GET['int_cod_ref_io'] : addslashes($_GET['int_cod_ref_io']);}
+          $colname_ref_cl= (get_magic_quotes_gpc()) ? $_GET['int_cod_ref_io'] : addslashes($_GET['int_cod_ref_io']);
+        }
+        if (isset($_GET['nit_c'])){
+        $colname_nit_c= (get_magic_quotes_gpc()) ? $_GET['nit_c'] : addslashes($_GET['nit_c']);}
+         if (isset($_GET['int_cod_ref_io'])){
           mysql_select_db($database_conexion1, $conexion1);
-          $query_referencias2 = sprintf("SELECT * FROM Tbl_refcliente WHERE id_c_rc=%s AND int_ref_ac_rc=%s AND  int_estado_ref_rc='1' ORDER BY str_ref_cl_rc ASC",$colname_ref_cliente2,$colname_ref_cl);
+          $query_referencias2 = sprintf("SELECT * FROM tbl_refcliente WHERE str_nit_rc='%s' AND int_ref_ac_rc='%s' AND  int_estado_ref_rc='1' ORDER BY str_ref_cl_rc ASC",$colname_nit_c,$colname_ref_cl);
           $referencias2 = mysql_query($query_referencias2, $conexion1) ;
           $row_referencias2 = mysql_fetch_assoc($referencias2);
           $totalRows_referencias2 = mysql_num_rows($referencias2);
+         }else if(isset($_GET['id_mp_vta_io'])){
+          $colname_ref_cliente= (get_magic_quotes_gpc()) ? $_GET['id_mp_vta_io'] : addslashes($_GET['id_mp_vta_io']);
+          mysql_select_db($database_conexion1, $conexion1);
+          $query_referencias2 = "SELECT * FROM Tbl_mp_vta WHERE id_mp_vta=$colname_ref_cliente ";
+          $referencias2 = mysql_query($query_referencias2, $conexion1) ;
+          $row_referencias2 = mysql_fetch_assoc($referencias2);
+          $totalRows_referencias2 = mysql_num_rows($referencias2);
+
+         }
+ 
+
+
 //IMRPIME EL NOMBRE DEL VENDEDOR
           mysql_select_db($database_conexion1, $conexion1);
           $query_vendedores = "SELECT * FROM vendedor ORDER BY nombre_vendedor ASC";
@@ -323,7 +342,7 @@ if (isset($_GET['id_oc'])){
 //IMPRIME LA CANTIDAD DE LA ULTIMA COTIZACION
     if (isset($_GET['nit_c'])||(isset($_GET['int_cod_ref_io']))){
       $nit_c=$_GET['nit_c'];
-      $codref=$_GET['int_cod_ref_io'];
+      $codref=$_GET['int_cod_ref_io']=='' ? $_GET['id_mp_vta_io'] : $_GET['int_cod_ref_io'];
       mysql_select_db($database_conexion1, $conexion1);
       /*if($row_refer['tipo_bolsa_ref']=='PACKING LIST'){
          
@@ -340,7 +359,7 @@ if (isset($_GET['id_oc'])){
           
       } */
 
-      $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
+    $query_cotiz=("(SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cant_impresion AS cantidad,N_precio AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_bolsa WHERE Str_nit='$nit_c' and N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
       UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad,N_precio_k AS N_precio,N_precio_old,Str_unidad_vta, Str_moneda, fecha_creacion, Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_laminas WHERE Str_nit='$nit_c' and N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
       UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision FROM Tbl_cotiza_packing WHERE Str_nit='$nit_c' AND N_referencia_c='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)
       UNION (SELECT N_cotizacion,valor_impuesto,N_referencia_c,Str_nit,N_cantidad AS cantidad, N_precio_vnta  AS N_precio,N_precio_old, Str_unidad_vta, Str_moneda, fecha_creacion,Str_usuario AS usuario, N_comision AS comision  FROM Tbl_cotiza_materia_p WHERE Str_nit='$nit_c' and Str_referencia='$codref'  AND B_estado='1' ORDER BY fecha_creacion DESC LIMIT 0,1)"); 
@@ -411,6 +430,11 @@ if (isset($_GET['id_oc'])){
         $orden_compra = mysql_query($query_orden_compra, $conexion1) ;
         $row_orden_compra = mysql_fetch_assoc($orden_compra);
         $totalRows_orden_compra = mysql_num_rows($orden_compra); 
+
+
+
+      
+
         ?>
         <html>
         <head>
@@ -567,7 +591,7 @@ if (isset($_GET['id_oc'])){
                   $result2= mysql_query($sql2);
                   $numRem = mysql_num_rows($result2);
 
-                  if($nump >='1' || $numRem >='1')
+                  if($nump >='1' || $numRem >='1' || $nump !='' || $numRem !='')
                   { 
                    $existe_op ="1";
                  }else {
@@ -582,7 +606,12 @@ if (isset($_GET['id_oc'])){
         }else {$existe_op="0";} */
      
         ?> 
-        <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }else{  ?> disabled  <?php }  ?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled onClick="existeop();"<?php } ?> >
+
+        
+
+      <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?>
+
+       <select class="selectsMini busqueda" name="int_cod_ref_io" id="ref_cl" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }else{  ?> readonly <?php }  ?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> readonly onClick="existeop();"<?php } ?> >
           <option value="" <?php if (!(strcmp(0, $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
           <?php
           do {  
@@ -597,32 +626,69 @@ if (isset($_GET['id_oc'])){
           }
           ?>
         </select>
+      <?php }else{  ?>
+         <input name="int_cod_ref_io" id="ref_cl" type="text" style="width:100px" <?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){ ?> onChange="javascript:refacvsrefcl_edit();" <?php }else{  ?> readonly <?php }  ?> autofocus onChange="if(form1.int_cod_ref_io.value!=''){document.getElementById('ref_mp').disabled = true;sinPermiso();}" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> readonly onClick="existeop();"<?php } ?> value="<?php echo $_GET['int_cod_ref_io'];?>" > 
+      <?php  }  ?>
+     
       </td>
         <td id="fuente5">
-          <select style="width:130px"  class="selectsMedio busqueda" name="id_mp_vta_io" id="ref_mp"<?php if($_SESSION['superacceso']){?> onChange="javascript:refmpvsrefac_edit()" onBlur="if(form1.id_mp_vta_io.value!=''){document.getElementById('ref_cl').disabled = true;}" <?php } ?> >
-          <option value=""<?php if (!(strcmp(0, $row_items['id_mp_vta_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
+           <!-- <input name="materiavista" id="materiavista" type="text" style="width:100px" <?php if($_SESSION['superacceso']){?> onChange="javascript:refmpvsrefac_edit()" onBlur="if(form1.id_mp_vta_io.value!=''){document.getElementById('ref_cl').readonly = true;}" <?php }else{  ?> readonly  <?php }  ?> value="<?php echo $row_referencias2['Str_nombre'];?>" > -->
+      
+
+       
+
+         <select style="width:130px"  class="selectsMedio busqueda" name="id_mp_vta_io" id="ref_mp"<?php if($_SESSION['superacceso'] || !$_SESSION['restriUsuarios']){?> onChange="javascript:refmpvsrefac_edit()" onBlur="if(form1.id_mp_vta_io.value!=''){sinPermiso();}" <?php }  ?> >
+          <option value=""<?php if (!(strcmp(0, $_GET['id_mp_vta_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
           <?php
           do {  
             ?>
-            <option value="<?php echo $row_referencias3['id_mp_vta']?>"<?php if (!(strcmp($row_referencias3['id_mp_vta'], $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias3['str_nombre']?></option>
+            <option value="<?php echo $row_referencias2['id_mp_vta']?>"<?php if (!(strcmp($row_referencias2['id_mp_vta'], $_GET['id_mp_vta_io']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias2['Str_nombre']?></option>
             <?php
-          } while ($row_referencias3 = mysql_fetch_assoc($referencias3));
-          $rows = mysql_num_rows($referencias3);
+          } while ($row_referencias2 = mysql_fetch_assoc($referencias2));
+          $rows = mysql_num_rows($referencias2);
           if($rows > 0) {
-            mysql_data_seek($referencias3, 0);
-            $row_referencias3 = mysql_fetch_assoc($referencias3);
+            mysql_data_seek($referencias2, 0);
+            $row_referencias2 = mysql_fetch_assoc($referencias2);
           }
           ?>
-        </select>                  
-        
-        
+        </select>                
+       
+
       </td>                    
-      <td id="fuente5"><select class="selectsMini busqueda" name="int_cod_cliente_io" id="int_cod_cliente_io" style="width:100px">
-        <option value="" <?php if (!(strcmp(0, $row_referencias2['str_ref_cl_rc']))) {echo "selected=\"selected\"";} ?>>Select</option>
+      <td id="fuente5">
+     <?php if (isset($_GET['id_mp_vta_io']) && $_GET['id_mp_vta_io']!=''): ?>
+      
+      <input name="muestracliente" id="muestracliente" type="text" style="width:100px"  value="<?php echo $row_referencias2['Str_nombre'];?>" > 
+      <input name="int_cod_cliente_io" id="int_cod_cliente_io" type="hidden" style="width:100px" value="<?php echo $_GET['id_mp_vta_io'];?>" >
+
+       <!-- <select class="selectsMini busqueda" name="int_cod_cliente_io" id="int_cod_cliente_io" style="width:100px">
+          <option value="" <?php if (!(strcmp(0, $_GET['id_mp_vta_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
+          <?php
+          do {  
+            ?>
+            <option value="<?php echo $row_referencias2['id_mp_vta']?>"<?php if (!(strcmp($row_referencias2['id_mp_vta'], $_GET['id_mp_vta_io']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias2['Str_nombre']?></option>
+            <?php
+          } while ($row_referencias2 = mysql_fetch_assoc($referencias2));
+          $rows2 = mysql_num_rows($referencias2);
+          if($rows2 > 0) {
+            mysql_data_seek($referencias2, 0);
+            $row_referencias2 = mysql_fetch_assoc($referencias2);
+          }
+          ?>
+        </select> -->
+
+
+      <?php else: ?>
+
+     <input name="muestracliente" id="muestracliente" type="text" style="width:100px"  value="<?php echo $row_referencias2['str_ref_cl_rc'];?>" > 
+     <input name="int_cod_cliente_io" id="int_cod_cliente_io" type="hidden" style="width:100px" value="<?php echo $_GET['int_cod_ref_io'];?>" >
+ 
+      <!-- <select class="selectsMini busqueda" name="int_cod_cliente_io" id="int_cod_cliente_io" style="width:100px">
+        <option value="" <?php if (!(strcmp(0, $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>>Select</option>
         <?php
         do {  
           ?>
-          <option value="<?php echo $row_referencias2['str_ref_cl_rc']?>"<?php if (!(strcmp($row_referencias2['str_ref_cl_rc'], $row_referencias2['str_ref_cl_rc']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias2['str_ref_cl_rc']?></option>
+          <option value="<?php echo $row_referencias2['int_ref_ac_rc']?>"<?php if (!(strcmp($row_referencias2['int_ref_ac_rc'], $_GET['int_cod_ref_io']))) {echo "selected=\"selected\"";} ?>><?php echo $row_referencias2['str_ref_cl_rc']?></option> 
           <?php
         } while ($row_referencias2 = mysql_fetch_assoc($referencias2));
         $rows2 = mysql_num_rows($referencias2);
@@ -631,10 +697,15 @@ if (isset($_GET['id_oc'])){
           $row_referencias2 = mysql_fetch_assoc($referencias2);
         }
         ?>
-      </select></td>
+      </select> -->
+
+<?php endif; ?>
+      
+    </td>
       <td id="fuente5">  
-        <input name="int_cantidad_io" type="number" step="0.01" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> readonly="readonly" onClick="existeop(), igualRestante()"<?php }?> id="int_cantidad_io" onChange="itemsoc()" value="<?php echo $row_items['int_cantidad_io']=='' ?  $row_cotiz['cantidad']:$row_items['int_cantidad_io']; ?>" required></td>
-        <td id="fuente5"><input name="int_cantidad_rest_io" type="number" step="0.01" style="width:70px" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> readonly onBlur="existeop();"<?php }?>  value="<?php echo $row_items['int_cantidad_rest_io']; ?>" onBlur="cambio_restante()" required>
+        <input name="int_cantidad_io" type="number" step="0.01" <?php if ($existe_op > '0' && (!$_SESSION['superacceso']) ){ ?> readonly="readonly" onClick="existeop(); igualRestante()"<?php } ?> id="int_cantidad_io" onChange="itemsoc()" value="<?php echo $row_items['int_cantidad_io']=='' ?  $row_cotiz['cantidad']:$row_items['int_cantidad_io']; ?>" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> readonly="readonly" <?php } ?> required></td>
+        <td id="fuente5">
+          <input name="int_cantidad_rest_io" id="int_cantidad_rest_io" type="number" step="0.01" style="width:70px" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> onBlur="existeop();"<?php } ?>  value="<?php echo $row_items['int_cantidad_rest_io']; ?>" <?php if ($existe_op > '0' && (!$_SESSION['superacceso']) ){ ?> readonly="readonly" <?php } ?> onBlur="cambio_restante()" required>
         </td>
         <td id="fuente5"><select class="selectsMini busqueda" name="str_unidad_io" id="str_unidad_io" onChange="itemsoc()">
           <option value="UNIDAD"<?php if (!(strcmp("UNIDAD",$row_cotiz['Str_unidad_vta']))){echo "selected=\"selected\"";} ?>>UNIDAD</option>
@@ -785,11 +856,16 @@ do {
 </tr>
 <tr>
  <td colspan="2" id="dato1"></td>
-  <td id="dato1">PROGRAMAR: 
-    <select class="selectsMini busqueda" name="b_estado_io" id="b_estado_io" style="width:100px" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> disabled  onClick="existeop();"<?php }?>>
+  <td id="dato1">
+   <?php if($row_items['b_estado_io']=='1' && $_SESSION['superacceso']):?> 
+    PROGRAMAR: 
+    <select class="selectsMini busqueda" name="b_estado_io" id="b_estado_io" style="width:100px" <?php if ($existe_op > '0' && (!$_SESSION['superacceso'])){ ?> onclick="existeop();" <?php } ?>>
       <option value="1"<?php if(!(strcmp("1", $row_items['b_estado_io']))) {echo "selected=\"selected\"";} ?>>Ingresado</option>
       <option value="2"<?php if(!(strcmp("2", $row_items['b_estado_io']))) {echo "selected=\"selected\"";} ?>>Programar</option>              
     </select>
+  <?php else : ?>
+      <em style="color: red;" >El item ya esta programado !</em>
+  <?php endif; ?>
   </td>
   </tr>
   <tr>
@@ -878,10 +954,29 @@ $(document).ready(function(){
 
        verDireccion();
        sumaImpuesto($("#valor").val(),$("#valor_impuesto").val());
-       itemsoc() 
+       itemsoc();
+
+       codrefoMateriprima();
  
 }); 
- 
+
+
+function codrefoMateriprima(){
+     
+     if($("#int_cod_ref_io").val()!='' ){
+       var codref= '<?php echo $_GET['int_cod_ref_io'];?>';
+       document.getElementById('ref_mp').readonly = true;
+       $("#int_cod_ref_io").val(codref);
+
+     }else
+
+     if($("#id_mp_vta_io").val()!='' ){
+       var codmateria= '<?php echo $_GET['id_mp_vta_io'];?>';
+       document.getElementById('ref_cl').readonly = true; 
+       $("#id_mp_vta_io").val(codmateria);
+     }
+
+} 
 
   function verDireccion(){
      var vari2="<?php echo $row_items['str_direccion_desp_io']?>";

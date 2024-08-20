@@ -408,6 +408,19 @@ class oMmezclasIm{
     }
     /* fin caracteristicas */
 
+    //registrar en la tabla tbl_estado_mezcla indicando que ya se lleno la mezcla
+    public function RegistrarEstadoMezcla($tabla,$columna,$data)
+    { 
+        try {
+            $array_codificado = UtilHelper::arrayEncode($data);
+            $array_deco = UtilHelper::arrayDecode($array_codificado); 
+            $arrayPHP =  ($array_deco);
+
+            $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES('". $arrayPHP['cod_ref_ci'] ."','". '2' ."','". $arrayPHP['usuario'] ."','". $arrayPHP['fecha_modif'] ."','". '1' ."')"); 
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }
 
 class UtilHelper {

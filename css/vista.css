@@ -115,13 +115,7 @@ body{ margin:0; }
 #dato2{      text-align: center;  font: normal 12px Arial; color: #000; border:1px solid #CCC; }
 #dato3{      text-align: right;   font: normal 12px Arial; color: #000; border:1px solid #CCC; }
 #detalle1{   text-align: left;    font: normal 10px Arial; color: #000; border:1px solid #CCC; }
-#detalle2{
-    text-align: center;
-    font: normal 10px Arial;
-    color: #000;
-    border: 1px solid #CCC;
-    font-size: 10px;
-}
+#detalle2{   text-align: center;  font: normal 10px Arial; color: #000; border: 1px solid #CCC; font-size: 10px;}
 #detalle3{   text-align: right;   font: normal 10px Arial; color: #000; border:1px solid #CCC; }
 /*FUENTE CON: BORDE ABAJO SIN: FONDO*/
 #abajo1{      text-align: left;    font: normal 11px Arial; color: #000; border-bottom:1px solid #CCC; }
@@ -204,6 +198,13 @@ body{ margin:0; }
 }
 #talla1{
     text-align: left;
+    color: #000000;
+    font-family:Arial;
+    font-size:10px;
+    font-weight:bold;
+}
+#talla2{
+    text-align: center;
     color: #000000;
     font-family:Arial;
     font-size:10px;

@@ -140,6 +140,7 @@ class CgeneralController{
 
     //BORRA
     public function Eliminar(){
+        //echo $_REQUEST['id'];die;
         $this->logs =  new omGeneral(); 
         $this->logs->Eliminar($_REQUEST['id'],$_REQUEST['columna'],$_REQUEST['proceso'],$_REQUEST['master'] );
         header('Location: index.php');

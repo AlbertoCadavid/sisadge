@@ -3607,7 +3607,7 @@ function divideCadenas(carac){
 	}
 
    function cerosIzquierda(conletras,solonumero){
-   	var ceros=(conletras.search(/EM|MQ/i));//codigos especiales 
+   	var ceros=(conletras.search(/EM|MQ|AB|AC/i));//codigos especiales 
    	 if(ceros== 0 ){
    	  var cuantos = 8;
    	   codigo = solonumero.toString().padStart(cuantos, "0");

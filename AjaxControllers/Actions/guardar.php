@@ -281,4 +281,18 @@ function enviarEmail() {
 
     $envioCorreo->enviar($to, $to2, '', '', $asunto, $body, '', $to3);
 }
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['add_indice'] == 'true' ){
+   if($_POST['nombre'] != ""){
+      $res = $conexion->insertar("indices","nombre","'".$_POST['nombre']."'");
+   }
+   echo $res;
+}
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['add_relacion_clase_indice'] == 'true' ){
+   if($_POST['id_clase'] != "" && $_POST['id_indice'] != ""){
+      $res = $conexion->insertar("insumos_clases_indices","id_clase, id_indice","$_POST[id_clase], $_POST[id_indice]");
+   }
+   echo $res;
+}
 ?>

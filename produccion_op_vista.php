@@ -139,10 +139,15 @@ $numdesc = mysql_num_rows($resultdesc);
 $row_desc = mysql_fetch_assoc($resultdesc);
 
 
-$row_mezclaycaract_impresion = $conexion->llenarCampos("tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref", " WHERE cp.cod_ref= '" . $_GET['int_cod_ref_op'] . "' AND cp.proceso=2", "", "*");
+//$row_mezclaycaract_impresion = $conexion->llenarCampos("tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref", " WHERE cp.cod_ref= '" . $_GET['int_cod_ref_op'] . "' AND cp.proceso=2", "", "*");
 
 $row_impresion = $conexion->llenarCampos("tbl_produccion_mezclas cp", "WHERE cp.id_proceso=2 AND cp.int_cod_ref_pm= '" . $_GET['int_cod_ref_op'] . "' ", "", "*");
+$info_impresion = $conexion->llenarCampos("tbl_caracteristicas_impresion cp", "WHERE cp.cod_ref_ci= '" . $_GET['int_cod_ref_op'] . "' ", "", "*");
 
+
+$int_cliente_op=$row_orden_produccion['int_cliente_op'];
+$info_refcliente = $conexion->llenarCampos("tbl_refcliente ", "WHERE CONVERT(int_ref_ac_rc, SIGNED INTEGER) = '" . $_GET['int_cod_ref_op'] . "'  AND id_c_rc='" . $int_cliente_op . "' ", "", "str_ref_cl_rc,str_descripcion_rc");
+  
 
 //LLAMA LAS MEZCLAS DE IMPRESION UNIDAD 1
 
@@ -218,6 +223,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
   <script type="text/javascript" src="js/formato.js"></script>
 
   <title>SISADGE AC & CIA</title>
+
 </head>
 
 <body>
@@ -303,6 +309,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
       </tr>
 
       <tr>
+        <td colspan="3" id="detalle2"><strong>REF CLIENTE:</strong> <?php echo $info_refcliente['str_ref_cl_rc'] ; ?></td>
+        <td colspan="5" id="detalle2"><strong>DESCRIPCION:</strong> <?php echo $info_refcliente['str_descripcion_rc'] ; ?></td>
+      </tr>
+
+      <tr>
         <td colspan="8" id="fondo">Alguna Inquietud o Comentario : sistemas@acycia.com </td>
       </tr>
 
@@ -312,16 +323,18 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
       <tr>
         <td colspan="2" id="detalle1">DESPERDICIO</td>
         <td colspan="2" id="detalle1">UNIDADES SOLICITADAS</td>
-        <td colspan="2" id="detalle1">TIPO DE BOLSA</td>
+        <td id="detalle1">TIPO DE BOLSA</td>
         <td id="detalle1"><strong>EXTRUSION</strong></td>
+        <td nowrap="nowrap" id="detalle1"><strong>STICKER-</strong></td> 
         <td id="detalle1">PESO MILLAR</td>
         <td colspan="2" id="detalle1">Prioridad</td>
       </tr>
       <tr>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_desperdicio_op']; ?> %<strong></strong></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['int_cantidad_op']; ?></td>
-        <td colspan="2" id="detalle1"><?php $row_formula = $conexion->buscar('tbl_formulacion','nombre',$row_orden_produccion['str_tipo_bolsa_op']);   echo $row_formula['formulacion']; ?></td>
+        <td id="detalle1"><?php $row_formula = $conexion->buscar('tbl_formulacion','nombre',$row_orden_produccion['str_tipo_bolsa_op']);   echo $row_formula['formulacion']; ?></td>
         <td id="detalle1"><?php echo $row_orden_produccion['coextrusion'] ?></td>
+        <td id="detalle1"><?php echo $row_orden_produccion['sinnumeracion']==1? 'SI' : 'NO'; ?></td>
         <td id="detalle1"><?php echo $row_orden_produccion['int_pesom_op']; ?></td>
         <td colspan="2" id="detalle1"><?php echo $row_orden_produccion['b_visual_op']; ?></td>
       </tr>
@@ -626,19 +639,19 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
         <table style="width: 100%">
           <tr>
             <td colspan="18" id="detalle1">
-              Impresora : <?php echo $row_impresion['extrusora_mp']; ?>
+              IMPRESORA : <?php echo $info_impresion['maquina']; ?>
             </td>
           </tr>
           <tr id="tr1">
             <td rowspan="2" id="detalle1"> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 1</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 2</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 3</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 4</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 5</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 6</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 7</b> </td>
-            <td nowrap="nowrap" colspan="2" id="detalle1"><b>UNIDAD 8</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 1</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 2</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 3</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 4</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 5</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 6</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 7</b> </td>
+            <td nowrap="nowrap" colspan="2" id="detalle2"><b>UNIDAD 8</b> </td>
           </tr>
           <tr>
             <td></td>
@@ -646,7 +659,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
           <tr id="tr1">
             <td id="detalle1"><b>COLORES</b></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref1_tol1_pm']; ?>
+              <?php $idinsumo = $info_impresion['color1']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -660,10 +673,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref1_tol1_porc1_pm']; ?>
+              <?php echo $info_impresion['val_color1']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo =  $row_impresion['int_ref3_tol3_pm']; ?>
+              <?php $idinsumo =  $info_impresion['color2']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -677,10 +690,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref3_tol3_porc3_pm']; ?>
+              <?php echo $info_impresion['val_color2']==0 ? "" : $info_impresion['val_color2']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_1']; ?>
+              <?php $idinsumo = $info_impresion['color3']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -694,10 +707,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_2']; ?>
+              <?php echo $info_impresion['val_color3']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_3']; ?>
+              <?php $idinsumo = $info_impresion['color4']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -711,12 +724,12 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_4']; ?>
+              <?php echo $info_impresion['val_color4']; ?>
             </td>
 
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_5']; ?>
+              <?php $idinsumo = $info_impresion['color5']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -730,10 +743,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_6']; ?>
+              <?php echo $info_impresion['val_color5']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_7']; ?>
+              <?php $idinsumo = $info_impresion['color6']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -747,10 +760,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_8']; ?>
+              <?php echo $info_impresion['val_color6']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_9']; ?>
+              <?php $idinsumo = $info_impresion['color7']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -764,10 +777,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_10']; ?>
+              <?php echo $info_impresion['val_color7']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_11']; ?>
+              <?php $idinsumo = $info_impresion['color8']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -781,7 +794,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_12']; ?>
+              <?php echo $info_impresion['val_color8']; ?>
             </td>
 
           </tr>
@@ -789,7 +802,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
           <tr>
             <td id="detalle1"><b>MEZCLAS</b></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref1_tol2_pm'];
+              <?php $idinsumo = $info_impresion['mezcla1'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -802,10 +815,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref1_tol2_porc1_pm']; ?>
+              <?php echo $info_impresion['val_mezcla1']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref3_tol4_pm']; ?>
+              <?php $idinsumo = $info_impresion['mezcla2']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -819,11 +832,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref3_tol4_porc3_pm']; ?>
+              <?php echo $info_impresion['val_mezcla2']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_13']; ?>
+              <?php $idinsumo = $info_impresion['mezcla3']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -837,10 +850,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_14']; ?>
+              <?php echo $info_impresion['val_mezcla3']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_15']; ?>
+              <?php $idinsumo = $info_impresion['mezcla4']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -854,11 +867,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_16']; ?>
+              <?php echo $info_impresion['val_mezcla4']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_17']; ?>
+              <?php $idinsumo = $info_impresion['mezcla5']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -872,10 +885,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_18']; ?>
+              <?php echo $info_impresion['val_mezcla5']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_19']; ?>
+              <?php $idinsumo = $info_impresion['mezcla6']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -889,10 +902,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_20']; ?>
+              <?php echo $info_impresion['val_mezcla6']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_21']; ?>
+              <?php $idinsumo = $info_impresion['mezcla7']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -906,10 +919,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_22']; ?>
+              <?php echo $info_impresion['val_mezcla7']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_23']; ?>
+              <?php $idinsumo = $info_impresion['mezcla8']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -923,15 +936,14 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_24']; ?>
+              <?php echo $info_impresion['val_mezcla8']; ?>
             </td>
-
           </tr>
 
           <tr id="tr1">
             <td id="detalle1"></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref1_tol3_pm'];
+              <?php $idinsumo = $info_impresion['mezcla9'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -944,10 +956,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref1_tol3_porc1_pm']; ?>
+              <?php echo $info_impresion['val_mezcla9']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_25']; ?>
+              <?php $idinsumo = $info_impresion['mezcla10']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -961,10 +973,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_26']; ?>
+              <?php echo $info_impresion['val_mezcla10']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_27']; ?>
+              <?php $idinsumo = $info_impresion['mezcla11']; ?>
 
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
@@ -979,10 +991,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_28']; ?>
+              <?php echo $info_impresion['val_mezcla11']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_29']; ?>
+              <?php $idinsumo = $info_impresion['mezcla12']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -996,11 +1008,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_30']; ?>
+              <?php echo $info_impresion['val_mezcla12']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_31']; ?>
+              <?php $idinsumo = $info_impresion['mezcla13']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1014,28 +1026,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_32']; ?>
+              <?php echo $info_impresion['val_mezcla13']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_33']; ?>
-
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_34']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_35']; ?>
+              <?php $idinsumo = $info_impresion['mezcla14']; ?>
 
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
@@ -1050,10 +1044,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_36']; ?>
+              <?php echo $info_impresion['val_mezcla14']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_37']; ?>
+              <?php $idinsumo = $info_impresion['mezcla15']; ?>
 
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
@@ -1068,31 +1062,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_38']; ?>
+              <?php echo $info_impresion['val_mezcla15']; ?>
             </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla16']; ?>
 
-          </tr>
-
-          <tr>
-            <td id="detalle1"></td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref1_tol4_pm'];
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_impresion['int_ref1_tol4_porc1_pm']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_39']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1106,110 +1080,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_40']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_41']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_42']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_43']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_44']; ?>
-            </td>
-
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_45']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_46']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_47']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_48']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_49']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_50']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_51']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_52']; ?>
+              <?php echo $info_impresion['val_mezcla16']; ?>
             </td>
 
           </tr>
@@ -1217,7 +1088,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
           <tr>
             <td id="detalle1"></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref2_tol1_pm'];
+              <?php $idinsumo = $info_impresion['mezcla17'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -1230,10 +1101,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref2_tol1_porc2_pm']; ?>
+              <?php echo $info_impresion['val_mezcla17']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_53']; ?>
+              <?php $idinsumo = $info_impresion['mezcla18']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1247,10 +1118,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_54']; ?>
+              <?php echo $info_impresion['val_mezcla18']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_55']; ?>
+              <?php $idinsumo = $info_impresion['mezcla19']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1264,10 +1135,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_56']; ?>
+              <?php echo $info_impresion['val_mezcla19']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_57']; ?>
+              <?php $idinsumo = $info_impresion['mezcla20']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1281,11 +1152,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_58']; ?>
+              <?php echo $info_impresion['val_mezcla20']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_59']; ?>
+              <?php $idinsumo = $info_impresion['mezcla21']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1299,10 +1170,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_60']; ?>
+              <?php echo $info_impresion['val_mezcla21']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_61']; ?>
+              <?php $idinsumo = $info_impresion['mezcla22']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1316,10 +1187,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_62']; ?>
+              <?php echo $info_impresion['val_mezcla22']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_63']; ?>
+              <?php $idinsumo = $info_impresion['mezcla23']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1333,10 +1204,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_64']; ?>
+              <?php echo $info_impresion['val_mezcla23']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_65']; ?>
+              <?php $idinsumo = $info_impresion['mezcla24']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1350,14 +1221,155 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_66']; ?>
+              <?php echo $info_impresion['val_mezcla24']; ?>
+            </td>
+
+          </tr>
+
+          <tr>
+            <td id="detalle1"></td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla25'];
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla25']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla26']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla26']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla27']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla27']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla28']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla28']; ?>
+            </td>
+
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla29']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla29']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla30']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla30']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla31']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla31']; ?>
+            </td>
+            <td id="detalle1">
+              <?php $idinsumo = $info_impresion['mezcla32']; ?>
+              <?php
+              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $resultm = mysql_query($sqlm);
+              $numm = mysql_num_rows($resultm);
+              if ($numm >= '1') {
+                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
+                echo $nombreInsumo;
+              } else {
+                echo "";
+              }
+              ?>
+            </td>
+            <td id="detalle1">
+              <?php echo $info_impresion['val_mezcla32']; ?>
             </td>
 
           </tr>
           <tr id="tr1">
             <td id="detalle1"><b>ALCOHOL</b></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref2_tol2_pm'];
+              <?php $idinsumo = $info_impresion['alcohol1'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -1370,10 +1382,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref2_tol2_porc2_pm']; ?>
+              <?php echo $info_impresion['val_alcohol1']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_67']; ?>
+              <?php $idinsumo = $info_impresion['alcohol2']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1387,10 +1399,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_68']; ?>
+              <?php echo $info_impresion['val_alcohol2']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_69']; ?>
+              <?php $idinsumo = $info_impresion['alcohol3']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1404,10 +1416,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_70']; ?>
+              <?php echo $info_impresion['val_alcohol3']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_71']; ?>
+              <?php $idinsumo = $info_impresion['alcohol4']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1421,11 +1433,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_72']; ?>
+              <?php echo $info_impresion['val_alcohol4']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_73']; ?>
+              <?php $idinsumo = $info_impresion['alcohol5']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1439,10 +1451,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_74']; ?>
+              <?php echo $info_impresion['val_alcohol5']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_75']; ?>
+              <?php $idinsumo = $info_impresion['alcohol6']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1456,10 +1468,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_76']; ?>
+              <?php echo $info_impresion['val_alcohol6']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_77']; ?>
+              <?php $idinsumo = $info_impresion['alcohol7']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1473,10 +1485,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_78']; ?>
+              <?php echo $info_impresion['val_alcohol7']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_79']; ?>
+              <?php $idinsumo = $info_impresion['alcohol8']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1490,7 +1502,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_80']; ?>
+              <?php echo $info_impresion['val_alcohol8']; ?>
             </td>
 
           </tr>
@@ -1498,7 +1510,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
           <tr>
             <td id="detalle1"><b>ACETATO</b> NPA</td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref2_tol3_pm'];
+              <?php $idinsumo = $info_impresion['acetato1'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -1511,10 +1523,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref2_tol3_porc2_pm']; ?>
+              <?php echo $info_impresion['val_acetato1']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_81']; ?>
+              <?php $idinsumo = $info_impresion['acetato2']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1528,10 +1540,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_82']; ?>
+              <?php echo $info_impresion['val_acetato2']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_83']; ?>
+              <?php $idinsumo = $info_impresion['acetato3']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1545,10 +1557,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_84']; ?>
+              <?php echo $info_impresion['val_acetato3']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_85']; ?>
+              <?php $idinsumo = $info_impresion['acetato4']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1562,11 +1574,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_86']; ?>
+              <?php echo $info_impresion['val_acetato4']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_87']; ?>
+              <?php $idinsumo = $info_impresion['acetato5']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1580,10 +1592,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_88']; ?>
+              <?php echo $info_impresion['val_acetato5']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_89']; ?>
+              <?php $idinsumo = $info_impresion['acetato6']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1597,10 +1609,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_90']; ?>
+              <?php echo $info_impresion['val_acetato6']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_91']; ?>
+              <?php $idinsumo = $info_impresion['acetato7']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1614,10 +1626,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_92']; ?>
+              <?php echo $info_impresion['val_acetato7']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_93']; ?>
+              <?php $idinsumo = $info_impresion['acetato8']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1631,7 +1643,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_94']; ?>
+              <?php echo $info_impresion['val_acetato8']; ?>
             </td>
 
           </tr>
@@ -1639,7 +1651,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
           <tr id="tr1">
             <td id="detalle1"><b>METOXIPROPANOL</b></td>
             <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref2_tol4_pm'];
+              <?php $idinsumo = $info_impresion['metoxi1'];
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
@@ -1652,10 +1664,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_impresion['int_ref2_tol4_porc2_pm']; ?>
+              <?php echo $info_impresion['val_metoxi1']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_95']; ?>
+              <?php $idinsumo = $info_impresion['metoxi2']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1669,10 +1681,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_96']; ?>
+              <?php echo $info_impresion['val_metoxi2']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_97']; ?>
+              <?php $idinsumo = $info_impresion['metoxi3']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1686,10 +1698,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_98']; ?>
+              <?php echo $info_impresion['val_metoxi3']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_99']; ?>
+              <?php $idinsumo = $info_impresion['metoxi4']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1703,11 +1715,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_100']; ?>
+              <?php echo $info_impresion['val_metoxi4']; ?>
             </td>
 
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_101']; ?>
+              <?php $idinsumo = $info_impresion['metoxi5']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1721,10 +1733,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_102']; ?>
+              <?php echo $info_impresion['val_metoxi5']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_103']; ?>
+              <?php $idinsumo = $info_impresion['metoxi6']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1738,10 +1750,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_104']; ?>
+              <?php echo $info_impresion['val_metoxi6']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_105']; ?>
+              <?php $idinsumo = $info_impresion['metoxi7']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1755,10 +1767,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_106']; ?>
+              <?php echo $info_impresion['val_metoxi7']; ?>
             </td>
             <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_107']; ?>
+              <?php $idinsumo = $info_impresion['metoxi8']; ?>
               <?php
               $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
@@ -1772,44 +1784,72 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               ?>
             </td>
             <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_108']; ?>
+              <?php echo $info_impresion['val_metoxi8']; ?>
             </td>
 
           </tr>
+          <tr>
 
+          </tr>
+            <td id="detalle1"><b>STIK</b></td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik1']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik2']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik3']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik4']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik5']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik6']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik7']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+                <?php echo $info_impresion['stik8']; ?>
+            </td>
+            
           <tr>
             <td id="detalle1"><b>VISCOSIDAD</b></td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref1_rpm_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco1']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref1_tol5_porc1_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco2']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref2_rpm_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco3']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref2_tol5_porc2_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco4']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref3_rpm_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco5']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['int_ref3_tol5_porc3_pm']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco6']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_137']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco7']; ?>
             </td>
-            <td colspan="2" id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_138']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['visco8']; ?>
             </td>
           </tr>
 
           <tr id="tr1">
             <td id="detalle1"><b>ANILOX</b></td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref3_tol1_pm'];
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox1'];
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1820,13 +1860,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_impresion['int_ref3_tol1_porc3_pm']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_109']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox2']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1837,13 +1874,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_110']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_111']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox3']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1854,13 +1888,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_112']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_113']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox4']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1871,14 +1902,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_114']; ?>
-            </td>
-
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_115']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox5']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1889,13 +1916,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_116']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_117']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox6']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1906,13 +1930,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_118']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_119']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox7']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1923,13 +1944,10 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_120']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_121']; ?>
+            <td colspan="2" id="detalle1">
+              <?php $idinsumo = $info_impresion['anilox8']; ?>
               <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
+              $sqlm = "SELECT descripcion_insumo FROM anilox WHERE anilox.id_insumo='$idinsumo'";
               $resultm = mysql_query($sqlm);
               $numm = mysql_num_rows($resultm);
               if ($numm >= '1') {
@@ -1940,156 +1958,11 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
               }
               ?>
             </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_122']; ?>
-            </td>
-
-          </tr>
-
-          <tr>
-            <td id="detalle1"><b>BCM</b></td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_impresion['int_ref3_tol2_pm'];
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_impresion['int_ref3_tol2_porc3_pm']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_123']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_124']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_125']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_126']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_127']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_128']; ?>
-            </td>
-
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_129']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_130']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_131']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_132']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_133']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_134']; ?>
-            </td>
-            <td id="detalle1">
-              <?php $idinsumo = $row_mezclaycaract_impresion['campo_135']; ?>
-              <?php
-              $sqlm = "SELECT descripcion_insumo FROM insumo WHERE insumo.id_insumo='$idinsumo'";
-              $resultm = mysql_query($sqlm);
-              $numm = mysql_num_rows($resultm);
-              if ($numm >= '1') {
-                $nombreInsumo = mysql_result($resultm, 0, 'descripcion_insumo');
-                echo $nombreInsumo;
-              } else {
-                echo "";
-              }
-              ?>
-            </td>
-            <td id="detalle1">
-              <?php echo $row_mezclaycaract_impresion['campo_136']; ?>
-            </td>
-
           </tr>
 
           <tr id="tr1">
             <td colspan="18" id="detalle1">
-              Observacion: <?php echo $row_impresion['observ_pm']; ?>
+              Observacion: <?php echo $info_impresion['observ_ci']; ?>
             </td>
           </tr>
 
@@ -2099,41 +1972,69 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
             <td colspan="100%" id="fuente2"><strong>CARACTERISTICAS</strong> </td>
           </tr>
           <tr>
-            <td colspan="2" id="talla1">Cantidad de Unidades</td>
-            <td nowrap="nowrap" id="talla1">Temp Secado Grados C</td>
-            <td colspan="3" id="talla1">Repeticion de Ancho</td>
-            <td colspan="3" id="talla1">Rep. Perimetro</td>
-            <td colspan="3" id="talla1">Arte Aprobado (0 SI, 1 NO)</td>
-            <td colspan="2" id="talla1">Z</td>
-            <td colspan="2" id="talla1">Guia Fotocelda (0 SI, 1 NO)</td>
-            <td colspan="2" id="talla1">Velocidad Maquina</td>
+          <td colspan="1" id="fuente2">Cant de Unidades</td>
+          <td colspan="2" id="fuente2">Temp Secado Tunel</td>
+          <td colspan="2" id="fuente2">Temp Secado Tinteros</td>
+          <td colspan="2" id="fuente2">Numero de Pistas</td>
+          <td colspan="2" id="fuente2">Repeticion Perimetro</td> 
+          <td colspan="2" id="fuente2">Arte Aprobado (SI/NO)</td>
+          <td colspan="2" id="fuente2">Guia Fotocelda (SI/NO)</td>
+          <td colspan="2" id="fuente2">Velocidad Maquina</td>
+          <td colspan="2" id="fuente2">Z</td>
+        </tr>
+          <tr>
+            <td id="detalle2">
+              <?php echo $info_impresion['cant_unidades']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['temp_tunel']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['temp_tintas']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['rep_ancho']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['rep_perimetro']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+            <?php if($info_impresion['arte']==0){
+                echo "SI";
+              } else if($info_impresion['arte']==1){
+                echo "NO";
+              }?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php if($info_impresion['guia_fotoc']==0){
+                echo "SI";
+              } else if($info_impresion['guia_fotoc']==1){
+                echo "NO";
+              }?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['velocidad']; ?>
+            </td>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['z']; ?>
+            </td>
           </tr>
           <tr>
-            <td colspan="2" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_139']; ?>
+          <td colspan="1" id="fuente2">Tension Desbobinador</td>
+          <td colspan="2" id="fuente2">Tension Refrescador</td>
+          <td colspan="2" id="fuente2">Tension Rebobinador</td>
+        </tr>
+        <tr>
+        <td id="detalle2">
+              <?php echo $info_impresion['tension_desbo']; ?>
             </td>
-            <td id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_140']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['tension_refres']; ?>
             </td>
-            <td colspan="3" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_141']; ?>
+            <td colspan="2" id="detalle2">
+              <?php echo $info_impresion['tension_rebo']; ?>
             </td>
-            <td colspan="3" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_142']; ?>
-            </td>
-            <td colspan="3" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_143']; ?>
-            </td>
-            <td colspan="2" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_144']; ?>
-            </td>
-            <td colspan="2" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_145']; ?>
-            </td>
-            <td colspan="2" id="talla1">
-              <?php echo $row_mezclaycaract_impresion['campo_146']; ?>
-            </td>
-          </tr>
+        </tr>
         </table>
 
       </td>
@@ -2235,7 +2136,7 @@ $totalRows_unidad_ocho = mysql_num_rows($unidad_ocho);
             <tr>
               <td id="detalle1"><?php echo $row_ref_op['calibre_ref']; ?></td>
               <td id="detalle1"><?php echo $row_ref_op['peso_millar_ref']; ?></td>
-              <td id="detalle1"><?php echo $row_ref_op['tipo_bolsa_ref']; ?></td>
+              <td id="detalle1"><?php $row_formula = $conexion->buscar('tbl_formulacion','nombre',$row_ref_op['tipo_bolsa_ref']);   echo $row_formula['formulacion']; ?> </td>
               <td id="detalle1">&nbsp;</td>
               <td id="detalle1"><?php echo $row_ref_op['N_fuelle']; ?></td>
               <td id="detalle1">&nbsp;</td>

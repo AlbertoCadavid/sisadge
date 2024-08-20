@@ -47,70 +47,65 @@ $currentPage = $_SERVER["PHP_SELF"];
 //Filtra remision, FECHA
 mysql_select_db($database_conexion1, $conexion1);
 //Filtra todos vacios
-if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref == '0' && $vende =='0')
+/* if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref == '0' && $vende =='0')
 { 
- 
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_mp_io_rd=Tbl_items_ordenc.id_mp_vta_io and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remision_detalle.id_rd ASC',"*"); 
- 
-}
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND  rdint_mp_io_rd=ioid_mp_vta_io",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY rdid_rd ASC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais"); 
+} */
 //Filtra fecha lleno
 if($fecha != '0' && $mes != '0' && $dia != '0' && $cod_ref == '0' && $vende =='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_remision_detalle.fecha_rd =  '$fecha' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND rd.fecha_rd =  '$fecha'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");
  
 }
 //Filtra ref lleno
  if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref != '0' && $vende =='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_items_ordenc,Tbl_remision_detalle',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_remisiones.int_remision = Tbl_remision_detalle.int_remision_r_rd and Tbl_remisiones.str_numero_oc_r = Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_numero_oc = Tbl_items_ordenc.str_numero_io and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref'",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*"); 
-
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_items_ordenc io,Tbl_remision_detalle rd',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND rd.int_ref_io_rd = '$cod_ref'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais"); 
 }
 //Filtra año lleno
  if($id_c =='0' && $anual != '0' && $mes == '0' && $dia == '0' && $cod_ref == '0' && $vende =='0')
 { 
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and  YEAR(Tbl_remision_detalle.fecha_rd) = '$anual' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*"); 
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND YEAR(rd.fecha_rd) = '$anual'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais"); 
 
 }
-  //Filtra ref  y cliente llenos
-  if($id_c !='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref != '0' && $vende =='0')
-  {
-    $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_items_ordenc,Tbl_remision_detallelle',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_remisiones.int_remision = Tbl_remision_detalle.int_remision_r_rd and Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.id_pedido = Tbl_items_ordenc.id_pedido_io and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' and Tbl_orden_compra.id_c_oc='$id_c' and Tbl_remisiones.b_borrado_r='0'",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.int_remision DESC',"*");  ;
-  }
-//Filtra año y mes llenos
+//Filtra ref  y cliente llenos
+if($id_c !='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref != '0' && $vende =='0')
+{
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_items_ordenc io,Tbl_remision_detalle rd',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND rd.int_ref_io_rd = '$cod_ref' AND oc.id_c_oc='$id_c'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.int_remision DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  ;
+}
+//Filtra año y mes llenos *
 if($id_c =='0' && $anual != '0' && $mes != '0' && $dia == '0' && $cod_ref == '0' && $vende =='0')
 {
-  $registros = $conexion->llenaListas('tbl_orden_compra,tbl_remisiones,tbl_remision_detalle,tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items and YEAR(Tbl_remision_detalle.fecha_rd) = '$anual' AND MONTH(Tbl_remisiones.fecha_r) = '$mes'",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");  
- 
-
+  //$registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.b_borrado_r='0' AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=io.str_numero_io AND rd.int_ref_io_rd=io.int_cod_ref_io and rd.int_item_io_rd=io.id_items and YEAR(rd.fecha_rd) = '$anual' AND MONTH(ro.fecha_r) = '$mes'",'GROUP BY ro.str_numero_oc_r,rd.int_ref_io_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  
+  $registros = $conexion->llenaListas('tbl_orden_compra oc,tbl_items_ordenc io,tbl_remisiones ro,tbl_remision_detalle rd',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND YEAR(ro.fecha_r) = '$anual' AND MONTH(ro.fecha_r) = '$mes'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  
 }
 //Filtra año y mes, REF Y VENDE llenos
 if($id_c =='0' && $anual != '0' && $mes != '0' && $dia == '0' && $cod_ref != '0' && $vende !='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and YEAR(Tbl_remision_detalle.fecha_rd) = '$anual' AND MONTH(Tbl_remisiones.fecha_r) = '$mes' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_orden_compra.str_responsable_oc='$vende' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");  
-
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND YEAR(rd.fecha_rd) = '$anual' AND MONTH(ro.fecha_r) = '$mes' AND rd.int_ref_io_rd = '$cod_ref' AND oc.str_elaboro_oc='$vende'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  
 }
 //Filtra fecha y VENDE llenos
 if($id_c =='0' && $anual != '0' && $mes != '0' && $dia != '0' && $cod_ref == '0' && $vende !='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_remision_detalle.fecha_rd =  '$fecha' AND Tbl_orden_compra.str_responsable_oc='$vende' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*"); 
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' and rd.fecha_rd =  '$fecha' AND oc.str_elaboro_oc='$vende'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais"); 
 
 } 
 //Filtra MES, REF Y VENDE llenos
 if($id_c =='0' && $anual == '0' && $mes != '0' && $dia == '0' && $cod_ref != '0' && $vende !='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and MONTH(Tbl_remisiones.fecha_r) = '$mes' and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_orden_compra.str_responsable_oc='$vende' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");  
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' and MONTH(ro.fecha_r) = '$mes' and rd.int_ref_io_rd = '$cod_ref' AND oc.str_elaboro_oc='$vende'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  
 
 } 
 //Filtra REF Y VENDE llenos
 if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref != '0' && $vende !='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_items_ordenc.int_cod_ref_io = '$cod_ref' AND Tbl_orden_compra.str_responsable_oc='$vende' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");  
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' and rd.int_ref_io_rd = '$cod_ref' AND oc.str_elaboro_oc='$vende'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");  
 
 } 
 //Filtra vende lleno
 if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref == '0' && $vende !='0')
 {
-  $registros = $conexion->llenaListas('Tbl_orden_compra,Tbl_remisiones,Tbl_remision_detalle,Tbl_items_ordenc',"WHERE Tbl_remisiones.str_numero_oc_r=Tbl_orden_compra.str_numero_oc and Tbl_orden_compra.str_responsable_oc='$vende' AND Tbl_remisiones.b_borrado_r='0' AND Tbl_remisiones.int_remision=Tbl_remision_detalle.int_remision_r_rd AND  Tbl_remision_detalle.str_numero_oc_rd=Tbl_items_ordenc.str_numero_io AND  Tbl_remision_detalle.int_ref_io_rd=Tbl_items_ordenc.int_cod_ref_io  and Tbl_remision_detalle.int_item_io_rd=Tbl_items_ordenc.id_items",'GROUP BY Tbl_remisiones.str_numero_oc_r,tbl_remision_detalle.int_ref_io_rd ORDER BY Tbl_remisiones.fecha_r DESC',"*");
+  $registros = $conexion->llenaListas('Tbl_orden_compra oc,Tbl_remisiones ro,Tbl_remision_detalle rd,Tbl_items_ordenc io',"WHERE ro.id_pedido_oc=oc.id_pedido AND ro.int_remision=rd.int_remision_r_rd AND rd.str_numero_oc_rd=ro.str_numero_oc_r AND rd.int_ref_io_rd=io.int_cod_ref_io AND rd.int_item_io_rd=io.id_items AND ro.b_borrado_r='0' AND oc.str_elaboro_oc='$vende'",'GROUP BY rd.int_item_io_rd, rd.int_ref_io_rd, rd.int_cant_rd ORDER BY ro.fecha_r DESC',"rd.id_rd, rd.fecha_rd, rd.str_numero_oc_rd, ro.str_numero_oc_r, rd.int_ref_io_rd, oc.id_pedido, ro.str_transportador_r, ro.str_guia_r, ro.factura_r, rd.int_remision_r_rd, ro.ciudad_pais");
 } 
  
 ?>
@@ -137,10 +132,11 @@ if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref == '0'
             $ocremi=$row_remision['str_numero_oc_r'];
             $refer=$row_remision['int_ref_io_rd'];
             $id_pedido=$row_remision['id_pedido']; 
-
+            $id_rd=$row_remision['id_rd']; 
+            
           if(!empty($clientes))
             {
-             $resultmp = $conexion->llenarCampos('tbl_orden_compra oc, cliente c', "WHERE oc.id_c_oc= c.id_c and oc.id_pedido = '$id_pedido' ", '','distinct c.nombre_c, c.direccion_c, c.ciudad_c, c.pais_c' );
+            $resultmp = $conexion->llenarCampos('tbl_orden_compra oc, cliente c', "WHERE oc.id_c_oc= c.id_c and oc.id_pedido = '$id_pedido' ", '','distinct c.nombre_c, c.direccion_c, c.ciudad_c, c.pais_c' );
 
             $nombre_c=$resultmp['nombre_c'];  
               $ciudad_c=$resultmp['ciudad_c']; 
@@ -156,7 +152,9 @@ if($id_c =='0' && $anual == '0' && $mes == '0' && $dia == '0' && $cod_ref == '0'
             if($mp!='')
             { 
               $resultio = $conexion->llenarCampos('tbl_items_ordenc', "WHERE id_pedido_io = '$id_pedido' AND int_cod_ref_io='$refer'", 'GROUP BY int_cod_ref_io ORDER BY id_items DESC','id_items,int_cod_ref_io, int_cantidad_io, int_cantidad_rest_io, str_direccion_desp_io,(int_cantidad_io - int_cantidad_rest_io) as despachada ' ); 
-              $despachada = $resultio['despachada']; 
+              $resultdetallesremision = $conexion->llenarCampos('tbl_remision_detalle rd', "WHERE id_rd = '$id_rd'", 'GROUP BY id_rd ','int_cant_rd as despachada'); 
+              //$despachada = $resultio['despachada']; 
+              $despachada = $resultdetallesremision['despachada']; 
               $int_cantidad_io = $resultio['int_cantidad_io']; 
               $int_cantidad_rest_io = $resultio['int_cantidad_rest_io']; 
               $str_direccion_desp_io = $resultio['str_direccion_desp_io']; 

@@ -123,6 +123,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
   <script type="text/javascript" src="js/validacion_numerico.js"></script>
   <script type="text/javascript" src="js/consulta.js"></script>
   <script type="text/javascript" src="AjaxControllers/js/consultas.js"></script>
+  <script type="text/javascript" src="AjaxControllers/updateConAlert.js"></script>
 
   <!-- sweetalert -->
   <script src="librerias/sweetalert/dist/sweetalert.min.js"></script>
@@ -140,11 +141,16 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
 
   <!-- css Bootstrap hace mas grande el formato-->
   <link rel="stylesheet" href="bootstrap-4/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<style>
-  .width_selects{
-    width: 180px;
-  }
-</style>
+  <style>
+    .width_selects {
+      width: 180px;
+    }
+
+    option {
+      color: black;
+      /* Aseguramos que las opciones sean negras */
+    }
+  </style>
 </head>
 
 <body>
@@ -224,194 +230,194 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
                                                     } ?>>Referencia</option>
                                   <?php foreach ($this->row_referencia_copia as $row_referencia_copia) {  ?>
                                     <option value="<?php echo $row_referencia_copia['int_cod_ref_pm']; ?>" <?php if (!(strcmp($row_referencia_copia['int_cod_ref_pm'], $_GET['cod_refcopia']))) {
-                                                                                                          echo "selected=\"selected\"";
-                                                                                                        } ?>><?php echo htmlentities($row_referencia_copia['int_cod_ref_pm']); ?> </option>
+                                                                                                              echo "selected=\"selected\"";
+                                                                                                            } ?>><?php echo htmlentities($row_referencia_copia['int_cod_ref_pm']); ?> </option>
                                   <?php } ?>
                                 </select>
                               </td>
-                              <tr>
-                                <td colspan="9" id="fuente2">
-                                  <?php if ($_GET['cod_refcopia'])
+                            <tr>
+                              <td colspan="9" id="fuente2">
+                                <?php if ($_GET['cod_refcopia'])
                                   echo 'Copiando Caracteristicas ' . $_GET['cod_refcopia'];
                                 ?>
                               </td>
                             </tr>
-                            </tr>
-                            <!--  INICIA MEZCLAS DE IMPRESION -->
-                            
-                            <tr>
-                              <td colspan="9" id="titulo4">
-                                IMPRESORA:
-                                <select name="maquina" id="impresora_ci" class="busqueda selectsMedio" required="required">
-                                  <option value="">Seleccione</option>
-                                  <?php foreach ($this->maquinas as $maquinas) { ?>
-                                    <option value="<?php echo $maquinas['nombre_maquina']; ?>" <?php if (!(strcmp($row_caract['maquina'], $maquinas['nombre_maquina']))) {
-                                                                                                  echo "selected=\"selected\"";
-                                                                                                } ?>><?php echo htmlentities($maquinas['nombre_maquina']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                            </tr>
-                            <tr id="tr1">
-                              <td colspan="9"> <strong style="color: red;"> NOTA: Los colores de las 8 unidades se deben ingresar en la referencia</strong></td>
-                            </tr>
-                            <tr>
+        </tr>
+        <!--  INICIA MEZCLAS DE IMPRESION -->
+
+        <tr>
+          <td colspan="9" id="titulo4">
+            IMPRESORA:
+            <select name="maquina" id="impresora_ci" class="busqueda selectsMedio" required="required">
+              <option value="">Seleccione</option>
+              <?php foreach ($this->maquinas as $maquinas) { ?>
+                <option value="<?php echo $maquinas['nombre_maquina']; ?>" <?php if (!(strcmp($row_caract['maquina'], $maquinas['nombre_maquina']))) {
+                                                                              echo "selected=\"selected\"";
+                                                                            } ?>><?php echo htmlentities($maquinas['nombre_maquina']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+        </tr>
+        <tr id="tr1">
+          <td colspan="9"> <strong style="color: red;"> NOTA: Los colores de las 8 unidades se deben ingresar en la referencia</strong></td>
+        </tr>
+        <tr>
           <td colspan="17" style="background-color: #ABADAF;"></td>
         </tr>
-                            <tr id="tr1">
-                              <td colspan="9" id="titulo4">UNIDADES DE IMPRESION</td>
-                            </tr>
-                            <tr>
-                            <td id="fuente1"></td>
-                              <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 1</td>
-                              <td colspan="2" id="fuente2">UNIDAD 2</td>
-                              <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 3</td>
-                              <td colspan="2" id="fuente2">UNIDAD 4</td>
-                              
-                            </tr>
-                            <tr>
-                              <td id="fuente2">COLORES </td>
-                              <td colspan="1" id="fuente1" class="fondoGris">
-                                <select name="color1" id="color1" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color1']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color1']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td colspan="1" id="fuente1" class="fondoGris">
-                                <input readonly name="val_color1" type="text" id="val_color1" placeholder="%" size="2" value="<?php echo $row_caract['val_color1']; ?>"/>
-                              </td>
-                              <td id="fuente1">
-                                <select name="color2" id="color2" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color2']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color2']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input readonly name="val_color2" type="text" id="val_color2" placeholder="%" size="2" value="<?php echo $row_caract['val_color2'] ?>" />
-                              </td>
-
-                              <td id="fuente1" class="fondoGris">
-                                <select name="color3" id="color3" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color3']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color3']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input readonly name="val_color3" type="text" id="val_color3" placeholder="%" size="2" value="<?php echo $row_caract['val_color3'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="color4" id="color4" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color4']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color4']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input readonly name="val_color4" type="text" id="val_color4" placeholder="%" size="2" value="<?php echo $row_caract['val_color4'] ?>" />
-                              </td>
-                              
-                            <tr>
-                              <td id="fuente2">MEZCLA 1</td>
-                              <td colspan="1" id="fuente1" class="fondoGris">
-                                <select name="mezcla1" id="mezcla1" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla1']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla1']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td colspan="1" id="fuente1" class="fondoGris">
-                                <input name="val_mezcla1" type="text" id="val_mezcla1" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla1'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="mezcla2" id="mezcla2" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla2']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla2']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input name="val_mezcla2" type="text" id="val_mezcla2" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla2'] ?>" />
-                              </td>
-
-                              <td id="fuente1" class="fondoGris">
-                                <select name="mezcla3" id="mezcla3" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla3']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla3']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input name="val_mezcla3" type="text" id="val_mezcla3" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla3'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="mezcla4" id="mezcla4" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla4']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla4']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input name="val_mezcla4" type="text" id="val_mezcla4" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla4'] ?>" />
-                              </td>
-                              
-                              
-                            </tr>
+        <tr id="tr1">
+          <td colspan="9" id="titulo4">UNIDADES DE IMPRESION</td>
+        </tr>
+        <tr>
+          <td id="fuente1"></td>
+          <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 1</td>
+          <td colspan="2" id="fuente2">UNIDAD 2</td>
+          <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 3</td>
+          <td colspan="2" id="fuente2">UNIDAD 4</td>
 
         </tr>
         <tr>
-        <td id="fuente2">MEZCLA 2</td>
+          <td id="fuente2">COLORES </td>
+          <td colspan="1" id="fuente1" class="fondoGris">
+            <select name="color1" id="color1" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color1']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color1']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td colspan="1" id="fuente1" class="fondoGris">
+            <input readonly name="val_color1" type="text" id="val_color1" placeholder="%" size="2" value="<?php echo $row_caract['val_color1']; ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="color2" id="color2" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color2']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color2']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input readonly name="val_color2" type="text" id="val_color2" placeholder="%" size="2" value="<?php echo $row_caract['val_color2'] ?>" />
+          </td>
+
+          <td id="fuente1" class="fondoGris">
+            <select name="color3" id="color3" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color3']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color3']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input readonly name="val_color3" type="text" id="val_color3" placeholder="%" size="2" value="<?php echo $row_caract['val_color3'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="color4" id="color4" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color4']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color4']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input readonly name="val_color4" type="text" id="val_color4" placeholder="%" size="2" value="<?php echo $row_caract['val_color4'] ?>" />
+          </td>
+
+        <tr>
+          <td id="fuente2">MEZCLA 1</td>
+          <td colspan="1" id="fuente1" class="fondoGris">
+            <select name="mezcla1" id="mezcla1" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla1']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla1']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td colspan="1" id="fuente1" class="fondoGris">
+            <input name="val_mezcla1" type="text" id="val_mezcla1" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla1'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="mezcla2" id="mezcla2" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla2']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla2']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input name="val_mezcla2" type="text" id="val_mezcla2" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla2'] ?>" />
+          </td>
+
+          <td id="fuente1" class="fondoGris">
+            <select name="mezcla3" id="mezcla3" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla3']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla3']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input name="val_mezcla3" type="text" id="val_mezcla3" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla3'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="mezcla4" id="mezcla4" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla4']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla4']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input name="val_mezcla4" type="text" id="val_mezcla4" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla4'] ?>" />
+          </td>
+
+
+        </tr>
+
+        </tr>
+        <tr>
+          <td id="fuente2">MEZCLA 2</td>
           <td colspan="1" id="fuente1" class="fondoGris">
             <select name="mezcla9" id="mezcla9" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla9']))) {
@@ -476,7 +482,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla12" type="text" id="val_mezcla12" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla12'] ?>" />
           </td>
-          <tr>
+        <tr>
           <td id="fuente2">MEZCLA 3</td>
           <td colspan="1" id="fuente1" class="fondoGris">
             <select name="mezcla17" id="mezcla17" class="width_selects">
@@ -542,10 +548,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla20" type="text" id="val_mezcla20" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla20'] ?>" />
           </td>
-          
+
 
         <tr>
-        <td id="fuente2">MEZCLA 4</td>
+          <td id="fuente2">MEZCLA 4</td>
           <td colspan="1" id="fuente1" class="fondoGris">
             <select name="mezcla25" id="mezcla25" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla25']))) {
@@ -610,7 +616,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla28" type="text" id="val_mezcla28" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla28'] ?>" />
           </td>
-          
+
         </tr>
         <tr>
           <td id="fuente2">ALCOHOL</td>
@@ -748,7 +754,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
         <tr>
           <td id="fuente2">METOXIPROPANOL</td>
           <td colspan="1" id="fuente1" class="fondoGris">
-            <select name="metoxi1" id="metoxi1" class="width_selects" >
+            <select name="metoxi1" id="metoxi1" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['metoxi1']))) {
                                   echo "selected=\"selected\"";
                                 } ?>></option>
@@ -924,7 +930,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
               <?php } ?>
             </select>
           </td>
-          
+
         </tr>
         <tr>
           <td colspan="17" style="background-color: #ABADAF;"></td>
@@ -1060,151 +1066,151 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
                             <input name="campo_136"  type="text"  id="campo_136" placeholder="%" size="3"value="<?php echo $row_caract['campo_136'] ?>"/>
                             </td>
                       </tr> -->
-                      <tr>
-                      <td id="fuente1"></td>
-                      <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 5</td>
-                              <td colspan="2" id="fuente2">UNIDAD 6</td>
-                              <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 7</td>
-                              <td colspan="3" id="fuente2">UNIDAD 8</td>
-                      </tr>
-                      <tr>
-                      <td id="fuente2">COLORES </td>
-                      <td id="fuente1" class="fondoGris">
-                                <select name="color5" id="color5" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color5']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color5']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input readonly name="val_color5" type="text" id="val_color5" placeholder="%" size="2" value="<?php echo $row_caract['val_color5'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="color6" id="color6" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color6']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color6']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input readonly name="val_color6" type="text" id="val_color6" placeholder="%" size="2" value="<?php echo $row_caract['val_color6'] ?>" />
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <select name="color7" id="color7" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color7']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color7']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input readonly name="val_color7" type="text" id="val_color7" placeholder="%" size="2" value="<?php echo $row_caract['val_color7'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="color8" id="color8" class="width_selects" onchange="updateInput(this)">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['color8']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>COLOR</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color8']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input readonly name="val_color8" type="text" id="val_color8" placeholder="%" size="2" value="<?php echo $row_caract['val_color8'] ?>" />
-                              </td>
-                            </tr>
-                      </tr>
-                      <tr>
-                      <td id="fuente2">MEZCLA 1</td>
-                      <td id="fuente1" class="fondoGris">
-                                <select name="mezcla5" id="mezcla5" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla5']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla5']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input name="val_mezcla5" type="text" id="val_mezcla5" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla5'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="mezcla6" id="mezcla6" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla6']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla6']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input name="val_mezcla6" type="text" id="val_mezcla6" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla6'] ?>" />
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <select name="mezcla7" id="mezcla7" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla7']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla7']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1" class="fondoGris">
-                                <input name="val_mezcla7" type="text" id="val_mezcla7" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla7'] ?>" />
-                              </td>
-                              <td id="fuente1">
-                                <select name="mezcla8" id="mezcla8" class="width_selects">
-                                  <option value="" <?php if (!(strcmp("", $row_caract['mezcla8']))) {
-                                                      echo "selected=\"selected\"";
-                                                    } ?>>MEZCLAS</option>
-                                  <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
-                                    <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla8']))) {
-                                                                                                      echo "selected=\"selected\"";
-                                                                                                    } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
-                                    </option>
-                                  <?php } ?>
-                                </select>
-                              </td>
-                              <td id="fuente1">
-                                <input name="val_mezcla8" type="text" id="val_mezcla8" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla8'] ?>" />
-                              </td>
-                      </tr>
-                      <tr>
-                      <td id="fuente2">MEZCLA 2</td>
-                      <td id="fuente1" class="fondoGris">
+        <tr>
+          <td id="fuente1"></td>
+          <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 5</td>
+          <td colspan="2" id="fuente2">UNIDAD 6</td>
+          <td colspan="2" id="fuente2" class="fondoGris">UNIDAD 7</td>
+          <td colspan="3" id="fuente2">UNIDAD 8</td>
+        </tr>
+        <tr>
+          <td id="fuente2">COLORES </td>
+          <td id="fuente1" class="fondoGris">
+            <select name="color5" id="color5" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color5']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color5']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input readonly name="val_color5" type="text" id="val_color5" placeholder="%" size="2" value="<?php echo $row_caract['val_color5'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="color6" id="color6" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color6']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color6']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input readonly name="val_color6" type="text" id="val_color6" placeholder="%" size="2" value="<?php echo $row_caract['val_color6'] ?>" />
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <select name="color7" id="color7" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color7']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color7']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input readonly name="val_color7" type="text" id="val_color7" placeholder="%" size="2" value="<?php echo $row_caract['val_color7'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="color8" id="color8" class="width_selects" onchange="updateInput(this)">
+              <option value="" <?php if (!(strcmp("", $row_caract['color8']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>COLOR</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['color8']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input readonly name="val_color8" type="text" id="val_color8" placeholder="%" size="2" value="<?php echo $row_caract['val_color8'] ?>" />
+          </td>
+        </tr>
+        </tr>
+        <tr>
+          <td id="fuente2">MEZCLA 1</td>
+          <td id="fuente1" class="fondoGris">
+            <select name="mezcla5" id="mezcla5" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla5']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla5']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input name="val_mezcla5" type="text" id="val_mezcla5" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla5'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="mezcla6" id="mezcla6" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla6']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla6']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input name="val_mezcla6" type="text" id="val_mezcla6" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla6'] ?>" />
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <select name="mezcla7" id="mezcla7" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla7']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla7']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1" class="fondoGris">
+            <input name="val_mezcla7" type="text" id="val_mezcla7" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla7'] ?>" />
+          </td>
+          <td id="fuente1">
+            <select name="mezcla8" id="mezcla8" class="width_selects">
+              <option value="" <?php if (!(strcmp("", $row_caract['mezcla8']))) {
+                                  echo "selected=\"selected\"";
+                                } ?>>MEZCLAS</option>
+              <?php foreach ($this->row_materia_prima as $row_materia_prima) { ?>
+                <option value="<?php echo $row_materia_prima['id_insumo']; ?>" <?php if (!(strcmp($row_materia_prima['id_insumo'], $row_caract['mezcla8']))) {
+                                                                                  echo "selected=\"selected\"";
+                                                                                } ?>><?php echo htmlentities($row_materia_prima['descripcion_insumo']); ?>
+                </option>
+              <?php } ?>
+            </select>
+          </td>
+          <td id="fuente1">
+            <input name="val_mezcla8" type="text" id="val_mezcla8" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla8'] ?>" />
+          </td>
+        </tr>
+        <tr>
+          <td id="fuente2">MEZCLA 2</td>
+          <td id="fuente1" class="fondoGris">
             <select name="mezcla13" id="mezcla13" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla13']))) {
                                   echo "selected=\"selected\"";
@@ -1236,8 +1242,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla14" type="text" id="val_mezcla14" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla14'] ?>" />
           </td>
-          
-                      <td id="fuente1" class="fondoGris">
+
+          <td id="fuente1" class="fondoGris">
             <select name="mezcla15" id="mezcla15" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla15']))) {
                                   echo "selected=\"selected\"";
@@ -1273,8 +1279,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
 
         </tr>
         <tr>
-        <td id="fuente2">MEZCLA 3</td>
-        <td id="fuente1" class="fondoGris">
+          <td id="fuente2">MEZCLA 3</td>
+          <td id="fuente1" class="fondoGris">
             <select name="mezcla21" id="mezcla21" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla21']))) {
                                   echo "selected=\"selected\"";
@@ -1338,10 +1344,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla24" type="text" id="val_mezcla24" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla24'] ?>" />
           </td>
-          </tr>
-<tr>
-<td id="fuente2">MEZCLA 4</td>
-<td id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">MEZCLA 4</td>
+          <td id="fuente1" class="fondoGris">
             <select name="mezcla29" id="mezcla29" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['mezcla29']))) {
                                   echo "selected=\"selected\"";
@@ -1405,10 +1411,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_mezcla32" type="text" id="val_mezcla32" placeholder="%" size="2" value="<?php echo $row_caract['val_mezcla32'] ?>" />
           </td>
-</tr>
-<tr>
-<td id="fuente2">ALCOHOL</td>
-<td id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">ALCOHOL</td>
+          <td id="fuente1" class="fondoGris">
             <select name="alcohol5" id="alcohol5" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['alcohol5']))) {
                                   echo "selected=\"selected\"";
@@ -1421,7 +1427,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
               <?php } ?>
             </select>
           </td>
-<td id="fuente1" class="fondoGris">
+          <td id="fuente1" class="fondoGris">
             <input name="val_alcohol5" type="text" id="val_alcohol5" placeholder="%" size="2" value="<?php echo $row_caract['val_alcohol5'] ?>" />
           </td>
           <td id="fuente1">
@@ -1472,10 +1478,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_alcohol8" type="text" id="val_alcohol8" placeholder="%" size="2" value="<?php echo $row_caract['val_alcohol8'] ?>" />
           </td>
-</tr>
-<tr>
-<td id="fuente2">ACETATO NPA</td>
-<td id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">ACETATO NPA</td>
+          <td id="fuente1" class="fondoGris">
             <select name="acetato5" id="acetato5" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['acetato5']))) {
                                   echo "selected=\"selected\"";
@@ -1539,10 +1545,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td id="fuente1">
             <input name="val_acetato8" type="text" id="val_acetato8" placeholder="%" size="2" value="<?php echo $row_caract['val_acetato8'] ?>" />
           </td>
-</tr>
-<tr>
-<td id="fuente2">METOXIPROPANOL</td>
-<td id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">METOXIPROPANOL</td>
+          <td id="fuente1" class="fondoGris">
             <select name="metoxi5" id="metoxi5" class="width_selects">
               <option value="" <?php if (!(strcmp("", $row_caract['metoxi5']))) {
                                   echo "selected=\"selected\"";
@@ -1608,10 +1614,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           </td>
         </tr>
         <tr>
-</tr>
-<tr>
-<td id="fuente2">STIK</td>
-<td colspan="2" id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">STIK</td>
+          <td colspan="2" id="fuente1" class="fondoGris">
             <select name="stik5" id="stik5" class="width_selects bordegris">
               <option value="">STIK</option>
               <?php foreach ($stik as $row_stik) { ?>
@@ -1651,10 +1657,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
               <?php } ?>
             </select>
           </td>
-</tr>
-<tr>
-<td id="fuente2">VISCOSIDAD</td>
-<td colspan="2" id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">VISCOSIDAD</td>
+          <td colspan="2" id="fuente1" class="fondoGris">
             <input name="visco5" id="visco5" style="width:50px" min="0" step="0.1" type="number" size="3" value="<?php echo $row_caract['visco5'] ?>" placeholder="seg" /> Segundos
           </td>
           <td colspan="2" id="fuente1">
@@ -1666,10 +1672,10 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td colspan="2" id="fuente1">
             <input name="visco8" id="visco8" style="width:50px" min="0" step="0.1" type="number" size="3" value="<?php echo $row_caract['visco8'] ?>" placeholder="seg" /> Segundos
           </td>
-</tr>
-<tr>
-<td id="fuente2">ANILOX</td>
-<td colspan="2" id="fuente1" class="fondoGris">
+        </tr>
+        <tr>
+          <td id="fuente2">ANILOX</td>
+          <td colspan="2" id="fuente1" class="fondoGris">
             <select name="anilox5" id="anilox5" class="width_selects bordegris">
               <option value="" <?php if (!(strcmp("", $row_caract['anilox5']))) {
                                   echo "selected=\"selected\"";
@@ -1721,8 +1727,8 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
               <?php } ?>
             </select>
           </td>
-</tr>
-<tr>
+        </tr>
+        <tr>
           <td colspan="17" style="background-color: #ABADAF;"></td>
         </tr>
         <tr>
@@ -1746,11 +1752,11 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td colspan="2" id="fuente1">Temp Secado Tinteros</td>
           <td colspan="2" id="fuente1">Numero de Pistas</td>
           <td colspan="2" id="fuente1">Repeticion Perimetro</td>
-          
+
         </tr>
         <tr>
           <td colspan="1" id="fuente1">
-            <input name="cant_unidades" id="cant_unidades" style="width:40px" min="0" max="8" step="1" type="number" size="3" value="<?php echo $row_caract['cant_unidades'] ?>"/>
+            <input name="cant_unidades" id="cant_unidades" style="width:40px" min="0" max="8" step="1" type="number" size="3" value="<?php echo $row_caract['cant_unidades'] ?>" />
           </td>
           <td colspan="2" id="fuente1">
             <input name="temp_tunel" id="temp_tunel" style="width:40px" min="0" step="1" type="number" size="3" value="<?php echo $row_caract['temp_tunel'] ?>" placeholder="°C" /> °C
@@ -1764,16 +1770,16 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
           <td colspan="2" id="fuente1">
             <input name="rep_perimetro" id="rep_perimetro" style="width:40px" min="0" step="1" type="number" size="3" value="<?php echo $row_caract['rep_perimetro'] ?>" />
           </td>
-         
+
         </tr>
         <tr>
-        <td colspan="3" id="fuente1">Arte Aprobado (SI/NO)</td>
+          <td colspan="3" id="fuente1">Arte Aprobado (SI/NO)</td>
           <td colspan="2" id="fuente1">Guia Fotocelda (SI/NO)</td>
           <td colspan="2" id="fuente1">Velocidad Maquina</td>
           <td colspan="1" id="fuente1">Z</td>
         </tr>
         <tr>
-        <td colspan="3" id="fuente1">
+          <td colspan="3" id="fuente1">
             <select name="arte" id="arte" style="width:50px">
               <option value="0" <?php if (!strcmp("0", $row_caract['arte'])) {
                                   echo "selected=\"selected\"";
@@ -1828,6 +1834,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
               <input type="hidden" name="fecha_modif" id="fecha_modif" value="<?php echo date('Y-m-d H:i:s') ?>" />
               <input class="botonGeneral" type="submit" name="GUARDAR" id="GUARDAR" value="GUARDAR" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <a class="botonFinalizar" style="text-decoration:none; " href="javascript:saliryCerrar()">SALIR</a>
+              <input type="button" name="updateEgp" id="updateEgp" value="ACTUALIZAR EGP">
             </div>
           </td>
         </tr>
@@ -1922,19 +1929,27 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
     busquedaColor('#metoxi7', 'METOXIPROPANOL', <?php echo $row_caract['metoxi7'] ?>);
     busquedaColor('#metoxi8', 'METOXIPROPANOL', <?php echo $row_caract['metoxi8'] ?>);
 
+    /* Si no hay ninguna opcion seleccionada en los inputs entonces los muestra en gris */
+    $('select').each(function() {
+      if ($(this).val() === "") {
+        $(this).css('color', '#999'); // Cambiar el color a gris si el valor es ""
+      }
+
+      // Añadir evento change para cambiar el color cuando el valor cambie
+      $(this).on('change', function() {
+        if ($(this).val() === "") {
+          $(this).css('color', '#999');
+        } else {
+          $(this).css('color', 'black');
+        }
+      });
+    })
+
     $(".busqueda").select2();
 
     refcopia = $(".refcopia").val();
     if (refcopia != '')
       vercopiaMezcla();
-
-    /* $( ".select_colores" ).change(function() { 
-      let name_color = document.querySelector("#color1").value;
-      console.log(name_color)
-      if(name_color != ""){
-        document.querySelector("#val_color1").value = 100
-      } else document.querySelector("#val_color1").value = ""
-    }) */
   });
 
   function updateInput(selectElement) {
@@ -1947,7 +1962,7 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
     } else {
       inputElement.value = '';
     }
-  } 
+  }
 
   function vercopiaMezcla() {
     $('.refcopia').show();
@@ -2024,53 +2039,73 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("", $MM_authorizedUsers
       return false;
     }
 
-    if($("#temp_tunel").val() == ''){
+    if ($("#temp_tunel").val() == '') {
       swal("Error", "Falta por agregar Temperatura Secado Tunel! :)", "error");
       return false;
     }
-    if($("#temp_tintas").val() == ''){
+    if ($("#temp_tintas").val() == '') {
       swal("Error", "Falta por agregar Temperatura Tintas! :)", "error");
       return false;
     }
-    if($("#rep_ancho").val() == ''){
+    if ($("#rep_ancho").val() == '') {
       swal("Error", "Falta por agregar el Numero de Pistas! :)", "error");
       return false;
     }
-    if($("#rep_perimetro").val() == ''){
+    if ($("#rep_perimetro").val() == '') {
       swal("Error", "Falta por agregar la Repeticion del Perimetro! :)", "error");
       return false;
     }
-    if($("#velocidad").val() == ''){
+    if ($("#velocidad").val() == '') {
       swal("Error", "Falta por agregar la Velocidad! :)", "error");
       return false;
     }
-    if($("#z").val() == ''){
+    if ($("#z").val() == '') {
       swal("Error", "Falta por agregar la Z! :)", "error");
       return false;
     }
-    if($("#tension_desbo").val() == ''){
+    if ($("#tension_desbo").val() == '') {
       swal("Error", "Falta por agregar la Tension del Desbobinador! :)", "error");
       return false;
     }
-    if($("#tension_refres").val() == ''){
+    if ($("#tension_refres").val() == '') {
       swal("Error", "Falta por agregar la Tension del refrescador! :)", "error");
       return false;
     }
-    if($("#tension_rebo").val() == ''){
+    if ($("#tension_rebo").val() == '') {
       swal("Error", "Falta por agregar la Tension del Rebobinador! :)", "error");
       return false;
     }
-    
+
   })
 
   /* agregar el 100% a los colores cuando se cargan los datos de la DB y no se tenia agregado el valor*/
   for (let i = 1; i <= 8; i++) {
-      if ($(`#color${i}`).val() != "" && $(`#val_color${i}`).val() == "") {
-        $(`#val_color${i}`).val(100)
-      } else if($(`#color${i}`).val() == "" && $(`#val_color${i}`).val() != ""){
-        $(`#val_color${i}`).val('')
-      }
+    if ($(`#color${i}`).val() != "" && $(`#val_color${i}`).val() == "") {
+      $(`#val_color${i}`).val(100)
+    } else if ($(`#color${i}`).val() == "" && $(`#val_color${i}`).val() != "") {
+      $(`#val_color${i}`).val('')
     }
+  }
+
+  /* script para actualizar el egp desde la pantalla de mezclas impresion !!OJO¡¡ aun no activo
+  $("#updateEgp").on('click', function(){
+    let array= [];
+    for (let i = 1; i <= 8; i++) {
+      if( $(`#color${i}`).val() != ""){ //solo almacena unidades llenas
+        array[i-1] = {
+            unidad: i,
+            pantone : selectPantone($(`#color${i} option:selected`).text())
+          }
+        }
+      }
+      updateConAlertEGP(array);
+  })
+
+  function selectPantone(txt){
+    let pantone = /PANTONE:\s*([A-Za-z0-9_]\d+)/i;
+    let txtpantone = txt.match(pantone);
+    return txtpantone === null ? "" : txtpantone[1];
+  } */
 </script>
 
 <?php

@@ -29,7 +29,9 @@ $row_colas_tikets = $conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int
 
 $row_numeracion =$conexion->llenarCampos('tbl_tiquete_numeracion', "WHERE int_op_tn='".$_GET['id_op']."' "." AND int_caja_tn='".$cajamenos1."' ", "ORDER BY int_paquete_tn DESC LIMIT 1","int_hasta_tn " );
 
-$row_info_op = $conexion->llenarCampos('tbl_orden_produccion', "WHERE id_op='".$_GET['id_op']."' ", "","charfin" );
+$row_info_op = $conexion->llenarCampos('tbl_orden_produccion', "WHERE id_op='".$_GET['id_op']."' ", "","charfin,int_cod_ref_op,int_calibre_op,sinnumeracion" );
+
+$row_info_ref = $conexion->llenarCampos('tbl_orden_produccion op', " JOIN tbl_referencia rf ON op.int_cod_ref_op=rf.cod_ref WHERE op.id_op='".$_GET['id_op']."' ", ""," tipo_formula,ancho_ref,largo_ref " );
 
 $undxcaja = $row_tiquete_num['int_undxcaja_tn'];
 $undxpaq = $row_tiquete_num['int_undxpaq_tn'];
@@ -51,8 +53,28 @@ $hasta = $hastaLetr.($hastaNum-$undxcaja);//para q arranque desde primer caja
   <script type="text/javascript" src="js/formato.js"></script>
 
   <!--Librerias de codigo barras QR  -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
+  <script src="JsBarcode-master/dist/JsBarcode.all.min.js"></script> -->
+
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ 
+  <!--Librerias de codigo barras QR  -->
+  <script src="jQuery_QR/js/jquery_qr.js"></script>
+  <script type="text/javascript" src="jQuery_QR/js/jquery.classyqr.js"></script>
+  <script type="text/javascript" src="jQuery_QR/js/jquery-barcode.js"></script>
+  <!-- *************************** Library of QR generator about missing number -->
+  <!-- Incluir la biblioteca QRious desde un CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <!-- *************************** -->
+
+  <!--Librerias de codigo barras QR  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
   <script src="JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+
 
   <!--IMPRIME AL CARGAR POPUP-->
 <style type="text/css"> 
@@ -67,91 +89,217 @@ $hasta = $hastaLetr.($hastaNum-$undxcaja);//para q arranque desde primer caja
 </script>
 </head>
 <body onLoad="self.print();"><!--self.close(); onLoad="imprimir();"--> 
-  <?php  
-    //$hastaNum=$hastaNum-$undxpaq;
-    for ($i=0; $i < $paquAImprimir; $i++) {  
-   
-     $hasta = $Cadenas->str_split_unicode($hasta);
-     $hastaLetr = $Cadenas->retornaLetras($hasta);
-     $hastaNum =  $Cadenas->retornaNumer($hasta);
 
-     $desde = $hastaLetr.(($hastaNum )+1);
-    ?>
-    <div class="container" id="seleccion" onClick="cerrar('seleccion');return false" >
-   
-      <table align="center" id="tabla_borde"  style="padding-top: 2%;" > <!-- border="1"  -->
-         
-       <!--  <tr>
-          <td colspan="4" nowrap="nowrap" align="center" class="fuentev2"><strong>CONTROL DE NUMERACION</strong> </td>
-        </tr> -->
-        <tr>
-          <td nowrap="nowrap" ><b> PAQUETE</b></td>
-          <td nowrap="nowrap" id="stikers_fuentN2"><?php 
-            $incrempaqu = ($row_colas_tikets['int_paquete_tn']-($row_colas_tikets['int_undxcaja_tn']/$row_colas_tikets['int_undxpaq_tn'])+1);
-            $verpaq=$row_colas_tikets['ref_tn']=='096' ? $incrempaqu : 1; echo $paq_gen=$i+$verpaq; ?></td>
-          <td nowrap="nowrap" ><b> CAJA</b></td>
-          <td nowrap="nowrap" id="stikers_fuentN2"><?php echo $caja_gen=$row_colas_tikets['int_caja_tn']; ?></td>
-        </tr>    
-        <tr>
-          <td nowrap="nowrap" colspan="2" ><b> FECHA</b></td> 
-          <td nowrap="nowrap" colspan="2" ><?php echo $row_colas_tikets['fecha_ingreso_tn']; ?><b>/</b><?php echo ($row_colas_tikets['hora_tn']);?></td>
-        </tr>
-        <tr>
-          <td nowrap="nowrap" colspan="2" ><b> ORDEN P.</b></td>
-          <td nowrap="nowrap" colspan="2" ><?php echo $op_gen=$row_colas_tikets['int_op_tn']; ?></td>
-        </tr>
-        <tr>
-          <td nowrap="nowrap" ><b>UNIDADES X PAQ.</b></td>
-          <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_undxpaq_tn']; ?></td>
-          <td nowrap="nowrap" ><b>CODIGO EMP.</b></td>
-          <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_empleado_tn']; ?></td>
-        </tr>
-        <tr>
-         <td nowrap="nowrap" ><b>UNIDADES X CAJA</b></td>
-         <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_undxcaja_tn'];?></td>
-         <td nowrap="nowrap" ><b>CODIGO REV.</b></td>
-         <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_rev_tn']; ?></td>
-       </tr>
-       <tr> 
-        <td nowrap="nowrap" colspan="2" ><b>DESDE </b> <?php  echo $desde;
-             //proceso si tiene letras para poder sumar unidades x caja
-             $desde = $Cadenas->str_split_unicode($desde);
-             $desdeLetr = $Cadenas->retornaLetras($desde);
-             $desdeNum =  $Cadenas->retornaNumer($desde);
-             $desde = $desdeLetr.$desdeNum;
-             $desdeConLetras = $desdeLetr.$desdeNum;
-          ?><?php echo $row_info_op['charfin']; ?></td>
-        <td nowrap="nowrap" colspan="2" ><canvas id="desde<?php echo $paq_gen; ?>"></canvas> </td>
-      </tr>
-      <tr>
-        <td nowrap="nowrap" colspan="2"  ><b>HASTA </b><?php $desde = ($desdeNum + $undxpaq)-1; echo $hasta=$desdeLetr.$desde; ?><?php echo $row_info_op['charfin']; ?></td>
-        <td nowrap="nowrap" colspan="2" ><canvas id="hasta<?php echo $paq_gen; ?>"></canvas> </td>
-      </tr> 
+  <?php if($row_info_op['sinnumeracion']==0) { ?> 
+      <?php  
+        //$hastaNum=$hastaNum-$undxpaq;
+        for ($i=0; $i < $paquAImprimir; $i++) {  
+       
+         $hasta = $Cadenas->str_split_unicode($hasta);
+         $hastaLetr = $Cadenas->retornaLetras($hasta);
+         $hastaNum =  $Cadenas->retornaNumer($hasta);
+
+         $desde = $hastaLetr.(($hastaNum )+1);
+        ?>
+        <div class="container" id="seleccion" onClick="cerrar('seleccion');return false" >
+       
+          <table align="center" id="tabla_borde"  style="padding-top: 2%;" > <!-- border="1"  -->
+             
+           <!--  <tr>
+              <td colspan="4" nowrap="nowrap" align="center" class="fuentev2"><strong>CONTROL DE NUMERACION</strong> </td>
+            </tr> -->
+            <tr>
+              <td nowrap="nowrap" ><b> PAQUETE</b></td>
+              <td nowrap="nowrap" id="stikers_fuentN2"><?php 
+                $incrempaqu = ($row_colas_tikets['int_paquete_tn']-($row_colas_tikets['int_undxcaja_tn']/$row_colas_tikets['int_undxpaq_tn'])+1);
+                $verpaq=$row_colas_tikets['ref_tn']=='096' ? $incrempaqu : 1; echo $paq_gen=$i+$verpaq; ?></td>
+              <td nowrap="nowrap" ><b> CAJA</b></td>
+              <td nowrap="nowrap" id="stikers_fuentN2"><?php echo $caja_gen=$row_colas_tikets['int_caja_tn']; ?></td>
+            </tr>    
+            <tr>
+              <td nowrap="nowrap" colspan="2" ><b> FECHA</b></td> 
+              <td nowrap="nowrap" colspan="2" ><?php echo $row_colas_tikets['fecha_ingreso_tn']; ?><b>/</b><?php echo ($row_colas_tikets['hora_tn']);?></td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap" colspan="2" ><b> ORDEN P.</b></td>
+              <td nowrap="nowrap" colspan="2" ><?php echo $op_gen=$row_colas_tikets['int_op_tn']; ?></td>
+            </tr>
+            <tr>
+              <td nowrap="nowrap" ><b>UNIDADES X PAQ.</b></td>
+              <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_undxpaq_tn']; ?></td>
+              <td nowrap="nowrap" ><b>CODIGO EMP.</b></td>
+              <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_empleado_tn']; ?></td>
+            </tr>
+            <tr>
+             <td nowrap="nowrap" ><b>UNIDADES X CAJA</b></td>
+             <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_undxcaja_tn'];?></td>
+             <td nowrap="nowrap" ><b>CODIGO REV.</b></td>
+             <td nowrap="nowrap" ><?php echo $row_colas_tikets['int_cod_rev_tn']; ?></td>
+           </tr>
+           <tr> 
+            <td nowrap="nowrap" colspan="2" ><b>DESDE </b> <?php  echo $desde;
+                 //proceso si tiene letras para poder sumar unidades x caja
+                 $desde = $Cadenas->str_split_unicode($desde);
+                 $desdeLetr = $Cadenas->retornaLetras($desde);
+                 $desdeNum =  $Cadenas->retornaNumer($desde);
+                 $desde = $desdeLetr.$desdeNum;
+                 $desdeConLetras = $desdeLetr.$desdeNum;
+              ?><?php echo $row_info_op['charfin']; ?></td>
+            <td nowrap="nowrap" colspan="2" ><canvas id="desde<?php echo $paq_gen; ?>"></canvas> </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap" colspan="2"  ><b>HASTA </b><?php $desde = ($desdeNum + $undxpaq)-1; echo $hasta=$desdeLetr.$desde; ?><?php echo $row_info_op['charfin']; ?></td>
+            <td nowrap="nowrap" colspan="2" ><canvas id="hasta<?php echo $paq_gen; ?>"></canvas> </td>
+          </tr> 
+          
+        </table> 
       
-    </table> 
+       
+      </div>
+      <div id="oculto">
+        <table width="100%" height="100%" border="0" align="center">
+          <tr>
+            <td><input name="cerrar" type="button" autofocus value="cerrar"onClick="cerrar('seleccion');return false" ></td>
+          </tr>
+        </table>
+
+      </div>
+    <script type="text/javascript">
+
+       var conteo = <?php echo $paq_gen; ?>;
+       
+      var desde = <?php echo json_encode($desdeConLetras); ?>;
+      $("#desde"+conteo).JsBarcode(desde,{format:"CODE128",displayValue:false,fontSize:10, width:1,height:7});
+
+
+      var hasta = <?php echo json_encode($hasta); ?>;
+      $("#hasta"+conteo).JsBarcode(hasta,{format:"CODE128",displayValue:false,fontSize:10, width:1,height:7});
+    </script>
+    <?php } ?>
+
+<?php }else{ ?> 
+
+
+
+
+
+    <?php  
+      //$hastaNum=$hastaNum-$undxpaq;
+      for ($i=0; $i < $paquAImprimir; $i++) {  
+       
+
+       $codigos = array();
+       $hasta = $Cadenas->str_split_unicode($hasta);
+       $hastaLetr = $Cadenas->retornaLetras($hasta);
+       $hastaNum =  $Cadenas->retornaNumer($hasta);
+
+       $desde = $hastaLetr.(($hastaNum )+1);
+      ?>
+      <div class="container" id="seleccion" onClick="cerrar('seleccion');return false" >
+         <?php 
+                       $incrempaqu = 1;//($row_colas_tikets['int_paquete_tn']-($row_colas_tikets['int_undxcaja_tn']/$row_colas_tikets['int_undxpaq_tn'])+1);
+                       $verpaq=$incrempaqu;//$row_colas_tikets['ref_tn']=='096' ? $incrempaqu : 1;  
+                       $paq_gen=$i+$verpaq;
+                       $caja_gen=$row_colas_tikets['int_caja_tn'];
+                       $op_gen=$row_colas_tikets['int_op_tn']; 
+                       $empleado=$row_colas_tikets['int_cod_empleado_tn'];
+                       $auxiliar=$row_colas_tikets['int_cod_rev_tn']; 
+                       $cod_ref=$row_info_op['int_cod_ref_op'];
+                       $calibre=$row_info_op['int_calibre_op']; 
+                       $tipof=$row_info_ref['tipo_formula'];
+                       $ancho=$row_info_ref['ancho_ref'];
+                       $largo=$row_info_ref['largo_ref'];
+                       $codigos = " PAQUETE ". $paq_gen . "- CAJA " . $caja_gen . "- ORDEN P " . $op_gen . "- COD. EMP ". $empleado. "- COD. REV ". $auxiliar . "- COD. REF ". $cod_ref . "- TIPO BOLSA " .$tipof . "- ANCHO " .$ancho . "- LARGO " .$largo ."- CALIBRE ". $calibre;
+                       // " PAQUETE ". $paq_gen . " CAJA " . $caja_gen . " ORDEN P " . $op_gen . "COD. EMP". $empleado. "COD. REV". $auxiliar;
+                     
+         ?>
+        <table align="center" id="tabla_borde" style="padding-top: 2%;"> <!-- style="padding-top: 2%;" --><!-- border="1"  -->
+              
+            <tr>  
+             <td colspan="2" ><canvas align="center"  id="codigosb<?php echo $paq_gen; ?>"></canvas> </td> 
+             <td colspan="3" id="stikers_fuentN2"><?php echo "<b>REF: </b> " .$cod_ref. " <b>".$tipof ."<b><br>" . " <b>Calibre:</b> ".$calibre . "<br> <b>Ancho:</b> " .$ancho . "  <b>Largo:</b> " .$largo; ?></td> 
+           </tr>
+          <tr>
+            <td colspan="2">&nbsp;<b> ORDEN P.</b></td>
+            <td colspan="2">&nbsp;<?php echo $op_gen ; ?></td>
+          </tr>
+           <tr>
+            <td >&nbsp;<b> PAQUETE:</b> </td>
+            <td >&nbsp;<?php echo $paq_gen ; ?>&nbsp; </td> 
+            <td >&nbsp;<b> CAJA: </b></td> 
+            <td ><?php echo $caja_gen ; ?></td>
+          </tr>    
+          
+          <tr> 
+            <td >&nbsp;<b> COD. EMP.</b></td>
+            <td >&nbsp;<?php echo $empleado; ?>&nbsp;</td>
+           <td >&nbsp;<b> COD. REV.</b></td>
+           <td ><?php echo $auxiliar; ?></td>
+           </tr> 
+            
+      </table> 
+
+    </div>
+   <div id="oculto">
+     <table width="100%" height="100%" border="0" align="center">
+       <tr>
+         <td><input name="cerrar" type="button" autofocus value="cerrar"onClick="cerrar('seleccion');return false" ></td>
+       </tr>
+     </table>
+
+   </div>
+   <script> 
+
+       arrayFaltantes = '<?php echo ($codigos); ?>';
+ 
+       creaQR2(arrayFaltantes);
+
+function creaQR2(arrayFaltantes){
+        
+          var conteo = <?php echo $paq_gen; ?>;
+       
+         //var desde = <?php echo ($desdeConLetras); ?>;
+         //$("#codigosb"+conteo).JsBarcode(desde,{format:"CODE128",displayValue:false,fontSize:10, width:2,height:20});
+         
+
+        //inicia codigo QR
+        
+         
+
+         let txt = "";
+        /* arrayFaltantes.forEach(element => {
+             txt = txt + element
+         });*/
+
+         // Obtener el elemento canvas donde se mostrará el código QR
+         const canvas = document.getElementById("codigosb"+conteo);
+      
+       
+         // The various parameters
+         const createQR = v => {
+             return new QRious({
+                 element: canvas,
+                 value: v,
+                 level: "L",
+                 size: 110,
+                 backgroundAlpha: 0,
+                 foreground: "black"
+             });
+
+         }; 
+
+         // We create the qr code
+         const qr = createQR(arrayFaltantes);
+       } 
+
+     </script>
+    <?php } ?>
+
   
-   
-  </div>
-  <div id="oculto">
-    <table width="100%" height="100%" border="0" align="center">
-      <tr>
-        <td><input name="cerrar" type="button" autofocus value="cerrar"onClick="cerrar('seleccion');return false" ></td>
-      </tr>
-    </table>
 
-  </div>
-<script type="text/javascript">
-
-   var conteo = <?php echo $paq_gen; ?>;
-   
-  var desde = <?php echo json_encode($desdeConLetras); ?>;
-  $("#desde"+conteo).JsBarcode(desde,{format:"CODE128",displayValue:false,fontSize:10, width:1,height:7});
+<?php } ?> 
 
 
-  var hasta = <?php echo json_encode($hasta); ?>;
-  $("#hasta"+conteo).JsBarcode(hasta,{format:"CODE128",displayValue:false,fontSize:10, width:1,height:7});
-</script>
-<?php } ?>
+ </body>
+ </html>
 
-</body>
-</html>

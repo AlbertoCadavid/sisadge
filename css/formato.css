@@ -747,6 +747,9 @@ border-radius: 8px;
    border-width: 2px;
    border-style: solid;
 }
+.bordegris{
+  border-color: darkgray;
+}
 #cajon1{ 
  float:left;
 }
@@ -821,4 +824,3 @@ input.largerCheckbox
     color: #4481B0;
     background-color: #ffffff;
   }
- 

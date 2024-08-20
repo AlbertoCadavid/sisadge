@@ -49,6 +49,16 @@ case '1':
 $ref=$_POST['N_referencia']; 
 $nitc=$_POST['Str_nit'];
 
+
+ //ACTUALIZO VALOR IMPUESTO ENREFERENCIA
+  
+  $conexion = new ApptivaDB();
+
+   $existe = $conexion->actualizar("tbl_referencia", "valor_impuesto='".$_POST['valor_impuesto']."'", " cod_ref='".$_POST['N_referencia']."'");   
+     
+/// 
+
+
 $sqlestado="SELECT N_cotizacion,N_referencia_c,Str_nit,fecha_creacion,B_estado FROM Tbl_cotiza_packing WHERE N_referencia_c='$ref' and Str_nit='$nitc' ORDER BY fecha_creacion DESC LIMIT 1";
 $resultestado= mysql_query($sqlestado);
 $numestado= mysql_num_rows($resultestado);
@@ -151,6 +161,16 @@ $Result5 = mysql_query($insertSQL5, $conexion1) or die(mysql_error());
 break;
 return '0';
 case'2':
+
+ //ACTUALIZO VALOR IMPUESTO ENREFERENCIA
+  
+  $conexion = new ApptivaDB();
+
+   $existe = $conexion->actualizar("tbl_referencia", "valor_impuesto='".$_POST['valor_impuesto']."'", " CONVERT(cod_ref, SIGNED INTEGER)='".$_POST['N_referencia']."'");   
+     
+///
+
+ 
 $updateSQL = sprintf("UPDATE Tbl_cotiza_packing SET N_cotizacion=%s, N_referencia_c=%s,Str_nit=%s, N_ancho=%s, N_alto=%s, N_cantidad=%s, N_calibre=%s, Str_incoterms=%s, Str_moneda=%s, N_precio_vnta=%s, Str_boca_entrada=%s, B_impresion=%s, N_colores_impresion=%s, B_cyreles=%s, Str_ubica_entrada=%s, Str_lam1=%s, Str_lam2=%s,Str_plazo=%s, fecha_creacion=%s, Str_usuario=%s, N_comision=%s, B_estado=%s, B_generica=%s,N_precio_old=%s,impuesto=%s, valor_impuesto=%s WHERE N_cotizacion=%s and N_referencia_c=%s",   
                        GetSQLValueString($_POST['N_cotizacion'], "int"),
 					   GetSQLValueString($_POST['N_referencia'], "int"),

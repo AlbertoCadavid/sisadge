@@ -240,29 +240,28 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
     </table>
  
   <br>
-  <table>
+  <table style="width: 90%">
     <tr>
-      <td class="Estilo1">CODIGO</td>
-      <td class="textocentrado">DESCRIPCION</td>
-      <td class="centrado2">PROVEEDOR</td>
-      <td class="centrado1">CLASE</td>
+      <td class="centrado5">CODIGO</td>
+      <td class="centrado1">DESCRIPCION</td>
+      <td class="centrado1">PROVEEDOR</td>
+      <td class="centrado2">CLASE</td>
       <td class="centrado5">QUIMICOS</td>
       <td class="centrado5">MEDIDA</td>
-      <td class="centrado1">TIPO</td>
-      <td class="Estilo5">VALOR </td>
-      <td class="Estilo5">STOCK</td>   
+      <td class="centrado5">TIPO</td>
+      <td class="centrado5">VALOR </td>
+      <td class="centrado5">STOCK</td>   
     </tr>
 
   </table>
 <!--   <div class="divScrollGigante" id="itemspedido" role="alert" style="text-align: left;">  -->
 
-  <table  >
+  <table  style="width: 90%">
 
     <?php do { ?>
       <?php //foreach($row_registros as $row_insumos) {  ?>
        <tr onMouseOver="uno(this,'CBCBE4');" onMouseOut="dos(this,'#FFFFFF');" bgcolor="#FFFFFF" bordercolor="#ACCFE8">  
-        <td class="Estilo3"><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_insumos['codigo_insumo']; ?></a>
-        </td>
+        <td class="centrado6" ><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_insumos['codigo_insumo']; ?></a></td>
         <td class="Estilo3"><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000">
          <?php 
          echo $row_insumos['descripcion_insumo']; 
@@ -287,7 +286,6 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
     if($numclase >='1')
     { 
       echo $clase = $numclase['nombre_clase'];    
-
     } 
     ?> 
   </a>
@@ -320,7 +318,7 @@ $queryString_registros = sprintf("&totalRows_registros=%d%s", $totalRows_registr
  </a>
 </td>
 <td class="centrado6"><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo number_format($row_insumos['valor_unitario_insumo'], 2,",", "."); ?></a></td>
-<td class="derecha1"><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_insumos['stok_insumo']; ?></a></td>
+<td class="centrado6"><a href="insumo_edit.php?id_insumo=<?php echo $row_insumos['id_insumo']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_insumos['stok_insumo']; ?></a></td>
 </tr>
 <?php //} ?>
 <?php } while ($row_insumos = mysql_fetch_assoc($registros)); ?>

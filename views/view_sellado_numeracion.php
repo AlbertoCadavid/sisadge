@@ -112,7 +112,7 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 /* ++++++++++INICIO NUEVAS FUNCIONES PARA EL MANEJO DE LAS BANDERAS +++++++++*/
 $objCsellado = new CselladoController();
-$ops = $row_tiquete_num['int_op_n'] == '' ? $row_control_paquete['id_op'] :  $row_tiquete_num['int_op_n'];
+$ops = $row_control_paquete['id_op']  == '' ? $row_tiquete_num['int_op_n']:  $row_control_paquete['id_op'];
 $numRollo = $row_tiquete_num['rollo'];
 
 
@@ -219,7 +219,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
               <div class="span8 offset2"> <!--span8 offset2   esto da el tamaño pequeño -->
                 <div class="panel panel-primary">
                   <div class="panel-heading">
-                    <h2>SELLADO NUMERACION</h2>
+                    <h2>SELLADO NUMERACION EDIT  </h2>
                   </div>
                   <div id="cabezamenu">
                     <ul id="menuhorizontal">
@@ -288,9 +288,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                             <td colspan="3">
                               <input <?php if ($restrincion != '1') {
                                         echo "readonly";
-                                      } ?> class="check" type="checkbox" name="imprimirt" <?php if ($row_control_paquete['imprimiop'] == '0') {
-                                                                                            echo 'disabled="disabled"';
-                                                                                          }  ?> id="imprimirt" value="<?php echo $select_tiquete_num['imprime'] == '' ? $row_control_paquete['imprimiop'] :  $select_tiquete_num['imprime']; ?>" />
+                                      } ?> class="check" type="checkbox" name="imprimirt" <?php if ($row_control_paquete['imprimiop'] == '0') { echo 'disabled="disabled"'; }  ?> id="imprimirt" value="<?php echo $select_tiquete_num['imprime'] == '' ? $row_control_paquete['imprimiop'] :  $select_tiquete_num['imprime']; ?>" />
                               <input name="tienefaltantes" id="tienefaltantes" type="hidden" value="<?php echo $select_tiquete_num['imprime'] == '' ? $row_control_paquete['imprimiop'] :  $select_tiquete_num['imprime']; ?>">
                               <input name="tienefaltantesOP" id="tienefaltantesOP" type="hidden" value="<?php echo $row_control_paquete['imprimiop']; ?>">
                               <input name="pesot" required="required" style="width:50px;" step="0.01" type="number" id="pesot" placeholder="Peso Caja" value="1">
@@ -317,23 +315,17 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
 
                           <tr>
                             <td colspan="3" id="fuente1">UNIDADES X CAJA</td>
-                            <td colspan="3"><input class="form-control negro_inteso" type="number" name="int_undxcaja_tn" id="int_undxcaja_tn" min="0" <?php if ($restrincion != '1') {
-                                                                                                                                                          echo "readonly";
-                                                                                                                                                        } ?> value="<?php echo $row_control_paquete['int_undxcaja_op']; ?>"></td>
+                            <td colspan="3"><input class="form-control negro_inteso" type="number" name="int_undxcaja_tn" id="int_undxcaja_tn" min="0" <?php if ($restrincion != '1') { echo "readonly"; } ?> value="<?php echo $row_control_paquete['int_undxcaja_op']; ?>"></td>
                           </tr>
                           <tr>
                             <td colspan="3" id="fuente1">UNIDADES X PAQ.</td>
-                            <td colspan="3"><input class="form-control negro_inteso" type="number" name="int_undxpaq_tn" id="int_undxpaq_tn" <?php if ($restrincion != '1') {
-                                                                                                                                                echo "readonly";
-                                                                                                                                              } ?> min="0" value="<?php echo $row_control_paquete['int_undxpaq_op']; ?>" readonly> <em>Cambiar en o.p</em></td>
+                            <td colspan="3"><input class="form-control negro_inteso" type="number" name="int_undxpaq_tn" id="int_undxpaq_tn" <?php if ($restrincion != '1') { echo "readonly"; } ?> min="0" value="<?php echo $row_control_paquete['int_undxpaq_op']; ?>" readonly> <em>Cambiar en o.p</em></td>
                           </tr>
                           <tr>
                             <td colspan="3" id="fuente1"><strong>DESDE</strong></td>
                             <td colspan="2">
                               <!-- <input type="text" name="totalFaltantes" id="totalFaltantes" value="<?php echo $faltantes['totalf']; ?>">  -->
-                              <input class="form-control negro_inteso int_desde_tn" type="text" <?php if ($restrincion != '1') {
-                                                                                                  echo "readonly";
-                                                                                                } ?> name="int_desde_tn" autofocus id="int_desde_tn" value="<?php echo $select_tiquete_num['int_hasta_tn'] == '' ? $row_control_paquete['numInicio_op'] : $select_tiquete_num['int_hasta_n']; ?>" min="0" onchange="conMayusculas(this)" required>
+                              <input class="form-control negro_inteso int_desde_tn" type="text" <?php if ($restrincion != '1') { echo "readonly"; } ?> name="int_desde_tn" autofocus id="int_desde_tn" value="<?php echo $select_tiquete_num['int_hasta_tn'] == '' ? $row_control_paquete['numInicio_op'] : $select_tiquete_num['int_hasta_n']; ?>" min="0" onchange="conMayusculas(this)" required>
 
                             </td>
                             <td>
@@ -343,9 +335,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                           <tr>
                             <td colspan="3" id="fuente1"><strong>HASTA</strong></td>
                             <td colspan="2">
-                              <input class="form-control negro_inteso" type="text" <?php if ($restrincion != '1') {
-                                                                                      echo "readonly";
-                                                                                    } ?> name="int_hasta_tn" id="int_hasta_tn" required value="" min="0">
+                              <input class="form-control negro_inteso" type="text" <?php if ($restrincion != '1') { echo "readonly"; } ?> name="int_hasta_tn" id="int_hasta_tn" required value="" min="0">
                             </td>
                             <td>
                               <input class="form-control negro_inteso charfin" style=" width:100px" type="text" name="charfin" autofocus id="charfin" value="<?php echo $row_control_paquete['charfin']; ?>" min="0" readonly="readonly">
@@ -359,9 +349,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                                                     echo "selected=\"selected\"";
                                                   } ?>>Seleccione</option>
                                 <?php foreach ($row_codigo_empleado as $row_codigo_empleado) { ?>
-                                  <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_tiquete_num['int_cod_empleado_n']))) {
-                                                                                                          echo "selected=\"selected\"";
-                                                                                                        } ?>><?php echo $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado']; ?></option>
+                                  <option value="<?php echo $row_codigo_empleado['codigo_empleado'] ?>" <?php if (!(strcmp($row_codigo_empleado['codigo_empleado'], $row_tiquete_num['int_cod_empleado_n']))) { echo "selected=\"selected\""; } ?>><?php echo $row_codigo_empleado['nombre_empleado'] . " " . $row_codigo_empleado['apellido_empleado']; ?></option>
                                 <?php } ?>
                               </select>
                             </td>
@@ -374,9 +362,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
                                                     echo "selected=\"selected\"";
                                                   } ?>>Seleccione</option>
                                 <?php foreach ($row_revisor as $row_revisor) { ?>
-                                  <option value="<?php echo $row_revisor['codigo_empleado'] ?>" <?php if (!(strcmp($row_tiquete_num['int_cod_rev_n'], $row_revisor['codigo_empleado']))) {
-                                                                                                  echo "selected=\"selected\"";
-                                                                                                } ?>><?php echo $row_revisor['nombre_empleado'] . " " . $row_revisor['apellido_empleado']; ?></option>
+                                  <option value="<?php echo $row_revisor['codigo_empleado'] ?>" <?php if (!(strcmp($row_tiquete_num['int_cod_rev_n'], $row_revisor['codigo_empleado']))) { echo "selected=\"selected\""; } ?>><?php echo $row_revisor['nombre_empleado'] . " " . $row_revisor['apellido_empleado']; ?></option>
                                 <?php } ?>
                               </select>
                             </td>
@@ -887,7 +873,7 @@ window.location ='sellado_control_numeracion_edit.php?id_op='+id_op+'&id_tn='+id
           actualizaBandera(operario, fecha, estado, id_op, id_bandera);
         }
       }
-      console.log("sellados " + parseInt(metrosSellados) + "mts" + ">=" + metrosBanderas + "mts " + "ubic/bandera")
+      //console.log("sellados " + parseInt(metrosSellados) + "mts" + ">=" + metrosBanderas + "mts " + "ubic/bandera")
 
     //mostrar las banderas en la parte alta de la pag
       let pband = document.createElement("p");

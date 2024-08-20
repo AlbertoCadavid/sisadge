@@ -672,14 +672,13 @@ else if (device.match(/Ipad/i))
     echo "<a href='produccion.php' >".$row_ver_menu['nombre_menu']."</a>"; ?>
     <ul><?php $i=0; 
     foreach ($row_ver_sub_menu_f as $row_ver_sub_menu_f) {
-     $ver_url_sub=$row_ver_sub_menu_f['ver_url']; if ($ver_url_sub==1){ //IMPORTANTE, DEFINE LA IMPRESION DE LOS QUE TIENEN VALOR 1?> 
-      <li><?php
-      $tipo_5=$row_usuario['tipo_usuario'];
-      $id_submenu_f=$row_ver_sub_menu_f['id_submenu'];
-       
-      $num5=$conexion->llenarCampos('permisos',"where submenu='$id_submenu_f' and usuario='$tipo_5'",'','*');  
-      if ($num5 >= '1') { $submenu_f=$num5['submenu']; }    
-      if ($id_submenu_f==$submenu_f) { $url5=$row_ver_sub_menu_f['url'];
+      $ver_url_sub=$row_ver_sub_menu_f['ver_url']; 
+      if ($ver_url_sub==1){ //IMPORTANTE, DEFINE LA IMPRESION DE LOS QUE TIENEN VALOR 1?> 
+      <li><?php $tipo_5=$row_usuario['tipo_usuario'];
+                $id_submenu_f=$row_ver_sub_menu_f['id_submenu'];
+                $num5=$conexion->llenarCampos('permisos',"where submenu='$id_submenu_f' and usuario='$tipo_5'",'','*'); 
+      if ($num5 >= '1') {$submenu_f=$num5['submenu']; }    
+      if ($id_submenu_f==$submenu_f) {$url5=$row_ver_sub_menu_f['url'];
       echo "<a href=$url5>".$row_ver_sub_menu_f['nombre_submenu']."</a>"; } ?>
 
       <?php

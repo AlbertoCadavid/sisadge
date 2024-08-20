@@ -159,23 +159,11 @@ class oMmezclas{
             }
 
             if(is_null($this->existe)){ 
-   
-         
-
-              $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_proceso'] ."','". $arrayPHP['fecha_registro_pm'] ."','". $arrayPHP['str_registro_pm'] ."','". $arrayPHP['id_ref_pm'] ."','". $arrayPHP['int_cod_ref_pm'] ."','". $arrayPHP['version_ref_pm'] ."','". $arrayPHP['int_ref1_tol1_pm'] ."','". $arrayPHP['int_ref1_tol1_porc1_pm'] ."','". $arrayPHP['int_ref2_tol1_pm'] ."','". $arrayPHP['int_ref2_tol1_porc2_pm'] ."','". $arrayPHP['int_ref3_tol1_pm'] ."','". $arrayPHP['int_ref3_tol1_porc3_pm'] ."','". $arrayPHP['int_ref1_tol2_pm'] ."','". $arrayPHP['int_ref1_tol2_porc1_pm'] ."','". $arrayPHP['int_ref2_tol2_pm'] ."','". $arrayPHP['int_ref2_tol2_porc2_pm'] ."','". $arrayPHP['int_ref3_tol2_pm'] ."','". $arrayPHP['int_ref3_tol2_porc3_pm'] ."','". $arrayPHP['int_ref1_tol3_pm'] ."','". $arrayPHP['int_ref1_tol3_porc1_pm'] ."','". $arrayPHP['int_ref2_tol3_pm'] ."','". $arrayPHP['int_ref2_tol3_porc2_pm'] ."','". $arrayPHP['int_ref3_tol3_pm'] ."','". $arrayPHP['int_ref3_tol3_porc3_pm'] ."','". $arrayPHP['int_ref1_tol4_pm'] ."','". $arrayPHP['int_ref1_tol4_porc1_pm'] ."','". $arrayPHP['int_ref2_tol4_pm'] ."','". $arrayPHP['int_ref2_tol4_porc2_pm'] ."','". $arrayPHP['int_ref3_tol4_pm'] ."','". $arrayPHP['int_ref3_tol4_porc3_pm'] ."','". $arrayPHP['int_ref1_rpm_pm'] ."','". $arrayPHP['int_ref1_tol5_porc1_pm'] ."','". $arrayPHP['int_ref2_rpm_pm'] ."','". $arrayPHP['int_ref2_tol5_porc2_pm'] ."','". $arrayPHP['int_ref3_rpm_pm'] ."','". $arrayPHP['int_ref3_tol5_porc3_pm'] ."','". $arrayPHP['extrusora_mp'] ."','". $arrayPHP['observ_pm'] ."','". $arrayPHP['b_borrado_pm'] ."' );");
-             
-
+                $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_proceso'] ."','". $arrayPHP['fecha_registro_pm'] ."','". $arrayPHP['str_registro_pm'] ."','". $arrayPHP['id_ref_pm'] ."','". $arrayPHP['int_cod_ref_pm'] ."','". $arrayPHP['version_ref_pm'] ."','". $arrayPHP['int_ref1_tol1_pm'] ."','". $arrayPHP['int_ref1_tol1_porc1_pm'] ."','". $arrayPHP['int_ref2_tol1_pm'] ."','". $arrayPHP['int_ref2_tol1_porc2_pm'] ."','". $arrayPHP['int_ref3_tol1_pm'] ."','". $arrayPHP['int_ref3_tol1_porc3_pm'] ."','". $arrayPHP['int_ref1_tol2_pm'] ."','". $arrayPHP['int_ref1_tol2_porc1_pm'] ."','". $arrayPHP['int_ref2_tol2_pm'] ."','". $arrayPHP['int_ref2_tol2_porc2_pm'] ."','". $arrayPHP['int_ref3_tol2_pm'] ."','". $arrayPHP['int_ref3_tol2_porc3_pm'] ."','". $arrayPHP['int_ref1_tol3_pm'] ."','". $arrayPHP['int_ref1_tol3_porc1_pm'] ."','". $arrayPHP['int_ref2_tol3_pm'] ."','". $arrayPHP['int_ref2_tol3_porc2_pm'] ."','". $arrayPHP['int_ref3_tol3_pm'] ."','". $arrayPHP['int_ref3_tol3_porc3_pm'] ."','". $arrayPHP['int_ref1_tol4_pm'] ."','". $arrayPHP['int_ref1_tol4_porc1_pm'] ."','". $arrayPHP['int_ref2_tol4_pm'] ."','". $arrayPHP['int_ref2_tol4_porc2_pm'] ."','". $arrayPHP['int_ref3_tol4_pm'] ."','". $arrayPHP['int_ref3_tol4_porc3_pm'] ."','". $arrayPHP['int_ref1_rpm_pm'] ."','". $arrayPHP['int_ref1_tol5_porc1_pm'] ."','". $arrayPHP['int_ref2_rpm_pm'] ."','". $arrayPHP['int_ref2_tol5_porc2_pm'] ."','". $arrayPHP['int_ref3_rpm_pm'] ."','". $arrayPHP['int_ref3_tol5_porc3_pm'] ."','". $arrayPHP['extrusora_mp'] ."','". $arrayPHP['observ_pm'] ."','". $arrayPHP['b_borrado_pm'] ."' );");
             }else{ 
-
                 $updatepro = $this->db->query("UPDATE $tabla SET id_proceso = '". $arrayPHP['id_proceso'] ."',fecha_registro_pm = '". $arrayPHP['fecha_registro_pm'] ."',str_registro_pm = '". $arrayPHP['str_registro_pm'] ."',int_ref1_tol1_pm = '". $arrayPHP['int_ref1_tol1_pm'] ."',int_ref1_tol1_porc1_pm = '". $arrayPHP['int_ref1_tol1_porc1_pm'] ."',int_ref2_tol1_pm = '". $arrayPHP['int_ref2_tol1_pm'] ."',int_ref2_tol1_porc2_pm = '". $arrayPHP['int_ref2_tol1_porc2_pm'] ."',int_ref3_tol1_pm = '". $arrayPHP['int_ref3_tol1_pm'] ."',int_ref3_tol1_porc3_pm = '". $arrayPHP['int_ref3_tol1_porc3_pm'] ."',int_ref1_tol2_pm = '". $arrayPHP['int_ref1_tol2_pm'] ."',int_ref1_tol2_porc1_pm = '". $arrayPHP['int_ref1_tol2_porc1_pm'] ."',int_ref2_tol2_pm = '". $arrayPHP['int_ref2_tol2_pm'] ."',int_ref2_tol2_porc2_pm = '". $arrayPHP['int_ref2_tol2_porc2_pm'] ."',int_ref3_tol2_pm = '". $arrayPHP['int_ref3_tol2_pm'] ."',int_ref3_tol2_porc3_pm = '". $arrayPHP['int_ref3_tol2_porc3_pm'] ."',int_ref1_tol3_pm = '". $arrayPHP['int_ref1_tol3_pm'] ."',int_ref1_tol3_porc1_pm = '". $arrayPHP['int_ref1_tol3_porc1_pm'] ."',int_ref2_tol3_pm = '". $arrayPHP['int_ref2_tol3_pm'] ."',int_ref2_tol3_porc2_pm = '". $arrayPHP['int_ref2_tol3_porc2_pm'] ."',int_ref3_tol3_pm = '". $arrayPHP['int_ref3_tol3_pm'] ."',int_ref3_tol3_porc3_pm = '". $arrayPHP['int_ref3_tol3_porc3_pm'] ."',int_ref1_tol4_pm = '". $arrayPHP['int_ref1_tol4_pm'] ."',int_ref1_tol4_porc1_pm = '". $arrayPHP['int_ref1_tol4_porc1_pm'] ."',int_ref2_tol4_pm = '". $arrayPHP['int_ref2_tol4_pm'] ."',int_ref2_tol4_porc2_pm = '". $arrayPHP['int_ref2_tol4_porc2_pm'] ."',int_ref3_tol4_pm = '". $arrayPHP['int_ref3_tol4_pm'] ."',int_ref3_tol4_porc3_pm = '". $arrayPHP['int_ref3_tol4_porc3_pm'] ."',int_ref1_rpm_pm = '". $arrayPHP['int_ref1_rpm_pm'] ."',int_ref1_tol5_porc1_pm = '". $arrayPHP['int_ref1_tol5_porc1_pm'] ."',int_ref2_rpm_pm = '". $arrayPHP['int_ref2_rpm_pm'] ."',int_ref2_tol5_porc2_pm = '". $arrayPHP['int_ref2_tol5_porc2_pm'] ."',int_ref3_rpm_pm = '". $arrayPHP['int_ref3_rpm_pm'] ."',int_ref3_tol5_porc3_pm = '". $arrayPHP['int_ref3_tol5_porc3_pm'] ."',extrusora_mp = '". $arrayPHP['extrusora_mp'] ."',observ_pm = '". $arrayPHP['observ_pm'] ."',b_borrado_pm = '". $arrayPHP['b_borrado_pm'] ."' WHERE ".$filtro." = '". $id ."'  and id_proceso='1';" );
-              
             }
-            /*echo '<pre>';
-               var_dump($stmt) ;
-            echo '<pre>';die; */
  
-
-     
         } catch (Exception $e) 
         {
             die($e->getMessage());
@@ -185,39 +173,23 @@ class oMmezclas{
 
     public function RegistrarMezclasHistorico($tabla,$columna,$filtro,$id, $data)
     { 
-
-
-        try 
-        {
+        try {
             $array_codificado = UtilHelper::arrayEncode($data);
             $array_deco = UtilHelper::arrayDecode($array_codificado); 
             $arrayPHP =  ($array_deco) ;
             
-              
-
-              $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_proceso'] ."','". $arrayPHP['fecha_registro_pm'] ."','". $arrayPHP['str_registro_pm'] ."','". $arrayPHP['id_ref_pm'] ."','". $arrayPHP['int_cod_ref_pm'] ."','". $arrayPHP['version_ref_pm'] ."','". $arrayPHP['int_ref1_tol1_pm'] ."','". $arrayPHP['int_ref1_tol1_porc1_pm'] ."','". $arrayPHP['int_ref2_tol1_pm'] ."','". $arrayPHP['int_ref2_tol1_porc2_pm'] ."','". $arrayPHP['int_ref3_tol1_pm'] ."','". $arrayPHP['int_ref3_tol1_porc3_pm'] ."','". $arrayPHP['int_ref1_tol2_pm'] ."','". $arrayPHP['int_ref1_tol2_porc1_pm'] ."','". $arrayPHP['int_ref2_tol2_pm'] ."','". $arrayPHP['int_ref2_tol2_porc2_pm'] ."','". $arrayPHP['int_ref3_tol2_pm'] ."','". $arrayPHP['int_ref3_tol2_porc3_pm'] ."','". $arrayPHP['int_ref1_tol3_pm'] ."','". $arrayPHP['int_ref1_tol3_porc1_pm'] ."','". $arrayPHP['int_ref2_tol3_pm'] ."','". $arrayPHP['int_ref2_tol3_porc2_pm'] ."','". $arrayPHP['int_ref3_tol3_pm'] ."','". $arrayPHP['int_ref3_tol3_porc3_pm'] ."','". $arrayPHP['int_ref1_tol4_pm'] ."','". $arrayPHP['int_ref1_tol4_porc1_pm'] ."','". $arrayPHP['int_ref2_tol4_pm'] ."','". $arrayPHP['int_ref2_tol4_porc2_pm'] ."','". $arrayPHP['int_ref3_tol4_pm'] ."','". $arrayPHP['int_ref3_tol4_porc3_pm'] ."','". $arrayPHP['int_ref1_rpm_pm'] ."','". $arrayPHP['int_ref1_tol5_porc1_pm'] ."','". $arrayPHP['int_ref2_rpm_pm'] ."','". $arrayPHP['int_ref2_tol5_porc2_pm'] ."','". $arrayPHP['int_ref3_rpm_pm'] ."','". $arrayPHP['int_ref3_tol5_porc3_pm'] ."','". $arrayPHP['extrusora_mp'] ."','". $arrayPHP['observ_pm'] ."','". $arrayPHP['b_borrado_pm'] ."' );");
-             
-
-          
-            /*echo '<pre>';
-               var_dump($stmt) ;
-            echo '<pre>';die; */
-    
-
-     
-        } catch (Exception $e) 
-        {
+            $stmt = $this->db->query("INSERT INTO $tabla ($columna) VALUES ( '". $arrayPHP['id_proceso'] ."','". $arrayPHP['fecha_registro_pm'] ."','". $arrayPHP['str_registro_pm'] ."','". $arrayPHP['id_ref_pm'] ."','". $arrayPHP['int_cod_ref_pm'] ."','". $arrayPHP['version_ref_pm'] ."','". $arrayPHP['int_ref1_tol1_pm'] ."','". $arrayPHP['int_ref1_tol1_porc1_pm'] ."','". $arrayPHP['int_ref2_tol1_pm'] ."','". $arrayPHP['int_ref2_tol1_porc2_pm'] ."','". $arrayPHP['int_ref3_tol1_pm'] ."','". $arrayPHP['int_ref3_tol1_porc3_pm'] ."','". $arrayPHP['int_ref1_tol2_pm'] ."','". $arrayPHP['int_ref1_tol2_porc1_pm'] ."','". $arrayPHP['int_ref2_tol2_pm'] ."','". $arrayPHP['int_ref2_tol2_porc2_pm'] ."','". $arrayPHP['int_ref3_tol2_pm'] ."','". $arrayPHP['int_ref3_tol2_porc3_pm'] ."','". $arrayPHP['int_ref1_tol3_pm'] ."','". $arrayPHP['int_ref1_tol3_porc1_pm'] ."','". $arrayPHP['int_ref2_tol3_pm'] ."','". $arrayPHP['int_ref2_tol3_porc2_pm'] ."','". $arrayPHP['int_ref3_tol3_pm'] ."','". $arrayPHP['int_ref3_tol3_porc3_pm'] ."','". $arrayPHP['int_ref1_tol4_pm'] ."','". $arrayPHP['int_ref1_tol4_porc1_pm'] ."','". $arrayPHP['int_ref2_tol4_pm'] ."','". $arrayPHP['int_ref2_tol4_porc2_pm'] ."','". $arrayPHP['int_ref3_tol4_pm'] ."','". $arrayPHP['int_ref3_tol4_porc3_pm'] ."','". $arrayPHP['int_ref1_rpm_pm'] ."','". $arrayPHP['int_ref1_tol5_porc1_pm'] ."','". $arrayPHP['int_ref2_rpm_pm'] ."','". $arrayPHP['int_ref2_tol5_porc2_pm'] ."','". $arrayPHP['int_ref3_rpm_pm'] ."','". $arrayPHP['int_ref3_tol5_porc3_pm'] ."','". $arrayPHP['extrusora_mp'] ."','". $arrayPHP['observ_pm'] ."','". $arrayPHP['b_borrado_pm'] ."' );");
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
+    
 
     public function Update($data)
     {
         try 
         {
-         
-             $updatepro = $this->db->query($data); echo '<br>';
-
+            $updatepro = $this->db->query($data); echo '<br>';
         } catch (Exception $e) 
         {
             die($e->getMessage());

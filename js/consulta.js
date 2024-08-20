@@ -1878,6 +1878,12 @@ function consulta_ref_op_edit(selec)
 {
 window.location ='produccion_op_edit.php?int_cliente_op='+document.form1.int_cliente_op.value+'&str_numero_oc_op='+document.form1.str_numero_oc_op.value+'&int_cod_ref_op='+document.form1.int_cod_ref_op.value+'&id_op='+document.form1.id_op.value;
 }
+
+function consulta_ref_traslado(selec) 
+{
+window.location ='produccion_op_edit.php?int_cliente_op='+document.form1.int_cliente_op.value+'&str_numero_oc_op='+document.form1.str_numero_oc_op.value+'&int_cod_ref_op='+document.form1.int_cod_ref_op.value+'&id_op='+document.form1.id_op.value+'&id_op_destino='+document.form1.op_destino.value+'&traslado='+document.form1.tipo_tras.value;
+}
+
 function consulta_ref_mezcla(selec) 
 {
 	window.location ='produccion_mezclas_add.php?id_ref='+document.form1.id_ref.value+'&cod_ref='+document.form1.cod_ref.value+'&ref='+document.form1.ref.value;

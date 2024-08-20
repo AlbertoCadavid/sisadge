@@ -177,7 +177,11 @@ $totalRows_obs_ref_edit = mysql_num_rows($obs_ref_edit);
       <td nowrap id="dato2"><a href="obs_ref.php?id_ref=<?php echo $_GET['id_ref']; ?>&id=<?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000" ><?php $cad = htmlentities( $row_obs_ref['usuario']);echo $cad; ?></a></td>
       
 
-      <td><button onClick="eliminar(<?php echo $row_obs_ref['id']; ?>,'id','0','../<?php echo $_SESSION['ambiente']; ?>/view_index.php?c=cgeneral&a=Eliminar&columna=1','tbl_observaciones_ref')" id="btnDelItems"  name="btnDelItems" type="button" class="botonDel" autofocus="" >DELETE</button></td>
+      <td>
+        <span onclick="eliminaProv('id','<?php echo $row_obs_ref['id'];?>' )"  ><img src="images/por.gif" style="cursor:hand;" alt="ELIMINAR" title="ELIMINAR" border="0"></span> 
+
+        <!-- <button onClick="eliminacion333(<?php echo $row_obs_ref['id']; ?>,'id','0','../<?php echo $_SESSION['ambiente']; ?>/view_index.php?c=cgeneral&a=Eliminar&columna=1','tbl_observaciones_ref')" id="btnDelItems"  name="btnDelItems" type="button" class="botonDel" autofocus="" >DELETE</button> -->
+      </td>
       <!-- <td id="dato2"><a href="obs_vista.php?id= <?php echo $row_obs_ref['id']; ?>" target="_top" style="text-decoration:none; color:#000000"><?php echo $row_obs_ref['obs'];?></a></td> -->
     </tr>
     <?php } while ($row_obs_ref = mysql_fetch_assoc($obs_ref)); ?>
@@ -297,37 +301,17 @@ function ocultar_edit(){
     }
 }
 
+
+function eliminaProv(vid,valores){
+  ids=vid;//coloque la columna del id a actualizar
+  valorid = ''+valores; 
+  tabla='tbl_observaciones_ref';
+  url='view_index.php?c=cgeneral&a=Eliminar'; //la envio en campo proceso
+  proceso= 'Eliminar';
+  eliminar(valorid,ids,proceso,url,tabla);   
+
+}
  
-/*function editar() {
-  var id = <?php echo $_GET['id']; ?>;
-  var ref = <?php echo $_GET['ref']; ?>;
-  var version = <?php echo $_GET['version']; ?>;
-  var fecha = <?php echo $_GET['fecha']; ?>;
-  var usuario = <?php echo $_GET['usuario']; ?>;
-  var obs = <?php echo $_GET['obs']; ?>;
-    var x = document.getElementById('edit');
-    if (x.style.display === 'none') {
-        x.style.display = 'block';
-      document.getElementById("id").value = id;
-      document.getElementById("ref").value = ref;
-      document.getElementById("version").value = version;
-      document.getElementById("fecha").value = fecha;
-      document.getElementById("usuario").value = usuario;
-      document.getElementById("obs").value = obs;
-
-    } else { 
-        x.style.display = 'none';
-    }
-}*/
-
-
-
-/*
-lunes 2 horas
-martes 2.5 horas
-miercoles 3.5 h
-
-*/
 
 </script>
 <?php

@@ -310,6 +310,42 @@ if ($_POST['comprobarCliente']) {
   }
 }
 
+/* Consulta todos los proveedores para listados sweet alert */
+if ($_POST['traerProveedores']) {
+
+  if ($existe = $conexion->llenaListas('proveedor', "WHERE estado_p = 'ACTIVO'", "ORDER BY proveedor_p ASC", '*')) {
+    
+    echo json_encode($existe);
+    
+    exit();
+  } else {
+    echo "No existe";
+    
+  }
+}
+
+/* Consulta todos los indices para listados sweet alert en indices_insumos*/
+if ($_POST['traerIndices']) {
+
+  if ($existe = $conexion->llenaListas('indices', "", "ORDER BY nombre ASC", '*')) {
+    
+    echo json_encode($existe);
+    exit();
+  } else {
+    echo "No existe";
+  }
+}
+/* Consulta todos lasrelaciones de indices para listados sweet alert en insumo_add*/
+if ($_POST['traerRelacion']) {
+$id_clase = $_POST['id_clase'];
+  if ($existe = $conexion->llenaSelect("insumos_clases_indices as ci", "INNER JOIN clase as c ON ci.id_clase = c.id_clase INNER JOIN indices as i ON ci.id_indice = i.id_i WHERE ci.id_clase = $id_clase", "ORDER BY i.nombre ASC")) {
+    
+    echo json_encode($existe);
+    exit();
+  } else {
+    echo "No existe";
+  }
+}
 
 
 ?>

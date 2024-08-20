@@ -289,7 +289,7 @@
        //echo "SELECT $var1, $var5 as id, $var6 as descrip FROM ".$var2." ". $where." ". $var4;die;
       $sql = "SELECT $var1, $var5 as id, $var6 as descrip FROM ".$var2." ". $where." ". $var4; 
     
-      $query_limit_registros = sprintf("%s LIMIT %d, %d", $sql, 0, $numero_de_registros);
+      $query_limit_registros = sprintf("%s LIMIT %d, %d", $sql, 1, $numero_de_registros);
       $usersList = $this->conexion->query($query_limit_registros) or die($this->conexion->error);
 
      }else{

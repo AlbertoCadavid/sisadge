@@ -17,7 +17,7 @@ function getClientData() {
     dataType: "json", //define las variables a mostrar
   })
     .done(function (data, textStatus, jqXHR) {
-		console.log(data)
+		
       if (data) {
         var html = "";
         var i;

@@ -113,7 +113,6 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 $conexion = new ApptivaDB();
 
-
 //BASES DE DATOS
 mysql_select_db($database_conexion1, $conexion1);
 $query_usuario = sprintf("SELECT * FROM usuario WHERE usuario = '%s'", $colname_usuario);
@@ -155,7 +154,6 @@ if (isset($_GET['id_items'])){
   $can2=$row_items['int_cantidad_io'];
 //if($can2>$can1){echo "LA CANTIDAD NO PUEDE SER MAYOR";}
   if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-    
 //ACTUALIZA TODOS LOS ITEMS QUE TENGAN ESTADO PENDIENTE DE DESPACHO Y TENGAN LA FECHA DE INGRESO MAYOR A UN MES, SEGUN FECHA ACTUAL
     $updateFecha = sprintf("UPDATE `Tbl_remision_detalle` SET `fecha_rd` = CURDATE( ) WHERE TIMESTAMPDIFF( MONTH , `fecha_rd` , CURDATE( )) <= '1' AND  `estado_rd` = '1'",
       GetSQLValueString($_POST['fecha_rd'], "text")

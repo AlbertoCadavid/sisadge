@@ -521,8 +521,6 @@ $rollo_sellado_edit = mysql_query($query_rollo_sellado_edit, $conexion1) or die(
 $row_rollo_sellado_edit = mysql_fetch_assoc($rollo_sellado_edit);
 $totalRows_rollo_sellado_edit = mysql_num_rows($rollo_sellado_edit);
 
-
-
 //VARIABLES FUNCIONALES
 $id_op = $row_rollo_sellado_edit['id_op_r'];
 $rolloNum = $row_rollo_sellado_edit['rollo_r'];
@@ -984,13 +982,13 @@ if ($totalRows_metrosImp == '0') {
           <p>
             <!-- <input name="metroInicial" type="hidden" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" /> -->
             <input name="metro_r" type="hidden" id="metro_r" min="1" style="width:60px" value="<?php echo  $row_metrosImp['METROSIMP']; ?>" readonly="readonly" />
-            <input name="metroInicial" type="number" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />
+            <input name="metroInicial" type="number" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['metro_r'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />
           </p>
         </td>
         <td id="fuente1">
           <p>Metro Final</p>
           <p>
-            <input name="metro_r2" type="number" id="metro_r2" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['int_metro_lineal_rp']; ?>" required="required" readonly="readonly" />
+            <input name="metro_r2" type="number" id="metro_r2" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['metro_r']; ?>" required="required" readonly="readonly" />
           </p>
         </td>
         <td id="fuente1">&nbsp;</td>

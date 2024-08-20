@@ -507,6 +507,17 @@ $query_maquinas = "SELECT * FROM maquina WHERE activo=0 AND proceso_maquina='2' 
 $maquinas = mysql_query($query_maquinas, $conexion1) or die(mysql_error());
 $row_maquinas = mysql_fetch_assoc($maquinas);
 $totalRows_maquinas = mysql_num_rows($maquinas);
+
+//Consulta para saber si ya se lleno los datos de la mezcla
+mysql_select_db($database_conexion1, $conexion1);
+$query_ref_mezcla = "SELECT * FROM tbl_estado_mezcla WHERE cod_ref = $row_op_carga[int_cod_ref_op] AND id_proceso = '2' ";
+$ref_mezcla = mysql_query($query_ref_mezcla, $conexion1) or die(mysql_error());
+$existe_mezcla = mysql_fetch_assoc($ref_mezcla);
+$totalRows_mezcla = mysql_num_rows($ref_mezcla);
+$estado=1;
+if(!$existe_mezcla){
+  $estado = 0;
+}// fin consulta
 ?>
 <html>
 
@@ -533,6 +544,16 @@ $totalRows_maquinas = mysql_num_rows($maquinas);
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
   <script type="text/javascript">
+    //validacion si NO Existe la mezcla entonces no deja agregar rollos y redirige a la pag de mezcla
+    $(document).ready(function() {
+      let estado_mezcla = '<?php echo $estado ?>';
+      if(estado_mezcla == 0){
+        window.close();
+        popUp('view_index.php?c=cmezclasIm&a=Mezcla&cod_ref=<?php echo $row_op_carga['int_cod_ref_op']; ?>','1300','700')
+      }
+    })
+    //fin validacion
+
     function validar2() {
 
       DatosGestiones3('5', 'id_r', form1.idrollo.value);

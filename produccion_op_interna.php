@@ -118,8 +118,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
   $insertSQL = sprintf(
     "INSERT INTO Tbl_orden_produccion (id_op, fecha_registro_op,fecha_entrega_op, str_responsable_op, str_numero_oc_op, int_cod_ref_op, id_ref_op, version_ref_op, int_cotiz_op, str_entrega_op, str_nit_op, int_cliente_op, int_desperdicio_op, int_cantidad_op, str_tipo_bolsa_op, int_pesom_op, str_matrial_op, str_presentacion_op, metroLineal_op, int_kilos_op, int_calibre_op, int_ancho_rollo_op, int_micras_op, str_interno_op, str_externo_op, str_tratamiento_op, int_undxcaja_op, int_undxpaq_op,undxpaqreal, numInicio_op, observ_extru_op,maquina_imp_op, 
-    kls_req_imp_op, mts_req_imp_op, margen_izq_imp_op, margen_anc_imp_op, margen_anc_mm_imp_op, margen_der_imp_op, margen_peri_imp_op, margen_per_mm_imp_op, margen_z_imp_op, observ_impre_op, mts_cinta_sellado_op, kls_sellado_op, kls_sellado_bol_op, und_prod_sellado_op, observ_sellado_op, b_estado_op, b_borrado_op, b_visual_op,id_termica_op, cinta_termica_op, numeracion_inicial,imprimiop,lote,charfin, coextrusion) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    kls_req_imp_op, mts_req_imp_op, margen_izq_imp_op, margen_anc_imp_op, margen_anc_mm_imp_op, margen_der_imp_op, margen_peri_imp_op, margen_per_mm_imp_op, margen_z_imp_op, observ_impre_op, mts_cinta_sellado_op, kls_sellado_op, kls_sellado_bol_op, und_prod_sellado_op, observ_sellado_op, b_estado_op, b_borrado_op, b_visual_op,id_termica_op, cinta_termica_op, numeracion_inicial,imprimiop,lote,charfin, coextrusion,sinnumeracion) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
     GetSQLValueString($_POST['id_op'], "int"),
     GetSQLValueString($_POST['fecha_registro_op'], "date"),
     GetSQLValueString($_POST['fecha_entrega_op'], "date"),
@@ -176,7 +176,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
     GetSQLValueString($_POST['imprimiop'], "text"),
     GetSQLValueString($_POST['lote'], "text"),
     GetSQLValueString($_POST['charfin'], "text"),
-    GetSQLValueString($_POST['coextrusion'], "text")
+    GetSQLValueString($_POST['coextrusion'], "text"),
+      GetSQLValueString($_POST['sinnumeracion'], "int")
   );
   mysql_select_db($database_conexion1, $conexion1);
   $Result1 = mysql_query($insertSQL, $conexion1) or die(mysql_error());
@@ -479,7 +480,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                             <form action="<?php echo $editFormAction; ?>" method="POST" enctype="multipart/form-data" name="form1" id="form1" onsubmit="return (funcion()&& validacion_tipocinta());">
                               <table id="tabla2">
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo2">ORDEN DE PRODUCCI&Oacute;N</td>
+                                  <td colspan="13" id="titulo2">ORDEN DE PRODUCCI&Oacute;N</td>
                                 </tr>
 
                                 <tr>
@@ -532,20 +533,23 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                     } ?>
                                   </td>
                                   <td colspan="2" id="dato3">Prioridad:</td>
-                                  <td colspan="2" id="dato1"><select name="b_visual_op" style="width:40px">
+                                  <td colspan="2" id="dato1">
+                                    <input name="b_visual_op" id="b_visual_op" min="0" max="99" type="number" value="0" style="width:40px" />
+                                    <!-- <select name="b_visual_op" style="width:40px">
                                       <option value="0">0</option>
                                       <option value="1">1</option>
                                       <option value="2">2</option>
                                       <option value="3">3</option>
                                       <option value="4">4</option>
                                       <option value="5">5</option>
-                                    </select></td>
+                                    </select> -->
+                                  </td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo4"></td>
+                                  <td colspan="13" id="titulo4"></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo4">ESPECIFICACIONES</td>
+                                  <td colspan="13" id="titulo4">ESPECIFICACIONES</td>
                                 </tr>
                                 <tr>
                                   <td id="talla1">CLIENTE <?php echo $row_nit['nit_c']; ?></td>
@@ -606,7 +610,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   <td colspan="2" id="dato1"></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN EXTRUSI&Oacute;N </td>
+                                  <td colspan="13" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN EXTRUSI&Oacute;N </td>
                                 </tr>
                                 <tr>
                                   <td nowrap="nowrap" id="talla1">EXT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELL&nbsp;&nbsp; DESPERDICIOS</td>
@@ -616,7 +620,8 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                                                 echo "UNIDADES SOLICITADAS";
                                                               } ?></td>
                                   <td colspan="2" id="talla1">TIPO DE BOLSA</td>
-                                  <td colspan="2" nowrap="nowrap" id="talla1"><strong>EXTRUSION</strong></td> 
+                                  <td nowrap="nowrap" id="talla1"><strong>EXTRUSION-</strong></td> 
+                                  <td nowrap="nowrap" id="talla1"><strong>STICKER-</strong></td> 
                                   <td nowrap="nowrap" id="talla1">PESO MILLAR-</td>
                                   <td nowrap="nowrap" id="talla1">METROS LINEAL</td>
                                 </tr>
@@ -669,6 +674,16 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                       <select name="coextrusion" id="coextrusion">
                                         <option value="SI">SI</option>
                                         <option value="NO">NO</option>
+                                      </select>
+                                    </td>
+                                    <td id="talla1">
+                                      <select name="sinnumeracion" id="sinnumeracion">
+                                        <option value="0" <?php if (!(strcmp("1", $row_orden_produccion['sinnumeracion']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>NO</option>
+                                        <option value="1" <?php if (!(strcmp("0", $row_orden_produccion['sinnumeracion']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>SI</option>
                                       </select>
                                     </td>
                                   <td colspan="2" id="fuente1"><input id="int_pesom_op" name="int_pesom_op" style="width:60px" type="number" min="0" step="0.01" value="<?php echo $row_datos_oc['peso_millar_ref']; ?>" required="required" onBlur="calcular_op();" /></td>
@@ -732,7 +747,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                     </select></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo1">Observacion en Extrusion</td>
+                                  <td colspan="13" id="titulo1">Observacion en Extrusion</td>
                                 </tr>
                                 <tr>
                                   <td id="fuente1"></td>
@@ -741,10 +756,10 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   <td colspan="2" id="fuente1"></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="fuente1"><textarea name="observ_extru_op" style="width: 100%" rows="3"></textarea></td>
+                                  <td colspan="13" id="fuente1"><textarea name="observ_extru_op" style="width: 100%" rows="3"></textarea></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN IMPRESION</td>
+                                  <td colspan="13" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN IMPRESION</td>
                                 </tr>
                                 <tr>
                                   <td id="talla1">IMPRIME EN MAQUINA:</td>
@@ -794,7 +809,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   <td colspan="6" id="talla1">&nbsp;</td>
                                 </tr>
                                 <!-- <tr>  
-                          <td colspan="11"> 
+                          <td colspan="13"> 
                                <div id="cajon1">
                                   <table>
                                    <?php foreach ($row_mezclas as $row_mezclas) { ?>
@@ -818,7 +833,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                     <td colspan="9" id="fuente2"><strong>CARACTERISTICAS DE IMPRESION</strong></td>
                                   </tr>
                                   <tr>
-                                    <td colspan="11">
+                                    <td colspan="13">
                                       <table>
                                         <tr>
                                           <td valign="top">
@@ -2538,7 +2553,7 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                 <!--  INICIA MEZCLAS DE EXTRUDER -->
 
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo1">Observacion en Impresion</td>
+                                  <td colspan="13" id="titulo1">Observacion en Impresion</td>
                                 </tr>
                                 <tr>
                                   <td id="fuente1"></td>
@@ -2547,19 +2562,19 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   <td colspan="2" id="fuente1"></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="fuente1"><textarea name="observ_impre_op" style="width: 100%" rows="3" id="observ_impre_op"></textarea></td>
+                                  <td colspan="13" id="fuente1"><textarea name="observ_impre_op" style="width: 100%" rows="3" id="observ_impre_op"></textarea></td>
                                 </tr>
                                 <tr>
-                                  <td colspan="11" id="fuente5">&nbsp;</td>
+                                  <td colspan="13" id="fuente5">&nbsp;</td>
                                 </tr>
                                 <!--SELLADO NO APARECE SI ES LAMINA EXCEPTO UND X CAJAS Y PAQUETES-->
 
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN SELLADO</td>
+                                  <td colspan="13" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN SELLADO</td>
                                 </tr>
 
                                 <tr>
-                                  <td colspan="11">
+                                  <td colspan="13">
                                     <table>
                                       <tr>
                                         <td id="talla1"><strong>ANCHO</strong></td>
@@ -2809,10 +2824,10 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td colspan="11" id="talla1"><strong>Nota:</strong> Si en el campo de la version de la referencia no coninciden es porque no han hecho la verificacion u modificacion en dise&ntilde;o y desarrollo.</td>
+                                  <td colspan="13" id="talla1"><strong>Nota:</strong> Si en el campo de la version de la referencia no coninciden es porque no han hecho la verificacion u modificacion en dise&ntilde;o y desarrollo.</td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="titulo1">Observacion en Sellado</td>
+                                  <td colspan="13" id="titulo1">Observacion en Sellado</td>
                                 </tr>
                                 <tr>
                                   <td id="fuente1"></td>
@@ -2821,13 +2836,13 @@ $row_formulas = $conexion->llenaListas('tbl_formulacion','',"WHERE proceso='1' a
                                   <td colspan="2" id="fuente1"></td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="fuente1"><textarea name="observ_sellado_op" style="width: 100%" rows="3" id="observ_sellado_op"></textarea></td>
+                                  <td colspan="13" id="fuente1"><textarea name="observ_sellado_op" style="width: 100%" rows="3" id="observ_sellado_op"></textarea></td>
                                 </tr>
                                 <tr>
-                                  <td colspan="11" id="fuente1">&nbsp;</td>
+                                  <td colspan="13" id="fuente1">&nbsp;</td>
                                 </tr>
                                 <tr id="tr1">
-                                  <td colspan="11" id="dato2"><input name="id_proceso" type="hidden" value="1" />
+                                  <td colspan="13" id="dato2"><input name="id_proceso" type="hidden" value="1" />
                                     <input name="b_estado_op" type="hidden" value="0" />
                                     <input name="b_borrado_op" type="hidden" id="b_borrado_op" value="0" />
                                     <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_datos_oc['id_ref']=='' ? $row_referencia['id_ref'] : $row_datos_oc['id_ref']; ?>" />

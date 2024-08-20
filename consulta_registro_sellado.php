@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/config.php');
 require(ROOT_BBDD);
+include('funciones/funciones_php.php');
 ?>
  
 <?php
@@ -29,7 +30,9 @@ if (isset($_GET['getClientId']) && $_GET['getClientId'] != '') {
 		$revisor = $inf3["cod_auxiliar_r"];
 
 		$inf4 = $conexion->llenarCampos("TblSelladoRollo ", "WHERE id_op_r ='$id_op'", "ORDER BY fechaF_r DESC LIMIT 1", "numFin_r ");
-		$numeracionIn = $inf4["numFin_r"] + 1;
+		$arrayCodigo = numeracionChar($inf4["numFin_r"]); //funcion creada en funciones/funciones_php.php (version php de la funcion de javascript numeracionChar en ajaxcontrollers/numeracionInicial)
+		$numSinLetras = $arrayCodigo[0] + 1;
+		$numeracionIn = $arrayCodigo[1].$numSinLetras;
 
 		if (!$inf4) {
 
@@ -56,6 +59,7 @@ if (isset($_GET['getClientId']) && $_GET['getClientId'] != '') {
 		echo json_encode($inf);
 	}
 }
+
 
 
 ?>

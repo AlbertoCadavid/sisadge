@@ -99,7 +99,7 @@ $colname_detalle = "-1";
 if (isset($_GET['id_pedido'])) {
   $colname_detalle = (get_magic_quotes_gpc()) ? $_GET['id_pedido'] : addslashes($_GET['id_pedido']);
 }
-mysql_select_db($database_conexion1, $conexion1);
+mysql_select_db($database_conexion1, $conexion1); 
 $query_detalle = sprintf("SELECT * FROM Tbl_orden_compra toc, Tbl_items_ordenc tio WHERE toc.id_c_oc='$id_oc' AND toc.id_pedido = '%s' AND toc.id_pedido = tio.id_pedido_io ORDER BY tio.id_items ASC", $colname_detalle);  
 $detalle = mysql_query($query_detalle, $conexion1) or die(mysql_error());
 $row_detalle = mysql_fetch_assoc($detalle);
@@ -173,7 +173,7 @@ $totalRows_remadjunto = mysql_num_rows($remadjunto);
   <div align="center">
     <table id="tabla3">
       <tr>
-        <td id="noprint" align="right"><a href="orden_compra_cl_add.php"><img src="images/mas.gif" alt="ADD ORDEN DE COMPRA" title="ADD ORDEN DE COMPRA" border="0" style="cursor:hand;" /></a><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()" /><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" border="0" /><?php if ($row_cliente_oc['str_nit_oc'] == '') { ?><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><?php } else { ?><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>&id_oc=<?php echo $_GET['id_oc']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><a href="orden_compra_cl2.php"><img src="images/o.gif" style="cursor:hand;" alt="ORDENES DE COMPRA" title="LISTADO DE ORDENES DE COMPRA" border="0" /></a><?php } ?><a href="orden_compra_cl.php"><img src="images/i.gif" style="cursor:hand;" alt="ORDENES DE COMPRA INACTIVAS" title="LISTADO DE ORDENES DE COMPRA INACTIVAS" border="0" /></a> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0" /></a><a href="menu.php"><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" title="SALIR" onClick="window.close() " /></a></td>
+        <td id="noprint" align="right"><a href="orden_compra_cl_add.php"><img src="images/mas.gif" alt="ADD ORDEN DE COMPRA" title="ADD ORDEN DE COMPRA" border="0" style="cursor:hand;" /></a><img src="images/ciclo1.gif" alt="RESTAURAR" title="RESTAURAR" border="0" style="cursor:hand;" onClick="window.history.go()" /><img src="images/impresor.gif" onClick="window.print();" style="cursor:hand;" alt="IMPRIMIR" title="IMPRIMIR" border="0" /><?php if ($row_cliente_oc['str_nit_oc'] == '') { ?><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><?php } else { ?><a href="orden_compra_cl_edit.php?str_numero_oc=<?php echo $row_orden_compra['str_numero_oc']; ?>&id_oc=<?php echo $_GET['id_oc']; ?>&id_pedido=<?php echo $_GET['id_pedido']; ?>"><img src="images/menos.gif" alt="EDITAR" title="EDITAR" border="0" /></a><a href="orden_compra_cl2.php"><img src="images/o.gif" style="cursor:hand;" alt="ORDENES DE COMPRA" title="LISTADO DE ORDENES DE COMPRA" border="0" /></a><?php } ?><a href="orden_compra_cl.php"><img src="images/i.gif" style="cursor:hand;" alt="ORDENES DE COMPRA INACTIVAS" title="LISTADO DE ORDENES DE COMPRA INACTIVAS" border="0" /></a> <a href="menu.php"><img src="images/identico.gif" style="cursor:hand;" alt="MENU PRINCIPAL" title="MENU PRINCIPAL" border="0" /></a><a href="menu.php"><img src="images/salir.gif" style="cursor:hand;" alt="SALIR" title="SALIR" onClick="window.close() " /></a></td>
       </tr>
     </table>
     <table id="tabla1">
@@ -564,21 +564,14 @@ $totalRows_remadjunto = mysql_num_rows($remadjunto);
         <td colspan="9" rowspan="3" id="detalle1">- <?php $obs =  ($row_orden_compra['str_observacion_oc']);
                                                     echo $obs; ?> - </td>
         <td id="detalle1">
-          <?php if ($row_orden_compra['str_archivo_oc'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['str_archivo_oc']; ?>','610','490')"><?php echo "ARC 1"; ?></a><?php } else {
-                                                                                                                                                                                                                    echo 'Sin Archivo';
-                                                                                                                                                                                                                  } ?>
+          <?php if ($row_orden_compra['str_archivo_oc'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['str_archivo_oc']; ?>','610','490')"><?php echo "ARC 1"; ?></a><?php } else { echo 'Sin Archivo'; } ?>
         </td>
         <td id="detalle1">
-          <?php if ($row_orden_compra['adjunto2'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto2']; ?>','610','490')"><?php echo "ARC 2"; ?></a><?php } else {
-                                                                                                                                                                                                        echo 'Sin Archivo';
-                                                                                                                                                                                                      } ?>
+          <?php if ($row_orden_compra['adjunto2'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto2']; ?>','610','490')"><?php echo "ARC 2"; ?></a><?php } else { echo 'Sin Archivo';} ?>
         </td>
         <td id="detalle1">
-          <?php if ($row_orden_compra['adjunto3'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto3']; ?>','610','490')"><?php echo "ARC 3"; ?></a><?php } else {
-                                                                                                                                                                                                        echo 'Sin Archivo';
-                                                                                                                                                                                                      } ?>
+          <?php if ($row_orden_compra['adjunto3'] != '') { ?><a class="editar" href="javascript:verFoto('pdfacturasoc/<?php echo $row_orden_compra['adjunto3']; ?>','610','490')"><?php echo "ARC 3"; ?></a><?php } else { echo 'Sin Archivo'; } ?>
         </td>
-
       </tr>
       <table id="tabla3">
         <tr>

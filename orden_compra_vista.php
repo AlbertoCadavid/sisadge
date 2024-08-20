@@ -151,7 +151,7 @@ $totalRows_detalle = mysql_num_rows($detalle);
                 </table>
                 <table class="table table-bordered table-sm">
                   <tr>
-                    <td colspan="20"><b style="color: red;" > Somos Agentes retenedores del impuesto de Instistria y Comercio de Medellin (ICA) - Resolucion 20245013185 de 2024</b></td>
+                    <td colspan="20"><b style="color: red;" > Somos Agentes retenedores del impuesto de Industria y Comercio de Medellin (ICA) - Resolucion 20245013185 de 2024</b></td>
                   </tr>
                   <tr>
                     <td colspan="5" ><strong>FECHA DE PEDIDO : </strong><?php echo $row_proveedor_oc['fecha_pedido_oc']; ?></td>

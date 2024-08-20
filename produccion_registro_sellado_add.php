@@ -1202,7 +1202,7 @@ $totalRows_referencia = mysql_num_rows($referencia);*/
         <td id="fuente1">Numeracion Inicial</td>
         <td colspan="2" id="fuente1">
           <input type="hidden" name="numInicioControl" id="numInicioControl" value="" />
-          <input type="text" name="n_ini_rp" id="n_ini_rp" size="15" required="required" onBlur="conMayusculas(this);" value="" />
+          <input type="text" name="n_ini_rp" id="n_ini_rp" size="15" required="required" onblur="conMayusculas(this);" value="" />
           <input id="porcentaje" name="porcentaje" type="hidden" value="<?php echo $row_orden_produccion['int_desperdicio_op']; ?>" min="0" max="100" step="1" style="width:40px" required="required" readonly="readonly" />
         </td>
         <td colspan="2" id="fuente1">

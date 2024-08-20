@@ -604,7 +604,6 @@ $rollo_sellado_edit = mysql_query($query_rollo_sellado_edit, $conexion1) or die(
 $row_rollo_sellado_edit = mysql_fetch_assoc($rollo_sellado_edit);
 $totalRows_rollo_sellado_edit = mysql_num_rows($rollo_sellado_edit);
 
-
 //PARA METROS Y KILOS INICIALES DESDE IMPRESION O EXTRUDER
 $colname_metrosImp = "-1";
 if (isset($_GET['id_r'])) {
@@ -725,6 +724,8 @@ if ($row_desperdicio['desperdicio'] == '') //debe ser vacio sino se repite el va
   $row_despacumula = mysql_fetch_assoc($despacumula);
   $totalRows_despacumula = mysql_num_rows($despacumula);
 }
+
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1060,8 +1061,7 @@ if ($row_desperdicio['desperdicio'] == '') //debe ser vacio sino se repite el va
             </tr>
             <tr>
               <td id="fuente1">
-                <p>Metro Inicial
-                </p>
+                <p>Metro Inicial</p>
                 <p>
                   <input name="metro_r" type="hidden" id="metro_r" min="1" style="width:60px" value="<?php echo $row_metrosImp['METROSIMP']; ?>" readonly="readonly" />
                   <input name="metroInicial" type="number" id="metroInicial" min="1" style="width:60px" value="<?php echo $row_rollo_sellado_edit['metro_r'] + $row_rollo_sellado_edit['metroIni_r']; ?>" readonly="readonly" />

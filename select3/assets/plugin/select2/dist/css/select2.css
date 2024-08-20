@@ -59,6 +59,7 @@
   z-index: 1051; }
 
 .select2-results {
+  width: max-content;
   display: block; }
 
 .select2-results__options {

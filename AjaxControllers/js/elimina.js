@@ -1,4 +1,5 @@
 function eliminar(id,columna,proceso,url,master){
+  
    swal({   
     title: "ELIMINAR?",   
     text: "Esta seguro que Quiere Eliminar!",   
@@ -22,7 +23,7 @@ function eliminar(id,columna,proceso,url,master){
 }
 
 function eliminacion(id,columna,proceso,url,master){ 
-
+ 
  
   $.ajax({
     dataType: "json",
@@ -30,7 +31,7 @@ function eliminacion(id,columna,proceso,url,master){
       "id": id, 
       "columna": columna,
       "proceso":proceso,
-      "master":master,
+      "master":master
     },
     url: url, // '../view_index.php?c=comprasEM&a=Eliminar&columna=',
     type:  'post',

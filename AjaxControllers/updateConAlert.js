@@ -78,3 +78,57 @@ function popUpImprimir(URL, ancho, alto ){
   ventana="toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width="+ancho+",height="+alto+",left="+derecha+",top="+arriba+"";
   eval("page" + id + " = window.open(URL, '" + id + "', '" + ventana + "');");
 }
+
+
+/* script para actualizar el egp desde la pantalla de mezclas impresion, ojo. aun no activo
+function updateConAlertEGP(array) { 
+ let txt = "Esta seguro que Quiere Actualizar el EGP con los siguientes datos:\n";
+ let unidad, pantone;
+
+ array.forEach(element => {
+  if(element['pantone'] != ""){
+    unidad = element['unidad'];
+    pantone = element['pantone'];
+  } else {
+    unidad = element['unidad'];
+    pantone = "Sin Pantone";
+  }
+  txt = txt + "Unidad"+unidad+" - Pantone:"+pantone+"\n"
+ });
+  swal({   
+   title: "ACTUALIZAR?",   
+   text: txt, 
+   inputPlaceholder: "aa",  
+   type: "warning",   
+   showCancelButton: true,   
+   confirmButtonColor: "#DD6B55",   
+   confirmButtonText: "Si, Actualizar!",   
+   cancelButtonText: "No, Actualizar!",   
+   closeOnConfirm: false,   
+   closeOnCancel: false }, 
+   function(isConfirm){   
+     if (isConfirm) {  
+      
+      updateEGP(array)
+       swal("Actualizado!", "El registro se ha Actualizado.", "success"); 
+       
+     } else { 
+       swal("Cancelado", "has cancelado :)", "error");
+     } 
+   });  
+}
+
+function updateEGP(array){
+  $.ajax({
+    dataType: "json",
+    data: {
+      update_egp: true,
+      object: array,
+    },
+    url:  "AjaxControllers/Actions/update.php",
+    type:  'post',
+    success: function(res){
+      console.log(res)
+    }
+  })
+} */

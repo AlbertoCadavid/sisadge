@@ -1,13 +1,16 @@
 
 <?php
   
-  require_once('Connections/conexion1.php'); ?>
-<?php
+  require_once('Connections/conexion1.php');  
+
+  //require_once("Controller/controller.php");
+
+
 mysql_select_db($database_conexion1, $conexion1);
 /*----------COTIZACION BOLSAS--------*/
 /*--------------ACCIONES------------------*/
 $rud=$_POST['valor'];     
-//echo "varable switch".$rud ;                                                      
+//echo "varable switch".$rud ;                                                       
 /*------------COTIZACIONES---------------*/
 /*FUNCION PARA LIMPIAR VARIABLES PARA ESCAPAR DE ALGUNOS DATOS PARA PASARLO A MYSQL*/
 function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") 
@@ -46,6 +49,9 @@ if (isset($_SERVER['QUERY_STRING'])) {
  
    //$N_cotizacion=consultoIdcotiz($_POST['N_cotizacion']);//quitarlo para q puedan agregar varias ref a la cotiz
    $N_cotizacion=$_POST['N_cotizacion'];
+
+
+   
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 // area de switch()
 switch($rud) {
@@ -54,6 +60,15 @@ $ref=$_POST['N_referencia'];
 $nitc=$_POST['Str_nit'];
 
  
+ //ACTUALIZO VALOR IMPUESTO ENREFERENCIA
+  
+  $conexion = new ApptivaDB();
+
+   $existe = $conexion->actualizar("tbl_referencia", "valor_impuesto='".$_POST['valor_impuesto']."'", " cod_ref='".$_POST['N_referencia']."'");   
+     
+///   
+
+
 $sqlestado="SELECT N_cotizacion,N_referencia_c,Str_nit,fecha_creacion,B_estado FROM Tbl_cotiza_bolsa WHERE N_referencia_c='$ref' and Str_nit='$nitc' ORDER BY fecha_creacion DESC LIMIT 1";
 $resultestado= mysql_query($sqlestado);
 $numestado= mysql_num_rows($resultestado);
@@ -65,9 +80,7 @@ $resultobsoleta=mysql_query($sqlobsoleta);  //3 es obsoleta
 }/*else{*/
 
 
- 
-
-  $insertSQL = sprintf("INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c, Str_nit, N_ancho, N_alto, B_fuelle, N_calibre, B_troquel, B_precorte, B_bolsillo, N_tamano_bolsillo, N_solapa, Str_moneda, N_precio,  Str_unidad_vta, Str_plazo, Str_incoterms, Str_tipo_coextrusion, Str_capa_ext_coext, Str_capa_inter_coext, N_cant_impresion, B_impresion, N_colores_impresion, B_cyreles, B_sellado_seguridad, B_sellado_permanente, B_sellado_resellable, B_sellado_hotm, Str_sellado_lateral, B_fondo, B_codigo_b, B_numeracion, fecha_creacion, Str_usuario, N_comision, B_estado,B_generica,tipo_bolsa,N_precio_old,impuesto,valor_impuesto) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+  $insertSQL = sprintf("INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c, Str_nit, N_ancho, N_alto, B_fuelle, N_calibre, B_troquel, B_precorte, B_bolsillo, N_tamano_bolsillo, N_solapa, Str_moneda, N_precio,  Str_unidad_vta, Str_plazo, Str_incoterms, Str_tipo_coextrusion, Str_capa_ext_coext, Str_capa_inter_coext, N_cant_impresion, B_impresion, N_colores_impresion, B_cyreles, B_sellado_seguridad, B_sellado_permanente, B_sellado_resellable, B_sellado_hotm, Str_sellado_lateral, B_fondo, B_codigo_b, B_numeracion, fecha_creacion, Str_usuario, N_comision, B_estado,B_generica,tipo_bolsa,tiposolapa,sello_superior,N_precio_old,impuesto,valor_impuesto) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
    GetSQLValueString($N_cotizacion, "int"),
    GetSQLValueString($_POST['N_referencia'], "int"), 
    GetSQLValueString($_POST['Str_nit'], "text"),					   
@@ -106,6 +119,8 @@ $resultobsoleta=mysql_query($sqlobsoleta);  //3 es obsoleta
    GetSQLValueString($_POST['B_estado'], "text"),
    GetSQLValueString($_POST['B_generica'], "text"),
    GetSQLValueString($_POST['tipo_bolsa'], "text"),
+   GetSQLValueString($_POST['tiposolapa'], "text"),
+   GetSQLValueString($_POST['sello_superior'], "text"),
    GetSQLValueString($_POST['N_precio_old'], "text"),
    GetSQLValueString(isset($_POST['impuesto']) ? "true" : "", "defined","1","0"),
    GetSQLValueString($_POST['valor_impuesto'], "text"));
@@ -119,8 +134,12 @@ GetSQLValueString($_POST['Str_nit'], "text"),
 GetSQLValueString($_POST['nota_b'], "text"));
 mysql_select_db($database_conexion1, $conexion1);
 $Result2 = mysql_query($insertSQL2, $conexion1) or die(mysql_error()); 
+
+
+  
+
 //CONSULTA PARA VER SI EXISTE LA COTIZACION EN MAESTRO
-//
+ 
   
 
    $n_cot=$N_cotizacion;
@@ -177,7 +196,18 @@ break;
 return '0';
 case '2':   
 
-$updateSQL = sprintf("UPDATE Tbl_cotiza_bolsa SET N_cotizacion=%s,N_referencia_c=%s, Str_nit=%s, N_ancho=%s, N_alto=%s, B_fuelle=%s, N_calibre=%s, B_troquel=%s, B_precorte=%s, B_bolsillo=%s, N_tamano_bolsillo=%s, N_solapa=%s, Str_moneda=%s, N_precio=%s,  Str_unidad_vta=%s, Str_plazo=%s, Str_incoterms=%s, Str_tipo_coextrusion=%s, Str_capa_ext_coext=%s, Str_capa_inter_coext=%s, N_cant_impresion=%s, B_impresion=%s, N_colores_impresion=%s, B_cyreles=%s, B_sellado_seguridad=%s, B_sellado_permanente=%s, B_sellado_resellable=%s, B_sellado_hotm=%s, Str_sellado_lateral=%s, B_fondo=%s, B_codigo_b=%s, B_numeracion=%s, fecha_creacion=%s, Str_usuario=%s, N_comision=%s, B_estado=%s, B_generica=%s, tipo_bolsa=%s,N_precio_old=%s,impuesto=%s, valor_impuesto=%s WHERE N_cotizacion='%s' and N_referencia_c='%s'",  
+
+
+
+ //ACTUALIZO VALOR IMPUESTO ENREFERENCIA
+  
+  $conexion = new ApptivaDB();
+
+   $existe = $conexion->actualizar("tbl_referencia", "valor_impuesto='".$_POST['valor_impuesto']."'", " CONVERT(cod_ref, SIGNED INTEGER)='".$_POST['N_referencia']."'");   
+     
+/// 
+ 
+$updateSQL = sprintf("UPDATE Tbl_cotiza_bolsa SET N_cotizacion=%s,N_referencia_c=%s, Str_nit=%s, N_ancho=%s, N_alto=%s, B_fuelle=%s, N_calibre=%s, B_troquel=%s, B_precorte=%s, B_bolsillo=%s, N_tamano_bolsillo=%s, N_solapa=%s, Str_moneda=%s, N_precio=%s,  Str_unidad_vta=%s, Str_plazo=%s, Str_incoterms=%s, Str_tipo_coextrusion=%s, Str_capa_ext_coext=%s, Str_capa_inter_coext=%s, N_cant_impresion=%s, B_impresion=%s, N_colores_impresion=%s, B_cyreles=%s, B_sellado_seguridad=%s, B_sellado_permanente=%s, B_sellado_resellable=%s, B_sellado_hotm=%s, Str_sellado_lateral=%s, B_fondo=%s, B_codigo_b=%s, B_numeracion=%s, fecha_creacion=%s, Str_usuario=%s, N_comision=%s, B_estado=%s, B_generica=%s, tipo_bolsa=%s,tiposolapa=%s,sello_superior=%s,N_precio_old=%s,impuesto=%s, valor_impuesto=%s WHERE N_cotizacion='%s' and N_referencia_c='%s'",  
   GetSQLValueString($_POST['N_cotizacion'], "int"),
   GetSQLValueString($_POST['N_referencia'], "int"),
   GetSQLValueString($_POST['Str_nit'], "text"),					   
@@ -216,6 +246,8 @@ $updateSQL = sprintf("UPDATE Tbl_cotiza_bolsa SET N_cotizacion=%s,N_referencia_c
   GetSQLValueString($_POST['B_estado'], "text"),
   GetSQLValueString($_POST['B_generica'], "text"),
   GetSQLValueString($_POST['tipo_bolsa'], "text"), 
+  GetSQLValueString($_POST['tiposolapa'], "text"),
+  GetSQLValueString($_POST['sello_superior'], "text"), 
   GetSQLValueString($_POST['N_precio_old'], "text"),
   GetSQLValueString(isset($_POST['impuesto']) ? "true" : "", "defined","1","0"),
   GetSQLValueString($_POST['valor_impuesto'], "text"),
@@ -248,7 +280,7 @@ $resulttex=mysql_query($sqltex);
 break;
 return '0'; 
 case '3':
-$insertSQL = sprintf("INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c, Str_nit, N_ancho, N_alto, B_fuelle, N_calibre, B_troquel, B_precorte, B_bolsillo, N_tamano_bolsillo, N_solapa, Str_moneda, N_precio,  Str_unidad_vta, Str_plazo, Str_incoterms, Str_tipo_coextrusion, Str_capa_ext_coext, Str_capa_inter_coext, N_cant_impresion, B_impresion, N_colores_impresion, B_cyreles, B_sellado_seguridad, B_sellado_permanente, B_sellado_resellable, B_sellado_hotm, Str_sellado_lateral, B_fondo, B_codigo_b, B_numeracion, fecha_creacion, Str_usuario, N_comision, B_estado,B_generica,tipo_bolsa,N_precio_old,impuesto,valor_impuesto) VALUES (%s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+$insertSQL = sprintf("INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c, Str_nit, N_ancho, N_alto, B_fuelle, N_calibre, B_troquel, B_precorte, B_bolsillo, N_tamano_bolsillo, N_solapa, Str_moneda, N_precio,  Str_unidad_vta, Str_plazo, Str_incoterms, Str_tipo_coextrusion, Str_capa_ext_coext, Str_capa_inter_coext, N_cant_impresion, B_impresion, N_colores_impresion, B_cyreles, B_sellado_seguridad, B_sellado_permanente, B_sellado_resellable, B_sellado_hotm, Str_sellado_lateral, B_fondo, B_codigo_b, B_numeracion, fecha_creacion, Str_usuario, N_comision, B_estado,B_generica,tipo_bolsa,tiposolapa,sello_superior,N_precio_old,impuesto,valor_impuesto) VALUES (%s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
  GetSQLValueString($_POST['N_cotizacion'], "int"),
  GetSQLValueString($_POST['N_referencia'], "int"), 
  GetSQLValueString($_POST['Str_nit'], "text"),					   
@@ -287,6 +319,8 @@ $insertSQL = sprintf("INSERT INTO Tbl_cotiza_bolsa(N_cotizacion, N_referencia_c,
  GetSQLValueString($_POST['B_estado'], "text"),
  GetSQLValueString($_POST['B_generica'], "text"),
  GetSQLValueString($_POST['tipo_bolsa'], "text"),
+   GetSQLValueString($_POST['tiposolapa'], "text"),
+   GetSQLValueString($_POST['sello_superior'], "text"),
    GetSQLValueString($_POST['N_precio_old'], "text"),
    GetSQLValueString(isset($_POST['impuesto']) ? "true" : "", "defined","1","0"),
    GetSQLValueString($_POST['valor_impuesto'], "text"));

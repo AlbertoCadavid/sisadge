@@ -466,7 +466,8 @@ $row_anual = $conexion->llenaSelect('anual', '', 'ORDER BY id_anual DESC');
 
 
                               <?php if ($existenuevamezcla >= '1' || $refNuevaNueva >= '1') :  ?>
-                                <?php if ($procesoVieja == 2) : ?>
+                                <?php /* if ($procesoVieja == 2) : */ ?>
+                                <?php if (false) : ?>
                                   <a href="javascript:popUp('produccion_caract_impresion_vista.php?id_ref=<?php echo $row_orden_produccion['id_ref_op']; ?>','870','600')"><img src="images/e.gif" style="cursor:hand;" alt="VISUALIZAR CARACTERISTICA ANTIGUA" title="VISUALIZAR CARACTERISTICA ANTIGUA" border="0" /></a>
 
                                 <?php else : ?>

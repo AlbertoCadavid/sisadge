@@ -141,8 +141,11 @@ if($id_matPrima !='') {
    $sqlrt="DELETE FROM tbl_reg_kilo_producido WHERE id_rkp = '$id_matPrima'";
    $resulrt=mysql_query($sqlrt);
   
-   
+}
 
+if($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['eliminar_relacion_clase_indice']){
+   $sqlrt="DELETE FROM insumos_clases_indices WHERE id_clase = $_POST[id_clase] AND id_indice = $_POST[id_indice]";
+   echo $resulrt=mysql_query($sqlrt);
 }
 
 ?>

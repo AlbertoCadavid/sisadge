@@ -370,6 +370,7 @@ do {
       <input type="hidden" name="MM_insert" value="form1">
     </form>	
 	<?php } ?></td>
+  
   </tr>
   <?php $permiso=$row_editpermisos['id_registro']; if($permiso != '') { ?>
   <tr id="tr3">

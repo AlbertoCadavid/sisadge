@@ -128,10 +128,11 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     $idRef = mysql_result($resultref, 0, 'id_ref');
   }
 
+
   //if ($_POST["tipo_tras"] == ""){
   $updateSQL = sprintf(
     "UPDATE Tbl_orden_produccion SET fecha_registro_op=%s, fecha_entrega_op=%s, str_responsable_op=%s, str_numero_oc_op=%s, int_cod_ref_op=%s, id_ref_op=%s, version_ref_op=%s, int_cotiz_op=%s, str_entrega_op=%s, str_nit_op=%s, int_cliente_op=%s, int_desperdicio_op=%s, int_cantidad_op=%s, str_tipo_bolsa_op=%s, int_pesom_op=%s, str_matrial_op=%s, str_presentacion_op=%s, metroLineal_op=%s, int_kilos_op=%s, int_calibre_op=%s, int_ancho_rollo_op=%s, int_micras_op=%s, str_interno_op=%s, str_externo_op=%s, str_tratamiento_op=%s, int_undxcaja_op=%s, int_undxpaq_op=%s,undxpaqreal=%s, numInicio_op=%s, observ_extru_op=%s, maquina_imp_op=%s, 
-  kls_req_imp_op=%s, mts_req_imp_op=%s, margen_izq_imp_op=%s, margen_anc_imp_op=%s, margen_anc_mm_imp_op=%s, margen_der_imp_op=%s, margen_peri_imp_op=%s, margen_per_mm_imp_op=%s, margen_z_imp_op=%s, observ_impre_op=%s, mts_cinta_sellado_op=%s, kls_sellado_op=%s, kls_sellado_bol_op=%s, und_prod_sellado_op=%s, observ_sellado_op=%s, b_estado_op=%s, b_visual_op=%s, id_termica_op=%s, cinta_termica_op=%s, numeracion_inicial=%s, imprimiop=%s, lote=%s , charfin=%s , coextrusion=%s  WHERE id_op=%s",
+  kls_req_imp_op=%s, mts_req_imp_op=%s, margen_izq_imp_op=%s, margen_anc_imp_op=%s, margen_anc_mm_imp_op=%s, margen_der_imp_op=%s, margen_peri_imp_op=%s, margen_per_mm_imp_op=%s, margen_z_imp_op=%s, observ_impre_op=%s, mts_cinta_sellado_op=%s, kls_sellado_op=%s, kls_sellado_bol_op=%s, und_prod_sellado_op=%s, observ_sellado_op=%s, b_estado_op=%s, b_visual_op=%s, id_termica_op=%s, cinta_termica_op=%s, numeracion_inicial=%s, imprimiop=%s, lote=%s , charfin=%s , coextrusion=%s, sinnumeracion=%s  WHERE id_op=%s",
     GetSQLValueString($_POST['fecha_registro_op'], "date"),
     GetSQLValueString($_POST['fecha_entrega_op'], "date"),
     GetSQLValueString($_POST['str_responsable_op'], "text"),
@@ -187,6 +188,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     GetSQLValueString($_POST['lote'], "text"),
     GetSQLValueString($_POST['charfin'], "text"),
     GetSQLValueString($_POST['coextrusion'], "text"),
+    GetSQLValueString($_POST['sinnumeracion'], "int"),
     GetSQLValueString($_POST['id_op'], "int")
   );
 
@@ -229,7 +231,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
     $bolsas_op = $_POST['int_cantidad_op'];
     //CONSULTO LA EXISTENCIA DE LA OP
     $query_existe = "SELECT id_op FROM Tbl_orden_produccion WHERE id_op='$op_destino'";
-    
+
     $resultexiste = mysql_query($query_existe);
     $numexiste = mysql_num_rows($resultexiste);
     if ($numexiste >= '1') {
@@ -557,7 +559,7 @@ SELECT ($rollo_r+200),  '$op_destino','$ref_oc','$cliente_oc',`tratInter_r`,`tra
     $updateGoTo .= (strpos($updateGoTo, '?')) ? "&" : "?";
     $updateGoTo .= $_SERVER['QUERY_STRING'];
   }*/
-  header("Location:".$updateGoTo);
+  header("Location:" . $updateGoTo);
 } //FIN IF GENERAL
 
 
@@ -569,22 +571,21 @@ $conexion = new ApptivaDB(); //consultas
 
 
 $row_orden_produccion = $conexion->llenarCampos("tbl_orden_produccion ", "INNER JOIN cliente ON(int_cliente_op = cliente.id_c) WHERE id_op='" . $_GET['id_op'] . "' AND b_borrado_op='0'", "ORDER BY id_op DESC", " *, cliente.nombre_c ");
- 
-if (isset($_GET['traslado']) && $_GET['traslado'] != '') {
-   
- 
-   $cliente=$_GET['int_cliente_op'];    
-   $referencia=$_GET['int_cod_ref_op'];
-   $clientenombre = $conexion->llenarCampos('cliente', "  WHERE id_c='" .$cliente. "' ", "  "," nombre_c ");
-   $nombrecliente= $clientenombre['nombre_c'];
 
-}else{
- 
+if (isset($_GET['traslado']) && $_GET['traslado'] != '') {
+
+
+  $cliente = $_GET['int_cliente_op'];
+  $referencia = $_GET['int_cod_ref_op'];
+  $clientenombre = $conexion->llenarCampos('cliente', "  WHERE id_c='" . $cliente . "' ", "  ", " nombre_c ");
+  $nombrecliente = $clientenombre['nombre_c'];
+} else {
+
   $_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
-  $cliente=$row_orden_produccion['int_cliente_op']; 
-  $nombrecliente=$row_orden_produccion['nombre_c'];
+  $cliente = $row_orden_produccion['int_cliente_op'];
+  $nombrecliente = $row_orden_produccion['nombre_c'];
 }
- 
+
 //$_GET['int_cod_ref_op'] = $row_orden_produccion['int_cod_ref_op'];
 
 
@@ -602,7 +603,6 @@ $row_precio = $conexion->llenarCampos("tbl_items_ordenc oci", "WHERE oci.int_cod
 if (isset($_GET['int_cod_ref_op']) && $_GET['int_cod_ref_op'] != '') {
   $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND  Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
   $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
- 
 } else {
   $row_datos_oc = $conexion->llenarCampos("Tbl_orden_produccion,Tbl_referencia,Tbl_egp", "WHERE tbl_orden_produccion.id_op='" . $_GET['id_op'] . "' AND Tbl_orden_produccion.int_cod_ref_op=Tbl_referencia.cod_ref AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp  AND Tbl_referencia.estado_ref='1'", "  ", " * ");
   $row_datos_ref = $conexion->llenarCampos(" Tbl_referencia,Tbl_egp", "WHERE Tbl_referencia.cod_ref='" . $_GET['int_cod_ref_op'] . "' AND Tbl_referencia.n_egp_ref=Tbl_egp.n_egp AND Tbl_referencia.estado_ref='1'", " ORDER BY Tbl_referencia.cod_ref DESC ", " * ");
@@ -649,14 +649,15 @@ if ($row_rollos['rollo_r'] == '') {
 }
 
 
-$cod_ref = $_GET['int_cod_ref_op'];// $row_orden_produccion['int_cod_ref_op'];
+$cod_ref = $_GET['int_cod_ref_op']; // $row_orden_produccion['int_cod_ref_op'];
 if ($cod_ref != '')
   $row_numeraciones = $conexion->llenarCampos("tbl_tiquete_numeracion", "WHERE ref_tn='" . $cod_ref . "' ", " ORDER BY fecha_ingreso_tn DESC, hora_tn DESC ", " int_hasta_tn"); //ORDER BY id_tn DESC, int_op_tn DESC,int_hasta_tn DESC
 if ($cod_ref != '')
   $row_ultima_numeraciones = $conexion->llenarCampos('tbl_orden_produccion', " WHERE int_cod_ref_op='" . $cod_ref . "' ", " ORDER BY  id_op  DESC ", "numeracion_inicial");
 
-$row_mezclaycaract_impresion = $conexion->llenarCampos("tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref", " WHERE cp.cod_ref= '" . $_GET['int_cod_ref_op'] . "'  AND cp.proceso=2", "", "*");
+//$row_mezclaycaract_impresion = $conexion->llenarCampos("tbl_caracteristicas_prod cp LEFT JOIN tbl_produccion_mezclas pm ON pm.int_cod_ref_pm = cp.cod_ref", " WHERE cp.cod_ref= '" . $_GET['int_cod_ref_op'] . "'  AND cp.proceso=2", "", "*");
 $row_impresion = $conexion->llenarCampos("tbl_produccion_mezclas cp", "WHERE cp.id_proceso=2 AND cp.int_cod_ref_pm= '" . $_GET['int_cod_ref_op'] . "' ", "", "*");
+$info_impresion = $conexion->llenarCampos("tbl_caracteristicas_impresion cp", "WHERE cp.cod_ref_ci= '" . $_GET['int_cod_ref_op'] . "' ", "", "*");
 
 
 //LLAMA LAS MEZCLAS DE IMPRESION UNIDAD 1
@@ -865,7 +866,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                 <td id="fuente1">
                                   <table id="tabla3">
                                     <tr id="tr1">
-                                      <td colspan="11" id="titulo2">ORDEN DE PRODUCCI&Oacute;N</td>
+                                      <td colspan="12" id="titulo2">ORDEN DE PRODUCCI&Oacute;N</td>
                                     </tr>
                                     <tr>
                                       <td rowspan="6" id="dato2"><img src="images/logoacyc.jpg" /></td>
@@ -896,13 +897,15 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td nowrap="nowrap" id="fuente1">O.P DESTINO</td>
                                       <td nowrap="nowrap" id="fuente1">ROLLO</td>
                                       <td colspan="3" nowrap="nowrap" id="fuente1">KILOS</td>
-                                      <td colspan="2" id="fuente2"><strong>ARTE</strong></td> 
+                                      <td colspan="2" id="fuente2"><strong>ARTE</strong></td>
                                     </tr>
-                                    <tr id="tr3"> 
+                                    <tr id="tr3">
                                       <td nowrap="nowrap" id="numero1"><input name="id_op" id="id_op" type="number" value="<?php echo $row_orden_produccion['id_op']; ?>" style="width:60px" readonly="readonly" />
                                         <input type="button" name="ENVIAR" id="ENVIAR" value="TRASLADAR" onClick="mostrarOcultarTraslado(this)" />
                                       </td>
-                                      <td nowrap="nowrap" id="numero1"><?php foreach ($row_orden as $row_orden) {$row_orden; } ?>
+                                      <td nowrap="nowrap" id="numero1"><?php foreach ($row_orden as $row_orden) {
+                                                                          $row_orden;
+                                                                        } ?>
                                         <select name="op_destino" id="op_destino" style="width:100px" hidden="true">
                                           <option value="<?php echo $row_orden['id_op'] + 1; ?>" selected="selected"><?php echo $row_orden['id_op'] + 1; ?></option>
                                           <?php foreach ($row_orden_destino as $row_orden_destino) { ?>
@@ -934,7 +937,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                     </tr>
                                     <tr>
                                       <td nowrap="nowrap" id="fuente1">
-                                        <fieldset id="grupo_tras" <?php if ($_GET['traslado'] == '') { ?>style="visibility:hidden;"<?php } ?>>
+                                        <fieldset id="grupo_tras" <?php if ($_GET['traslado'] == '') { ?>style="visibility:hidden;" <?php } ?>>
                                           <legend>Elige Tipo Traslado</legend>
                                           <label>
                                             <input type="radio" name="tipo_tras" id="tipo_tras" value="total" onClick="habilitaCamposOpTotal(this)" <?php if ($_GET['traslado'] == 'total') { ?>checked="checked" <?php } ?>>
@@ -959,7 +962,10 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td id="dato1">&nbsp;</td>
                                       <td id="dato1">&nbsp;</td>
                                       <td colspan="3" id="dato3">Prioridad</td>
-                                      <td colspan="2" id="dato1"><select name="b_visual_op" id="b_visual_op">
+                                      <td colspan="2" id="dato1">
+                                        <input name="b_visual_op" id="b_visual_op" min="0" max="99" type="number" value="<?php echo $row_orden_produccion['b_visual_op']; ?>" style="width:40px" />
+
+                                        <!-- <select name="b_visual_op" id="b_visual_op">
                                           <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['b_visual_op']))) {
                                                               echo "selected=\"selected\"";
                                                             } ?>>0</option>
@@ -978,11 +984,11 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                           <option value="5" <?php if (!(strcmp("5", $row_orden_produccion['b_visual_op']))) {
                                                               echo "selected=\"selected\"";
                                                             } ?>>5</option>
-                                        </select>
+                                        </select> -->
                                       </td>
                                     </tr>
                                     <tr id="tr1">
-                                      <td colspan="11" id="titulo4">ESPECIFICACIONES</td>
+                                      <td colspan="12" id="titulo4">ESPECIFICACIONES</td>
                                     </tr>
                                     <tr>
                                       <td id="talla1">CLIENTE</td>
@@ -999,8 +1005,8 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="dato1"></td>
                                     </tr>
                                     <tr>
-                                      <td id="fuente1"> 
-                                             
+                                      <td id="fuente1">
+
                                         <select name="int_cliente_op" id="int_cliente_op" class="selectsMedio">
                                           <?php if ((strcmp("", $cliente))) { ?>
                                             <option value="<?php echo $cliente; ?>"><?php echo $nombrecliente; ?> </option>
@@ -1028,7 +1034,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td nowrap="nowrap" id="fuente1">
                                         <a href="javascript:verFoto('referencia_bolsa_edit.php?id_ref=<?php echo $row_orden_produccion['id_ref_op']; ?>&n_egp=<?php echo  $row_datos_oc['n_egp_ref']; ?>','1100','850')"><em>REF:<?php echo $row_orden_produccion['id_ref_op']; ?></em></a>
 
-                                        <input name="int_cod_ref_op" type="text" id="int_cod_ref_op" min="0" value="<?php echo $referencia=='' ? $row_orden_produccion['int_cod_ref_op'] : $referencia; ?>" size="2" onchange="if(form1.int_cod_ref_op.value && (!form1.tipo_tras.value)) { consulta_ref_op_edit() } else{ consulta_ref_traslado() }" />
+                                        <input name="int_cod_ref_op" type="text" id="int_cod_ref_op" min="0" value="<?php echo $referencia == '' ? $row_orden_produccion['int_cod_ref_op'] : $referencia; ?>" size="2" onchange="if(form1.int_cod_ref_op.value && (!form1.tipo_tras.value)) { consulta_ref_op_edit() } else{ consulta_ref_traslado() }" />
                                         -
                                         <input name="version_ref_op" type="number" id="version_ref_op" min="0" max="9" size="2" value="<?php echo $row_orden_produccion['version_ref_op']; ?>" required="required" />
                                       </td>
@@ -1055,7 +1061,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="dato1"></td>
                                     </tr>
                                     <tr id="tr1">
-                                      <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN EXTRUSI&Oacute;N </td>
+                                      <td colspan="12" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN EXTRUSI&Oacute;N </td>
                                     </tr>
                                     <tr>
                                       <td id="talla1">DESPERDICIO</td>
@@ -1065,7 +1071,8 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                                                     echo "UNIDADES SOLICITADAS";
                                                                   } ?></td>
                                       <td colspan="2" id="talla1">TIPO DE BOLSA</td>
-                                      <td colspan="2" nowrap="nowrap" id="talla1">EXTRUSION</td>
+                                      <td nowrap="nowrap" id="talla1">EXTRUSION-</td>
+                                      <td nowrap="nowrap" id="talla1"><strong>STICKER-</strong></td>
                                       <td colspan="2" id="talla1">PESO MILLAR</td>
                                       <td colspan="2" id="talla1">METROS LINEAL</td>
                                     </tr>
@@ -1114,7 +1121,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                           <?php } ?>
                                         </select>
                                       </td>
-                                      <td colspan="2" nowrap="nowrap" id="talla1">
+                                      <td nowrap="nowrap" id="talla1">
                                         <select name="coextrusion" id="coextrusion">
                                           <option value="SI" <?php if (!(strcmp("SI", $row_orden_produccion['coextrusion']))) {
                                                                 echo "selected=\"selected\"";
@@ -1122,6 +1129,16 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                           <option value="NO" <?php if (!(strcmp("NO", $row_orden_produccion['coextrusion']))) {
                                                                 echo "selected=\"selected\"";
                                                               } ?>>NO</option>
+                                        </select>
+                                      </td>
+                                      <td id="talla1">
+                                        <select name="sinnumeracion" id="sinnumeracion">
+                                          <option value="0" <?php if (!(strcmp("0", $row_orden_produccion['sinnumeracion']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>NO</option>
+                                          <option value="1" <?php if (!(strcmp("1", $row_orden_produccion['sinnumeracion']))) {
+                                                              echo "selected=\"selected\"";
+                                                            } ?>>SI</option>
                                         </select>
                                       </td>
                                       <td colspan="2" id="fuente1"><input id="int_pesom_op" name="int_pesom_op" style="width:60px" type="number" min="0" step="0.01" value="<?php echo $row_orden_produccion['int_pesom_op']; ?>" required="required" /></td>
@@ -1169,7 +1186,13 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="fuente1">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                      <td colspan="3" id="fuente1"><strong style=" color: red;">SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior']; ?>" onblur="calcular_op()" readonly /> / SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) { echo "Sencilla"; } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) { echo "Doble"; } else { echo ""; } ?>
+                                      <td colspan="3" id="fuente1"><strong style=" color: red;">SELLO SUPERIOR:</strong><input id="sello_superior" name="sello_superior" style="width:60px" type="text" value="<?php echo $row_referencia['sello_superior']; ?>" onblur="calcular_op()" readonly /> / SOLAPA REF:<?php if ($row_datos_oc['b_solapa_caract_ref'] == 2) {
+                                                                                                                                                                                                                                                                                                                    echo "Sencilla";
+                                                                                                                                                                                                                                                                                                                  } else if ($row_datos_oc['b_solapa_caract_ref'] == 1) {
+                                                                                                                                                                                                                                                                                                                    echo "Doble";
+                                                                                                                                                                                                                                                                                                                  } else {
+                                                                                                                                                                                                                                                                                                                    echo "";
+                                                                                                                                                                                                                                                                                                                  } ?>
                                       </td>
                                       <td colspan="2" id="talla1">TRATAMIENTO CORONA</td>
                                       <td colspan="4" id="fuente1"><select name="str_tratamiento_op" id="str_tratamiento_op">
@@ -1185,7 +1208,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                         </select></td>
                                     </tr>
                                     <tr id="tr1">
-                                      <td colspan="11" id="titulo1">Observacion en Extrusion</td>
+                                      <td colspan="12" id="titulo1">Observacion en Extrusion</td>
                                     </tr>
                                     <tr>
                                       <td id="fuente1"></td>
@@ -1194,10 +1217,10 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="2" id="fuente1"></td>
                                     </tr>
                                     <tr id="tr1">
-                                      <td colspan="11" id="fuente1"><textarea name="observ_extru_op" style="width: 100%" rows="3"><?php echo $row_orden_produccion['observ_extru_op'] ?></textarea></td>
+                                      <td colspan="12" id="fuente1"><textarea name="observ_extru_op" style="width: 100%" rows="3"><?php echo $row_orden_produccion['observ_extru_op'] ?></textarea></td>
                                     </tr>
                                     <tr id="tr1">
-                                      <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN IMPRESION</td>
+                                      <td colspan="12" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN IMPRESION</td>
                                     </tr>
                                     <tr>
                                       <td id="talla1">IMPRIME EN MAQUINA:</td>
@@ -1247,7 +1270,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                       <td colspan="6" id="talla1">&nbsp;</td>
                                     </tr>
                                     <!-- <tr>  
-                                   <td colspan="11"> 
+                                   <td colspan="12"> 
                                          <div id="cajon1">
                                             <table>
                                              <?php foreach ($row_mezclas as $row_mezclas) { ?>
@@ -1273,7 +1296,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                         <td colspan="9" id="fuente2"><strong>CARACTERISTICAS DE IMPRESION</strong></td>
                                       </tr>
                                       <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                           <table>
                                             <tr>
                                               <td valign="top">
@@ -1476,39 +1499,69 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                         <td colspan="100%" id="fuente2"><strong>CARACTERISTICAS</strong> </td>
                                       </tr>
                                       <tr>
-                                        <td colspan="2" id="talla1">Cantidad de Unidades</td>
-                                        <td nowrap="nowrap" id="talla1">Temp Secado Grados C</td>
-                                        <td colspan="3" id="talla1">Repeticion de Ancho</td>
-                                        <td colspan="3" id="talla1">Rep. Perimetro</td>
-                                        <td colspan="3" id="talla1">Arte Aprobado (0 SI, 1 NO)</td>
-                                        <td colspan="2" id="talla1">Z</td>
-                                        <td colspan="2" id="talla1">Guia Fotocelda (0 SI, 1 NO)</td>
-                                        <td colspan="2" id="talla1">Velocidad Maquina</td>
+                                        <td colspan="1" id="talla1">Cantidad de Unidades</td>
+                                        <td colspan="1" id="talla1">Temp Secado Tunel</td>
+                                        <td colspan="1" id="talla1">Temp Secado Tinteros</td>
+                                        <td colspan="1" id="talla1">Numero de Pistas</td>
+                                        <td colspan="1" id="talla1">Rep. Perimetro</td>
+                                        <td colspan="1" id="talla1">Arte Aprobado</td>
+                                        <td colspan="1" id="talla1">Guia Fotocelda</td>
+                                        <td colspan="1" id="talla1">Velocidad Maquina</td>
+                                        <td colspan="1" id="talla1">Z</td>
                                       </tr>
                                       <tr>
-                                        <td colspan="2" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_139']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['cant_unidades']; ?>
                                         </td>
                                         <td id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_140']; ?>
+                                          <?php echo $info_impresion['temp_tunel']; ?>
                                         </td>
-                                        <td colspan="3" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_141']; ?>
+                                        <td id="talla1">
+                                          <?php echo $info_impresion['temp_tintas']; ?>
                                         </td>
-                                        <td colspan="3" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_142']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['rep_ancho']; ?>
                                         </td>
-                                        <td colspan="3" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_143']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['rep_perimetro']; ?>
                                         </td>
-                                        <td colspan="2" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_144']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php if ($info_impresion['arte'] == 0) {
+                                            echo "SI";
+                                          } else if ($info_impresion['arte'] == 1) {
+                                            echo "NO";
+                                          }
+                                          ?>
                                         </td>
-                                        <td colspan="2" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_145']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php if ($info_impresion['guia_fotoc'] == 0) {
+                                            echo "SI";
+                                          } else if ($info_impresion['guia_fotoc'] == 1) {
+                                            echo "NO";
+                                          }
+                                          ?>
                                         </td>
-                                        <td colspan="2" id="talla1">
-                                          <?php echo $row_mezclaycaract_impresion['campo_146']; ?>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['velocidad']; ?>
+                                        </td>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['z']; ?>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td colspan="1" id="talla1">Tension Desbobinador</td>
+                                        <td colspan="1" id="talla1">Tension Refrescador</td>
+                                        <td colspan="1" id="talla1">Tension Rebobinador</td>
+                                      </tr>
+                                      <tr>
+                                        <td id="talla1">
+                                          <?php echo $info_impresion['tension_desbo']; ?>
+                                        </td>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['tension_refres']; ?>
+                                        </td>
+                                        <td colspan="1" id="talla1">
+                                          <?php echo $info_impresion['tension_rebo']; ?>
                                         </td>
                                       </tr>
                                   </table>
@@ -1520,7 +1573,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
 
                             <!--  INICIA MEZCLAS DE EXTRUDER -->
                             <tr id="tr1">
-                              <td colspan="11" id="titulo1">Observacion en Impresion</td>
+                              <td colspan="12" id="titulo1">Observacion en Impresion</td>
                             </tr>
                             <tr>
                               <td id="fuente1"></td>
@@ -1529,17 +1582,17 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                               <td colspan="2" id="fuente1"></td>
                             </tr>
                             <tr id="tr1">
-                              <td colspan="11" id="fuente1"><textarea name="observ_impre_op" style="width: 100%" rows="3" id="observ_impre_op"><?php echo $row_orden_produccion['observ_impre_op']; ?></textarea></td>
+                              <td colspan="12" id="fuente1"><textarea name="observ_impre_op" style="width: 100%" rows="3" id="observ_impre_op"><?php echo $row_orden_produccion['observ_impre_op']; ?></textarea></td>
                             </tr>
                             <!--SELLADO NO APARECE SI ES LAMINA-->
                             <?php //if ((strcmp("LAMINA", $row_orden_produccion['str_tipo_bolsa_op']))) { 
                             ?>
                             <tr id="tr1">
-                              <td colspan="11" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN SELLADO</td>
+                              <td colspan="12" id="titulo4">CONDICIONES DE FABRICACI&Oacute;N EN SELLADO</td>
                             </tr>
 
                             <tr>
-                              <td colspan="11">
+                              <td colspan="12">
                                 <table>
                                   <tr>
                                     <td id="talla1"><strong>ANCHO</strong></td>
@@ -1670,7 +1723,7 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                                   </tr>
                                   <tr>
                                     <td id="talla1"><?php echo $row_datos_oc['tipo_sello_egp']; ?></td>
-                                    <td id="talla1"><input name="int_undxcaja_op" type="number" id="int_undxcaja_op" style="width:50px" min="0" <?php if ($row_orden_produccion['int_undxcaja_op'] != $row_datos_oc['unids_caja_egp']) { ?> class="rojo_normal" onclick="return valida_paqycaj()" <?php } ?> value="<?php echo $row_datos_oc['unids_caja_egp']; ?>" size="12" onBlur="alerta()" /></td>
+                                    <td id="talla1"><input name="int_undxcaja_op" type="number" id="int_undxcaja_op" style="width:50px" min="0" <?php if ($row_orden_produccion['int_undxcaja_op'] != $row_datos_oc['unids_caja_egp']) { ?> class="rojo_normal" onclick="return valida_paqycaj()" <?php } ?> value="<?php echo $row_orden_produccion['int_undxcaja_op']==''? $row_datos_oc['unids_caja_egp']:$row_orden_produccion['int_undxcaja_op']; ?>" size="12" onBlur="alerta()" /></td>
                                     <td id="talla1"><input name="int_undxpaq_op" style="width:50px" type="number" id="int_undxpaq_op" <?php if ($row_orden_produccion['int_undxpaq_op'] != $row_datos_oc['unids_paq_egp']) { ?> class="rojo_normal" onclick="return valida_paqycaj()" <?php } ?> value="<?php echo $row_datos_oc['unids_paq_egp']; ?>" size="12" min="0" onBlur="alerta()" /></td>
                                     <td id="talla1"><input name="undxpaqreal" style="width:50px" type="number" id="undxpaqreal" value="<?php echo $row_datos_oc['undxpaqreal']; ?>" required="required" size="12" min="0" /></td>
                                     <td id="talla1">
@@ -1807,10 +1860,10 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="11" id="talla1"><strong>Nota:</strong> Si en el campo de la version de la referencia no coninciden es porque no han hecho la verificacion u modificacion en dise&ntilde;o y desarrollo.</td>
+                              <td colspan="12" id="talla1"><strong>Nota:</strong> Si en el campo de la version de la referencia no coninciden es porque no han hecho la verificacion u modificacion en dise&ntilde;o y desarrollo.</td>
                             </tr>
                             <tr id="tr1">
-                              <td colspan="11" id="titulo1">Observacion en Sellado</td>
+                              <td colspan="12" id="titulo1">Observacion en Sellado</td>
                             </tr>
                             <tr>
                               <td id="fuente1"></td>
@@ -1819,15 +1872,15 @@ $fech_io = $resultio['fecha_entrega_io'];*/
                               <td colspan="2" id="fuente1"></td>
                             </tr>
                             <tr id="tr1">
-                              <td colspan="11" id="fuente1"><textarea name="observ_sellado_op" style="width: 100%" rows="3" id="observ_sellado_op"><?php echo $row_orden_produccion['observ_sellado_op']; ?></textarea></td>
+                              <td colspan="12" id="fuente1"><textarea name="observ_sellado_op" style="width: 100%" rows="3" id="observ_sellado_op"><?php echo $row_orden_produccion['observ_sellado_op']; ?></textarea></td>
                             </tr>
                             <?php //}
                             ?>
                             <tr>
-                              <td colspan="11" id="fuente1">&nbsp;</td>
+                              <td colspan="12" id="fuente1">&nbsp;</td>
                             </tr>
                             <tr id="tr1">
-                              <td colspan="11" id="dato2">
+                              <td colspan="12" id="dato2">
                                 <input name="b_estado_op" type="hidden" value="<?php echo $row_orden_produccion['b_estado_op'] ?>" />
                                 <input name="id_ref_op" type="hidden" id="id_ref_op" value="<?php echo $row_orden_produccion['id_ref_op'] == '' ? $row_referencia['id_ref'] : $row_orden_produccion['id_ref_op']; ?>" />
 
@@ -1862,19 +1915,18 @@ $fech_io = $resultio['fecha_entrega_io'];*/
 
 </html>
 <script>
- $(document).ready(function() {
+  $(document).ready(function() {
 
-  traspaso = '<?php echo $_GET['traslado'];?>'  
+    traspaso = '<?php echo $_GET['traslado']; ?>'
 
-   if(traspaso=='total'){
-     //$("#tipo_tras").val('total');
-    document.getElementById('grupo_tras').style.visibility = 'visible'; 
-    document.getElementById('op_destino').hidden  = false;   
+    if (traspaso == 'total') {
+      //$("#tipo_tras").val('total');
+      document.getElementById('grupo_tras').style.visibility = 'visible';
+      document.getElementById('op_destino').hidden = false;
 
-   } 
+    }
 
   });
- 
 </script>
 <script>
   $(document).ready(function() {
@@ -1924,4 +1976,3 @@ mysql_free_result($caract_valor);
 
 mysql_close($conexion1);
 ?>
-

@@ -103,9 +103,15 @@ document.addEventListener("DOMContentLoaded", function () {
             //Lo que se hace antes de enviar el formulario
           },
           success: function (data) {
+          /* success: function (res) {
+            objExiste = JSON.parse(res.existe);
+            data = JSON.parse(res.infoSellado);
 
-            if (data.length >= 1) {
-              containerProcesos(eventos[5].descripcion, data[0]["fechaI_r"], eventos[5].tipo, data, eventos[6].tipo, eventos[6].descripcion, "subcontainer3", eventos[7].tipo);
+            if (res.existe != "null") {
+              containerProcesos(eventos[5].descripcion, objExiste.fecha_ingreso, eventos[5].tipo, data, eventos[6].tipo, eventos[6].descripcion, "subcontainer3", eventos[7].tipo);
+               */
+              if (data.length >= 1) {
+                containerProcesos(eventos[5].descripcion, data[0]["fechaI_r"], eventos[5].tipo, data, eventos[6].tipo, eventos[6].descripcion, "subcontainer3", eventos[7].tipo);  
               if(estado === 5){
                 createDivEstado(
                   eventos[8].descripcion,

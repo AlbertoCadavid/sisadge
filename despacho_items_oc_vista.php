@@ -76,7 +76,6 @@ $query_remision = sprintf("SELECT * FROM Tbl_remisiones,Tbl_remision_detalle,Tbl
 $remision = mysql_query($query_remision, $conexion1) or die(mysql_error());
 $row_remision = mysql_fetch_assoc($remision);
 $totalRows_remision = mysql_num_rows($remision);
-
 //imprime total cajas
 if($totalRows_remision >='1'){
   $total_cajas = mysql_result($remision, 0, 'int_total_cajas_rd');
@@ -220,7 +219,7 @@ $totalRows_vendedores = mysql_num_rows($vendedores);
           <td nowrap="nowrap" id="nivel2">REF. AC </td>
           <td nowrap="nowrap" id="nivel2">REF. CLIENTE</td>
           <td colspan="2" id="nivel2">N. CAJAS</td>
-          <td colspan="3" id="nivel2">DESDE</td>
+          <td colspan="3" id="nivel2">DESDE</td> 
           <td colspan="2" id="nivel2">HASTA</td>
           <td id="nivel2">UNIDADES</td>
           <td id="nivel2">PESO</td> 

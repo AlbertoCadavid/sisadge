@@ -326,7 +326,7 @@ function separarNumLetras($txt) //Funcion para separar las letras de los numeros
                         <samp style="font-size:30px;" class="text">
                             &nbsp;<?php
                                     //ORDEN DE PRODUCCION HAY QUE DEJAR ESTA CONSULTA LAS MODERNAS NO FUNCIONARON
-                                    $sqlp = "SELECT * FROM tbl_refcliente WHERE int_ref_ac_rc='" . $row_refac['int_cod_ref_op'] . "' AND id_c_rc='" . $row_refac['int_cliente_op'] . "' ";
+                                    $sqlp = "SELECT * FROM tbl_refcliente WHERE CONVERT(int_ref_ac_rc, SIGNED INTEGER) = '" . $row_refac['int_cod_ref_op'] . "' AND id_c_rc='" . $row_refac['int_cliente_op'] . "' ";
                                     $resultp = mysql_query($sqlp);
                                     $nump = mysql_num_rows($resultp);
                                     if ($nump >= '1') {
